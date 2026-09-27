@@ -31,8 +31,29 @@ const out = await p.evaluate((id) => {
   const loc = ctx.data.LOCATION_BY_ID.get(id);
   const [cx, cz] = loc.pos;
   const R = 0.42, STEP_UP = 0.52;
-  const ox = Math.sin(loc.rot), oz = Math.cos(loc.rot);     // outward
-  const axv = Math.cos(loc.rot), azv = -Math.sin(loc.rot);  // across the front
+  /*
+   * OUTWARD IS ALTAR -> DARSHAN ANCHOR. Not sin/cos of loc.rot.
+   *
+   * Every earlier run took outward as (sin rot, cos rot) because that is how
+   * LandmarkGenerator's generic anchor is placed. But a builder may return
+   * its OWN anchors, and Krishna Balaram does — its local frame runs opposite
+   * to loc.rot, so "outward" was pointing at the back of the building. Probed
+   * directly: the side I was walking toward has 0 open samples in 49 across
+   * its whole width, and the other side has 9. I was walking into the back
+   * wall and calling it a cage.
+   *
+   * The two anchors the builder publishes are the ground truth: the altar is
+   * where the Deities are, the darshan spot is where a pilgrim stands. The
+   * way out is that vector, continued.
+   */
+  const A = W.anchors[id];
+  let ox, oz;
+  if (A && A.altar && A.darshan) {
+    const vx = A.darshan.x - A.altar.x, vz = A.darshan.z - A.altar.z;
+    const L = Math.hypot(vx, vz) || 1;
+    ox = vx / L; oz = vz / L;
+  } else { ox = Math.sin(loc.rot); oz = Math.cos(loc.rot); }
+  const axv = oz, azv = -ox;                                // across the front
 
   // how many people are standing in the darshan area at all?
   let people = 0;
@@ -49,9 +70,9 @@ const out = await p.evaluate((id) => {
   }
 
   /** Walk outward from `startAlong`, with and without the crowd. */
-  const walk = (across0, withCrowd) => {
-    let x = cx + ox * -6 + axv * across0;
-    let z = cz + oz * -6 + azv * across0;
+  const walkFrom = (depth0, across0, withCrowd) => {
+    let x = cx + ox * depth0 + axv * across0;
+    let z = cz + oz * depth0 + azv * across0;
     let feet = W.standHeight(x, z, W.groundHeight(x, z) + 1.2);
     if (feet === null || feet === undefined) return { start: 'no floor' };
     const along = () => (x - cx) * ox + (z - cz) * oz;
@@ -106,7 +127,10 @@ const out = await p.evaluate((id) => {
             tag: c.tag || '(untagged)', type: c.type,
             top: c.top === undefined ? 'infinite' : +c.top.toFixed(2),
             size: c.type === 'box' ? [+(c.hw * 2).toFixed(1), +(c.hd * 2).toFixed(1)] : +c.r.toFixed(1),
-            centreOff: [+(c.x - probeAt.x).toFixed(1), +(c.z - probeAt.z).toFixed(1)],
+            relToTemple: [
+              +(((c.x - cx) * ox + (c.z - cz) * oz)).toFixed(1),   // along, +out
+              +(((c.x - cx) * axv + (c.z - cz) * azv)).toFixed(1), // across
+            ],
           })).slice(0, 6) };
         break;
       }
@@ -121,13 +145,19 @@ const out = await p.evaluate((id) => {
     };
   };
 
+  /*
+   * Start where a PILGRIM stands, not at an arbitrary depth.
+   *
+   * Every run so far began 6 m inward along the facing, which I picked and
+   * never checked. Sweep the depth as well as the width, so the answer does
+   * not depend on my guess about where the player is standing.
+   */
   const lanes = [];
-  for (let a = -12; a <= 12; a += 1.0) {
-    lanes.push({
-      across: +a.toFixed(1),
-      geometryOnly: walk(a, false),
-      withPeople: walk(a, true),
-    });
+  for (let depth = -9; depth <= -1; depth += 2) {
+    for (let a = -12; a <= 12; a += 2.0) {
+      const r = walkFrom(depth, a);
+      lanes.push({ depth, across: +a.toFixed(1), geometryOnly: r, withPeople: r });
+    }
   }
   return { peopleInDarshanArea: people, sample: near, lanes };
 }, ID);

@@ -82,6 +82,33 @@ export class UI {
     if (this.el['intro-skip']) this.el['intro-skip'].addEventListener('click', () => this._endIntro());
 
     window.addEventListener('keydown', (e) => {
+      /*
+       * A SHORTCUT MUST NOT FIRE WHILE SOMEONE IS TYPING.
+       *
+       * `m` toggles the map. The map screen has a search field. So typing the
+       * name of any place with an m in it — Madan Mohan, Prem Mandir, Imli
+       * Tala, Mathura, and the word "mandir" itself — threw you out of the
+       * map on the first keystroke. Which is most of Vrindavan.
+       *
+       * InputManager has had `_isTyping` for exactly this since it was
+       * written; this listener is a SECOND, independent one registered on
+       * window by the UI, and it never got the guard. Two handlers for the
+       * same key, one of them careful and one of them not.
+       *
+       * Escape still works while typing, because leaving a field you are
+       * stuck in is the one shortcut you actively want there — but it blurs
+       * the field rather than closing the whole screen, which is what every
+       * other search box on a computer does.
+       */
+      const t = e.target;
+      const typing = t && t.tagName
+        && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA'
+          || t.tagName === 'SELECT' || t.isContentEditable === true);
+      if (typing) {
+        if (e.key === 'Escape') { e.stopPropagation(); t.blur(); }
+        return;
+      }
+
       if (e.key === 'Escape') this.show(this.screen === 'world' ? 'menu' : 'world');
       else if (e.key === 'm' || e.key === 'M') this.show(this.screen === 'map' ? 'world' : 'map');
       else if (e.key === 'Tab') { e.preventDefault(); this.show(this.screen === 'world' ? 'menu' : 'world'); }

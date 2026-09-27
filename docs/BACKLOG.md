@@ -2459,3 +2459,34 @@ sellers stand.
 Worth keeping in mind as a pattern: three separate causes, all producing the
 identical symptom "the temple stands in a field", and fixing any one of them
 alone would have looked like it had failed.
+
+## 2026-09-27 — Four reports from play
+
+Logged on arrival, per the standing rule.
+
+1. **`m` could not be typed into the map search box.** Fixed. The UI
+   registered a SECOND window keydown listener beside InputManager's, and
+   only InputManager had the `_isTyping` guard it has carried since it was
+   written. So `m` toggled the map out from under you on the first keystroke
+   — and most of Vrindavan has an m in it: Madan Mohan, Prem Mandir, Imli
+   Tala, and the word "mandir" itself. Escape now blurs the field instead of
+   closing the screen, which is what every other search box does. Regression
+   checks added to map-search.
+
+2. **The e-rickshaw offers only a handful of destinations.** Radha Madan
+   Mohan and others cannot be asked for at all. Wants search in the fare
+   dialog, the same as the map has. NOT YET DONE.
+
+3. **Prem Mandir does not look like Prem Mandir.** NOT YET DONE. A survey
+   came back from the temple workflow tonight and has not been applied. Note
+   for whoever picks this up: the ask was "same images as the real one", and
+   photographs of Prem Mandir are under copyright — docs/DATA-SOURCES.md
+   already rules out baking photograph pixels into textures. Model it from
+   measurement instead, which is what every other temple here does.
+
+4. **You vanish UNDER the stairs at Prem Mandir instead of stepping up.**
+   NOT YET DONE, and this is the serious one — falling through a staircase is
+   worse than being blocked by one. Suspect the same family as tonight's
+   ISKCON cage: a step collider whose `h` is missing or whose `standOnly` is
+   dropped, so `standHeight` never offers the tread and the body keeps the
+   ground below.

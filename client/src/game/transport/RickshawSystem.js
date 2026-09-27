@@ -495,28 +495,55 @@ export class RickshawSystem {
     // chauraha — get in and say "ISKCON" — was the one thing the driver
     // refused. A driver not knowing Banke Bihari is not restraint, it is a
     // driver who has never worked this road.
+    const quote = (l) => {
+      const set = this._setDown(l);
+      // routed as a vehicle: he will thread a gali to reach a door, but he
+      // will not take one as a through-road
+      const path = ctx.nav ? ctx.nav.path(p.x, p.z, set[0], set[1], true) : null;
+      const metres = path ? NavGraph.length(path) : Math.hypot(set[0] - p.x, set[1] - p.z);
+      const cruise = (this.vehicle && this.vehicle.speed) || RIDE_SPEED;
+      return {
+        loc: l, set, metres, path,
+        fare: fareFor(metres, this.hire),
+        // the honest journey time at this vehicle's real speed — an auto is
+        // quicker than a cycle rickshaw and the quote should say so
+        mins: Math.max(1, Math.round(metres / cruise / 60)),
+      };
+    };
+
     const known = ctx.data.LOCATIONS
       .filter((l) => ctx.state.discovered.has(l.id) || ALWAYS_KNOWN.has(l.id))
-      .map((l) => {
-        const set = this._setDown(l);
-        // routed as a vehicle: he will thread a gali to reach a door, but he
-        // will not take one as a through-road
-        const path = ctx.nav ? ctx.nav.path(p.x, p.z, set[0], set[1], true) : null;
-        const metres = path ? NavGraph.length(path) : Math.hypot(set[0] - p.x, set[1] - p.z);
-        const cruise = (this.vehicle && this.vehicle.speed) || RIDE_SPEED;
-        return {
-          loc: l, set, metres, path,
-          fare: fareFor(metres, this.hire),
-          // the honest journey time at this vehicle's real speed — an auto is
-          // quicker than a cycle rickshaw and the quote should say so
-          mins: Math.max(1, Math.round(metres / cruise / 60)),
-        };
-      })
+      .map(quote)
       .filter((d) => d.metres > 120)
       .sort((a, b) => a.metres - b.metres)
       .slice(0, 8);
 
-    const rows = known.length ? known.map((d) => `
+    /*
+     * ASKING FOR A PLACE BY NAME.
+     *
+     * The suggested list is the nearest eight he already knows, which is the
+     * right SUGGESTION and the wrong limit: Radha Madan Mohan, Radha Damodar
+     * and most of the old town simply could not be asked for at all. That is
+     * not how a rickshaw works. You say a name and the driver knows it —
+     * discovery governs what he OFFERS, not what he will answer to.
+     *
+     * Matches on the English name and on the Devanagari, so "मदन" finds Madan
+     * Mohan, and the distance filter is dropped for a searched result: if you
+     * have asked for somewhere 80 m away he can still say yes.
+     */
+    const search = (q) => {
+      const t = q.trim().toLowerCase();
+      if (!t) return known;
+      return ctx.data.LOCATIONS
+        .filter((l) => (l.name || '').toLowerCase().includes(t)
+          || (l.hindi || '').includes(q.trim())
+          || (l.deity || '').toLowerCase().includes(t))
+        .map(quote)
+        .sort((a, b) => a.metres - b.metres)
+        .slice(0, 8);
+    };
+
+    const rowsFor = (list) => list.length ? list.map((d) => `
       <button class="rk-row ui-interactive" data-go="${d.loc.id}" style="
         display:flex;align-items:center;gap:12px;width:100%;text-align:left;
         padding:13px 12px;margin-bottom:8px;border-radius:14px;
@@ -533,6 +560,8 @@ export class RickshawSystem {
         The driver looks at you kindly. "Where to, ji? You have not seen much of
         Vrindavan yet — walk a little first, then I will take you anywhere."
       </div>`;
+    let shown = known;
+    const rows = rowsFor(known);
 
     this.dialog.innerHTML = `
       <div style="width:38px;height:4px;border-radius:2px;background:rgba(43,29,20,.2);margin:0 auto 14px"></div>
@@ -544,7 +573,13 @@ export class RickshawSystem {
       <div style="font-family:Spectral,Georgia,serif;font-style:italic;color:#5b4634;font-size:13.5px;margin-bottom:14px">
         ${this.hire && this.hire.shared ? '"Sawari hai? Baith jaiye, dus rupaye." Shared — you sit with whoever else is going.' : '"Kahan jaana hai? Baith jaiye."'}
       </div>
-      ${rows}
+      <input id="rk-q" class="ui-interactive" type="search" autocomplete="off"
+        placeholder="Say a place — Madan Mohan, Radha Damodar&hellip;"
+        style="width:100%;box-sizing:border-box;padding:11px 13px;margin-bottom:10px;
+        border-radius:12px;border:1px solid rgba(43,29,20,.12);
+        background:rgba(255,255,255,.62);color:#2b1d14;
+        font-family:Jost,system-ui,sans-serif;font-size:14px">
+      <div id="rk-rows">${rows}</div>
       <button class="rk-drive ui-interactive" style="
         display:flex;align-items:center;gap:12px;width:100%;text-align:left;
         padding:13px 12px;margin:2px 0 8px;border-radius:14px;
@@ -567,12 +602,39 @@ export class RickshawSystem {
 
     this.dialog.querySelector('.rk-close').addEventListener('click', () => this.closeDialog());
     this.dialog.querySelector('.rk-drive')?.addEventListener('click', () => this.takeWheel());
-    this.dialog.querySelectorAll('.rk-row').forEach((b) => {
-      b.addEventListener('click', () => {
-        const d = known.find((k) => k.loc.id === b.dataset.go);
-        if (d) this._agree(d);
+
+    /*
+     * Rows are re-bound after every render rather than delegated, because the
+     * fare quote lives on the row object and not in the DOM — the click has
+     * to find the SAME object that produced the price the player just read.
+     */
+    const bindRows = () => {
+      this.dialog.querySelectorAll('.rk-row').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const d = shown.find((k) => k.loc.id === btn.dataset.go);
+          if (d) this._agree(d);
+        });
       });
-    });
+    };
+    bindRows();
+
+    const q = this.dialog.querySelector('#rk-q');
+    const rowsEl = this.dialog.querySelector('#rk-rows');
+    if (q && rowsEl) {
+      q.addEventListener('input', () => {
+        shown = search(q.value);
+        rowsEl.innerHTML = rowsFor(shown);
+        bindRows();
+      });
+      /*
+       * The world's own keyboard shortcuts are off while the dialog is open
+       * (input.setEnabled(false) above), but UISystem keeps its own window
+       * listener, so stop keys here too — otherwise typing "madan mohan"
+       * would toggle the map mid-word, which is the same fault that was just
+       * fixed in the map's search box.
+       */
+      q.addEventListener('keydown', (e) => e.stopPropagation());
+    }
   }
 
   closeDialog() {

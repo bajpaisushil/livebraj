@@ -120,6 +120,49 @@ const nav = await page.evaluate(() => {
 });
 check('Walk here builds a route', nav.ok && nav.route > 1, `${nav.dest}: ${nav.route} nodes`);
 
+/* ---- 6b. typing a name with an 'm' in it must not close the map ---- */
+/*
+ * `m` toggles the map, and the map has a search box. Every second place in
+ * Vrindavan has an m in it — Madan Mohan, Prem Mandir, Imli Tala, and the
+ * word "mandir" itself — so this threw you out of the map on the first
+ * keystroke. Two window keydown listeners existed; InputManager guarded
+ * against typing and the UI's own one did not.
+ */
+await page.evaluate(() => window.vrindavan.ctx.ui.show('map'));
+await page.waitForFunction(() => window.vrindavan.ctx.ui.screen === 'map', null, { timeout: 8000 });
+await page.focus('#map-q');
+// clear what earlier steps left in the field, or this asserts on their text
+await page.fill('#map-q', '');
+await page.type('#map-q', 'madan mohan', { delay: 12 });
+const typed = await page.evaluate(() => ({
+  screen: window.vrindavan.ctx.ui.screen,
+  value: document.getElementById('map-q').value,
+  focused: document.activeElement && document.activeElement.id,
+}));
+check('typing a name with an m in it stays on the map',
+  typed.screen === 'map', `screen is "${typed.screen}"`);
+check('and every letter reaches the field',
+  typed.value === 'madan mohan', `field holds "${typed.value}"`);
+check('and the field keeps focus while typing',
+  typed.focused === 'map-q', `focus on "${typed.focused}"`);
+
+// Escape should get you out of the field without closing the whole screen
+await page.keyboard.press('Escape');
+const esc = await page.evaluate(() => ({
+  screen: window.vrindavan.ctx.ui.screen,
+  focused: document.activeElement && document.activeElement.id,
+}));
+check('Escape leaves the field, not the map',
+  esc.screen === 'map' && esc.focused !== 'map-q',
+  `screen "${esc.screen}", focus "${esc.focused}"`);
+
+// and with nothing focused, m still toggles
+await page.keyboard.press('m');
+const toggled = await page.evaluate(() => window.vrindavan.ctx.ui.screen);
+check('m still toggles the map when not typing', toggled === 'world', `screen "${toggled}"`);
+await page.evaluate(() => window.vrindavan.ctx.ui.show('map'));
+await page.evaluate(() => { document.getElementById('map-q').value = ''; });
+
 /* ---- 7. shots across zoom ---- */
 await page.evaluate(() => { const m = window.vrindavan.ctx.map; m.fitWorld(); m._mapDirty = true; m._drawFull(true); });
 await page.waitForTimeout(500);

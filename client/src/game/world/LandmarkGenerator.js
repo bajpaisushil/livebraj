@@ -4808,20 +4808,108 @@ function buildPremMandir({ loc, b, ground, rng }) {
   const cs = Math.cos(rot), sn = Math.sin(rot);
   const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
   const colliders = [];
-  const MARBLE = 0xf4f1ea, SHADOW = 0xd8d2c4;
+  /*
+   * DO NOT PAINT IT WHITE. The survey is blunt about this being "the whole
+   * game": sampled over 740 x 160 px of facade, mean luminance is 64%, HALF
+   * the building is darker than V71% and a QUARTER darker than V47%, and the
+   * saturation of the lit marble is 9.4%, not zero. #ffffff models only the
+   * brightest 5% of it.
+   *
+   * And the stone itself is not white. The temple's own literature says
+   * Carrara, and ordinary Bianco Carrara is described by its own trade
+   * literature as "white or BLUE-GREY" — only the Statuario grade is
+   * near-white. Some of the grey measured here is the marble, not the shade.
+   *
+   * Measured, overcast monsoon light: ground storey #e5e7e1 (H80 S3 V91),
+   * upper storey #dfddd1 (H51 S6 V87). The vertical ramp does the rest.
+   */
+  const MARBLE = 0xe5e7e1, SHADOW = 0xc9c7bb;
 
-  const HW = 18.5, HD = 17.5;        // 37 x 35 m body
-  const PW = 29, PD = 19.5;          // 58 x 39 m platform
+  /*
+   * MEASURED off OpenStreetMap (ODbL, satellite traces):
+   *   way 673573044, the building  61.4 m E-W x 40.7 m N-S, 1,748 m²
+   *   way 491803653, the jagati   110.0 x 67.9 m, 7,201 m²
+   * This was 37 x 35 on a 58 x 39 platform — a little over half the real
+   * footprint on a platform barely a third of the real area. The published
+   * "122 ft long, 115 ft wide" that several sites repeat describes a
+   * completely different building and is not used.
+   */
+  const HW = 30.7, HD = 20.35;       // 61.4 x 40.7 m body
+  const PW = 55, PD = 34;            // 110 x 68 m jagati
   const FL = ground + 2.4;           // raised
-  const H = 13.5;
+  const H = 13.3;                    // MEASURED parapet/roof deck
 
   /* ---- lawns, then the platform, then the forty-foot parikrama ---- */
   b.box(x, ground - 0.25, z, PW * 2 + 40, 0.4, PD * 2 + 40, 0x6f9050, rot);
   b.box(x, ground + 0.15, z, PW * 2 + 26, 0.5, PD * 2 + 26, 0xe8e2d2, rot);
-  for (let i = 0; i < 5; i++) {      // the steps up to it
-    b.box(x, ground + 0.65 + i * 0.35, z, PW * 2 - i * 1.4, 0.35, PD * 2 - i * 1.4, MARBLE, rot);
+  /*
+   * THE STEPS WERE DRAWN AND NOT COLLIDED.
+   *
+   * Five treads and the platform above them existed as meshes and nothing
+   * else, so `standHeight` had nothing to offer and the body kept the height
+   * of the lawn underneath. You did not climb the staircase; you walked into
+   * it and disappeared inside it. "I get vanished under stairs on walking
+   * instead of stepping up."
+   *
+   * `standOnly`, because a 0.35 m riser is well under STEP_UP (0.52) and is
+   * therefore something you walk UP, not something you bump into. Marking
+   * them solid instead would trade falling through the stairs for a 2.4 m
+   * wall around the whole temple, which is the mistake the ISKCON hall
+   * floor made — see the note on `standOnly` in WorldService.collide.
+   *
+   * Tagged `temple-step` rather than `temple-floor` on purpose: the generic
+   * floor slab added after every builder keys off a `temple-floor` tag to
+   * decide whether the builder owns its own floor, and this is a staircase
+   * outside the building, not the floor of its interior.
+   */
+  /*
+   * A MOULDED EDGE ALL ROUND, AND BROAD STEPS ON ONE SIDE.
+   *
+   * This drew five concentric treads ringing the whole 110 x 68 m jagati,
+   * which is a ziggurat, not a temple platform — and the steps check caught
+   * it: six levels stacked on one centre with a 1.5 m drop and zero
+   * horizontal run, because a concentric ring has no run anywhere except
+   * radially. The survey is specific: "Moulded white marble edge, ornate
+   * metal balustrade. BROAD STEPS ON THE EAST."
+   *
+   * So the jagati is one raised slab with a solid moulded edge you cannot
+   * climb, and a single wide flight up its front. The treads are colliders
+   * as well as meshes this time — they were meshes only, which is why you
+   * walked into the staircase and vanished inside it rather than climbing
+   * it.
+   */
+  {
+    const RISE = 0.35, TREAD = 0.62, N = 5;
+
+    // the moulded edge: solid, so the only way up is the flight
+    b.box(x, ground + 0.65, z, PW * 2, FL - ground - 0.65, PD * 2, SHADOW, rot);
+    b.box(x, FL - 0.1, z, PW * 2 - 0.5, 0.2, PD * 2 - 0.5, MARBLE, rot);
+    colliders.push({
+      type: 'box', x, z, w: PW * 2, d: PD * 2, rot,
+      h: FL - ground, tag: 'temple-floor', standOnly: true,
+    });
+
+    // and the flight, on the front, wide enough to be the approach it is
+    const SW = Math.min(PW * 0.9, 26);
+    for (let i = 0; i < N; i++) {
+      const lz = PD + (N - i) * TREAD - TREAD * 0.5;
+      const q = p(0, lz);
+      const top = 0.65 + (i + 1) * RISE;
+      b.box(q[0], ground + 0.65 + i * RISE, q[1], SW, RISE, TREAD, MARBLE, rot);
+      colliders.push({
+        type: 'box', x: q[0], z: q[1], w: SW, d: TREAD, rot,
+        h: top, tag: 'temple-step', standOnly: true,
+      });
+    }
+    // the balustrade either side of the flight, which is what stops you
+    // walking off the cheek of it
+    for (const sx of [-1, 1]) {
+      const q = p(sx * (SW * 0.5 + 0.35), PD + N * TREAD * 0.5);
+      b.box(q[0], ground + 0.65, q[1], 0.5, 1.5, N * TREAD, SHADOW, rot);
+      colliders.push({ type: 'box', x: q[0], z: q[1], w: 0.5, d: N * TREAD, rot,
+        h: 2.15, tag: 'temple-rail' });
+    }
   }
-  b.box(x, FL - 0.1, z, PW * 2 - 7, 0.2, PD * 2 - 7, MARBLE, rot);
 
   /* ---- the body, and its 150 carved pillars ---- */
   /*
@@ -4893,8 +4981,33 @@ function buildPremMandir({ loc, b, ground, rng }) {
 
   /* ---- nine domes, seventeen kalashas ---- */
   b.box(x, FL + H, z, HW * 2 + 1.6, 1.1, HD * 2 + 1.6, SHADOW, rot);
+  /*
+   * THE CENTRE IS NOT A DOME.
+   *
+   * "ONE tall curvilinear NAGARA SHIKHARA of the SHEKHARI type — a latina
+   * spire with clustered subsidiary half-spires (urushringas) banked in 3-4
+   * tiers up each face and corner. It is NOT a dome, NOT an onion, NOT a
+   * smooth cone." What flanks it are SAMVARANA bell-roofs, which is what the
+   * nine "domes" of the published count actually are.
+   *
+   * Photogrammetry, scale pinned to the sourced 38.1 m flag height:
+   *   parapet 13.3 m, secondary spire 19.1, central samvarana 21.5,
+   *   main shikhara to the top of its gold kalash 34.8 m (about 114 ft),
+   *   flag-mast tip 38.1 m.
+   * So the shikhara rises 21.5 m above the parapet on a base about 13.4 m
+   * wide, and the whole masonry summit was being drawn at 13 m — a third of
+   * its height, and the wrong shape.
+   *
+   * AND IT IS NOT CENTRAL — measured on two independent photographs. The
+   * offset below is modest and approximate; the survey establishes the fact
+   * but not the exact displacement.
+   */
+  {
+    const q = p(0, -HD * 0.16);
+    shikhara(b, q[0], FL + H, q[1], 6.7, 21.5, MARBLE);
+  }
   const domes = [
-    [0, 0, 7.2, 13.0], [-HW * 0.58, HD * 0.55, 3.4, 6.2], [HW * 0.58, HD * 0.55, 3.4, 6.2],
+    [-HW * 0.58, HD * 0.55, 3.4, 6.2], [HW * 0.58, HD * 0.55, 3.4, 6.2],
     [-HW * 0.58, -HD * 0.55, 3.4, 6.2], [HW * 0.58, -HD * 0.55, 3.4, 6.2],
     [0, HD * 0.62, 3.0, 5.4], [0, -HD * 0.62, 3.0, 5.4],
     [-HW * 0.62, 0, 3.0, 5.4], [HW * 0.62, 0, 3.0, 5.4],
