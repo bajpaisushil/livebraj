@@ -7,7 +7,7 @@ p.on('console', m => { if (m.type() === 'error') errors.push('CONSOLE ' + m.text
 const failed = [];
 p.on('requestfailed', r => failed.push(r.url().split('/').slice(-2).join('/') + ' :: ' + (r.failure()?.errorText || '?')));
 // A plain python http.server — no project tooling, no custom headers.
-await p.goto('http://localhost:8099/', { waitUntil:'domcontentloaded' });
+await p.goto('https://livebraj-sushil2003s-projects.vercel.app/', { waitUntil:'domcontentloaded' });
 let booted = false;
 try {
   await p.waitForFunction(() => window.vrindavan?.ctx?.world && window.vrindavan?.ctx?.ui, null, { timeout: 240000 });

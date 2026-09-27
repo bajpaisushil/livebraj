@@ -778,6 +778,7 @@ export class Player {
 
     if (this._speed > 0.02) {
       const p = this.root.position;
+      const wasX = p.x, wasZ = p.z;
       _v.copy(p).addScaledVector(this._vel, dt);
 
       // wade, but never swim
@@ -788,10 +789,84 @@ export class Player {
         ctx.world.collide(p, RADIUS, this._feet());              // feet, not root
         if (ctx.crowd && ctx.crowd.collideAgents) ctx.crowd.collideAgents(p, RADIUS);
       }
-    }
+
+      /*
+       * WALKING AND GOING NOWHERE.
+       *
+       * A 1:1 town of this much geometry will eventually pen somebody in, and
+       * until now there was no way out of that but to close the app — the
+       * vehicles have had a stuck-detector for months and the person walking
+       * has had nothing. Being trapped in front of the Deities was reported
+       * four separate times before this existed.
+       *
+       * So: if the player is asking to move and has covered almost nothing
+       * for a second and a half, they are wedged. Not "slow" — wedged. Real
+       * walking into a wall still slides along it, which moves you.
+       */
+      const got = Math.hypot(p.x - wasX, p.z - wasZ);
+      const wanted = this._speed * dt;
+      if (wanted > 0.01 && got < wanted * 0.12) this._stuckT = (this._stuckT || 0) + dt;
+      else this._stuckT = 0;
+
+      if (this._stuckT > 1.5) {
+        this._stuckT = 0;
+        const out = this._wayOut(ctx);
+        if (out) {
+          /*
+           * Deliberately NOT silent. A player who is teleported without being
+           * told thinks the world glitched; a player who is told thinks the
+           * game noticed. And it reports WHERE, because every one of these is
+           * a geometry bug worth finding.
+           */
+          console.warn('[player] unstuck from', wasX.toFixed(1), wasZ.toFixed(1),
+            '->', out.x.toFixed(1), out.z.toFixed(1));
+          p.x = out.x; p.z = out.z;
+          this._standY = out.y;
+          this._speed = 0; this._vel.set(0, 0, 0);
+          if (ctx.bus) {
+            ctx.bus.emit('ui:toast', {
+              title: 'Stepped back into the open',
+              sub: 'आप फिर से खुले में हैं',
+            });
+          }
+        }
+      }
+    } else this._stuckT = 0;
 
     this._yaw = dampAngle(this._yaw, this._targetYaw, 9, dt);
     this.root.rotation.y = this._yaw;
+  }
+
+  /**
+   * The nearest place a body could actually stand, searched outward.
+   *
+   * Uses collide() and standHeight() rather than isClear(), because isClear
+   * is feet-blind — it counts a step as solid and would happily report the
+   * inside of a staircase as a fine place to stand. That mistake has cost
+   * this project three separate wrong diagnoses.
+   */
+  _wayOut(ctx) {
+    const p = this.root.position;
+    const feet = this._standY !== null && this._standY !== undefined
+      ? this._standY : ctx.world.groundHeight(p.x, p.z);
+    for (let r = 2.5; r <= 20; r += 1.5) {
+      for (let k = 0; k < 24; k++) {
+        // rotate the sample pattern per ring so rings do not line up and
+        // re-test the same blocked bearing over and over
+        const a = (k / 24) * Math.PI * 2 + r * 0.7;
+        const x = p.x + Math.cos(a) * r, z = p.z + Math.sin(a) * r;
+        const q = { x, y: 0, z };
+        ctx.world.collide(q, RADIUS, feet);
+        if (Math.hypot(q.x - x, q.z - z) > 0.05) continue;      // inside masonry
+        const h = ctx.world.standHeight
+          ? ctx.world.standHeight(x, z, feet) : ctx.world.groundHeight(x, z);
+        if (h === null || h === undefined) continue;
+        if (Math.abs(h - feet) > 2.5) continue;                 // not a cliff
+        if (ctx.world.waterDepth(x, z) > 0.5) continue;         // not the river
+        return { x, z, y: h };
+      }
+    }
+    return null;
   }
 
   _updateAnimation(dt) {

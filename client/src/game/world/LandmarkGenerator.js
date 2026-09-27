@@ -2595,18 +2595,35 @@ const BACK_HALF = 3.4;      // the back gate is narrower, as it is in life
         h: t.top - gy, tag: t.tag, standOnly: t.standOnly });
     }
     /*
-     * The side rails stop you wading into the hall over the verandah, where
-     * there are no steps. They must therefore begin OUTSIDE the widened
-     * flight — starting them at `KB_COURT` put them 0.3 m from the outer
-     * altars, close enough that a person standing at one was already inside
-     * the rail and could not walk out past it.
+     * THE SIDE RAILS ARE GONE, AND THEY WERE THE CAGE.
+     *
+     * They were added to "stop you wading into the hall over the verandah,
+     * where there are no steps", then moved twice to clear the altars. Both
+     * changes missed the real fault, which is that the collider carried NO
+     * `h` — and in this codebase a collider with no height is INFINITELY
+     * TALL. So each rail was a full-height wall running the entire side of
+     * the hall. You could walk in down the steps at the front and then never
+     * get out except by walking all the way back to those same steps, which
+     * is exactly what was reported four times: "I have to go to the end of
+     * the poles to get out."
+     *
+     * They also prevented nothing. The hall floor stands at 1.54 m over a
+     * courtyard at 0.70 — a 0.84 m rise against a STEP_UP of 0.52 — so
+     * `standHeight` already refuses to let anyone climb in over the verandah.
+     * The rails guarded a wall that was already there.
+     *
+     * Removing them makes the gaps between the pillars behave the way the
+     * pillars themselves do: the pillars are solid, the gaps are not. Walking
+     * out between two of them steps you off the hall edge down into the
+     * court, which is what a person would do.
+     *
+     * Found by replicating collide()'s own filter — including its `radius + 6`
+     * query and its `top <= feetY + STEP_UP` skip — at the point the body
+     * TRIED to reach rather than the point it was pushed back to. Sampling
+     * where the body ended up reports nothing, because collide has by
+     * definition already pushed it clear of whatever stopped it. Three
+     * earlier probes reported "no blocker" for that reason.
      */
-    const RAIL_IN = KB_COURT + 1.4;
-    for (const sx of [-1, 1]) {
-      const r = p(sx * (RAIL_IN + (HW - RAIL_IN) * 0.5), HALL_Z - 0.3);
-      colliders.push({ type: 'box', x: r[0], z: r[1], w: HW - RAIL_IN, d: 0.5, rot,
-        tag: 'hall-rail' });
-    }
   }
 
   /**
