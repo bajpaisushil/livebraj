@@ -1340,6 +1340,38 @@ function tint(color, k) {
  * because at sixteen sides a wobble is invisible and a colour change reads from
  * the far side of the courtyard, which is where you see these from.
  */
+/**
+ * A BANGALDAR EAVE — a cornice that undulates.
+ *
+ * "This is the single most distinctive line in the whole complex and it is
+ * easy to miss: the eave is NOT straight. It is a chain of shallow
+ * downward-curving ogee/cyma sweeps, one per bay — the Bengali bangaldar
+ * curve, borrowed into Rajput marble."
+ *
+ * Drawn as a run of short segments whose height follows a cosine, so each bay
+ * dips at its middle and lifts at the pilaster that carries it. Cheap: it is
+ * the same slab the straight cornice was, cut into pieces and moved.
+ */
+function bangaldarEave(b, cx, y, cz, w, d, rot, color, bays = 5, drop = 0.42) {
+  const cs = Math.cos(rot), sn = Math.sin(rot);
+  const run = (len, across, along) => {
+    const n = Math.max(6, Math.round(len / 0.5));
+    for (let i = 0; i < n; i++) {
+      const t = (i + 0.5) / n;
+      // one full dip per bay, deepest at the middle of each
+      const phase = (t * bays) % 1;
+      const dy = -drop * Math.sin(phase * Math.PI);
+      const o = (t - 0.5) * len;
+      const lx = across ? o : along, lz = across ? along : o;
+      b.box(cx + lx * cs - lz * sn, y + dy, cz + lx * sn + lz * cs,
+        across ? len / n + 0.03 : 0.42, 0.34, across ? 0.42 : len / n + 0.03,
+        color, rot);
+    }
+  };
+  for (const side of [1, -1]) run(w, true, side * d * 0.5);
+  for (const side of [1, -1]) run(d, false, side * w * 0.5);
+}
+
 function ribbedDome(b, cx, y0, cz, r, h, color, rib, sides = 16) {
   const RINGS = 8;
   let prev = null;
@@ -1578,7 +1610,11 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
   for (const sx of [-1, 1]) {
     const q = p(sx * 7.2, DOME_Z);
     b.box(q[0], DOME_Y, q[1], 4.8, 2.9, 4.8, KB_IVORY, rot);
-    ribbedDome(b, q[0], DOME_Y + 2.9, q[1], 2.5, 3.5, KB_DOME, KB_RIB, 14);
+    /*
+     * "Broad, LOW, deeply GADROONED (20-28 fat lobes), WIDER THAN THEY ARE
+     * TALL." These were 14 ribs and taller than wide, which reads as an onion.
+     */
+    ribbedDome(b, q[0], DOME_Y + 2.9, q[1], 2.7, 2.3, KB_DOME, KB_RIB, 24);
     for (const a of [0.42, -0.42]) {
       b.panel(q[0] + Math.sin(rot + a) * 2.45, DOME_Y + 4.2, q[1] + Math.cos(rot + a) * 2.45,
         0.5, 1.5, KB_SAFFRON, rot + a, 0.22);
@@ -1593,7 +1629,7 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
         0.36, 2.8, 0.36, KB_DARKWOOD);
     }
     b.box(q[0], DOME_Y + 4.8, q[1], 7.0, 0.55, 7.0, KB_IVORY, rot);
-    ribbedDome(b, q[0], DOME_Y + 5.35, q[1], 3.4, 5.1, KB_DOME, KB_RIB, 16);
+    ribbedDome(b, q[0], DOME_Y + 5.35, q[1], 3.7, 3.3, KB_DOME, KB_RIB, 26);
   }
 
   /* ---------------- the courtyard floor ---------------- */
@@ -2260,6 +2296,13 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
     const d0 = p(SX, SZ - 7.6);
     cuspedArch(b, d0[0], g0 + 0.6, d0[1], 4.0, 5.0, 0.8, rot, KB_WHITE_MARBLE, 7);
     b.box(s0[0], g0 + 7.8, s0[1], 14, 0.7, 16, KB_WHITE_MARBLE, rot);
+    /*
+     * The cornice does not run straight. Per the 2026 survey it is "a chain of
+     * shallow downward-curving ogee/cyma sweeps, one per bay", which it calls
+     * the single most distinctive line on the whole site and the easiest to
+     * miss — and we had missed it, drawing a flat slab.
+     */
+    bangaldarEave(b, s0[0], g0 + 7.95, s0[1], 14.6, 16.6, rot, KB_WHITE_MARBLE, 5, 0.46);
     // seventy feet, which is the one published height on the whole site
     shikhara(b, s0[0], g0 + 8.5, s0[1], 3.1, 12.8, KB_WHITE_MARBLE, 12);
     for (const sx of [-1, 1]) {

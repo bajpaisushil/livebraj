@@ -2490,3 +2490,59 @@ Logged on arrival, per the standing rule.
    ISKCON cage: a step collider whose `h` is missing or whose `standOnly` is
    dropped, so `standHeight` never offers the tread and the body keeps the
    ground below.
+
+## 2026-09-27 — Five temple surveys, and a disagreement kept rather than settled
+
+A workflow ran five surveys with an independent checker on each whose brief
+was to refute the first. All ten agents returned clean. Written up to
+docs/research/{prem-mandir,radha-vallabh,iskcon-krishna-balaram,shahji,
+rangaji}.md, each carrying its own "what NOT to build", its own uncertainty
+list, and the checker's corrections.
+
+Prem Mandir was applied in full — see the commit. The other four are queued.
+
+### The ISKCON dome conflict, recorded and NOT resolved
+
+The new survey says the main temple is "LOW, FLAT-ROOFED… with no spire at
+all" and that the three-dome composition belongs on Prabhupada's Samadhi
+instead: "You have the composition inverted, and you have it on the wrong
+building."
+
+The builder's existing comment says the opposite, and cites its evidence:
+"Verified off two independent Commons photographs taken through the samadhi's
+arch: the centre is an open chhatri on short dark columns under a large
+ribbed dome with a stacked finial, the flanking two are lower solid domes on
+square drums."
+
+**The geometry was NOT changed.** The new survey lists this as THE BIGGEST
+item in its own uncertainty section, and its evidence is inferential — where
+a signboard places things, and a spire not appearing in street photographs.
+Direct photographs of the object beat an argument from absence. If someone
+resolves this later, the deciding evidence would be a photograph taken from
+inside the courtyard looking up, which neither survey has.
+
+What WAS taken from the survey, because it is unambiguous and additive:
+
+- **The bangaldar eave.** "The single most distinctive line in the whole
+  complex and it is easy to miss: the eave is NOT straight. It is a chain of
+  shallow downward-curving ogee/cyma sweeps, one per bay." We drew a flat
+  slab. Now a cosine dip per bay, deepest mid-bay, lifting at each pilaster.
+- **The domes are gadrooned and LOW** — "20-28 fat lobes… wider than they are
+  tall". They were 14 ribs and taller than wide, which reads as an onion.
+
+Already present and confirmed by the survey rather than added: the great
+cusped arch at 8.2 m span against its "roughly 8-11 m", the Samadhi's 70 ft
+shikhara, the black-and-white chequerboard on the diagonal.
+
+### The sunken courtyard, deliberately still flush
+
+The survey says the court centre sits 0.45-0.60 m below the ambulatory. The
+builder's comment declines to model it, reasoning that "nothing in this engine
+climbs, so every centimetre of level change indoors is a centimetre the player
+stands buried in".
+
+**That reasoning is now wrong** — the engine climbs anything under STEP_UP
+(0.52 m) given a collider, which is exactly what tonight's Prem Mandir fix
+proved. But the decision stands for now, because the player is actively
+reporting being trapped at this very temple and a new half-metre level change
+is a new chance to trap them. Revisit once the collision complaints stop.
