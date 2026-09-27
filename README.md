@@ -53,6 +53,32 @@ dependency install — the client is plain ES modules.
 
 On a phone, serve over your LAN and open the machine's IP on port 8080.
 
+### Putting it on the web
+
+The same directory is the deployable artefact. Nothing needs to be compiled,
+there is no backend, and `client/` contains no `package.json`, so a host has
+nothing it could build even if it tried.
+
+Verified rather than assumed: the whole world boots off a bare
+`python3 -m http.server` with **zero failed requests and zero console
+errors** — 34 landmarks, 2,172 roads, 2.5M triangles. `window.Capacitor` is
+correctly absent in a browser and `SaveSystem` falls back from the native
+Preferences plugin to `localStorage` on its own.
+
+Upload is 6.1 MB: `vendor/` 3.1, `src/` 1.9, `assets/` 1.1.
+
+On Vercel, the only setting that matters is **Root Directory = `client`**.
+Leave Build Command, Output Directory and Install Command empty.
+[`client/vercel.json`](client/vercel.json) supplies the cache headers and
+deliberately sets no build command — nothing here is content-hashed, so
+`index.html` must always revalidate or a deploy strands people on the old
+build, while `vendor/` and `assets/` can safely cache for a week.
+
+**Known gap: the web build is not offline-capable.** The Android wrapper is,
+because a WebView keeps its assets. A browser will not be until there is a
+service worker and a web manifest — which would also make the site installable
+to a phone home screen without an app store.
+
 ### Controls
 
 | | Touch | Keyboard |
