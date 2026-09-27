@@ -1,0 +1,770 @@
+/**
+ * GENERATED FILE — do not edit by hand.
+ * Produced by tools/osm-import/import.mjs from an OpenStreetMap extract.
+ * Map data (c) OpenStreetMap contributors, licensed under ODbL 1.0.
+ * World origin: 27.57998, 77.6905 (Shri Banke Bihari Mandir).
+ * Units: metres. +X east, +Z south.
+ */
+export const LOCATIONS = [
+  {
+    "id": "banke-bihari",
+    "name": "Shri Banke Bihari Mandir",
+    "hindi": "श्री बाँके बिहारी मंदिर",
+    "type": "temple",
+    "district": "old-town",
+    "grounds": null,
+    "pos": [0.25, 0.22],
+    "geo": [27.579978, 77.690503],
+    "rot": 3.141592653589793,
+    "radius": 30,
+    "icon": "temple",
+    "deity": "Shri Banke Bihari Ji",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-rajasthani",
+      "w": 44,
+      "d": 50,
+      "h": 17,
+      "color": "#a85f40",
+      "accent": "#b0472e",
+      "tiers": 3
+    },
+    "osm": "Храм Банкебихари"
+  },
+  {
+    "id": "yugal-ghat",
+    "name": "Shri Yugal Ghat",
+    "hindi": "श्री युगल घाट",
+    "type": "ghat",
+    "district": "ghat-front",
+    "grounds": null,
+    "pos": [57.45, -172.32],
+    "geo": [27.581535, 77.691082],
+    "rot": 0.9424777960769379,
+    "radius": 30,
+    "icon": "ghat",
+    "deity": null,
+    "interactions": [
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "ghat",
+      "w": 54,
+      "d": 36,
+      "h": 10,
+      "color": "#d2c09e",
+      "accent": "#96633f"
+    },
+    "osm": "Югала-гхат"
+  },
+  {
+    "id": "loi-bazar",
+    "name": "Loi Bazar",
+    "hindi": "लोई बाज़ार",
+    "type": "market",
+    "district": "bazaar",
+    "grounds": null,
+    "pos": [157.98, -201.68],
+    "geo": [27.5818, 77.6921],
+    "rot": 0,
+    "radius": 40,
+    "icon": "market",
+    "deity": null,
+    "interactions": [
+      "story"
+    ],
+    "build": {
+      "kind": "market",
+      "w": 60,
+      "d": 34,
+      "h": 6,
+      "color": "#dcc49c",
+      "accent": "#c8452a"
+    },
+    "osm": null
+  },
+  {
+    "id": "madan-mohan",
+    "name": "Shri Madan Mohan Mandir",
+    "hindi": "श्री मदन मोहन मंदिर",
+    "type": "temple",
+    "district": "ghat-front",
+    "grounds": null,
+    "pos": [-285.37, -30.2],
+    "geo": [27.580253, 77.68761],
+    "rot": 0.7853981633974483,
+    "radius": 30,
+    "icon": "temple",
+    "deity": "Shri Madan Mohan",
+    "interactions": [
+      "darshan",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-redstone",
+      "w": 28,
+      "d": 34,
+      "h": 15,
+      "color": "#a1523a",
+      "accent": "#7d3d2b"
+    },
+    "osm": "मदन मोहन मंदिर"
+  },
+  {
+    "id": "seva-kunj",
+    "name": "Shri Seva Kunj",
+    "hindi": "श्री सेवा कुंज",
+    "type": "grove",
+    "district": "old-town",
+    "grounds": null,
+    "pos": [452.63, -268.39],
+    "geo": [27.582402, 77.695084],
+    "rot": 0,
+    "radius": 46,
+    "icon": "grove",
+    "deity": null,
+    "interactions": [
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "grove",
+      "w": 96,
+      "d": 88,
+      "h": 8,
+      "color": "#456a33",
+      "accent": "#d8c9a8",
+      "dome": true
+    },
+    "osm": "सेवा कुंज"
+  },
+  {
+    "id": "kaliya-ghat",
+    "name": "Shri Kaliya Ghat",
+    "hindi": "श्री कालीय घाट",
+    "type": "ghat",
+    "district": "ghat-front",
+    "grounds": null,
+    "pos": [-577.27, 183.06],
+    "geo": [27.578328, 77.684654],
+    "rot": 0.6283185307179586,
+    "radius": 36,
+    "icon": "ghat",
+    "deity": null,
+    "interactions": [
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "ghat",
+      "w": 70,
+      "d": 44,
+      "h": 12,
+      "color": "#cfbd9b",
+      "accent": "#8f5f3c"
+    },
+    "osm": "Kaliya Ghata"
+  },
+  {
+    "id": "radha-vallabh",
+    "name": "Shri Radha Vallabh Mandir",
+    "hindi": "श्री राधावल्लभ मंदिर",
+    "type": "temple",
+    "district": "temple-quarter",
+    "grounds": null,
+    "pos": [483.83, -367.9],
+    "geo": [27.5833, 77.6954],
+    "rot": 1.5707963267948966,
+    "radius": 24,
+    "icon": "temple",
+    "deity": "Shri Radha Vallabh",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-gable",
+      "w": 30,
+      "d": 40,
+      "h": 14,
+      "color": "#a8563c",
+      "accent": "#8a4230"
+    },
+    "osm": null
+  },
+  {
+    "id": "radha-shyamsundar",
+    "name": "Shri Radha Shyamsundar Mandir",
+    "hindi": "श्री राधा श्यामसुन्दर मंदिर",
+    "type": "temple",
+    "district": "old-town",
+    "grounds": null,
+    "pos": [555.59, -300.01],
+    "geo": [27.582687, 77.696127],
+    "rot": 3.141592653589793,
+    "radius": 22,
+    "icon": "temple",
+    "deity": "Shri Radha Shyamsundar",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-haveli",
+      "w": 24,
+      "d": 28,
+      "h": 10,
+      "color": "#dcc9a6",
+      "accent": "#b0472e",
+      "arches": 5
+    },
+    "osm": "Sri Radha Shyamsundar Mandir"
+  },
+  {
+    "id": "radha-damodar",
+    "name": "Shri Radha Damodar Mandir",
+    "hindi": "श्री राधा दामोदर मंदिर",
+    "type": "temple",
+    "district": "temple-quarter",
+    "grounds": null,
+    "pos": [504.18, -419.01],
+    "geo": [27.583761, 77.695606],
+    "rot": 0,
+    "radius": 20,
+    "icon": "temple",
+    "deity": "Shri Radha Damodar",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-haveli",
+      "w": 20,
+      "d": 24,
+      "h": 9,
+      "color": "#dccfb4",
+      "accent": "#9c6a48",
+      "arches": 3
+    },
+    "osm": "Sri Radha Damodara Mandir"
+  },
+  {
+    "id": "shahji",
+    "name": "Shahji Mandir",
+    "hindi": "शाहजी मंदिर",
+    "type": "temple",
+    "district": "temple-quarter",
+    "grounds": null,
+    "pos": [641.81, -534.12],
+    "geo": [27.5848, 77.697],
+    "rot": 3.141592653589793,
+    "radius": 26,
+    "icon": "temple",
+    "deity": "Chhote Radha Raman",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-colonnade",
+      "w": 32,
+      "d": 40,
+      "h": 11,
+      "color": "#f4f1e8",
+      "accent": "#d8cfba"
+    },
+    "osm": null
+  },
+  {
+    "id": "chir-ghat",
+    "name": "Shri Chir Ghat",
+    "hindi": "श्री चीर घाट",
+    "type": "ghat",
+    "district": "ghat-front",
+    "grounds": null,
+    "pos": [605.44, -611.52],
+    "geo": [27.585499, 77.696632],
+    "rot": 0.3141592653589793,
+    "radius": 34,
+    "icon": "ghat",
+    "deity": null,
+    "interactions": [
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "ghat",
+      "w": 62,
+      "d": 40,
+      "h": 11,
+      "color": "#d2c09e",
+      "accent": "#9c6a42"
+    },
+    "osm": "Чир-гхат"
+  },
+  {
+    "id": "govind-dev",
+    "name": "Shri Govind Dev Ji Mandir",
+    "hindi": "श्री गोविन्द देव जी मंदिर",
+    "type": "temple",
+    "district": "temple-quarter",
+    "grounds": null,
+    "pos": [880.11, -161.55],
+    "geo": [27.581438, 77.699413],
+    "rot": 3.141592653589793,
+    "radius": 36,
+    "icon": "temple",
+    "deity": "Shri Govind Dev Ji",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-truncated",
+      "w": 36,
+      "d": 56,
+      "h": 20,
+      "color": "#a96a47",
+      "accent": "#86402d",
+      "cathedral": true
+    },
+    "osm": "Govind Dev Temple"
+  },
+  {
+    "id": "nidhivan",
+    "name": "Shri Nidhivan",
+    "hindi": "श्री निधिवन",
+    "type": "grove",
+    "district": "old-town",
+    "grounds": null,
+    "pos": [770.19, -484.65],
+    "geo": [27.584354, 77.6983],
+    "rot": 1.5707963267948966,
+    "radius": 58,
+    "icon": "grove",
+    "deity": null,
+    "interactions": [
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "grove",
+      "w": 130,
+      "d": 110,
+      "h": 9,
+      "color": "#3f6330",
+      "accent": "#d8c9a8"
+    },
+    "osm": "निधिवन"
+  },
+  {
+    "id": "vrindavan-gate",
+    "name": "Vrindavan Dwar",
+    "hindi": "वृन्दावन द्वार",
+    "type": "gate",
+    "district": "raman-reti",
+    "grounds": null,
+    "pos": [-918.29, 407.79],
+    "geo": [27.5763, 77.6812],
+    "rot": 1.5707963267948966,
+    "radius": 26,
+    "icon": "gate",
+    "deity": null,
+    "interactions": [
+      "story"
+    ],
+    "build": {
+      "kind": "gate",
+      "w": 26,
+      "d": 9,
+      "h": 16,
+      "color": "#dcc9a8",
+      "accent": "#c8452a"
+    },
+    "osm": null
+  },
+  {
+    "id": "radha-raman",
+    "name": "Shri Radha Raman Mandir",
+    "hindi": "श्री राधा रमण मंदिर",
+    "type": "temple",
+    "district": "temple-quarter",
+    "grounds": null,
+    "pos": [812.1, -598.31],
+    "geo": [27.585379, 77.698725],
+    "rot": 1.5707963267948966,
+    "radius": 24,
+    "icon": "temple",
+    "deity": "Shri Radha Raman",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-haveli",
+      "w": 26,
+      "d": 30,
+      "h": 12,
+      "color": "#d9c7a4",
+      "accent": "#a8563c",
+      "arches": 3
+    },
+    "osm": "Sri Radha Raman Mandir"
+  },
+  {
+    "id": "jugal-kishore",
+    "name": "Shri Jugal Kishore Mandir",
+    "hindi": "श्री युगल किशोर मंदिर",
+    "type": "temple",
+    "district": "ghat-front",
+    "grounds": null,
+    "pos": [808.7, -775.49],
+    "geo": [27.586978, 77.69869],
+    "rot": 4.71238898038469,
+    "radius": 22,
+    "icon": "temple",
+    "deity": "Shri Jugal Kishore",
+    "interactions": [
+      "darshan",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-redstone",
+      "w": 26,
+      "d": 32,
+      "h": 16,
+      "color": "#a35540",
+      "accent": "#82402e"
+    },
+    "osm": "Храм Югалы Кишора"
+  },
+  {
+    "id": "radha-gopinath",
+    "name": "Shri Radha Gopinath Mandir",
+    "hindi": "श्री राधा गोपीनाथ मंदिर",
+    "type": "temple",
+    "district": "temple-quarter",
+    "grounds": null,
+    "pos": [900.57, -672.44],
+    "geo": [27.586048, 77.699621],
+    "rot": 0,
+    "radius": 24,
+    "icon": "temple",
+    "deity": "Shri Radha Gopinath",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-truncated",
+      "w": 32,
+      "d": 38,
+      "h": 14,
+      "color": "#a8563c",
+      "accent": "#8a4230"
+    },
+    "osm": "Sri Radha Gopinath Mandir"
+  },
+  {
+    "id": "brahma-kund",
+    "name": "Brahma Kund",
+    "hindi": "ब्रह्म कुंड",
+    "type": "kund",
+    "district": "old-town",
+    "grounds": null,
+    "pos": [1075.48, -370.03],
+    "geo": [27.583319, 77.701392],
+    "rot": 0,
+    "radius": 28,
+    "icon": "kund",
+    "deity": null,
+    "interactions": [
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "kund",
+      "w": 46,
+      "d": 46,
+      "h": 5,
+      "color": "#c9b895",
+      "accent": "#6f8f7a"
+    },
+    "osm": "Brahma Kund"
+  },
+  {
+    "id": "keshi-ghat",
+    "name": "Shri Keshi Ghat",
+    "hindi": "श्री केशी घाट",
+    "type": "ghat",
+    "district": "ghat-front",
+    "grounds": null,
+    "pos": [813.79, -807.04],
+    "geo": [27.587263, 77.698742],
+    "rot": 0.47123889803846897,
+    "radius": 56,
+    "icon": "ghat",
+    "deity": null,
+    "interactions": [
+      "pranam",
+      "offer",
+      "story"
+    ],
+    "build": {
+      "kind": "ghat",
+      "w": 120,
+      "d": 58,
+      "h": 15,
+      "color": "#b4664a",
+      "accent": "#8f4a34",
+      "palace": true
+    },
+    "osm": "Keshi Ghat"
+  },
+  {
+    "id": "rangaji",
+    "name": "Shri Rangaji Mandir",
+    "hindi": "श्री रंगनाथ मंदिर",
+    "type": "temple",
+    "district": "temple-quarter",
+    "grounds": null,
+    "pos": [1212, -261.24],
+    "geo": [27.582338, 77.702775],
+    "rot": 1.5707963267948966,
+    "radius": 46,
+    "icon": "temple",
+    "deity": "Shri Ranganath Ji",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-gopuram",
+      "w": 70,
+      "d": 110,
+      "h": 28,
+      "color": "#e4d8c0",
+      "accent": "#c05a33"
+    },
+    "osm": "श्री रंगनाथ मंदिर"
+  },
+  {
+    "id": "katyayani",
+    "name": "Shri Katyayani Peeth",
+    "hindi": "श्री कात्यायनी पीठ",
+    "type": "temple",
+    "district": "ghat-front",
+    "grounds": null,
+    "pos": [1307.37, 119.81],
+    "geo": [27.578899, 77.70374],
+    "rot": 3.141592653589793,
+    "radius": 22,
+    "icon": "temple",
+    "deity": "Shri Katyayani Devi",
+    "interactions": [
+      "darshan",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-small",
+      "w": 28,
+      "d": 32,
+      "h": 19,
+      "color": "#d5c3a0",
+      "accent": "#9c4a38"
+    },
+    "osm": "Khram Katyayani"
+  },
+  {
+    "id": "gopishwar-mahadev",
+    "name": "Shri Gopishwar Mahadev Mandir",
+    "hindi": "श्री गोपीश्वर महादेव मंदिर",
+    "type": "temple",
+    "district": "ghat-front",
+    "grounds": null,
+    "pos": [1229.64, -572.56],
+    "geo": [27.585147, 77.702953],
+    "rot": 3.141592653589793,
+    "radius": 20,
+    "icon": "temple",
+    "deity": "Shri Gopishwar Mahadev",
+    "interactions": [
+      "darshan",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-small",
+      "w": 22,
+      "d": 26,
+      "h": 16,
+      "color": "#cfc0a0",
+      "accent": "#8f6f4a"
+    },
+    "osm": "Храм Гопишвары Махадевы"
+  },
+  {
+    "id": "iskcon-krishna-balaram",
+    "name": "Shri Krishna Balaram Mandir",
+    "hindi": "श्री कृष्ण बलराम मंदिर",
+    "type": "temple",
+    "district": "raman-reti",
+    "grounds": 100,
+    "pos": [-1276.51, 825.88],
+    "geo": [27.572527, 77.677572],
+    "rot": 1.5707963267948966,
+    "radius": 40,
+    "icon": "temple",
+    "deity": "Shri Krishna and Balaram",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-modern",
+      "w": 54,
+      "d": 66,
+      "h": 21,
+      "color": "#f2ece0",
+      "accent": "#d8c9a8"
+    },
+    "osm": "Krishna-Balaram Temple"
+  },
+  {
+    "id": "prem-mandir",
+    "name": "Prem Mandir",
+    "hindi": "प्रेम मंदिर",
+    "type": "temple",
+    "district": "raman-reti",
+    "grounds": null,
+    "pos": [-1823.02, 874.08],
+    "geo": [27.572092, 77.672037],
+    "rot": 0,
+    "radius": 52,
+    "icon": "temple",
+    "deity": "Shri Radha Krishna",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-marble",
+      "w": 66,
+      "d": 84,
+      "h": 38,
+      "color": "#f8f6f0",
+      "accent": "#eae4d4"
+    },
+    "osm": "Prem Mandir"
+  },
+  {
+    "id": "chandrodaya",
+    "name": "Vrindavan Chandrodaya Mandir",
+    "hindi": "वृन्दावन चन्द्रोदय मंदिर",
+    "type": "landmark",
+    "district": "outskirts",
+    "grounds": null,
+    "pos": [-1056.52, 1859.44],
+    "geo": [27.5632, 77.6798],
+    "rot": 0,
+    "radius": 48,
+    "icon": "landmark",
+    "deity": null,
+    "interactions": [
+      "story"
+    ],
+    "build": {
+      "kind": "tower",
+      "w": 44,
+      "d": 44,
+      "h": 62,
+      "color": "#d9d2c4",
+      "accent": "#a89878"
+    },
+    "osm": null
+  },
+  {
+    "id": "chaar-dham",
+    "name": "Chaar Dham",
+    "hindi": "चार धाम",
+    "type": "temple",
+    "district": "outskirts",
+    "grounds": 96,
+    "pos": [-5748.82, 2115.19],
+    "geo": [27.560892, 77.632279],
+    "rot": -1.7011,
+    "radius": 70,
+    "icon": "temple",
+    "deity": "Shiv, Maa Vaishno Devi, Radha Krishna and Shani",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-chaardham",
+      "w": 76,
+      "d": 76,
+      "h": 26,
+      "color": "#f4efe4",
+      "accent": "#c9a03c"
+    },
+    "osm": null
+  },
+  {
+    "id": "chhatikara-crossing",
+    "name": "Chhatikara Crossing",
+    "hindi": "छटीकरा चौराहा",
+    "type": "landmark",
+    "district": "outskirts",
+    "grounds": null,
+    "pos": [-6496.44, 2105.61],
+    "geo": [27.560979, 77.624707],
+    "rot": 1.5707963267948966,
+    "radius": 52,
+    "icon": "gate",
+    "deity": null,
+    "interactions": [
+      "story"
+    ],
+    "build": {
+      "kind": "crossing",
+      "w": 70,
+      "d": 46,
+      "h": 13,
+      "color": "#d8cdb4",
+      "accent": "#c8452a"
+    },
+    "osm": "Chhatikara"
+  }
+];

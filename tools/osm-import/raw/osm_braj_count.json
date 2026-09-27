@@ -1,0 +1,11567 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-09-22T06:48:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 245757930,
+  "lat": 27.3206052,
+  "lon": 77.7622061,
+  "tags": {
+    "name": "Farah",
+    "name:en": "Farah",
+    "name:hi": "फराह",
+    "place": "town",
+    "postal_code": "281112"
+  }
+},
+{
+  "type": "node",
+  "id": 245759628,
+  "lat": 27.4840031,
+  "lon": 77.5282434,
+  "tags": {
+    "name": "Aring",
+    "place": "village",
+    "postal_code": "281500"
+  }
+},
+{
+  "type": "node",
+  "id": 245760219,
+  "lat": 27.5575987,
+  "lon": 77.7916007,
+  "tags": {
+    "AND_a_nosr_p": "10010479",
+    "name": "Raya",
+    "place": "town",
+    "postal_code": "281204",
+    "source": "AND",
+    "wikidata": "Q1925374"
+  }
+},
+{
+  "type": "node",
+  "id": 245760701,
+  "lat": 27.5820950,
+  "lon": 77.6092319,
+  "tags": {
+    "AND_a_nosr_p": "10010469",
+    "name": "Jait",
+    "place": "village",
+    "postal_code": "281402",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 245761113,
+  "lat": 27.6481353,
+  "lon": 77.3764667,
+  "tags": {
+    "name": "Barsana",
+    "name:en": "Barsana",
+    "name:hi": "बरसाना",
+    "place": "village",
+    "postal_code": "281405"
+  }
+},
+{
+  "type": "node",
+  "id": 245761361,
+  "lat": 27.7095568,
+  "lon": 77.9403457,
+  "tags": {
+    "AND_a_nosr_p": "10010458",
+    "name": "Iglas",
+    "place": "village",
+    "population": "1000",
+    "postal_code": "202124",
+    "source": "AND/ Bing",
+    "wikidata": "Q1755803"
+  }
+},
+{
+  "type": "node",
+  "id": 245761454,
+  "lat": 27.7226148,
+  "lon": 77.5016630,
+  "tags": {
+    "name": "Chhata",
+    "name:en": "Chhata",
+    "name:hi": "छाता",
+    "place": "village",
+    "population": "5000",
+    "postal_code": "281401",
+    "wikidata": "Q888816"
+  }
+},
+{
+  "type": "node",
+  "id": 245762143,
+  "lat": 27.8306549,
+  "lon": 77.8773701,
+  "tags": {
+    "name": "Gonda",
+    "place": "village",
+    "postal_code": "202123"
+  }
+},
+{
+  "type": "node",
+  "id": 245762908,
+  "lat": 27.8999168,
+  "lon": 77.3739284,
+  "tags": {
+    "name": "Hodal",
+    "name:hi": "होडल",
+    "name:ml": "ഹോഡൽ",
+    "place": "town",
+    "population": "10000",
+    "postal_code": "121106",
+    "wikidata": "Q616583",
+    "wikipedia": "en:Hodal"
+  }
+},
+{
+  "type": "node",
+  "id": 245763348,
+  "lat": 27.9465807,
+  "lon": 77.7922335,
+  "tags": {
+    "AND_a_nosr_p": "10010400",
+    "name": "Gaumat",
+    "place": "village",
+    "postal_code": "202135",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 568283868,
+  "lat": 27.4955539,
+  "lon": 77.6855554,
+  "tags": {
+    "is_in:county": "Mathura",
+    "name": "Mathura",
+    "name:ar": "ماثورا",
+    "name:bn": "মথুরা",
+    "name:en": "Mathura",
+    "name:fa": "متورا",
+    "name:he": "מתורה",
+    "name:hi": "मथुरा",
+    "name:ja": "マトゥラー",
+    "name:kn": "ಮಥುರಾ",
+    "name:ml": "മഥുര",
+    "name:pa": "ਮਥੁਰਾ",
+    "name:ru": "Матхура",
+    "name:ta": "மதுரா",
+    "name:ur": "متھورا",
+    "name:zh": "马图拉",
+    "place": "city",
+    "population": "100000",
+    "postal_code": "281001",
+    "wikidata": "Q200311",
+    "wikipedia": "en:Mathura"
+  }
+},
+{
+  "type": "node",
+  "id": 568382432,
+  "lat": 27.2154447,
+  "lon": 77.4986962,
+  "tags": {
+    "capital": "5",
+    "name": "Bharatpur",
+    "name:ar": "بهرتبور",
+    "name:bn": "ভরতপুর",
+    "name:fa": "بهرتپور",
+    "name:gu": "ભરતપુર",
+    "name:hi": "भरतपुर",
+    "name:ja": "バラトプル",
+    "name:kn": "ಭರತ್‌ಪುರ್",
+    "name:ml": "ഭരത്പൂർ",
+    "name:mr": "भरतपुर",
+    "name:pa": "ਭਰਤਪੁਰ",
+    "name:ru": "Бхаратпур",
+    "name:ta": "பரத்பூர்",
+    "name:zh": "婆罗多布尔",
+    "place": "city",
+    "population": "252300",
+    "postal_code": "321001",
+    "wikidata": "Q254697",
+    "wikipedia": "en:Bharatpur"
+  }
+},
+{
+  "type": "node",
+  "id": 617987464,
+  "lat": 27.5245090,
+  "lon": 77.4905823,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Radha Kund",
+    "place": "village",
+    "wikidata": "Q2037248"
+  }
+},
+{
+  "type": "node",
+  "id": 617987466,
+  "lat": 27.5609785,
+  "lon": 77.6247070,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Chhatikara",
+    "name:ru": "Чхатикара",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 617987467,
+  "lat": 27.5753726,
+  "lon": 77.6938045,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Vrindavan",
+    "name:ar": "فريندافان",
+    "name:en": "Vrindavan",
+    "name:hi": "वृन्दावन",
+    "name:kn": "ವೃಂದಾವನ",
+    "name:ml": "വൃന്ദാവനം",
+    "name:ru": "Вриндавана",
+    "name:uk": "Вріндаван",
+    "place": "town",
+    "wikidata": "Q688281",
+    "wikipedia": "hi:वृन्दावन",
+    "wikipedia:uk": "Вріндаван"
+  }
+},
+{
+  "type": "node",
+  "id": 617991462,
+  "lat": 27.5574554,
+  "lon": 77.5614410,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Ral",
+    "name:en": "Ral",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 1069397241,
+  "lat": 27.2363320,
+  "lon": 77.8742231,
+  "tags": {
+    "name": "Runkata",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 1307180290,
+  "lat": 27.6344839,
+  "lon": 77.7115050,
+  "tags": {
+    "alt_name": "Mat",
+    "name": "Mant",
+    "name:hi": "माँट",
+    "place": "town",
+    "population": "1000",
+    "postal_code": "281202"
+  }
+},
+{
+  "type": "node",
+  "id": 1838397017,
+  "lat": 27.3108831,
+  "lon": 77.2748494,
+  "tags": {
+    "name": "Mahrawar",
+    "name:hi": "महरावर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 1838398001,
+  "lat": 27.3934510,
+  "lon": 77.4941247,
+  "tags": {
+    "alt_name": "Saunk",
+    "name": "Sonkh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 1838401830,
+  "lat": 27.6526038,
+  "lon": 77.2696401,
+  "tags": {
+    "name": "Kaman",
+    "name:hi": "कामां",
+    "name:ta": "காமன்",
+    "place": "town",
+    "population": "38100",
+    "postal_code": "321022",
+    "source": "AND",
+    "wikidata": "Q8104138"
+  }
+},
+{
+  "type": "node",
+  "id": 1897656987,
+  "lat": 27.3152709,
+  "lon": 77.3789964,
+  "tags": {
+    "name": "Kumher",
+    "name:hi": "कुम्हेर",
+    "name:uk": "Кумгер",
+    "place": "town",
+    "population": "20300",
+    "wikidata": "Q1791992",
+    "wikipedia": "en:Kumher"
+  }
+},
+{
+  "type": "node",
+  "id": 1929484600,
+  "lat": 27.4773321,
+  "lon": 77.3257027,
+  "tags": {
+    "name": "Deeg",
+    "name:hi": "डीग",
+    "place": "town",
+    "population": "44500",
+    "postal_code": "321203",
+    "wikidata": "Q1192807",
+    "wikipedia": "en:Deeg"
+  }
+},
+{
+  "type": "node",
+  "id": 2191625462,
+  "lat": 27.9420637,
+  "lon": 77.8426690,
+  "tags": {
+    "name": "Khair",
+    "name:hi": "खैर",
+    "place": "town",
+    "population": "1000",
+    "postal_code": "202138",
+    "wikidata": "Q2119936",
+    "wikipedia": "en:Khair"
+  }
+},
+{
+  "type": "node",
+  "id": 2263085440,
+  "lat": 27.7865337,
+  "lon": 77.6124775,
+  "tags": {
+    "name": "Shergarh",
+    "place": "village",
+    "postal_code": "281404",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 2275304386,
+  "lat": 27.8486484,
+  "lon": 77.6481271,
+  "tags": {
+    "alt_name": "Nauhjhil",
+    "name": "Naujheel",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 2275304393,
+  "lat": 27.4973490,
+  "lon": 77.4611872,
+  "tags": {
+    "name": "Govardhan",
+    "name:en": "Govardhan",
+    "name:hi": "गोवर्धन",
+    "place": "town",
+    "population": "5000",
+    "postal_code": "281502",
+    "wikidata": "Q1707255",
+    "wikipedia": "en:Govardhan"
+  }
+},
+{
+  "type": "node",
+  "id": 2377766084,
+  "lat": 27.4390720,
+  "lon": 77.7203733,
+  "tags": {
+    "name": "Gokul",
+    "name:hi": "गोकुल",
+    "name:ml": "ഗോകുലം",
+    "name:ta": "கோகுலம்",
+    "place": "town"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422078,
+  "lat": 27.5747197,
+  "lon": 77.6946789,
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "temple",
+    "email": "imlitala@mac.com",
+    "name": "Munger Raj Mandir",
+    "phone": "+91 9897836640",
+    "website": "https://rajaward.org/royalfamily/mungervrndvan.htm"
+  }
+},
+{
+  "type": "node",
+  "id": 2784872334,
+  "lat": 27.2175759,
+  "lon": 77.4960250,
+  "tags": {
+    "historic": "city_gate",
+    "historic:civilization": "jat_dynasty",
+    "name": "bharatpur fort"
+  }
+},
+{
+  "type": "node",
+  "id": 3128813705,
+  "lat": 27.3812357,
+  "lon": 77.8687129,
+  "tags": {
+    "name": "Atmadpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 3401700733,
+  "lat": 27.4165897,
+  "lon": 77.4100135,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 3401700737,
+  "lat": 27.4180544,
+  "lon": 77.3864210,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 3401700749,
+  "lat": 27.4292329,
+  "lon": 77.4251860,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 3420930100,
+  "lat": 27.3684006,
+  "lon": 77.3835921,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 3421056909,
+  "lat": 27.5442830,
+  "lon": 77.4026802,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 3429749321,
+  "lat": 27.7109688,
+  "lon": 77.3856842,
+  "tags": {
+    "name": "Nandgaon",
+    "name:en": "Nandgaon",
+    "name:hi": "नंदगाँव",
+    "place": "village",
+    "wikidata": "Q2627110"
+  }
+},
+{
+  "type": "node",
+  "id": 4489880189,
+  "lat": 27.4958034,
+  "lon": 77.4664353,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Sri Anu Giriraj Mandir",
+    "name:en": "Sri Sri Anu Giriraj Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569639794,
+  "lat": 27.5826874,
+  "lon": 77.6961268,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Shyamsundar Mandir",
+    "name:ru": "Радха-Шьямасундара",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569657292,
+  "lat": 27.5860483,
+  "lon": 77.6996206,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Gopinath Mandir",
+    "name:en": "Sri Radha Gopinath Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569657293,
+  "lat": 27.5673577,
+  "lon": 77.6760228,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Sri Sri Radha Govinda Mandir"
+  }
+},
+{
+  "type": "node",
+  "id": 4569668889,
+  "lat": 27.5674711,
+  "lon": 77.7002940,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Caitanya Mahaprabhu's Sitting Place",
+    "name:en": "Sri Caitanya Mahaprabhu's Sitting Place",
+    "name:ru": "Чайтанья Вишрама стхали",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4618633887,
+  "lat": 27.5822253,
+  "lon": 77.7698035,
+  "tags": {
+    "name": "Sukhangadh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 4648692290,
+  "lat": 27.5248884,
+  "lon": 77.4942452,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Mohana Kund"
+  }
+},
+{
+  "type": "node",
+  "id": 4648692292,
+  "lat": 27.5845022,
+  "lon": 77.7033788,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Vrinda Kunj",
+    "name:en": "Vrinda Kunj",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648837990,
+  "lat": 27.5826272,
+  "lon": 77.6959324,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Shyamsundar Temple",
+    "name:en": "Sri Radha Shyamsundar Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648837991,
+  "lat": 27.5674890,
+  "lon": 77.6759712,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Sri Sri Radha Govinda Mandir"
+  }
+},
+{
+  "type": "node",
+  "id": 4649010790,
+  "lat": 27.5675119,
+  "lon": 77.7004473,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Murari Gupta Jagannath Temple",
+    "name:en": "Murari Gupta Jagannath Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4706937889,
+  "lat": 27.5727050,
+  "lon": 77.6969117,
+  "tags": {
+    "addr:street": "Gurukul Road, Vrindavan (U.P.) INDIA",
+    "amenity": "place_of_worship",
+    "name": "Pilot Baba Ashram",
+    "name:en": "Pilot Baba Ashram",
+    "name:ru": "Пайлот Баба Ашрам",
+    "opening_hours": "24/7",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4735565525,
+  "lat": 27.2038479,
+  "lon": 77.5063978,
+  "tags": {
+    "historic": "monument",
+    "name:en": "Keoladev National Park,Bharatpur"
+  }
+},
+{
+  "type": "node",
+  "id": 4795308422,
+  "lat": 27.5691382,
+  "lon": 77.6851203,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Ramananda Ashram",
+    "name:en": "Ramananda Ashram"
+  }
+},
+{
+  "type": "node",
+  "id": 5147935621,
+  "lat": 27.8025650,
+  "lon": 77.4936492,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Phalen temple"
+  }
+},
+{
+  "type": "node",
+  "id": 5453980521,
+  "lat": 27.5834471,
+  "lon": 77.7054103,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Божества Наротама дас Тхакура",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5468509025,
+  "lat": 27.6556302,
+  "lon": 77.7068706,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Bhandirvat",
+    "name:en": "Bhandirvat",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5469282928,
+  "lat": 27.6014809,
+  "lon": 77.6844417,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Belvan",
+    "name:en": "Belvan",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5470829321,
+  "lat": 27.4646102,
+  "lon": 77.6543272,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Druva tila",
+    "name:en": "Druva tila",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5808897855,
+  "lat": 27.5725271,
+  "lon": 77.6775721,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Krishna-Balaram Temple"
+  }
+},
+{
+  "type": "node",
+  "id": 6094947292,
+  "lat": 27.5586304,
+  "lon": 77.6791564,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Pagal Baba temple"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814867,
+  "lat": 27.5257792,
+  "lon": 77.7029943,
+  "tags": {
+    "name": "Kinarai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814868,
+  "lat": 27.5145518,
+  "lon": 77.7818727,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814869,
+  "lat": 27.5249801,
+  "lon": 77.7557802,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814870,
+  "lat": 27.5180533,
+  "lon": 77.7500295,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814871,
+  "lat": 27.5204130,
+  "lon": 77.7343654,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814872,
+  "lat": 27.5282530,
+  "lon": 77.7746629,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814873,
+  "lat": 27.5324772,
+  "lon": 77.7656936,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814874,
+  "lat": 27.5320205,
+  "lon": 77.7798986,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814875,
+  "lat": 27.5360163,
+  "lon": 77.7900266,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814876,
+  "lat": 27.5166832,
+  "lon": 77.8094244,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814877,
+  "lat": 27.5223160,
+  "lon": 77.7997255,
+  "tags": {
+    "name": "Khirari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814878,
+  "lat": 27.5338472,
+  "lon": 77.8257751,
+  "tags": {
+    "name": "Madaim",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814879,
+  "lat": 27.5341135,
+  "lon": 77.7949190,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814880,
+  "lat": 27.5287097,
+  "lon": 77.7142381,
+  "tags": {
+    "name": "Daharuwa",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814881,
+  "lat": 27.5437790,
+  "lon": 77.7091312,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814882,
+  "lat": 27.5432843,
+  "lon": 77.7272844,
+  "tags": {
+    "name": "Kaliyanpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814883,
+  "lat": 27.5316780,
+  "lon": 77.7445364,
+  "tags": {
+    "name": "Diwana Kalan",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173814884,
+  "lat": 27.5279866,
+  "lon": 77.7824735,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815085,
+  "lat": 27.5366632,
+  "lon": 77.7867651,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815086,
+  "lat": 27.5462903,
+  "lon": 77.7408027,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815087,
+  "lat": 27.5636399,
+  "lon": 77.7234649,
+  "tags": {
+    "name": "Panigaon",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815088,
+  "lat": 27.5739875,
+  "lon": 77.7381849,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815089,
+  "lat": 27.5505138,
+  "lon": 77.7632474,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815090,
+  "lat": 27.5707159,
+  "lon": 77.7686548,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815091,
+  "lat": 27.5424472,
+  "lon": 77.8012704,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815092,
+  "lat": 27.5454152,
+  "lon": 77.8043174,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815093,
+  "lat": 27.5519977,
+  "lon": 77.8047895,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815094,
+  "lat": 27.5506660,
+  "lon": 77.8082656,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815095,
+  "lat": 27.5500572,
+  "lon": 77.7769374,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815096,
+  "lat": 27.5551557,
+  "lon": 77.7771949,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815097,
+  "lat": 27.5651997,
+  "lon": 77.7840185,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815098,
+  "lat": 27.5737212,
+  "lon": 77.7961635,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815099,
+  "lat": 27.6680979,
+  "lon": 77.7856063,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815100,
+  "lat": 27.7498227,
+  "lon": 77.7211904,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815101,
+  "lat": 27.7507722,
+  "lon": 77.7436781,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815102,
+  "lat": 27.7298246,
+  "lon": 77.7320480,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815103,
+  "lat": 27.7265577,
+  "lon": 77.7378845,
+  "tags": {
+    "name": "Akbarpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815104,
+  "lat": 27.6975882,
+  "lon": 77.7697706,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815105,
+  "lat": 27.7018819,
+  "lon": 77.7514886,
+  "tags": {
+    "name": "Hernol",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815106,
+  "lat": 27.6926864,
+  "lon": 77.8260755,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815107,
+  "lat": 27.6978922,
+  "lon": 77.8317833,
+  "tags": {
+    "name": "Gorai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815108,
+  "lat": 27.7049975,
+  "lon": 77.8250026,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815109,
+  "lat": 27.7040097,
+  "lon": 77.8197670,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815110,
+  "lat": 27.7159776,
+  "lon": 77.8283500,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815111,
+  "lat": 27.7162815,
+  "lon": 77.8198957,
+  "tags": {
+    "name": "Kham Ka Bas",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815112,
+  "lat": 27.7251711,
+  "lon": 77.8241872,
+  "tags": {
+    "name": "Sakarpua",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815113,
+  "lat": 27.7287800,
+  "lon": 77.8068924,
+  "tags": {
+    "name": "Jamon Khurd",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815114,
+  "lat": 27.7257790,
+  "lon": 77.8062486,
+  "tags": {
+    "name": "Jamon Kalan",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815115,
+  "lat": 27.7105827,
+  "lon": 77.8018713,
+  "tags": {
+    "name": "Kubara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815116,
+  "lat": 27.7026038,
+  "lon": 77.7887392,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815117,
+  "lat": 27.7178012,
+  "lon": 77.7820873,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815118,
+  "lat": 27.7309452,
+  "lon": 77.7856922,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815119,
+  "lat": 27.7296916,
+  "lon": 77.7765083,
+  "tags": {
+    "name": "Karahari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815120,
+  "lat": 27.6768014,
+  "lon": 77.7955198,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815121,
+  "lat": 27.6810959,
+  "lon": 77.7991247,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815122,
+  "lat": 27.6755853,
+  "lon": 77.8081798,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815123,
+  "lat": 27.6786257,
+  "lon": 77.8259897,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815124,
+  "lat": 27.6922304,
+  "lon": 77.8141021,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815125,
+  "lat": 27.6811339,
+  "lon": 77.7780103,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815126,
+  "lat": 27.6578353,
+  "lon": 77.8240156,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815127,
+  "lat": 27.6572271,
+  "lon": 77.7798557,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815128,
+  "lat": 27.6516772,
+  "lon": 77.8165483,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815129,
+  "lat": 27.6436560,
+  "lon": 77.8112697,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815130,
+  "lat": 27.6475336,
+  "lon": 77.8155183,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815131,
+  "lat": 27.6106907,
+  "lon": 77.8245306,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815132,
+  "lat": 27.5958207,
+  "lon": 77.8195095,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815133,
+  "lat": 27.6017157,
+  "lon": 77.7847480,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815134,
+  "lat": 27.6287525,
+  "lon": 77.7419614,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815135,
+  "lat": 27.6109188,
+  "lon": 77.7892541,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815136,
+  "lat": 27.6219084,
+  "lon": 77.8081798,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815137,
+  "lat": 27.6119076,
+  "lon": 77.8035879,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815138,
+  "lat": 27.6290187,
+  "lon": 77.7961635,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815139,
+  "lat": 27.6224787,
+  "lon": 77.7811431,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815140,
+  "lat": 27.6101203,
+  "lon": 77.7708864,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815141,
+  "lat": 27.6135427,
+  "lon": 77.7669382,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815142,
+  "lat": 27.6097400,
+  "lon": 77.7116203,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815143,
+  "lat": 27.6138850,
+  "lon": 77.7362966,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815144,
+  "lat": 27.6514491,
+  "lon": 77.7105045,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815145,
+  "lat": 27.6233913,
+  "lon": 77.7689123,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815146,
+  "lat": 27.6195889,
+  "lon": 77.7693414,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815147,
+  "lat": 27.6204634,
+  "lon": 77.7497291,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815148,
+  "lat": 27.6387898,
+  "lon": 77.7647066,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815149,
+  "lat": 27.6660075,
+  "lon": 77.7275848,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815150,
+  "lat": 27.6801078,
+  "lon": 77.7580118,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815151,
+  "lat": 27.6859603,
+  "lon": 77.7448797,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815152,
+  "lat": 27.6880123,
+  "lon": 77.7195596,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815153,
+  "lat": 27.7012739,
+  "lon": 77.6967716,
+  "tags": {
+    "name": "Bhaugaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815154,
+  "lat": 27.6681359,
+  "lon": 77.6454019,
+  "tags": {
+    "name": "Sei",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815155,
+  "lat": 27.6883924,
+  "lon": 77.6706790,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815156,
+  "lat": 27.6962583,
+  "lon": 77.6360893,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815157,
+  "lat": 27.7190929,
+  "lon": 77.6366043,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815158,
+  "lat": 27.7176872,
+  "lon": 77.6729536,
+  "tags": {
+    "name": "Gangroli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815159,
+  "lat": 27.7187509,
+  "lon": 77.6602506,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815160,
+  "lat": 27.7260449,
+  "lon": 77.6504659,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815161,
+  "lat": 27.7489112,
+  "lon": 77.6093101,
+  "tags": {
+    "name": "Astauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815162,
+  "lat": 27.7394538,
+  "lon": 77.6278066,
+  "tags": {
+    "name": "Agaryala",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815163,
+  "lat": 27.7588994,
+  "lon": 77.6127004,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815164,
+  "lat": 27.7691146,
+  "lon": 77.6342010,
+  "tags": {
+    "name": "Garhi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815166,
+  "lat": 27.8155076,
+  "lon": 77.7748775,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815167,
+  "lat": 27.7919719,
+  "lon": 77.8022146,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815168,
+  "lat": 27.7707475,
+  "lon": 77.7889108,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815169,
+  "lat": 27.7617856,
+  "lon": 77.8208398,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815170,
+  "lat": 27.7446194,
+  "lon": 77.8175783,
+  "tags": {
+    "name": "Mahdaura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815171,
+  "lat": 27.7573044,
+  "lon": 77.6944542,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815172,
+  "lat": 27.7459107,
+  "lon": 77.6929092,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815173,
+  "lat": 27.7451131,
+  "lon": 77.7807140,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815174,
+  "lat": 27.7507342,
+  "lon": 77.7536344,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815175,
+  "lat": 27.7565069,
+  "lon": 77.7305030,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815176,
+  "lat": 27.7771646,
+  "lon": 77.7917432,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815177,
+  "lat": 27.7561271,
+  "lon": 77.7621746,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815178,
+  "lat": 27.7713550,
+  "lon": 77.7207613,
+  "tags": {
+    "name": "Surir",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815179,
+  "lat": 27.7697981,
+  "lon": 77.7432918,
+  "tags": {
+    "name": "Bhadanwara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815180,
+  "lat": 27.7875299,
+  "lon": 77.7231645,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815181,
+  "lat": 27.8628672,
+  "lon": 77.7674961,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815182,
+  "lat": 27.8275771,
+  "lon": 77.8195095,
+  "tags": {
+    "name": "Chhoti Ballabh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815183,
+  "lat": 27.8318657,
+  "lon": 77.8059482,
+  "tags": {
+    "name": "Nagla Birkhu",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815184,
+  "lat": 27.8445406,
+  "lon": 77.7888679,
+  "tags": {
+    "name": "Nagla Jotu",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815285,
+  "lat": 27.8577072,
+  "lon": 77.7908849,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815286,
+  "lat": 27.8143309,
+  "lon": 77.7950477,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815287,
+  "lat": 27.7932247,
+  "lon": 77.7883100,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815288,
+  "lat": 27.8135718,
+  "lon": 77.7689123,
+  "tags": {
+    "name": "Bera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815289,
+  "lat": 27.8019183,
+  "lon": 77.7642345,
+  "tags": {
+    "name": "Jarara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815290,
+  "lat": 27.8102694,
+  "lon": 77.7462959,
+  "tags": {
+    "name": "Sikanderpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815291,
+  "lat": 27.8295886,
+  "lon": 77.7587843,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815292,
+  "lat": 27.8349397,
+  "lon": 77.7736759,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815293,
+  "lat": 27.8381654,
+  "lon": 77.7528190,
+  "tags": {
+    "name": "Hasanpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815294,
+  "lat": 27.8410494,
+  "lon": 77.7189159,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815295,
+  "lat": 27.8533818,
+  "lon": 77.6988744,
+  "tags": {
+    "name": "Baroth",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815296,
+  "lat": 27.8549374,
+  "lon": 77.7182293,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815297,
+  "lat": 27.8635122,
+  "lon": 77.7088308,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815298,
+  "lat": 27.8641192,
+  "lon": 77.7556085,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815299,
+  "lat": 27.8678372,
+  "lon": 77.7486562,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815300,
+  "lat": 27.8673061,
+  "lon": 77.6801633,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815303,
+  "lat": 27.9453555,
+  "lon": 77.6817083,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815304,
+  "lat": 27.9463033,
+  "lon": 77.6633405,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815305,
+  "lat": 27.9286543,
+  "lon": 77.5589061,
+  "tags": {
+    "name": "Dharagarhi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815306,
+  "lat": 27.9222461,
+  "lon": 77.5557947,
+  "tags": {
+    "name": "Pakhodana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815307,
+  "lat": 27.9001559,
+  "lon": 77.5695705,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815308,
+  "lat": 27.9104716,
+  "lon": 77.5540781,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815309,
+  "lat": 27.9056173,
+  "lon": 77.5812864,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815310,
+  "lat": 27.9100544,
+  "lon": 77.5761365,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815311,
+  "lat": 27.9234785,
+  "lon": 77.5717592,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815312,
+  "lat": 27.9494119,
+  "lon": 77.5497007,
+  "tags": {
+    "name": "Untasani Bangar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815314,
+  "lat": 27.9468719,
+  "lon": 77.5734329,
+  "tags": {
+    "name": "Mewgarhi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815315,
+  "lat": 27.9425121,
+  "lon": 77.5929164,
+  "tags": {
+    "name": "Jaidpura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815316,
+  "lat": 27.9231373,
+  "lon": 77.5982379,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815317,
+  "lat": 27.9306450,
+  "lon": 77.6048898,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815318,
+  "lat": 27.8735468,
+  "lon": 77.5809002,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815319,
+  "lat": 27.8762971,
+  "lon": 77.5865650,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815320,
+  "lat": 27.8711188,
+  "lon": 77.5956416,
+  "tags": {
+    "name": "Bhairai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815325,
+  "lat": 27.8829736,
+  "lon": 77.6243090,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815326,
+  "lat": 27.9073618,
+  "lon": 77.6067567,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815327,
+  "lat": 27.9045933,
+  "lon": 77.5989890,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815328,
+  "lat": 27.9096752,
+  "lon": 77.6537704,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815329,
+  "lat": 27.8968183,
+  "lon": 77.6488351,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815330,
+  "lat": 27.8729588,
+  "lon": 77.7201604,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815331,
+  "lat": 27.8865772,
+  "lon": 77.7209329,
+  "tags": {
+    "name": "Shall",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815332,
+  "lat": 27.9271187,
+  "lon": 77.7075004,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815333,
+  "lat": 27.9171080,
+  "lon": 77.7053976,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815334,
+  "lat": 27.9076652,
+  "lon": 77.7094316,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815335,
+  "lat": 27.9131641,
+  "lon": 77.6881456,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815336,
+  "lat": 27.8891944,
+  "lon": 77.7096033,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815337,
+  "lat": 27.8887393,
+  "lon": 77.6777172,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815338,
+  "lat": 27.8789526,
+  "lon": 77.6940250,
+  "tags": {
+    "name": "Parsauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815339,
+  "lat": 27.8977665,
+  "lon": 77.6781892,
+  "tags": {
+    "name": "Bajna",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815340,
+  "lat": 27.9286733,
+  "lon": 77.6580190,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815341,
+  "lat": 27.9270428,
+  "lon": 77.6386642,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815342,
+  "lat": 27.9370526,
+  "lon": 77.6326131,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815343,
+  "lat": 27.9400857,
+  "lon": 77.6163911,
+  "tags": {
+    "name": "Ghanghauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173815345,
+  "lat": 27.9476681,
+  "lon": 77.6439857,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924211,
+  "lat": 27.2888838,
+  "lon": 77.7171993,
+  "tags": {
+    "name": "Parkham",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924212,
+  "lat": 27.3669843,
+  "lon": 77.7131009,
+  "tags": {
+    "name": "Barari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924213,
+  "lat": 27.3763786,
+  "lon": 77.7102899,
+  "tags": {
+    "name": "Baburi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924214,
+  "lat": 27.3839621,
+  "lon": 77.7440643,
+  "tags": {
+    "name": "Anwla Sultanpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924215,
+  "lat": 27.3624680,
+  "lon": 77.7297306,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924216,
+  "lat": 27.3580467,
+  "lon": 77.7474975,
+  "tags": {
+    "name": "Jhandipur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924217,
+  "lat": 27.3804752,
+  "lon": 77.7949941,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924218,
+  "lat": 27.3713290,
+  "lon": 77.7726030,
+  "tags": {
+    "name": "Garhaya Latipur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924219,
+  "lat": 27.3967841,
+  "lon": 77.7655864,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924220,
+  "lat": 27.3890301,
+  "lon": 77.7750921,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924233,
+  "lat": 27.2606954,
+  "lon": 77.7432918,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924234,
+  "lat": 27.2862903,
+  "lon": 77.7442574,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924235,
+  "lat": 27.2761446,
+  "lon": 77.7394295,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924236,
+  "lat": 27.2978271,
+  "lon": 77.7591705,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924237,
+  "lat": 27.3099918,
+  "lon": 77.7571535,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924238,
+  "lat": 27.3164550,
+  "lon": 77.7522611,
+  "tags": {
+    "name": "Daulatpur Farah",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924239,
+  "lat": 27.3160260,
+  "lon": 77.7165663,
+  "tags": {
+    "name": "Sanaura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924240,
+  "lat": 27.3418464,
+  "lon": 77.7201390,
+  "tags": {
+    "name": "Kurkanda",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924241,
+  "lat": 27.3377102,
+  "lon": 77.7328205,
+  "tags": {
+    "name": "Mahuan",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924242,
+  "lat": 27.3357469,
+  "lon": 77.7566385,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924243,
+  "lat": 27.3301427,
+  "lon": 77.7465749,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924244,
+  "lat": 27.3301236,
+  "lon": 77.7633762,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924245,
+  "lat": 27.3209542,
+  "lon": 77.7752852,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924247,
+  "lat": 27.2910291,
+  "lon": 77.8256571,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924248,
+  "lat": 27.2668372,
+  "lon": 77.8247451,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924249,
+  "lat": 27.2685157,
+  "lon": 77.8194236,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924250,
+  "lat": 27.2669135,
+  "lon": 77.8116989,
+  "tags": {
+    "name": "Rajpurajat",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924251,
+  "lat": 27.2553545,
+  "lon": 77.7750492,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924252,
+  "lat": 27.2674857,
+  "lon": 77.7729892,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924253,
+  "lat": 27.2680579,
+  "lon": 77.7796411,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924254,
+  "lat": 27.2841163,
+  "lon": 77.7741050,
+  "tags": {
+    "name": "Pingari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924255,
+  "lat": 27.2843452,
+  "lon": 77.7933311,
+  "tags": {
+    "name": "Shehzadpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924256,
+  "lat": 27.2811413,
+  "lon": 77.8018283,
+  "tags": {
+    "name": "Pauri",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924257,
+  "lat": 27.2635184,
+  "lon": 77.7957344,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924258,
+  "lat": 27.2695964,
+  "lon": 77.8650087,
+  "tags": {
+    "name": "Nagla Akos",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924259,
+  "lat": 27.2842308,
+  "lon": 77.8789472,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924260,
+  "lat": 27.2888838,
+  "lon": 77.9133224,
+  "tags": {
+    "name": "Nera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924271,
+  "lat": 27.3220980,
+  "lon": 77.9313683,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924272,
+  "lat": 27.3231847,
+  "lon": 77.9187941,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924273,
+  "lat": 27.3208589,
+  "lon": 77.9035163,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924274,
+  "lat": 27.3175989,
+  "lon": 77.9000187,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924275,
+  "lat": 27.3363950,
+  "lon": 77.8984952,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924276,
+  "lat": 27.3298186,
+  "lon": 77.8961992,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924277,
+  "lat": 27.3088288,
+  "lon": 77.8805137,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924278,
+  "lat": 27.3113741,
+  "lon": 77.8738511,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924279,
+  "lat": 27.3170746,
+  "lon": 77.8616094,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924280,
+  "lat": 27.3176275,
+  "lon": 77.8714049,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924281,
+  "lat": 27.3321633,
+  "lon": 77.8567171,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924282,
+  "lat": 27.3249576,
+  "lon": 77.8333711,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924283,
+  "lat": 27.3293040,
+  "lon": 77.8291654,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173924284,
+  "lat": 27.3262158,
+  "lon": 77.8092956,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925585,
+  "lat": 27.3352132,
+  "lon": 77.7895546,
+  "tags": {
+    "name": "Lahrauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925586,
+  "lat": 27.3391780,
+  "lon": 77.8267622,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925587,
+  "lat": 27.3360138,
+  "lon": 77.8362035,
+  "tags": {
+    "name": "Mandaura",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925588,
+  "lat": 27.3567126,
+  "lon": 77.8909635,
+  "tags": {
+    "name": "Kachnau",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925589,
+  "lat": 27.3425707,
+  "lon": 77.8762865,
+  "tags": {
+    "name": "Barauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925590,
+  "lat": 27.3578561,
+  "lon": 77.8081798,
+  "tags": {
+    "name": "Daulatpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925591,
+  "lat": 27.3741302,
+  "lon": 77.8406238,
+  "tags": {
+    "name": "Angai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925592,
+  "lat": 27.3681087,
+  "lon": 77.8728532,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925593,
+  "lat": 27.3563315,
+  "lon": 77.8598928,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925594,
+  "lat": 27.3511094,
+  "lon": 77.8565025,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925595,
+  "lat": 27.3562933,
+  "lon": 77.8259897,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925596,
+  "lat": 27.3655170,
+  "lon": 77.8297662,
+  "tags": {
+    "name": "Saidpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925597,
+  "lat": 27.4592728,
+  "lon": 77.8362465,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925598,
+  "lat": 27.4512375,
+  "lon": 77.8347659,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925599,
+  "lat": 27.4506282,
+  "lon": 77.8619957,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925600,
+  "lat": 27.4360032,
+  "lon": 77.8534984,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925601,
+  "lat": 27.4237761,
+  "lon": 77.8504514,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925602,
+  "lat": 27.4350891,
+  "lon": 77.8296804,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925603,
+  "lat": 27.4160049,
+  "lon": 77.7994680,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925604,
+  "lat": 27.4218334,
+  "lon": 77.8062486,
+  "tags": {
+    "name": "Chholi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925605,
+  "lat": 27.4182716,
+  "lon": 77.7812075,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925606,
+  "lat": 27.4188239,
+  "lon": 77.7688050,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925607,
+  "lat": 27.4203096,
+  "lon": 77.7127576,
+  "tags": {
+    "name": "Koila",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925608,
+  "lat": 27.4330227,
+  "lon": 77.7421867,
+  "tags": {
+    "name": "Mahaban",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925609,
+  "lat": 27.4699729,
+  "lon": 77.7472186,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925610,
+  "lat": 27.4693065,
+  "lon": 77.7594065,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925611,
+  "lat": 27.4772120,
+  "lon": 77.7258387,
+  "tags": {
+    "name": "Raval",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925612,
+  "lat": 27.4736091,
+  "lon": 77.7433133,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925613,
+  "lat": 27.4794155,
+  "lon": 77.7413392,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925614,
+  "lat": 27.4810907,
+  "lon": 77.7451372,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925615,
+  "lat": 27.5006775,
+  "lon": 77.7257824,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925616,
+  "lat": 27.4933305,
+  "lon": 77.7252459,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925617,
+  "lat": 27.4888954,
+  "lon": 77.7318764,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925618,
+  "lat": 27.4938634,
+  "lon": 77.7369618,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925619,
+  "lat": 27.5109359,
+  "lon": 77.7232503,
+  "tags": {
+    "name": "Lohaban",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925620,
+  "lat": 27.4944821,
+  "lon": 77.7713478,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925621,
+  "lat": 27.4986504,
+  "lon": 77.7646208,
+  "tags": {
+    "name": "Sihora",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925622,
+  "lat": 27.5133718,
+  "lon": 77.8369331,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925623,
+  "lat": 27.5129151,
+  "lon": 77.8409242,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925624,
+  "lat": 27.5083856,
+  "lon": 77.8447866,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925625,
+  "lat": 27.5022953,
+  "lon": 77.8623390,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925626,
+  "lat": 27.5123061,
+  "lon": 77.8644847,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925627,
+  "lat": 27.5202989,
+  "lon": 77.8541851,
+  "tags": {
+    "name": "Nagaura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925628,
+  "lat": 27.5099082,
+  "lon": 77.8051757,
+  "tags": {
+    "name": "Itauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925629,
+  "lat": 27.5057592,
+  "lon": 77.8165483,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925630,
+  "lat": 27.4986790,
+  "lon": 77.8380918,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925631,
+  "lat": 27.4866493,
+  "lon": 77.8349590,
+  "tags": {
+    "name": "Sonkh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925632,
+  "lat": 27.4836035,
+  "lon": 77.7981805,
+  "tags": {
+    "name": "Karab",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925633,
+  "lat": 27.4645278,
+  "lon": 77.8237152,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925634,
+  "lat": 27.4496761,
+  "lon": 77.8525114,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925635,
+  "lat": 27.4670409,
+  "lon": 77.8406238,
+  "tags": {
+    "name": "Pachawar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925637,
+  "lat": 27.4372030,
+  "lon": 77.7865720,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925638,
+  "lat": 27.4469150,
+  "lon": 77.8058195,
+  "tags": {
+    "name": "Bandi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925639,
+  "lat": 27.4473149,
+  "lon": 77.7644062,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925640,
+  "lat": 27.4657082,
+  "lon": 77.7608442,
+  "tags": {
+    "name": "Hayatpur",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925641,
+  "lat": 27.4690971,
+  "lon": 77.7725172,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6173925642,
+  "lat": 27.4647563,
+  "lon": 77.7871942,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685223,
+  "lat": 27.2615347,
+  "lon": 77.3864507,
+  "tags": {
+    "name": "Kanchanpura",
+    "name:hi": "कंचनपुरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685224,
+  "lat": 27.2611914,
+  "lon": 77.4064493,
+  "tags": {
+    "name": "Seh",
+    "name:hi": "सेह",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685225,
+  "lat": 27.2468466,
+  "lon": 77.3979520,
+  "tags": {
+    "name": "Baben",
+    "name:hi": "बावेन",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685227,
+  "lat": 27.2252496,
+  "lon": 77.3614740,
+  "tags": {
+    "name": "Adarshnagar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685228,
+  "lat": 27.2251351,
+  "lon": 77.3708295,
+  "tags": {
+    "name": "Helak",
+    "name:hi": "हेलक",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685229,
+  "lat": 27.2117016,
+  "lon": 77.3945188,
+  "tags": {
+    "name": "Nagla Khoontela",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685230,
+  "lat": 27.2102131,
+  "lon": 77.3603153,
+  "tags": {
+    "name": "Hindola",
+    "name:hi": "हिडोला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685231,
+  "lat": 27.2054041,
+  "lon": 77.3749065,
+  "tags": {
+    "name": "Garhi Zalimsingh",
+    "name:hi": "गढी जालिमसिंह",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685233,
+  "lat": 27.2014727,
+  "lon": 77.3987245,
+  "tags": {
+    "name": "Moondota",
+    "name:hi": "मूढोता",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685309,
+  "lat": 27.2033812,
+  "lon": 77.5957489,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685310,
+  "lat": 27.2027705,
+  "lon": 77.6434707,
+  "tags": {
+    "name": "Bharangarpur",
+    "name:hi": "भरंगरपुर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685312,
+  "lat": 27.2161287,
+  "lon": 77.5949335,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685313,
+  "lat": 27.2138007,
+  "lon": 77.6093959,
+  "tags": {
+    "name": "Ikaran",
+    "name:hi": "इकरन",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685314,
+  "lat": 27.2105184,
+  "lon": 77.6241159,
+  "tags": {
+    "name": "Chaliganj",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685315,
+  "lat": 27.2141823,
+  "lon": 77.6347589,
+  "tags": {
+    "name": "Ghusyari",
+    "name:hi": "घुस्यारी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685316,
+  "lat": 27.2263944,
+  "lon": 77.6472902,
+  "tags": {
+    "name": "Noorpur",
+    "name:hi": "नूरपुर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685317,
+  "lat": 27.2220440,
+  "lon": 77.6573647,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685318,
+  "lat": 27.2292945,
+  "lon": 77.6090097,
+  "tags": {
+    "name": "Nagla Parsram",
+    "name:hi": "नगला परशुराम",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685319,
+  "lat": 27.2381091,
+  "lon": 77.6071214,
+  "tags": {
+    "name": "Nagla Hatheepura",
+    "name:hi": "नगला हाथीपुरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685320,
+  "lat": 27.2424970,
+  "lon": 77.6009416,
+  "tags": {
+    "name": "Nagla Gulabi",
+    "name:hi": "नगला गुलाबी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685321,
+  "lat": 27.2555071,
+  "lon": 77.6036882,
+  "tags": {
+    "name": "Peepla",
+    "name:hi": "पीपला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685322,
+  "lat": 27.2364302,
+  "lon": 77.6222276,
+  "tags": {
+    "name": "Phulwara",
+    "name:hi": "फुलवारा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685323,
+  "lat": 27.2431838,
+  "lon": 77.6282358,
+  "tags": {
+    "name": "Sooti",
+    "name:hi": "सूती",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685324,
+  "lat": 27.2629081,
+  "lon": 77.6231718,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685325,
+  "lat": 27.2536758,
+  "lon": 77.6267767,
+  "tags": {
+    "name": "Mahchauli",
+    "name:hi": "महचौली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685326,
+  "lat": 27.2600469,
+  "lon": 77.6433849,
+  "tags": {
+    "name": "Bhaderua",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685329,
+  "lat": 27.2671043,
+  "lon": 77.6526546,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685330,
+  "lat": 27.2646628,
+  "lon": 77.6820945,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685331,
+  "lat": 27.2581394,
+  "lon": 77.6881885,
+  "tags": {
+    "name": "Jhundawai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685332,
+  "lat": 27.2551256,
+  "lon": 77.6986599,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685333,
+  "lat": 27.2542863,
+  "lon": 77.7083158,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685334,
+  "lat": 27.2367354,
+  "lon": 77.6781892,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685335,
+  "lat": 27.2292564,
+  "lon": 77.6785755,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685336,
+  "lat": 27.2172736,
+  "lon": 77.7155685,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685337,
+  "lat": 27.2249824,
+  "lon": 77.7205467,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685338,
+  "lat": 27.2334539,
+  "lon": 77.7149248,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685339,
+  "lat": 27.2278063,
+  "lon": 77.7074146,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685340,
+  "lat": 27.2160905,
+  "lon": 77.6846695,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685341,
+  "lat": 27.2046407,
+  "lon": 77.6835966,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685626,
+  "lat": 27.2027705,
+  "lon": 77.7692127,
+  "tags": {
+    "name": "Kachora",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685627,
+  "lat": 27.2051751,
+  "lon": 77.7953052,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685628,
+  "lat": 27.2059766,
+  "lon": 77.8048324,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685629,
+  "lat": 27.2015491,
+  "lon": 77.8225135,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174685630,
+  "lat": 27.2090300,
+  "lon": 77.8365898,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6174734726,
+  "lat": 27.2052515,
+  "lon": 77.2581767,
+  "tags": {
+    "name": "Kawai",
+    "name:hi": "कवई",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6281736990,
+  "lat": 27.8317518,
+  "lon": 77.4526262,
+  "tags": {
+    "name": "Kharauth",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6281737047,
+  "lat": 27.8747418,
+  "lon": 77.4253320,
+  "tags": {
+    "name": "Hatana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6281737293,
+  "lat": 27.8410874,
+  "lon": 77.4074363,
+  "tags": {
+    "name": "Kotwan",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6281737379,
+  "lat": 27.8137805,
+  "lon": 77.3406172,
+  "tags": {
+    "name": "Kamar",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6281737536,
+  "lat": 27.7775253,
+  "lon": 77.3908281,
+  "tags": {
+    "name": "Bathain Kalan",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6281738783,
+  "lat": 27.7925414,
+  "lon": 77.4367904,
+  "tags": {
+    "name": "Kosi Kalan",
+    "place": "village",
+    "wikidata": "Q2237390"
+  }
+},
+{
+  "type": "node",
+  "id": 6283358904,
+  "lat": 27.4106714,
+  "lon": 77.6924586,
+  "tags": {
+    "name": "Bad",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6283358905,
+  "lat": 27.4070522,
+  "lon": 77.8222989,
+  "tags": {
+    "alt_name": "Baldev",
+    "name": "Baldeo",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6283363328,
+  "lat": 27.3227462,
+  "lon": 77.6830387,
+  "tags": {
+    "name": "Beri",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6283363768,
+  "lat": 27.3035664,
+  "lon": 77.6246309,
+  "tags": {
+    "name": "Ol",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6283571490,
+  "lat": 27.5385468,
+  "lon": 77.6026583,
+  "tags": {
+    "name": "Bati",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6283986811,
+  "lat": 27.6027045,
+  "lon": 77.5774240,
+  "tags": {
+    "name": "Ajhai Khurd",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6283986838,
+  "lat": 27.6316801,
+  "lon": 77.6208543,
+  "tags": {
+    "name": "Parkham",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6283986839,
+  "lat": 27.6505368,
+  "lon": 77.6024007,
+  "tags": {
+    "name": "Pasoli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6283987132,
+  "lat": 27.6221935,
+  "lon": 77.5821018,
+  "tags": {
+    "name": "Chaumuha",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6284082499,
+  "lat": 27.6465832,
+  "lon": 77.5613308,
+  "tags": {
+    "name": "Akbarpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6284082500,
+  "lat": 27.6809914,
+  "lon": 77.5877130,
+  "tags": {
+    "name": "Tarauli Shumali",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6284082501,
+  "lat": 27.6775045,
+  "lon": 77.5880026,
+  "tags": {
+    "name": "Tarauli Janubi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6285073632,
+  "lat": 27.5777344,
+  "lon": 77.9408580,
+  "tags": {
+    "name": "Mursan",
+    "place": "village",
+    "wikidata": "Q2725627"
+  }
+},
+{
+  "type": "node",
+  "id": 6286163492,
+  "lat": 27.7818348,
+  "lon": 77.5269126,
+  "tags": {
+    "name": "Paigaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6288769324,
+  "lat": 27.5811484,
+  "lon": 77.6662910,
+  "tags": {
+    "name": "Sunrakh",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6290752906,
+  "lat": 27.4288804,
+  "lon": 77.6383102,
+  "tags": {
+    "name": "Tarsi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6290752965,
+  "lat": 27.4642612,
+  "lon": 77.6488888,
+  "tags": {
+    "name": "Maholi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6292013996,
+  "lat": 27.4963189,
+  "lon": 77.6171207,
+  "tags": {
+    "name": "Asgarhpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6292013997,
+  "lat": 27.4977274,
+  "lon": 77.6272058,
+  "tags": {
+    "name": "Satoha",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6294254911,
+  "lat": 27.4300612,
+  "lon": 77.6706576,
+  "tags": {
+    "name": "Aruki",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6294300227,
+  "lat": 27.4425923,
+  "lon": 77.6118421,
+  "tags": {
+    "name": "Uspar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6295216005,
+  "lat": 27.5902011,
+  "lon": 77.8535628,
+  "tags": {
+    "name": "Gaju",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6295348151,
+  "lat": 27.3896779,
+  "lon": 77.7269196,
+  "tags": {
+    "name": "Ladpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6295348398,
+  "lat": 27.4012039,
+  "lon": 77.7425623,
+  "tags": {
+    "name": "Karnawal",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6295535740,
+  "lat": 27.3861913,
+  "lon": 77.6773739,
+  "tags": {
+    "name": "Bhainsa",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6295535994,
+  "lat": 27.4130049,
+  "lon": 77.6472044,
+  "tags": {
+    "name": "Dhangaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6296235470,
+  "lat": 27.4066331,
+  "lon": 77.6113915,
+  "tags": {
+    "name": "Rampur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6296235471,
+  "lat": 27.4021564,
+  "lon": 77.6071858,
+  "tags": {
+    "name": "Umari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6296353914,
+  "lat": 27.3437906,
+  "lon": 77.7031660,
+  "tags": {
+    "name": "Bhahai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6296353915,
+  "lat": 27.3557120,
+  "lon": 77.6906776,
+  "tags": {
+    "name": "Dhana Shamsabad",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6296811222,
+  "lat": 27.3952791,
+  "lon": 77.5701499,
+  "tags": {
+    "name": "Son",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6296811397,
+  "lat": 27.3591710,
+  "lon": 77.5606012,
+  "tags": {
+    "name": "Magorra",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6297549406,
+  "lat": 27.5065110,
+  "lon": 77.6005232,
+  "tags": {
+    "name": "Datiya",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6297549407,
+  "lat": 27.4978796,
+  "lon": 77.5853204,
+  "tags": {
+    "name": "Khamini",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6297549512,
+  "lat": 27.5263025,
+  "lon": 77.6218629,
+  "tags": {
+    "name": "Arhera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6297549513,
+  "lat": 27.5222494,
+  "lon": 77.6068103,
+  "tags": {
+    "name": "Phenchari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298068360,
+  "lat": 27.4883434,
+  "lon": 77.5614595,
+  "tags": {
+    "name": "Jachonda",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298068579,
+  "lat": 27.5850568,
+  "lon": 77.5113773,
+  "tags": {
+    "name": "Pelkhu",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298068678,
+  "lat": 27.5169115,
+  "lon": 77.5870585,
+  "tags": {
+    "name": "Mora",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298068679,
+  "lat": 27.5516933,
+  "lon": 77.4779892,
+  "tags": {
+    "name": "Kunjera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298068767,
+  "lat": 27.5813101,
+  "lon": 77.4929023,
+  "tags": {
+    "name": "Bharna Khurd",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298068931,
+  "lat": 27.6083329,
+  "lon": 77.5181579,
+  "tags": {
+    "name": "Shiwal",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298069633,
+  "lat": 27.5244663,
+  "lon": 77.5631976,
+  "tags": {
+    "name": "Tos",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298069634,
+  "lat": 27.5150561,
+  "lon": 77.5374376,
+  "tags": {
+    "name": "Jikhangaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298126177,
+  "lat": 27.5551367,
+  "lon": 77.5112700,
+  "tags": {
+    "name": "Konhi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298126219,
+  "lat": 27.5643057,
+  "lon": 77.5422549,
+  "tags": {
+    "name": "Bhadal",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298172153,
+  "lat": 27.4626079,
+  "lon": 77.5585387,
+  "tags": {
+    "name": "Madhurikund",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6298977119,
+  "lat": 27.3030421,
+  "lon": 77.6461422,
+  "tags": {
+    "name": "Garhi Rambal",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6299625453,
+  "lat": 27.3406551,
+  "lon": 77.5683850,
+  "tags": {
+    "name": "Rasulpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6299720339,
+  "lat": 27.3213831,
+  "lon": 77.5589919,
+  "tags": {
+    "name": "Rarah",
+    "name:hi": "रारह",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6300185111,
+  "lat": 27.3888777,
+  "lon": 77.5116777,
+  "tags": {
+    "name": "Loriha Patti",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6300925932,
+  "lat": 27.3133092,
+  "lon": 77.6074433,
+  "tags": {
+    "name": "Santrook",
+    "name:hi": "सांतरूक",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6300926513,
+  "lat": 27.4472958,
+  "lon": 77.4728823,
+  "tags": {
+    "name": "Pentha",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6300927348,
+  "lat": 27.4864969,
+  "lon": 77.4265337,
+  "tags": {
+    "name": "Gantholi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6300927392,
+  "lat": 27.4745467,
+  "lon": 77.4418813,
+  "tags": {
+    "name": "Jatipura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6300927393,
+  "lat": 27.4744278,
+  "lon": 77.4458349,
+  "tags": {
+    "name": "Aanyor",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6300929077,
+  "lat": 27.4721813,
+  "lon": 77.3742199,
+  "tags": {
+    "name": "Bahaj",
+    "name:hi": "बहज",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6300929078,
+  "lat": 27.4640851,
+  "lon": 77.4085683,
+  "tags": {
+    "name": "Baroli Chauth",
+    "name:hi": "बरोली चौथ",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301030696,
+  "lat": 27.5994718,
+  "lon": 77.3737049,
+  "tags": {
+    "name": "Hathiya",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301195009,
+  "lat": 27.7431760,
+  "lon": 77.3655510,
+  "tags": {
+    "name": "Gidoh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301195540,
+  "lat": 27.6796898,
+  "lon": 77.3821163,
+  "tags": {
+    "name": "Sanket",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301196008,
+  "lat": 27.6426248,
+  "lon": 77.3695207,
+  "tags": {
+    "name": "Chiksoli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301196044,
+  "lat": 27.6125920,
+  "lon": 77.3369264,
+  "tags": {
+    "name": "Rankoli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301196578,
+  "lat": 27.5296991,
+  "lon": 77.4304390,
+  "tags": {
+    "name": "Bhagosa",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301196715,
+  "lat": 27.5219735,
+  "lon": 77.3978233,
+  "tags": {
+    "name": "Devseras",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301197099,
+  "lat": 27.5601398,
+  "lon": 77.3804426,
+  "tags": {
+    "name": "Mahroli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301197167,
+  "lat": 27.5358545,
+  "lon": 77.4140185,
+  "tags": {
+    "name": "Madaura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301197357,
+  "lat": 27.5723898,
+  "lon": 77.4162769,
+  "tags": {
+    "name": "Palson",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301197692,
+  "lat": 27.6324025,
+  "lon": 77.4273062,
+  "tags": {
+    "name": "Kamai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301407421,
+  "lat": 27.8473676,
+  "lon": 77.3845624,
+  "tags": {
+    "name": "Umrala",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301407422,
+  "lat": 27.8330802,
+  "lon": 77.3743056,
+  "tags": {
+    "name": "Dahgaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301407423,
+  "lat": 27.8339910,
+  "lon": 77.3579978,
+  "tags": {
+    "name": "Lalpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301407887,
+  "lat": 27.7897319,
+  "lon": 77.3297381,
+  "tags": {
+    "name": "Sirthala",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301408159,
+  "lat": 27.7914973,
+  "lon": 77.3551440,
+  "tags": {
+    "name": "Hulwana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301409196,
+  "lat": 27.7309452,
+  "lon": 77.4129295,
+  "tags": {
+    "name": "Jao",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6301633770,
+  "lat": 27.7073167,
+  "lon": 77.6077381,
+  "tags": {
+    "name": "Naugaona",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6302349937,
+  "lat": 27.5486684,
+  "lon": 77.4543643,
+  "tags": {
+    "name": "Padal",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303151884,
+  "lat": 27.7959202,
+  "lon": 77.5620389,
+  "tags": {
+    "name": "Husaini",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303152469,
+  "lat": 27.8008363,
+  "lon": 77.6646709,
+  "tags": {
+    "name": "Dhimari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303323627,
+  "lat": 27.7394727,
+  "lon": 77.6758826,
+  "tags": {
+    "name": "Siyaraha",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303323628,
+  "lat": 27.7625261,
+  "lon": 77.6547146,
+  "tags": {
+    "name": "Kajraut",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303521649,
+  "lat": 27.7093278,
+  "lon": 77.5609034,
+  "tags": {
+    "name": "Undi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303521686,
+  "lat": 27.7295681,
+  "lon": 77.5523403,
+  "tags": {
+    "name": "Ladpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303755545,
+  "lat": 27.6553540,
+  "lon": 77.4927531,
+  "tags": {
+    "name": "Sankhi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303756241,
+  "lat": 27.6294149,
+  "lon": 77.4794534,
+  "tags": {
+    "name": "Sahar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303756792,
+  "lat": 27.6904290,
+  "lon": 77.5005610,
+  "tags": {
+    "name": "Ranwari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303756793,
+  "lat": 27.6735452,
+  "lon": 77.4773384,
+  "tags": {
+    "name": "Umraya",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6303757066,
+  "lat": 27.6749036,
+  "lon": 77.4963625,
+  "tags": {
+    "name": "Alwai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6304112920,
+  "lat": 27.6993507,
+  "lon": 77.4378638,
+  "tags": {
+    "name": "Khaira",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6304112921,
+  "lat": 27.6667001,
+  "lon": 77.3822886,
+  "tags": {
+    "alt_name": "Ghazipur",
+    "name": "Gajipur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6304113248,
+  "lat": 27.7424200,
+  "lon": 77.3254828,
+  "tags": {
+    "name": "Sanchauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6304113494,
+  "lat": 27.6643335,
+  "lon": 77.3657976,
+  "tags": {
+    "name": "Unchagaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6304114469,
+  "lat": 27.5980104,
+  "lon": 77.4653720,
+  "tags": {
+    "name": "Bharna Kalan",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6304592612,
+  "lat": 27.6725828,
+  "lon": 77.4158048,
+  "tags": {
+    "name": "Ajnokh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6304593116,
+  "lat": 27.6486741,
+  "lon": 77.4307179,
+  "tags": {
+    "name": "Karhela",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6305555666,
+  "lat": 27.5292805,
+  "lon": 77.3610019,
+  "tags": {
+    "name": "Mudseras",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6306118477,
+  "lat": 27.6491493,
+  "lon": 77.3356175,
+  "tags": {
+    "name": "Sunhera",
+    "name:hi": "सुनहेरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6306118512,
+  "lat": 27.6336096,
+  "lon": 77.2978198,
+  "tags": {
+    "name": "Kanwara",
+    "name:hi": "कनवाडा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6306118918,
+  "lat": 27.5694035,
+  "lon": 77.3533630,
+  "tags": {
+    "name": "Janu",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6306119477,
+  "lat": 27.7190929,
+  "lon": 77.3157692,
+  "tags": {
+    "name": "Mahrana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6306308349,
+  "lat": 27.8194740,
+  "lon": 77.4094534,
+  "tags": {
+    "name": "Nabipur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6306309608,
+  "lat": 27.7846065,
+  "lon": 77.3848629,
+  "tags": {
+    "name": "Bathain Khurd",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6306540486,
+  "lat": 27.7252851,
+  "lon": 77.3493933,
+  "tags": {
+    "name": "Badangarh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6306616795,
+  "lat": 27.6973412,
+  "lon": 77.4169743,
+  "tags": {
+    "name": "Bijwari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6306790235,
+  "lat": 27.5864689,
+  "lon": 77.4149197,
+  "tags": {
+    "name": "Sehi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6308051300,
+  "lat": 27.7808477,
+  "lon": 77.2943973,
+  "tags": {
+    "name": "Naunera",
+    "name:hi": "नोनेरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6308051301,
+  "lat": 27.7625452,
+  "lon": 77.2689914,
+  "tags": {
+    "name": "Gaonri",
+    "name:hi": "गांवडी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309044722,
+  "lat": 27.7597349,
+  "lon": 77.3458099,
+  "tags": {
+    "name": "Khitwita",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309044723,
+  "lat": 27.7801642,
+  "lon": 77.3434924,
+  "tags": {
+    "name": "Kadauna",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309045564,
+  "lat": 27.8298543,
+  "lon": 77.2758150,
+  "tags": {
+    "name": "Nai",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6309045713,
+  "lat": 27.8655419,
+  "lon": 77.3615169,
+  "tags": {
+    "name": "Garhi Patti",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6309045714,
+  "lat": 27.8455841,
+  "lon": 77.3075723,
+  "tags": {
+    "name": "Bichhor",
+    "place": "village",
+    "source": "GNS",
+    "wikidata": "Q28172550"
+  }
+},
+{
+  "type": "node",
+  "id": 6309047252,
+  "lat": 27.7836080,
+  "lon": 77.3820768,
+  "tags": {
+    "amenity": "place_of_worship",
+    "historic": "wayside_shrine",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 6309123952,
+  "lat": 27.7177632,
+  "lon": 77.4703932,
+  "tags": {
+    "name": "Bhadawal",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309123953,
+  "lat": 27.7374026,
+  "lon": 77.4535489,
+  "tags": {
+    "name": "Dham Singha",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309123981,
+  "lat": 27.8631138,
+  "lon": 77.5373840,
+  "tags": {
+    "name": "Shernagar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309124413,
+  "lat": 27.8030571,
+  "lon": 77.4928164,
+  "tags": {
+    "name": "Phalain",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309257637,
+  "lat": 27.7143820,
+  "lon": 77.3361110,
+  "tags": {
+    "name": "Badokhar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309308790,
+  "lat": 27.8684063,
+  "lon": 77.2515463,
+  "tags": {
+    "name": "Singar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309309067,
+  "lat": 27.7957304,
+  "lon": 77.2619533,
+  "tags": {
+    "name": "Nogawan",
+    "name:hi": "नोगांव",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6309309068,
+  "lat": 27.8093584,
+  "lon": 77.2527265,
+  "tags": {
+    "name": "Hathangaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6313241698,
+  "lat": 27.5375384,
+  "lon": 77.3062849,
+  "tags": {
+    "name": "Parmandra",
+    "name:hi": "परमदरा",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6313899527,
+  "lat": 27.5872629,
+  "lon": 77.6987417,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Keshi Ghat",
+    "name:ru": "Кеши-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 6315788296,
+  "lat": 27.7415998,
+  "lon": 77.3033452,
+  "tags": {
+    "name": "Sahera",
+    "name:hi": "सहेडा",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6316180639,
+  "lat": 27.9268912,
+  "lon": 77.5113773,
+  "tags": {
+    "name": "Chaundras",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6316181262,
+  "lat": 27.9176010,
+  "lon": 77.4524974,
+  "tags": {
+    "alt_name": "Bhiruki",
+    "name": "Bhiduki",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6316181407,
+  "lat": 27.8753867,
+  "lon": 77.4679040,
+  "tags": {
+    "name": "Baraka",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6316181440,
+  "lat": 27.8967045,
+  "lon": 77.4469614,
+  "tags": {
+    "name": "Banswa",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6316181565,
+  "lat": 27.8598035,
+  "lon": 77.4869907,
+  "tags": {
+    "name": "Bukharari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6316182267,
+  "lat": 27.8150902,
+  "lon": 77.5373839,
+  "tags": {
+    "name": "Bishambhara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6316182709,
+  "lat": 27.8824330,
+  "lon": 77.2717702,
+  "tags": {
+    "name": "Khaika",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6317889968,
+  "lat": 27.3665270,
+  "lon": 77.2993755,
+  "tags": {
+    "name": "Sinsini",
+    "name:hi": "सिनसिनी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6317891476,
+  "lat": 27.3389111,
+  "lon": 77.4937820,
+  "tags": {
+    "name": "Ajan",
+    "name:hi": "अजान",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6317891477,
+  "lat": 27.3218693,
+  "lon": 77.4608659,
+  "tags": {
+    "name": "Awar",
+    "name:hi": "अवार",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6320472959,
+  "lat": 27.5383755,
+  "lon": 77.7440321,
+  "tags": {
+    "name": "Diwana Khurd",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6327277693,
+  "lat": 27.4662794,
+  "lon": 77.6378917,
+  "tags": {
+    "name": "Salempur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6327277694,
+  "lat": 27.4537129,
+  "lon": 77.6306819,
+  "tags": {
+    "name": "Mukandpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6327725498,
+  "lat": 27.4638043,
+  "lon": 77.5721454,
+  "tags": {
+    "name": "Junsuti",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6344853568,
+  "lat": 27.5285384,
+  "lon": 77.2511065,
+  "tags": {
+    "name": "Khoh",
+    "name:hi": "खोह",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6344853569,
+  "lat": 27.5348366,
+  "lon": 77.2855138,
+  "tags": {
+    "name": "Gohana",
+    "name:hi": "गुहाना",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6344856390,
+  "lat": 27.5613810,
+  "lon": 77.3244166,
+  "tags": {
+    "name": "Pasta",
+    "name:hi": "पास्ता",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6344856413,
+  "lat": 27.5972850,
+  "lon": 77.3305642,
+  "tags": {
+    "name": "Nahora",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6344856585,
+  "lat": 27.5659606,
+  "lon": 77.2936892,
+  "tags": {
+    "name": "Sehu",
+    "name:hi": "सेऊ",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6344857539,
+  "lat": 27.6186763,
+  "lon": 77.2861575,
+  "tags": {
+    "name": "Indroli",
+    "name:hi": "इन्दौली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6345131515,
+  "lat": 27.5026474,
+  "lon": 77.3484063,
+  "tags": {
+    "name": "Iklahra",
+    "name:hi": "इकलेरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347008127,
+  "lat": 27.2924402,
+  "lon": 77.5410747,
+  "tags": {
+    "name": "Dhormui",
+    "name:hi": "घौरमुई",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347008138,
+  "lat": 27.2793296,
+  "lon": 77.4884605,
+  "tags": {
+    "name": "Sogar",
+    "name:hi": "सोगर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347008242,
+  "lat": 27.2952243,
+  "lon": 77.4429595,
+  "tags": {
+    "name": "Dahra",
+    "name:hi": "डहरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347008722,
+  "lat": 27.3423039,
+  "lon": 77.5311184,
+  "tags": {
+    "name": "Takha",
+    "name:hi": "ताखा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347008925,
+  "lat": 27.3756164,
+  "lon": 77.4556410,
+  "tags": {
+    "name": "Talphara",
+    "name:hi": "तालफरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347009028,
+  "lat": 27.4317372,
+  "lon": 77.3459386,
+  "tags": {
+    "name": "Au",
+    "name:hi": "अऊ",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347009053,
+  "lat": 27.4338988,
+  "lon": 77.3714948,
+  "tags": {
+    "name": "Umra",
+    "name:hi": "उमरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347234432,
+  "lat": 27.3743016,
+  "lon": 77.4110520,
+  "tags": {
+    "name": "Kasot",
+    "name:hi": "कासोट",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347357460,
+  "lat": 27.3977128,
+  "lon": 77.4694008,
+  "tags": {
+    "name": "Bachgaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347357476,
+  "lat": 27.4064807,
+  "lon": 77.4126506,
+  "tags": {
+    "name": "Kourer",
+    "name:hi": "कोरेर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347655621,
+  "lat": 27.4390788,
+  "lon": 77.3999905,
+  "tags": {
+    "name": "Samai",
+    "name:hi": "सामई",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347655622,
+  "lat": 27.4311468,
+  "lon": 77.4014497,
+  "tags": {
+    "name": "Khera Brahman",
+    "name:hi": "खेडा ब्राम्हण",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6347656653,
+  "lat": 27.4726668,
+  "lon": 77.4916470,
+  "tags": {
+    "name": "Bhavanpura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6348737685,
+  "lat": 27.6536405,
+  "lon": 77.3757161,
+  "tags": {
+    "addr:street": "Priya Kund",
+    "amenity": "place_of_worship",
+    "name": "विनोद विहारी बाबा आश्रम",
+    "name:en": "Vinod Bihari Baba Ashram"
+  }
+},
+{
+  "type": "node",
+  "id": 6349660017,
+  "lat": 27.5308598,
+  "lon": 77.5174069,
+  "tags": {
+    "name": "Basonti",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6349660018,
+  "lat": 27.5377477,
+  "lon": 77.5311398,
+  "tags": {
+    "name": "Junhaidi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6349660875,
+  "lat": 27.5671399,
+  "lon": 77.5904274,
+  "tags": {
+    "name": "Maghera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6349660876,
+  "lat": 27.5274538,
+  "lon": 77.5873160,
+  "tags": {
+    "name": "Sakna",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6349773497,
+  "lat": 27.4493905,
+  "lon": 77.5577044,
+  "tags": {
+    "name": "Sonsa",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6350463383,
+  "lat": 27.5672921,
+  "lon": 77.4590206,
+  "tags": {
+    "name": "Pali",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6350465125,
+  "lat": 27.5196946,
+  "lon": 77.4536294,
+  "tags": {
+    "name": "Nibgaon",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6352003352,
+  "lat": 27.4121572,
+  "lon": 77.3128295,
+  "tags": {
+    "name": "Sungaon",
+    "name:hi": "सोनगांव",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6352006925,
+  "lat": 27.5038940,
+  "lon": 77.3082161,
+  "tags": {
+    "name": "Didawali",
+    "name:hi": "दिदावली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6352006926,
+  "lat": 27.4801818,
+  "lon": 77.2709709,
+  "tags": {
+    "name": "Bandha Khalsa",
+    "name:hi": "बन्धा खालसा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6352006927,
+  "lat": 27.4551600,
+  "lon": 77.2794413,
+  "tags": {
+    "name": "Narena Katatta",
+    "name:hi": "नरेना कटता",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6352007793,
+  "lat": 27.4329180,
+  "lon": 77.3240196,
+  "tags": {
+    "name": "Kuchawati",
+    "name:hi": "कुचावटी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6352539318,
+  "lat": 27.5080621,
+  "lon": 77.4160623,
+  "tags": {
+    "name": "Malsari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6352539319,
+  "lat": 27.5075482,
+  "lon": 77.4300956,
+  "tags": {
+    "name": "Sakarwa",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6352539547,
+  "lat": 27.4388979,
+  "lon": 77.5298095,
+  "tags": {
+    "name": "Borpa",
+    "place": "village",
+    "population": "2000"
+  }
+},
+{
+  "type": "node",
+  "id": 6353063111,
+  "lat": 27.6863118,
+  "lon": 77.3293090,
+  "tags": {
+    "name": "Dhilawati",
+    "name:hi": "घीलावटी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6353063297,
+  "lat": 27.6742931,
+  "lon": 77.3036670,
+  "tags": {
+    "name": "Udaka",
+    "name:hi": "उदाका",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6353063298,
+  "lat": 27.6684400,
+  "lon": 77.3233223,
+  "tags": {
+    "name": "Akata",
+    "name:hi": "अकाटा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6353242514,
+  "lat": 27.7156737,
+  "lon": 77.2778535,
+  "tags": {
+    "name": "Satwas",
+    "name:hi": "सतवास",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6353243507,
+  "lat": 27.7001530,
+  "lon": 77.3232472,
+  "tags": {
+    "name": "Lewra",
+    "name:hi": "लेवारा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6353243538,
+  "lat": 27.6863498,
+  "lon": 77.3587489,
+  "tags": {
+    "name": "Rithora",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357017534,
+  "lat": 27.3278552,
+  "lon": 77.3066282,
+  "tags": {
+    "name": "Pichoomar",
+    "name:hi": "पिंचूमर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357017535,
+  "lat": 27.3384917,
+  "lon": 77.3335469,
+  "tags": {
+    "name": "Reethauthi",
+    "name:hi": "रीठोती",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357017536,
+  "lat": 27.3411222,
+  "lon": 77.2821664,
+  "tags": {
+    "name": "Bartai",
+    "name:hi": "बरताई",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357017568,
+  "lat": 27.2959393,
+  "lon": 77.2950411,
+  "tags": {
+    "name": "Astavan Kadim",
+    "name:hi": "अस्तावन कदीम",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357018399,
+  "lat": 27.2556310,
+  "lon": 77.2502375,
+  "tags": {
+    "name": "Gangroli",
+    "name:hi": "गांगरोली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357956659,
+  "lat": 27.2568423,
+  "lon": 77.3492002,
+  "tags": {
+    "name": "Pahua",
+    "name:hi": "पहुआ",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357956660,
+  "lat": 27.2452632,
+  "lon": 77.3446083,
+  "tags": {
+    "name": "Ajau",
+    "name:hi": "आजऊ",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357956951,
+  "lat": 27.2678672,
+  "lon": 77.4305033,
+  "tags": {
+    "name": "Borai",
+    "name:hi": "बोरई",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357957187,
+  "lat": 27.2615251,
+  "lon": 77.4874949,
+  "tags": {
+    "name": "Tuhiya",
+    "name:hi": "तुहिया",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6357957258,
+  "lat": 27.2431647,
+  "lon": 77.4336791,
+  "tags": {
+    "name": "Kasoda",
+    "name:hi": "कसोदा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6358030767,
+  "lat": 27.3201916,
+  "lon": 77.3465824,
+  "tags": {
+    "name": "Sikrori",
+    "name:hi": "सिकरोरी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6360727040,
+  "lat": 27.2362012,
+  "lon": 77.2813940,
+  "tags": {
+    "name": "Bhatawali",
+    "name:hi": "भटावली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6360727041,
+  "lat": 27.2205556,
+  "lon": 77.3064351,
+  "tags": {
+    "name": "Paprera",
+    "name:hi": "पपरेरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6360839439,
+  "lat": 27.3557216,
+  "lon": 77.2728753,
+  "tags": {
+    "name": "Usrani",
+    "name:hi": "उसरानी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6360839440,
+  "lat": 27.3672702,
+  "lon": 77.2589922,
+  "tags": {
+    "name": "Thairawar",
+    "name:hi": "थैरावर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6360839783,
+  "lat": 27.4034803,
+  "lon": 77.3026907,
+  "tags": {
+    "name": "Barawali",
+    "name:hi": "वरावली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6360839784,
+  "lat": 27.4004133,
+  "lon": 77.2818553,
+  "tags": {
+    "name": "Sahari",
+    "name:hi": "सहारई",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6360839785,
+  "lat": 27.3911068,
+  "lon": 77.2617388,
+  "tags": {
+    "name": "Shyorawali",
+    "name:hi": "श्यौरावली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6360840316,
+  "lat": 27.2416766,
+  "lon": 77.3261332,
+  "tags": {
+    "name": "Seehi",
+    "name:hi": "सीही",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6364533926,
+  "lat": 27.8823856,
+  "lon": 77.3873091,
+  "tags": {
+    "name": "Bhulwana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6364534013,
+  "lat": 27.9187386,
+  "lon": 77.3214769,
+  "tags": {
+    "name": "Sondh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6364534187,
+  "lat": 27.9345124,
+  "lon": 77.3514318,
+  "tags": {
+    "name": "Banchari",
+    "place": "village",
+    "wikidata": "Q39047359"
+  }
+},
+{
+  "type": "node",
+  "id": 6365360736,
+  "lat": 27.8917215,
+  "lon": 77.3176682,
+  "tags": {
+    "name": "Dadka",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6365360758,
+  "lat": 27.9475164,
+  "lon": 77.3112630,
+  "tags": {
+    "name": "Lohina",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6365361995,
+  "lat": 27.9434978,
+  "lon": 77.2819519,
+  "tags": {
+    "name": "Nangal Jat",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6365613516,
+  "lat": 27.9478576,
+  "lon": 77.3699712,
+  "tags": {
+    "name": "Dakora",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6365614826,
+  "lat": 27.9349673,
+  "lon": 77.4154615,
+  "tags": {
+    "name": "Pengaltu",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6365614827,
+  "lat": 27.9271187,
+  "lon": 77.4024581,
+  "tags": {
+    "name": "Godota",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6365615026,
+  "lat": 27.8986388,
+  "lon": 77.4266195,
+  "tags": {
+    "name": "Khirbi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6365972038,
+  "lat": 27.8807734,
+  "lon": 77.3303175,
+  "tags": {
+    "name": "Boraka",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6366085735,
+  "lat": 27.9447868,
+  "lon": 77.4735260,
+  "tags": {
+    "name": "Bhandoli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6368675770,
+  "lat": 27.8974251,
+  "lon": 77.2537994,
+  "tags": {
+    "name": "Nagal Sabha",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6368675771,
+  "lat": 27.9034935,
+  "lon": 77.2715663,
+  "tags": {
+    "name": "Andhop",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6372918213,
+  "lat": 27.8915631,
+  "lon": 77.7863220,
+  "tags": {
+    "name": "Edalpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6372918509,
+  "lat": 27.9211251,
+  "lon": 77.7317982,
+  "tags": {
+    "name": "Kolahar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6372918526,
+  "lat": 27.9228863,
+  "lon": 77.7622941,
+  "tags": {
+    "name": "Ahrola",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6372918611,
+  "lat": 27.8964048,
+  "lon": 77.7520429,
+  "tags": {
+    "name": "Pach Hara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6372919036,
+  "lat": 27.9274151,
+  "lon": 77.8069600,
+  "tags": {
+    "name": "Kasison",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6373027001,
+  "lat": 27.8812130,
+  "lon": 77.7993773,
+  "tags": {
+    "name": "Khera Sattu",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745113,
+  "lat": 27.4953291,
+  "lon": 77.8261399,
+  "tags": {
+    "name": "Nagla Hari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745230,
+  "lat": 27.4824042,
+  "lon": 77.8480911,
+  "tags": {
+    "name": "Tal Garhi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745231,
+  "lat": 27.5359401,
+  "lon": 77.8643560,
+  "tags": {
+    "name": "Gudera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745233,
+  "lat": 27.4674598,
+  "lon": 77.8859424,
+  "tags": {
+    "name": "Jugsana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745234,
+  "lat": 27.4099095,
+  "lon": 77.8788185,
+  "tags": {
+    "name": "Jharauta",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745235,
+  "lat": 27.4367650,
+  "lon": 77.8870582,
+  "tags": {
+    "name": "Dagheta",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745245,
+  "lat": 27.4251665,
+  "lon": 77.9243517,
+  "tags": {
+    "name": "Radoi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745413,
+  "lat": 27.4420972,
+  "lon": 77.9222059,
+  "tags": {
+    "name": "Sarai Daud",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6376745414,
+  "lat": 27.4272234,
+  "lon": 77.8371691,
+  "tags": {
+    "name": "Awerni",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6380449602,
+  "lat": 27.5570961,
+  "lon": 77.8336286,
+  "tags": {
+    "name": "Bisavli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6380449603,
+  "lat": 27.5653899,
+  "lon": 77.8232431,
+  "tags": {
+    "name": "Pirsuwa",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6380449604,
+  "lat": 27.5306886,
+  "lon": 77.8402161,
+  "tags": {
+    "name": "Khajuri",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6380449855,
+  "lat": 27.5710773,
+  "lon": 77.8339076,
+  "tags": {
+    "name": "Birhana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 6380450132,
+  "lat": 27.5339328,
+  "lon": 77.8583908,
+  "tags": {
+    "name": "Pavesara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7171716172,
+  "lat": 27.5767900,
+  "lon": 77.6754809,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Ашрам Гаутамы риши"
+  }
+},
+{
+  "type": "node",
+  "id": 7171760301,
+  "lat": 27.5724032,
+  "lon": 77.6777866,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7171760302,
+  "lat": 27.5723219,
+  "lon": 77.6773956,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Кришна-Баларам мандир"
+  }
+},
+{
+  "type": "node",
+  "id": 7171792398,
+  "lat": 27.5701644,
+  "lon": 77.6929867,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Тарас мандир"
+  }
+},
+{
+  "type": "node",
+  "id": 7171865698,
+  "lat": 27.5788988,
+  "lon": 77.7037404,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Katyayani",
+    "name:ru": "Храм Катьяяни",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172072781,
+  "lat": 27.5802569,
+  "lon": 77.6888572,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "храм Ашта-сакхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172091726,
+  "lat": 27.5799780,
+  "lon": 77.6905025,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Банкебихари",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172103529,
+  "lat": 27.5810739,
+  "lon": 77.6917198,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхи-Валлабхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172126073,
+  "lat": 27.5810397,
+  "lon": 77.6924374,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "храм Нрисимхадевы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292946,
+  "lat": 27.5828566,
+  "lon": 77.6950567,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храмы Пурнамаси и Адвайты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292949,
+  "lat": 27.5857657,
+  "lon": 77.7000490,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Шри Шри Радха-Гопинатха",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247396549,
+  "lat": 27.5854780,
+  "lon": 77.6990090,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Radha-Ramana",
+    "name:ru": "Радха-Раман",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287646376,
+  "lat": 27.5811092,
+  "lon": 77.6880385,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Сурья гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287657604,
+  "lat": 27.5815504,
+  "lon": 77.6683140,
+  "tags": {
+    "amenity": "place_of_worship"
+  }
+},
+{
+  "type": "node",
+  "id": 7287711828,
+  "lat": 27.5779027,
+  "lon": 77.7077571,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Пани-гхат",
+    "name:en": "Pani-ghat",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287726154,
+  "lat": 27.5518014,
+  "lon": 77.6850479,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Акрура-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287733294,
+  "lat": 27.5566428,
+  "lon": 77.6879977,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Батхаран Бихари"
+  }
+},
+{
+  "type": "node",
+  "id": 7287742611,
+  "lat": 27.5761598,
+  "lon": 77.6752188,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Вараха-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287789485,
+  "lat": 27.5769074,
+  "lon": 77.6764355,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Мохана тер-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287803086,
+  "lat": 27.5785391,
+  "lon": 77.6856482,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Калия Мардана"
+  }
+},
+{
+  "type": "node",
+  "id": 7287833608,
+  "lat": 27.5808263,
+  "lon": 77.7020754,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Сад 64х самадхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287891338,
+  "lat": 27.5838662,
+  "lon": 77.7001762,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Samadhi Bilvamangala",
+    "name:ru": "Самадхи Билвамангала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287918954,
+  "lat": 27.5832308,
+  "lon": 77.7000786,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Amiya Nimai",
+    "name:ru": "Храм Амия Нимая",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287972516,
+  "lat": 27.5840523,
+  "lon": 77.7075323,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Джаганнатха-темпл",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287986412,
+  "lat": 27.5838574,
+  "lon": 77.7063522,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Текари Рани",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288005900,
+  "lat": 27.5827139,
+  "lon": 77.7060598,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Туласи Рамы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288011437,
+  "lat": 27.5839942,
+  "lon": 77.7052082,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "ГЬяна Гудри",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288032404,
+  "lat": 27.5835849,
+  "lon": 77.7054241,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхи-Враджа-мохана",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288046039,
+  "lat": 27.5851469,
+  "lon": 77.7029532,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Гопишвары Махадевы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288063453,
+  "lat": 27.5845889,
+  "lon": 77.7024710,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Радха Гопала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288063975,
+  "lat": 27.5869782,
+  "lon": 77.6986901,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Югалы Кишора",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288064334,
+  "lat": 27.5859002,
+  "lon": 77.7024438,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхаканты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288072404,
+  "lat": 27.5862533,
+  "lon": 77.7035191,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Вамшиват",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288077196,
+  "lat": 27.5859146,
+  "lon": 77.7021043,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "самадхи Шриниваса Ачарьи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292232952,
+  "lat": 27.5815351,
+  "lon": 77.6910818,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Югала-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292258052,
+  "lat": 27.5811524,
+  "lon": 77.6954146,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Божества Мурари Гупты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292333038,
+  "lat": 27.5825618,
+  "lon": 77.6964734,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шалаграма",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292341999,
+  "lat": 27.5809789,
+  "lon": 77.6954974,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Банкханди Махадева",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292358445,
+  "lat": 27.5835148,
+  "lon": 77.6941441,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Имли Тала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292385205,
+  "lat": 27.5834988,
+  "lon": 77.6960683,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Тилака-стхана и самадхи Шьямананды",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292425230,
+  "lat": 27.5847566,
+  "lon": 77.6969865,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шахджи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292475319,
+  "lat": 27.5849563,
+  "lon": 77.6958144,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Джару Мандала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292485103,
+  "lat": 27.5846282,
+  "lon": 77.6959458,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Шрингара ват",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292485577,
+  "lat": 27.5841408,
+  "lon": 77.6970509,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Мирабай",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301328132,
+  "lat": 27.5863531,
+  "lon": 77.6982711,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Вамши Гопала и Гададхарв Дант самадхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301331130,
+  "lat": 27.5857591,
+  "lon": 77.6980820,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шадбхуджа Махапрабху",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301340398,
+  "lat": 27.5854985,
+  "lon": 77.6966316,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Чир-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301353522,
+  "lat": 27.5868163,
+  "lon": 77.7024473,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Дхира Самира-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301363295,
+  "lat": 27.5823146,
+  "lon": 77.6983143,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шриджи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301363993,
+  "lat": 27.5851321,
+  "lon": 77.6993599,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Sona Gaurangi",
+    "name:ru": "Храм Сона Гауранги",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7391423251,
+  "lat": 27.2747142,
+  "lon": 77.2542286,
+  "tags": {
+    "name": "Meda Choli",
+    "name:hi": "मेडा चोली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7391423252,
+  "lat": 27.2867671,
+  "lon": 77.2704506,
+  "tags": {
+    "name": "Hingoli",
+    "name:hi": "हिंगोली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7391423253,
+  "lat": 27.2669898,
+  "lon": 77.2797203,
+  "tags": {
+    "name": "Bansroli",
+    "name:hi": "बांसरोली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7391423254,
+  "lat": 27.2725209,
+  "lon": 77.2919726,
+  "tags": {
+    "name": "Gudawali",
+    "name:hi": "गुदावली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7391423255,
+  "lat": 27.2445382,
+  "lon": 77.2979593,
+  "tags": {
+    "name": "Bani",
+    "name:hi": "बनी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7391423257,
+  "lat": 27.2613058,
+  "lon": 77.3018217,
+  "tags": {
+    "name": "Padola",
+    "name:hi": "पडोला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7391423258,
+  "lat": 27.2694884,
+  "lon": 77.3100293,
+  "tags": {
+    "name": "Guhawali",
+    "name:hi": "गुहावली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7600585111,
+  "lat": 27.2036102,
+  "lon": 77.5642061,
+  "tags": {
+    "name": "Nagla Barela",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 7600585112,
+  "lat": 27.2058621,
+  "lon": 77.5574684,
+  "tags": {
+    "name": "Bachhanmadi",
+    "name:hi": "बछामदी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8127653987,
+  "lat": 27.4560893,
+  "lon": 77.3867004,
+  "tags": {
+    "name": "Nagla Dandu",
+    "name:hi": "नगला दांदू",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8207732687,
+  "lat": 27.3155208,
+  "lon": 77.8537774,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8209484089,
+  "lat": 27.9367114,
+  "lon": 77.7563166,
+  "tags": {
+    "name": "Shivala Kalan",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355057512,
+  "lat": 27.2379373,
+  "lon": 77.4503946,
+  "tags": {
+    "name": "Kanjoli",
+    "name:hi": "कंजोली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355057516,
+  "lat": 27.2224828,
+  "lon": 77.4453950,
+  "tags": {
+    "name": "Murwara",
+    "name:hi": "मुरवारा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355101418,
+  "lat": 27.2189528,
+  "lon": 77.4235940,
+  "tags": {
+    "name": "Madhoni",
+    "name:hi": "माडोनी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355101421,
+  "lat": 27.2105375,
+  "lon": 77.3445010,
+  "tags": {
+    "name": "Bisda",
+    "name:hi": "विसदा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197148,
+  "lat": 27.2629081,
+  "lon": 77.4512529,
+  "tags": {
+    "name": "Maharajsar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197149,
+  "lat": 27.2576053,
+  "lon": 77.4648785,
+  "tags": {
+    "name": "Chak Bhandor",
+    "name:hi": "चक भांडोर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197150,
+  "lat": 27.2655593,
+  "lon": 77.4649644,
+  "tags": {
+    "name": "Ghana Bhandor",
+    "name:hi": "घना भांडोर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197151,
+  "lat": 27.2474189,
+  "lon": 77.4500942,
+  "tags": {
+    "name": "Girdharpur",
+    "name:hi": "गिरधरपुर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197152,
+  "lat": 27.2430788,
+  "lon": 77.4698138,
+  "tags": {
+    "name": "Gundwa",
+    "name:hi": "गुंडवा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197153,
+  "lat": 27.2525504,
+  "lon": 77.4989533,
+  "tags": {
+    "name": "Tonga",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197154,
+  "lat": 27.2761637,
+  "lon": 77.4953699,
+  "tags": {
+    "name": "Ludhwada",
+    "name:hi": "लुधवाडा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197155,
+  "lat": 27.2971978,
+  "lon": 77.4868512,
+  "tags": {
+    "name": "Nagla Harchand",
+    "name:hi": "नगला हरचन्द",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197156,
+  "lat": 27.3128326,
+  "lon": 77.4911212,
+  "tags": {
+    "name": "Mahanganya",
+    "name:hi": "महगाया",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197157,
+  "lat": 27.2971597,
+  "lon": 77.5097036,
+  "tags": {
+    "name": "Tamrauli",
+    "name:hi": "तमरौलि",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197158,
+  "lat": 27.3097630,
+  "lon": 77.5169563,
+  "tags": {
+    "name": "Moroli Khurd",
+    "name:hi": "मोरोली खुर्द",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197159,
+  "lat": 27.3139956,
+  "lon": 77.5151109,
+  "tags": {
+    "name": "Moroli Kalan",
+    "name:hi": "मोरोली कला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197161,
+  "lat": 27.3051299,
+  "lon": 77.5401950,
+  "tags": {
+    "name": "Sahnawali",
+    "name:hi": "सहनावली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197162,
+  "lat": 27.2845931,
+  "lon": 77.5578975,
+  "tags": {
+    "name": "Senthra",
+    "name:hi": "सैंथरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197163,
+  "lat": 27.2626792,
+  "lon": 77.5276851,
+  "tags": {
+    "name": "Jagheena",
+    "name:hi": "जघीना",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197165,
+  "lat": 27.2312979,
+  "lon": 77.5801492,
+  "tags": {
+    "name": "Gaonri",
+    "name:hi": "गॉंवड़ी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197167,
+  "lat": 27.2360676,
+  "lon": 77.5602579,
+  "tags": {
+    "name": "Nagla Kewal",
+    "name:hi": "नगला केवल",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197168,
+  "lat": 27.2362775,
+  "lon": 77.5399589,
+  "tags": {
+    "name": "Barakhur",
+    "name:hi": "बराखुर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197169,
+  "lat": 27.2488114,
+  "lon": 77.5578975,
+  "tags": {
+    "name": "Jiroli",
+    "name:hi": "जिरोली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197170,
+  "lat": 27.2500132,
+  "lon": 77.5782823,
+  "tags": {
+    "name": "Nauganwa",
+    "name:hi": "नौगाया",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197171,
+  "lat": 27.2677146,
+  "lon": 77.5648069,
+  "tags": {
+    "name": "Hathaini",
+    "name:hi": "हथैनी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197172,
+  "lat": 27.2780899,
+  "lon": 77.5689268,
+  "tags": {
+    "name": "Nagla Hathaini",
+    "name:hi": "नगला हथेनी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197173,
+  "lat": 27.2946046,
+  "lon": 77.5692701,
+  "tags": {
+    "name": "Nagla Bilauthi",
+    "name:hi": "नगला बाईलाउथि",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197174,
+  "lat": 27.3052634,
+  "lon": 77.5789475,
+  "tags": {
+    "name": "Bilauthi",
+    "name:hi": "बिलोठी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197176,
+  "lat": 27.2904284,
+  "lon": 77.5954914,
+  "tags": {
+    "name": "Karoth",
+    "name:hi": "कारोठ",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197177,
+  "lat": 27.2828577,
+  "lon": 77.5905132,
+  "tags": {
+    "name": "Jatoli Rathman",
+    "name:hi": "जाटोली रथवान",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197178,
+  "lat": 27.2891889,
+  "lon": 77.6158332,
+  "tags": {
+    "name": "Nagla Tangar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197180,
+  "lat": 27.2873583,
+  "lon": 77.6111126,
+  "tags": {
+    "name": "Baghai",
+    "name:hi": "बाघई",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355197181,
+  "lat": 27.2709951,
+  "lon": 77.6101255,
+  "tags": {
+    "name": "Kolipura",
+    "name:hi": "कोलीपुरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660359,
+  "lat": 27.3111549,
+  "lon": 77.5606870,
+  "tags": {
+    "name": "Nagala Baidhaya",
+    "name:hi": "नगला बैधया",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660360,
+  "lat": 27.2745426,
+  "lon": 77.4762940,
+  "tags": {
+    "name": "Nagla Jeewana",
+    "name:hi": "नगला जीवना",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660363,
+  "lat": 27.2748477,
+  "lon": 77.4328422,
+  "tags": {
+    "name": "Nagla Sawairam",
+    "name:hi": "नगला सवाईराम",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660364,
+  "lat": 27.2868815,
+  "lon": 77.4412536,
+  "tags": {
+    "name": "Golpura",
+    "name:hi": "गोलपुरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660368,
+  "lat": 27.3759022,
+  "lon": 77.4915504,
+  "tags": {
+    "name": "Gunsara",
+    "name:hi": "गुनसारा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660369,
+  "lat": 27.3915259,
+  "lon": 77.4218774,
+  "tags": {
+    "name": "Didwari",
+    "name:hi": "डिडवारी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660371,
+  "lat": 27.3517193,
+  "lon": 77.4628186,
+  "tags": {
+    "name": "Abhaurra",
+    "name:hi": "अर्भोरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660372,
+  "lat": 27.3552642,
+  "lon": 77.4472403,
+  "tags": {
+    "name": "Sajaula",
+    "name:hi": "सजौला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660373,
+  "lat": 27.3333642,
+  "lon": 77.4445367,
+  "tags": {
+    "name": "Sunari",
+    "name:hi": "सुनारी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660375,
+  "lat": 27.3186093,
+  "lon": 77.4417901,
+  "tags": {
+    "name": "Surauta",
+    "name:hi": "सुरोता",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660376,
+  "lat": 27.2939753,
+  "lon": 77.4196028,
+  "tags": {
+    "name": "Belara Khurd",
+    "name:hi": "बेलारा खुर्द",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660381,
+  "lat": 27.2689162,
+  "lon": 77.3957848,
+  "tags": {
+    "name": "Chokipura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660383,
+  "lat": 27.2704039,
+  "lon": 77.3698640,
+  "tags": {
+    "name": "Hanuman Ka Nagla",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660384,
+  "lat": 27.2778229,
+  "lon": 77.3476982,
+  "tags": {
+    "name": "Kishanpura",
+    "name:hi": "किशनपुरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660396,
+  "lat": 27.2928884,
+  "lon": 77.4079513,
+  "tags": {
+    "name": "Belara Kalan",
+    "name:hi": "बेलारा कला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660397,
+  "lat": 27.3110023,
+  "lon": 77.4075866,
+  "tags": {
+    "name": "Adhaiya Khurd",
+    "name:hi": "अधेया खुर्द",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660398,
+  "lat": 27.3219836,
+  "lon": 77.4108481,
+  "tags": {
+    "name": "Adhaiya Kalan",
+    "name:hi": "अधेया कला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660401,
+  "lat": 27.3291514,
+  "lon": 77.4117493,
+  "tags": {
+    "name": "Lakhan",
+    "name:hi": "लखन",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660402,
+  "lat": 27.3347938,
+  "lon": 77.4103331,
+  "tags": {
+    "name": "Khan",
+    "name:hi": "खानु",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660403,
+  "lat": 27.3385870,
+  "lon": 77.4097967,
+  "tags": {
+    "name": "Indoo",
+    "name:hi": "इन्दू",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660404,
+  "lat": 27.3398641,
+  "lon": 77.4028444,
+  "tags": {
+    "name": "Koomha",
+    "name:hi": "कूम्हा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660406,
+  "lat": 27.3742445,
+  "lon": 77.3788118,
+  "tags": {
+    "name": "Tamrer",
+    "name:hi": "तमरेर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660407,
+  "lat": 27.3702810,
+  "lon": 77.3582553,
+  "tags": {
+    "name": "Saint",
+    "name:hi": "सैंत",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660408,
+  "lat": 27.3836953,
+  "lon": 77.3461103,
+  "tags": {
+    "name": "Sitare Ka Nagla",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660409,
+  "lat": 27.3721103,
+  "lon": 77.3428702,
+  "tags": {
+    "name": "Sitara",
+    "name:hi": "सितारा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660410,
+  "lat": 27.3714720,
+  "lon": 77.3251462,
+  "tags": {
+    "name": "Senhti",
+    "name:hi": "सेंहती",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660411,
+  "lat": 27.3678037,
+  "lon": 77.3266268,
+  "tags": {
+    "name": "Mukandpura",
+    "name:hi": "मुकुन्दपुरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660412,
+  "lat": 27.3588280,
+  "lon": 77.3426127,
+  "tags": {
+    "name": "Pala",
+    "name:hi": "पला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660413,
+  "lat": 27.3445911,
+  "lon": 77.3510027,
+  "tags": {
+    "name": "Supawas",
+    "name:hi": "सूपावास",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355660415,
+  "lat": 27.3507378,
+  "lon": 77.3018861,
+  "tags": {
+    "name": "Jaya",
+    "name:hi": "जया",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355662523,
+  "lat": 27.2901043,
+  "lon": 77.3154688,
+  "tags": {
+    "name": "Khera Karauli",
+    "name:hi": "खेडा कारौली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355662525,
+  "lat": 27.3081996,
+  "lon": 77.3210263,
+  "tags": {
+    "name": "Peedhi",
+    "name:hi": "पीढी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355662526,
+  "lat": 27.3173320,
+  "lon": 77.3411107,
+  "tags": {
+    "name": "Sikrora",
+    "name:hi": "सिकरोरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934323,
+  "lat": 27.4704679,
+  "lon": 77.2996759,
+  "tags": {
+    "name": "Shyopura",
+    "name:hi": "श्योपुरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934325,
+  "lat": 27.5039606,
+  "lon": 77.2902024,
+  "tags": {
+    "name": "Mahmadpur",
+    "name:hi": "महमदपुर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934328,
+  "lat": 27.4428208,
+  "lon": 77.3682761,
+  "tags": {
+    "name": "Nagla Faujdar",
+    "name:hi": "नगला फौजदार",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934330,
+  "lat": 27.4448203,
+  "lon": 77.3064780,
+  "tags": {
+    "name": "Bahtana",
+    "name:hi": "बहताना",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934331,
+  "lat": 27.4249951,
+  "lon": 77.3169279,
+  "tags": {
+    "name": "Kheriya Purohit",
+    "name:hi": "खेरिया पुरोहितान",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934332,
+  "lat": 27.4329942,
+  "lon": 77.2901487,
+  "tags": {
+    "name": "Khohri",
+    "name:hi": "खोहरी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934333,
+  "lat": 27.4296422,
+  "lon": 77.2743558,
+  "tags": {
+    "name": "Girse",
+    "name:hi": "गिरसै",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934335,
+  "lat": 27.4096238,
+  "lon": 77.2739267,
+  "tags": {
+    "name": "Naswara",
+    "name:hi": "नसवाडा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934340,
+  "lat": 27.3971651,
+  "lon": 77.3374843,
+  "tags": {
+    "name": "Badangarh",
+    "name:hi": "बदनगढ",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934341,
+  "lat": 27.4017182,
+  "lon": 77.3286008,
+  "tags": {
+    "name": "Gahnawali",
+    "name:hi": "गहनावली",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934342,
+  "lat": 27.3946314,
+  "lon": 77.3535347,
+  "tags": {
+    "name": "Madhera",
+    "name:hi": "माढेरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934346,
+  "lat": 27.4192239,
+  "lon": 77.3811936,
+  "tags": {
+    "name": "Kathaira Chauth",
+    "name:hi": "कठेरा चौथ",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934347,
+  "lat": 27.4162906,
+  "lon": 77.3686194,
+  "tags": {
+    "name": "Gharwari",
+    "name:hi": "घरवारी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934349,
+  "lat": 27.4582066,
+  "lon": 77.4137020,
+  "tags": {
+    "name": "Shyamdhak",
+    "name:hi": "श्याम ढाक",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934350,
+  "lat": 27.4951197,
+  "lon": 77.3918152,
+  "tags": {
+    "name": "Nagla Moti",
+    "name:hi": "नगला मोती",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934353,
+  "lat": 27.5784762,
+  "lon": 77.3413467,
+  "tags": {
+    "name": "Narena Chauth",
+    "name:hi": "(नाहरा चौथ)",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934355,
+  "lat": 27.5871488,
+  "lon": 77.3021865,
+  "tags": {
+    "name": "Dhamari",
+    "name:hi": "धमारी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8355934356,
+  "lat": 27.5698600,
+  "lon": 77.2952771,
+  "tags": {
+    "name": "Suhera",
+    "name:hi": "सुहेरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474966,
+  "lat": 27.6415271,
+  "lon": 77.3163271,
+  "tags": {
+    "name": "Nandola",
+    "name:hi": "नन्दोला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474969,
+  "lat": 27.7476768,
+  "lon": 77.2559881,
+  "tags": {
+    "name": "Parehi",
+    "name:hi": "परेही",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474972,
+  "lat": 27.7752471,
+  "lon": 77.2586918,
+  "tags": {
+    "name": "Khaichatan",
+    "name:hi": "खेचाटन",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474973,
+  "lat": 27.7796706,
+  "lon": 77.2625970,
+  "tags": {
+    "name": "Samdhara",
+    "name:hi": "समधारा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474975,
+  "lat": 27.7516267,
+  "lon": 77.2861361,
+  "tags": {
+    "name": "Pathwari",
+    "name:hi": "पथवाडी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474985,
+  "lat": 27.7305273,
+  "lon": 77.2834539,
+  "tags": {
+    "name": "Anchwara",
+    "name:hi": "ऐचवाडा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474986,
+  "lat": 27.7280962,
+  "lon": 77.2745919,
+  "tags": {
+    "name": "Nagla Bhattki",
+    "name:hi": "नगला भट्ट की",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474987,
+  "lat": 27.7382763,
+  "lon": 77.2610092,
+  "tags": {
+    "name": "Unchera",
+    "name:hi": "ऊचेरा",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474991,
+  "lat": 27.7172123,
+  "lon": 77.2618997,
+  "tags": {
+    "name": "Vadipur",
+    "name:hi": "वदीपुर",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357474993,
+  "lat": 27.6899504,
+  "lon": 77.2693348,
+  "tags": {
+    "name": "Nanderabas",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357517267,
+  "lat": 27.6161000,
+  "lon": 77.2660839,
+  "tags": {
+    "name": "Chhichharwari",
+    "name:hi": "छिछरवाडी",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357517270,
+  "lat": 27.5810248,
+  "lon": 77.2655582,
+  "tags": {
+    "name": "Palla",
+    "name:hi": "पल्ला",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8357517272,
+  "lat": 27.6150068,
+  "lon": 77.3146105,
+  "tags": {
+    "name": "Mullaka",
+    "name:hi": "मुल्लाका",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8511957819,
+  "lat": 27.6435034,
+  "lon": 77.3650267,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Gaur Das residence Man Mandir"
+  }
+},
+{
+  "type": "node",
+  "id": 8513551217,
+  "lat": 27.6434432,
+  "lon": 77.3652941,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Ramesh baba residence"
+  }
+},
+{
+  "type": "node",
+  "id": 8665140053,
+  "lat": 27.5730437,
+  "lon": 77.8874490,
+  "tags": {
+    "name": "Sonai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665140091,
+  "lat": 27.6180413,
+  "lon": 77.9001518,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665171383,
+  "lat": 27.8642827,
+  "lon": 77.9354178,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665171392,
+  "lat": 27.8307259,
+  "lon": 77.9276227,
+  "tags": {
+    "name": "Nagla Kunji",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665171393,
+  "lat": 27.8354258,
+  "lon": 77.9217174,
+  "tags": {
+    "name": "Nunera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665171394,
+  "lat": 27.8281843,
+  "lon": 77.9003006,
+  "tags": {
+    "name": "Bisauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665171395,
+  "lat": 27.8464264,
+  "lon": 77.8716005,
+  "tags": {
+    "name": "Nayabas",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665171404,
+  "lat": 27.8649439,
+  "lon": 77.9197095,
+  "tags": {
+    "name": "Chinta ki Nagariya",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665171407,
+  "lat": 27.8632385,
+  "lon": 77.8825845,
+  "tags": {
+    "name": "Subkara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665899764,
+  "lat": 27.9210657,
+  "lon": 77.8363754,
+  "tags": {
+    "name": "Viraula",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665899767,
+  "lat": 27.9258711,
+  "lon": 77.8819023,
+  "tags": {
+    "name": "Bajhera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665899768,
+  "lat": 27.9323039,
+  "lon": 77.8867269,
+  "tags": {
+    "name": "Arrana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8665899772,
+  "lat": 27.9478289,
+  "lon": 77.8588026,
+  "tags": {
+    "name": "Rasulpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8682565468,
+  "lat": 27.9438624,
+  "lon": 77.7598587,
+  "tags": {
+    "name": "Shivala",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778417,
+  "lat": 27.6539200,
+  "lon": 77.9065418,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778418,
+  "lat": 27.6702264,
+  "lon": 77.8990316,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778426,
+  "lat": 27.6935604,
+  "lon": 77.8925943,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778432,
+  "lat": 27.6952703,
+  "lon": 77.8686046,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778440,
+  "lat": 27.6837561,
+  "lon": 77.8309679,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778441,
+  "lat": 27.6796898,
+  "lon": 77.8554296,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778442,
+  "lat": 27.6761934,
+  "lon": 77.8626394,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778443,
+  "lat": 27.6697323,
+  "lon": 77.8796339,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778449,
+  "lat": 27.6503087,
+  "lon": 77.8940534,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778450,
+  "lat": 27.6546803,
+  "lon": 77.8915214,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778451,
+  "lat": 27.6522854,
+  "lon": 77.8752565,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778454,
+  "lat": 27.6562388,
+  "lon": 77.8600645,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778457,
+  "lat": 27.6583294,
+  "lon": 77.8450870,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8687778460,
+  "lat": 27.6630427,
+  "lon": 77.8344869,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8703069030,
+  "lat": 27.8474069,
+  "lon": 77.8271969,
+  "tags": {
+    "name": "Hirdai Ka Nagariya",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8703069031,
+  "lat": 27.8790282,
+  "lon": 77.8276004,
+  "tags": {
+    "name": "Palachand",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8703079336,
+  "lat": 27.6990420,
+  "lon": 77.9213533,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8703079341,
+  "lat": 27.6746418,
+  "lon": 77.9251561,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8703079343,
+  "lat": 27.6696840,
+  "lon": 77.9312032,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8703079344,
+  "lat": 27.6642222,
+  "lon": 77.9214140,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8703110869,
+  "lat": 27.7684683,
+  "lon": 77.9451555,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735762475,
+  "lat": 27.7242460,
+  "lon": 77.7891994,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841375,
+  "lat": 27.8654996,
+  "lon": 77.9020675,
+  "tags": {
+    "name": "Basai",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841376,
+  "lat": 27.8863551,
+  "lon": 77.8732818,
+  "tags": {
+    "name": "Gidaura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841377,
+  "lat": 27.8935463,
+  "lon": 77.8973417,
+  "tags": {
+    "name": "Majupur Subkar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841378,
+  "lat": 27.8944624,
+  "lon": 77.8921098,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841379,
+  "lat": 27.9038006,
+  "lon": 77.9099032,
+  "tags": {
+    "name": "Tehra",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841380,
+  "lat": 27.9105250,
+  "lon": 77.8949680,
+  "tags": {
+    "name": "Balpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841381,
+  "lat": 27.9177037,
+  "lon": 77.9056992,
+  "tags": {
+    "name": "Chaudhana",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841382,
+  "lat": 27.8993527,
+  "lon": 77.9318282,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841383,
+  "lat": 27.8983883,
+  "lon": 77.9459788,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841384,
+  "lat": 27.8837756,
+  "lon": 77.9291436,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841385,
+  "lat": 27.8893614,
+  "lon": 77.9253078,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8735841388,
+  "lat": 27.9336910,
+  "lon": 77.8571242,
+  "tags": {
+    "name": "Lohagarh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960387,
+  "lat": 27.7918192,
+  "lon": 77.9362021,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960388,
+  "lat": 27.8186917,
+  "lon": 77.8905002,
+  "tags": {
+    "name": "Nagla Madho",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960389,
+  "lat": 27.8049071,
+  "lon": 77.8894183,
+  "tags": {
+    "name": "Nagla Fakeera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960390,
+  "lat": 27.7978719,
+  "lon": 77.8909388,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960391,
+  "lat": 27.7978461,
+  "lon": 77.9006172,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960392,
+  "lat": 27.7908363,
+  "lon": 77.9232196,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960393,
+  "lat": 27.7926470,
+  "lon": 77.9110558,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960395,
+  "lat": 27.7963976,
+  "lon": 77.9256173,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960397,
+  "lat": 27.8086573,
+  "lon": 77.9163190,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8891960398,
+  "lat": 27.8082952,
+  "lon": 77.9333950,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067123,
+  "lat": 27.6725240,
+  "lon": 77.8040686,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067129,
+  "lat": 27.6819235,
+  "lon": 77.8115247,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067131,
+  "lat": 27.6897687,
+  "lon": 77.7914956,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067132,
+  "lat": 27.9285215,
+  "lon": 77.9395226,
+  "tags": {
+    "name": "Haivatpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067133,
+  "lat": 27.9220708,
+  "lon": 77.9191948,
+  "tags": {
+    "name": "Andala",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067134,
+  "lat": 27.9376489,
+  "lon": 77.9034344,
+  "tags": {
+    "name": "Tarasura Pipal Ka Gaori",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067135,
+  "lat": 27.9372614,
+  "lon": 77.9210369,
+  "tags": {
+    "name": "Bhripur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067137,
+  "lat": 27.9351948,
+  "lon": 77.9336394,
+  "tags": {
+    "name": "Kakola",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067138,
+  "lat": 27.9497378,
+  "lon": 77.9366512,
+  "tags": {
+    "name": "Bhanauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067156,
+  "lat": 27.5825943,
+  "lon": 77.9337293,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067158,
+  "lat": 27.5688564,
+  "lon": 77.9104973,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067160,
+  "lat": 27.5747140,
+  "lon": 77.9171200,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067162,
+  "lat": 27.5947468,
+  "lon": 77.9101902,
+  "tags": {
+    "name": "Jawar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067163,
+  "lat": 27.6101123,
+  "lon": 77.9191375,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067164,
+  "lat": 27.6100604,
+  "lon": 77.9267397,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067166,
+  "lat": 27.6019245,
+  "lon": 77.9363594,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067167,
+  "lat": 27.5951873,
+  "lon": 77.9361840,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067168,
+  "lat": 27.5905228,
+  "lon": 77.9354238,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067169,
+  "lat": 27.5978563,
+  "lon": 77.9250146,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067174,
+  "lat": 27.5830075,
+  "lon": 77.9257163,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067175,
+  "lat": 27.5836035,
+  "lon": 77.9144299,
+  "tags": {
+    "name": "Navipur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067176,
+  "lat": 27.5837072,
+  "lon": 77.9115645,
+  "tags": {
+    "name": "Chhotua",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067180,
+  "lat": 27.7892882,
+  "lon": 77.9419451,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067181,
+  "lat": 27.8036955,
+  "lon": 77.9446644,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067188,
+  "lat": 27.8153595,
+  "lon": 77.9496936,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067189,
+  "lat": 27.8224453,
+  "lon": 77.9422375,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067212,
+  "lat": 27.6365629,
+  "lon": 77.9145733,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067213,
+  "lat": 27.6354225,
+  "lon": 77.9100829,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067214,
+  "lat": 27.6376503,
+  "lon": 77.9054128,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067217,
+  "lat": 27.6283147,
+  "lon": 77.9203211,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067218,
+  "lat": 27.6293756,
+  "lon": 77.9279249,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067219,
+  "lat": 27.6187661,
+  "lon": 77.9377439,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067221,
+  "lat": 27.6136201,
+  "lon": 77.9208898,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067222,
+  "lat": 27.6272803,
+  "lon": 77.8884091,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892067223,
+  "lat": 27.6330621,
+  "lon": 77.8892173,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081128,
+  "lat": 27.9198752,
+  "lon": 77.8869402,
+  "tags": {
+    "name": "Nigola",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081129,
+  "lat": 27.9140505,
+  "lon": 77.8802378,
+  "tags": {
+    "name": "Kuawarpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081130,
+  "lat": 27.9116098,
+  "lon": 77.8711049,
+  "tags": {
+    "name": "Godoli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081131,
+  "lat": 27.9083230,
+  "lon": 77.8585840,
+  "tags": {
+    "name": "Palpar Nagla",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081132,
+  "lat": 27.9171419,
+  "lon": 77.8523604,
+  "tags": {
+    "name": "Jasi Nagla",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081134,
+  "lat": 27.9148965,
+  "lon": 77.8173018,
+  "tags": {
+    "name": "Savai Raghunathpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081135,
+  "lat": 27.9053941,
+  "lon": 77.8434853,
+  "tags": {
+    "name": "Bamani",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081136,
+  "lat": 27.9116424,
+  "lon": 77.8308907,
+  "tags": {
+    "name": "Nayela",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081137,
+  "lat": 27.9014562,
+  "lon": 77.8335422,
+  "tags": {
+    "name": "Bhanera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081138,
+  "lat": 27.8879816,
+  "lon": 77.8452161,
+  "tags": {
+    "name": "Nagala Virua",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081139,
+  "lat": 27.8896416,
+  "lon": 77.8507400,
+  "tags": {
+    "name": "Usram",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081140,
+  "lat": 27.8906180,
+  "lon": 77.8630031,
+  "tags": {
+    "name": "Bhogpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081141,
+  "lat": 27.8954351,
+  "lon": 77.8778073,
+  "tags": {
+    "name": "Janhera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081142,
+  "lat": 27.8407747,
+  "lon": 77.8409442,
+  "tags": {
+    "name": "Chuharpur Kinwan",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081143,
+  "lat": 27.8501201,
+  "lon": 77.8369670,
+  "tags": {
+    "name": "Ahrua",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081144,
+  "lat": 27.8517155,
+  "lon": 77.8569268,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081145,
+  "lat": 27.8447800,
+  "lon": 77.8491197,
+  "tags": {
+    "name": "Sekhpura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081146,
+  "lat": 27.8513899,
+  "lon": 77.8439640,
+  "tags": {
+    "name": "Bhure Ki Nagariya",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081147,
+  "lat": 27.8554599,
+  "lon": 77.8561903,
+  "tags": {
+    "name": "Talesara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081150,
+  "lat": 27.8722591,
+  "lon": 77.8610882,
+  "tags": {
+    "name": "Digsari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081153,
+  "lat": 27.8633186,
+  "lon": 77.8261530,
+  "tags": {
+    "name": "Arni",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081157,
+  "lat": 27.7965119,
+  "lon": 77.8759291,
+  "tags": {
+    "name": "Hasan Garh",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081159,
+  "lat": 27.7964142,
+  "lon": 77.8532074,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081160,
+  "lat": 27.8007142,
+  "lon": 77.8595783,
+  "tags": {
+    "name": "Payadapur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081161,
+  "lat": 27.8065451,
+  "lon": 77.8554906,
+  "tags": {
+    "name": "Jasua",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081162,
+  "lat": 27.8042323,
+  "lon": 77.8460999,
+  "tags": {
+    "name": "Murhia",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081163,
+  "lat": 27.7978801,
+  "lon": 77.8353098,
+  "tags": {
+    "name": "Bhuria Garhi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081164,
+  "lat": 27.7981081,
+  "lon": 77.8227889,
+  "tags": {
+    "name": "Nithewari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081165,
+  "lat": 27.8079132,
+  "lon": 77.8370407,
+  "tags": {
+    "name": "Pachawari",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081166,
+  "lat": 27.8179779,
+  "lon": 77.8198797,
+  "tags": {
+    "name": "Sarkaria",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081168,
+  "lat": 27.8188573,
+  "lon": 77.8419017,
+  "tags": {
+    "name": "Uttampur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081170,
+  "lat": 27.8191830,
+  "lon": 77.8520289,
+  "tags": {
+    "name": "Kuniwarpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081171,
+  "lat": 27.8302237,
+  "lon": 77.8649181,
+  "tags": {
+    "name": "Dhatauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081173,
+  "lat": 27.8209417,
+  "lon": 77.8726516,
+  "tags": {
+    "name": "Rana Baraula",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081174,
+  "lat": 27.7842362,
+  "lon": 77.8226312,
+  "tags": {
+    "name": "Talnagar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081176,
+  "lat": 27.7842014,
+  "lon": 77.8403865,
+  "tags": {
+    "name": "Bhandera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081177,
+  "lat": 27.7760160,
+  "lon": 77.8484178,
+  "tags": {
+    "name": "Razawal",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081178,
+  "lat": 27.7609324,
+  "lon": 77.8594017,
+  "tags": {
+    "name": "Beloth",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081179,
+  "lat": 27.7728810,
+  "lon": 77.8833380,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081180,
+  "lat": 27.7747620,
+  "lon": 77.8798736,
+  "tags": {
+    "name": "Aturra",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081181,
+  "lat": 27.7806487,
+  "lon": 77.8681810,
+  "tags": {
+    "name": "Sadha",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081182,
+  "lat": 27.7828082,
+  "lon": 77.8751099,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081183,
+  "lat": 27.7840272,
+  "lon": 77.8879836,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081184,
+  "lat": 27.7816588,
+  "lon": 77.8934952,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081185,
+  "lat": 27.7735429,
+  "lon": 77.9000698,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081186,
+  "lat": 27.7729159,
+  "lon": 77.8948338,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081189,
+  "lat": 27.7689796,
+  "lon": 77.8719998,
+  "tags": {
+    "name": "Kalua",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081190,
+  "lat": 27.7630923,
+  "lon": 77.8738895,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081191,
+  "lat": 27.7612808,
+  "lon": 77.8995580,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081192,
+  "lat": 27.7460906,
+  "lon": 77.9011328,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081193,
+  "lat": 27.7534073,
+  "lon": 77.8932984,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081194,
+  "lat": 27.7518395,
+  "lon": 77.8805822,
+  "tags": {
+    "name": "Kanetpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081196,
+  "lat": 27.7427457,
+  "lon": 77.8829050,
+  "tags": {
+    "name": "Rampur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081199,
+  "lat": 27.7469965,
+  "lon": 77.8632205,
+  "tags": {
+    "name": "Baba ki Marhi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081200,
+  "lat": 27.7493309,
+  "lon": 77.8537326,
+  "tags": {
+    "name": "Bhangra",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081201,
+  "lat": 27.7438607,
+  "lon": 77.8425125,
+  "tags": {
+    "name": "Gidaura",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081202,
+  "lat": 27.7539995,
+  "lon": 77.8397566,
+  "tags": {
+    "name": "Deta",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081203,
+  "lat": 27.7422231,
+  "lon": 77.8308593,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081204,
+  "lat": 27.7236843,
+  "lon": 77.8818225,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081208,
+  "lat": 27.7338598,
+  "lon": 77.8574840,
+  "tags": {
+    "name": "Khirsauli",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081209,
+  "lat": 27.7357146,
+  "lon": 77.8515266,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081210,
+  "lat": 27.7268509,
+  "lon": 77.8363487,
+  "tags": {
+    "name": "Harji Ka Bas",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081211,
+  "lat": 27.7272028,
+  "lon": 77.8496916,
+  "tags": {
+    "name": "Dantau Kalan",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081212,
+  "lat": 27.7226733,
+  "lon": 77.8481712,
+  "tags": {
+    "name": "Dantau Khurd",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081213,
+  "lat": 27.7167201,
+  "lon": 77.8691945,
+  "tags": {
+    "name": "Jatwar",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081215,
+  "lat": 27.7061845,
+  "lon": 77.8615337,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892081216,
+  "lat": 27.7121125,
+  "lon": 77.8583173,
+  "tags": {
+    "name": "Garhi Amia",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083519,
+  "lat": 27.6238460,
+  "lon": 77.8313435,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083520,
+  "lat": 27.6285407,
+  "lon": 77.8350556,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083521,
+  "lat": 27.6301320,
+  "lon": 77.8300263,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083522,
+  "lat": 27.6329169,
+  "lon": 77.8262243,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083523,
+  "lat": 27.6366387,
+  "lon": 77.8367476,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083525,
+  "lat": 27.6387110,
+  "lon": 77.8713378,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083526,
+  "lat": 27.6378043,
+  "lon": 77.8802265,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083527,
+  "lat": 27.6256292,
+  "lon": 77.8794956,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083528,
+  "lat": 27.6203961,
+  "lon": 77.8777704,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083530,
+  "lat": 27.6230645,
+  "lon": 77.8577999,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083531,
+  "lat": 27.6235826,
+  "lon": 77.8385604,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083532,
+  "lat": 27.6272095,
+  "lon": 77.8442329,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083533,
+  "lat": 27.6331676,
+  "lon": 77.8437943,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083534,
+  "lat": 27.6307585,
+  "lon": 77.8490574,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892083535,
+  "lat": 27.6345664,
+  "lon": 77.8532093,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892652898,
+  "lat": 27.9265435,
+  "lon": 77.8271485,
+  "tags": {
+    "name": "Bishanpuri",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892652899,
+  "lat": 27.9420345,
+  "lon": 77.8155399,
+  "tags": {
+    "name": "Nagola",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892652911,
+  "lat": 27.8885039,
+  "lon": 77.8159590,
+  "tags": {
+    "name": "Vajipur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682454,
+  "lat": 27.7310960,
+  "lon": 77.8911040,
+  "tags": {
+    "name": "Maujipur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682455,
+  "lat": 27.7107643,
+  "lon": 77.8931076,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682456,
+  "lat": 27.7078407,
+  "lon": 77.9042576,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682458,
+  "lat": 27.7158887,
+  "lon": 77.9194149,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682460,
+  "lat": 27.7206515,
+  "lon": 77.9096564,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682461,
+  "lat": 27.7199288,
+  "lon": 77.9007883,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682462,
+  "lat": 27.7325083,
+  "lon": 77.9052038,
+  "tags": {
+    "name": "Nagla Fatola",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682463,
+  "lat": 27.7342489,
+  "lon": 77.9208991,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682465,
+  "lat": 27.7341175,
+  "lon": 77.9370397,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682467,
+  "lat": 27.7552886,
+  "lon": 77.9285336,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682469,
+  "lat": 27.7447666,
+  "lon": 77.9182976,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682477,
+  "lat": 27.7696066,
+  "lon": 77.9178646,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682478,
+  "lat": 27.7721495,
+  "lon": 77.9212503,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682480,
+  "lat": 27.7783846,
+  "lon": 77.9114868,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682481,
+  "lat": 27.7418023,
+  "lon": 77.8069504,
+  "tags": {
+    "name": "Kanthi Nagaria",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682485,
+  "lat": 27.7764427,
+  "lon": 77.7686954,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8892682486,
+  "lat": 27.7901777,
+  "lon": 77.7648090,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8893061802,
+  "lat": 27.9190717,
+  "lon": 77.9476731,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 8910875401,
+  "lat": 27.4962908,
+  "lon": 77.6548242,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Durga Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 8916790950,
+  "lat": 27.2180465,
+  "lon": 77.4860308,
+  "tags": {
+    "amenity": "place_of_worship"
+  }
+},
+{
+  "type": "node",
+  "id": 8916800373,
+  "lat": 27.2185503,
+  "lon": 77.4884684,
+  "tags": {
+    "amenity": "place_of_worship"
+  }
+},
+{
+  "type": "node",
+  "id": 8916805585,
+  "lat": 27.2168024,
+  "lon": 77.4857905,
+  "tags": {
+    "amenity": "place_of_worship"
+  }
+},
+{
+  "type": "node",
+  "id": 8916816362,
+  "lat": 27.2176954,
+  "lon": 77.4870350,
+  "tags": {
+    "amenity": "place_of_worship"
+  }
+},
+{
+  "type": "node",
+  "id": 9004913405,
+  "lat": 27.2510758,
+  "lon": 77.8054051,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9004913406,
+  "lat": 27.2475642,
+  "lon": 77.7873479,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9004913407,
+  "lat": 27.2279256,
+  "lon": 77.7929504,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9004913408,
+  "lat": 27.2324055,
+  "lon": 77.8010520,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9004913409,
+  "lat": 27.2345881,
+  "lon": 77.8378991,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9006060867,
+  "lat": 27.2692176,
+  "lon": 77.9450481,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008033209,
+  "lat": 27.2460294,
+  "lon": 77.7414306,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008033210,
+  "lat": 27.2493679,
+  "lon": 77.7469603,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008033211,
+  "lat": 27.2219129,
+  "lon": 77.8201032,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008033212,
+  "lat": 27.2286519,
+  "lon": 77.7772198,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008033213,
+  "lat": 27.2104827,
+  "lon": 77.7827706,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008033214,
+  "lat": 27.2076818,
+  "lon": 77.8086745,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008033215,
+  "lat": 27.2247663,
+  "lon": 77.7544654,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008033216,
+  "lat": 27.2192351,
+  "lon": 77.7363169,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008048217,
+  "lat": 27.2305772,
+  "lon": 77.7511979,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008048218,
+  "lat": 27.2364228,
+  "lon": 77.7545047,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9008048219,
+  "lat": 27.2370528,
+  "lon": 77.7499381,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016246563,
+  "lat": 27.3107354,
+  "lon": 77.8448724,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016246564,
+  "lat": 27.3116887,
+  "lon": 77.8388643,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016246565,
+  "lat": 27.3182471,
+  "lon": 77.8372335,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016246568,
+  "lat": 27.3197722,
+  "lon": 77.8175783,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016263256,
+  "lat": 27.2073728,
+  "lon": 77.9066085,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016263258,
+  "lat": 27.2065484,
+  "lon": 77.8919775,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016263259,
+  "lat": 27.2008127,
+  "lon": 77.8788377,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016305944,
+  "lat": 27.2513486,
+  "lon": 77.9025077,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016305945,
+  "lat": 27.2115489,
+  "lon": 77.8591203,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016305946,
+  "lat": 27.2157471,
+  "lon": 77.8724670,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016305947,
+  "lat": 27.2273865,
+  "lon": 77.9098033,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016609769,
+  "lat": 27.2865192,
+  "lon": 77.7509737,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016609772,
+  "lat": 27.2700034,
+  "lon": 77.7611875,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016609773,
+  "lat": 27.2730168,
+  "lon": 77.7579689,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016609775,
+  "lat": 27.2616873,
+  "lon": 77.7601575,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9016615530,
+  "lat": 27.2232652,
+  "lon": 77.8443145,
+  "tags": {
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9680819547,
+  "lat": 27.2114153,
+  "lon": 77.3282146,
+  "tags": {
+    "name": "Sonera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9681767587,
+  "lat": 27.3379390,
+  "lon": 77.4151826,
+  "tags": {
+    "name": "Dandoo",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9681767588,
+  "lat": 27.3280505,
+  "lon": 77.3634106,
+  "tags": {
+    "name": "Bilawati",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9681767590,
+  "lat": 27.2140678,
+  "lon": 77.3168420,
+  "tags": {
+    "name": "Khanswara",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 9726193793,
+  "lat": 27.8587648,
+  "lon": 77.4070294,
+  "tags": {
+    "addr:city": "KARMAN",
+    "addr:postcode": "121106",
+    "addr:street": "Near Railway Crossing",
+    "amenity": "place_of_worship",
+    "name": "LAMORVAN MANDIR",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 9904060117,
+  "lat": 27.5819358,
+  "lon": 77.6935671,
+  "tags": {
+    "addr:postcode": "281121",
+    "addr:street": "Sewa Kunj Road, Gotam Nagar, Vrindavan, Uttar Pradesh 281121, Индия",
+    "amenity": "place_of_worship",
+    "name": "श्री कृष्णा बलराम मंदिर",
+    "name:en": "Shri Krishna Balram Temple",
+    "name:ru": "Шри Кришна Баларам Мандир",
+    "opening_hours": "Mo-Su 04:30-19:00",
+    "religion": "hindu",
+    "website": "http://visuddhagauravani.com"
+  }
+},
+{
+  "type": "node",
+  "id": 10119700427,
+  "lat": 27.5890506,
+  "lon": 77.2822952,
+  "tags": {
+    "name": "Nagla Ghata",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 10121763858,
+  "lat": 27.2052514,
+  "lon": 77.5749993,
+  "tags": {
+    "name": "ajhera",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 10121763859,
+  "lat": 27.2311071,
+  "lon": 77.5559878,
+  "tags": {
+    "name": "Nagla Lodho",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 10904656770,
+  "lat": 27.5823151,
+  "lon": 77.6062138,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "shri hanuman mandir"
+  }
+},
+{
+  "type": "node",
+  "id": 10904656777,
+  "lat": 27.5821124,
+  "lon": 77.6065598,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "temple"
+  }
+},
+{
+  "type": "node",
+  "id": 10904656785,
+  "lat": 27.5816537,
+  "lon": 77.6068816,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "hanuman temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 10904656796,
+  "lat": 27.5825872,
+  "lon": 77.6081452,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "sikh temple",
+    "religion": "sikh"
+  }
+},
+{
+  "type": "node",
+  "id": 11386941862,
+  "lat": 27.4788032,
+  "lon": 77.3320432,
+  "tags": {
+    "name": "Bisonikalan",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 11742129145,
+  "lat": 27.5828963,
+  "lon": 77.4921257,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Surya Narayan Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683438,
+  "lat": 27.5790459,
+  "lon": 77.6971569,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 12282391434,
+  "lat": 27.4753697,
+  "lon": 77.9376439,
+  "tags": {
+    "name": "Nasirpur",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 12282391455,
+  "lat": 27.5310657,
+  "lon": 77.8898164,
+  "tags": {
+    "name": "Jatoi",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 12282391458,
+  "lat": 27.3918080,
+  "lon": 77.9247512,
+  "tags": {
+    "name": "Bisawar",
+    "place": "town"
+  }
+},
+{
+  "type": "node",
+  "id": 12516958144,
+  "lat": 27.6034105,
+  "lon": 77.8721392,
+  "tags": {
+    "name": "Sathini",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 12555500493,
+  "lat": 27.2890376,
+  "lon": 77.7128942,
+  "tags": {
+    "addr:city": "Mathura",
+    "addr:housenumber": "Near by BKGS inter college",
+    "amenity": "place_of_worship",
+    "name": "Panch Mukhi Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12592913133,
+  "lat": 27.4861829,
+  "lon": 77.6675151,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shri Prachin Hanuman Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12592918077,
+  "lat": 27.4748193,
+  "lon": 77.6565893,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Baba Jai Guru Dev Shanti Sthal",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12592926516,
+  "lat": 27.4826941,
+  "lon": 77.6546613,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shiv Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12592940378,
+  "lat": 27.4811588,
+  "lon": 77.6559929,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Devi Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12593340166,
+  "lat": 27.2867437,
+  "lon": 77.7181552,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "DEVI MAA TEMPLE",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12595635574,
+  "lat": 27.5011734,
+  "lon": 77.6586892,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Radha Nagar Gurudwara",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12595638945,
+  "lat": 27.5006437,
+  "lon": 77.6551091,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Hanuman Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12595651182,
+  "lat": 27.4998805,
+  "lon": 77.6684018,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shri Bhuteshwar Mahadev Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12595732299,
+  "lat": 27.4954882,
+  "lon": 77.6722478,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Banmal Asharam",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12595815327,
+  "lat": 27.5308029,
+  "lon": 77.6603960,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Radha Krishna Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12595886109,
+  "lat": 27.4777016,
+  "lon": 77.6596744,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12595888672,
+  "lat": 27.4769860,
+  "lon": 77.6586761,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Jaigurudev Asharam",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719250356,
+  "lat": 27.6502981,
+  "lon": 77.3733732,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Shree Ladli Jee Maharaj Barsana",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719250358,
+  "lat": 27.6513742,
+  "lon": 77.3781996,
+  "tags": {
+    "historic": "city_gate",
+    "name": "Mharo Pyaro Barsana"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325193,
+  "lat": 27.5711878,
+  "lon": 77.6727511,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Sri chintamani kunj",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337814,
+  "lat": 27.5713996,
+  "lon": 77.6744995,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Dakshin Mukhi Hanuman Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13086877198,
+  "lat": 27.5673520,
+  "lon": 77.6723142,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shivji Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13140718477,
+  "lat": 27.4690360,
+  "lon": 77.3297873,
+  "tags": {
+    "historic": "cannon",
+    "location": "roof"
+  }
+},
+{
+  "type": "node",
+  "id": 13140719061,
+  "lat": 27.4722612,
+  "lon": 77.3234577,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Temple of Hanuman Ji"
+  }
+},
+{
+  "type": "node",
+  "id": 13140732912,
+  "lat": 27.4724083,
+  "lon": 77.3280433,
+  "tags": {
+    "historic": "cannon",
+    "location": "roof"
+  }
+},
+{
+  "type": "node",
+  "id": 13140733012,
+  "lat": 27.4593247,
+  "lon": 77.4165909,
+  "tags": {
+    "historic": "memorial"
+  }
+},
+{
+  "type": "node",
+  "id": 13140736885,
+  "lat": 27.4703688,
+  "lon": 77.3276895,
+  "tags": {
+    "historic": "cannon",
+    "location": "roof"
+  }
+},
+{
+  "type": "node",
+  "id": 13140736886,
+  "lat": 27.4692318,
+  "lon": 77.3290604,
+  "tags": {
+    "historic": "cannon",
+    "location": "roof"
+  }
+},
+{
+  "type": "node",
+  "id": 13190348553,
+  "lat": 27.4721583,
+  "lon": 77.3292304,
+  "tags": {
+    "barrier": "entrance",
+    "historic": "city_gate"
+  }
+},
+{
+  "type": "node",
+  "id": 13190348645,
+  "lat": 27.4710095,
+  "lon": 77.3171619,
+  "tags": {
+    "historic": "city_gate"
+  }
+},
+{
+  "type": "node",
+  "id": 13273674966,
+  "lat": 27.4404942,
+  "lon": 77.6863591,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13276223242,
+  "lat": 27.4369819,
+  "lon": 77.6833696,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13276332950,
+  "lat": 27.5842274,
+  "lon": 77.9151112,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13334394701,
+  "lat": 27.5803998,
+  "lon": 77.6723538,
+  "tags": {
+    "addr:postcode": "281121",
+    "addr:street": "Radha Keli Kunj, Varaha Ghat, Sri Premanand Rd, Raman Reiti",
+    "amenity": "place_of_worship",
+    "name": "Vrindavan Ras Mahima",
+    "opening_hours": "Mo-Su 04:00-20:00",
+    "phone": "+9106396384412",
+    "website": "https://vrindavanrasmahima.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13370017456,
+  "lat": 27.5823146,
+  "lon": 77.9161224,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Hanuman Mandir",
+    "name:hi": "हनुमान मंदिर",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13955301390,
+  "lat": 27.3146159,
+  "lon": 77.9348599,
+  "tags": {
+    "amenity": "place_of_worship"
+  }
+},
+{
+  "type": "node",
+  "id": 13987804286,
+  "lat": 27.4374526,
+  "lon": 77.6913510,
+  "tags": {
+    "addr:city": "Mathura",
+    "addr:district": "Mathura",
+    "addr:housenumber": "Triangle Park",
+    "addr:postcode": "281006",
+    "addr:street": "Pawan Vihar Colony",
+    "amenity": "place_of_worship",
+    "denomination": "hindu",
+    "name": "Hanuman Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 14064475070,
+  "lat": 27.4979825,
+  "lon": 77.6715190,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 14200891727,
+  "lat": 27.5063027,
+  "lon": 77.6798177,
+  "tags": {
+    "addr:full": "sabji mandi, Chatta Bazar, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200891812,
+  "lat": 27.5054418,
+  "lon": 77.6697932,
+  "tags": {
+    "addr:full": "Geet Gate, Deeg Marg, Janam Bhumi, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Mosque Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200891814,
+  "lat": 27.5063027,
+  "lon": 77.6798177,
+  "tags": {
+    "addr:full": "sabji mandi, Chatta Bazar, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200891909,
+  "lat": 27.2172332,
+  "lon": 77.9472502,
+  "tags": {
+    "addr:full": "6W8W+VWR, Tomb of Akbar The Great Area, Sikandra, Agra, Uttar Pradesh 282007, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Nuri Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200891922,
+  "lat": 27.5054418,
+  "lon": 77.6697932,
+  "tags": {
+    "addr:full": "Geet Gate, Deeg Marg, Janam Bhumi, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Mosque Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200891924,
+  "lat": 27.5063027,
+  "lon": 77.6798177,
+  "tags": {
+    "addr:full": "sabji mandi, Chatta Bazar, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200892109,
+  "lat": 27.2361055,
+  "lon": 77.8758465,
+  "tags": {
+    "addr:full": "6VPG+C8X, Agra, Runkata, Uttar Pradesh 282007, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Ahmadiya Noor Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200893311,
+  "lat": 27.5054418,
+  "lon": 77.6697932,
+  "tags": {
+    "addr:full": "Geet Gate, Deeg Marg, Janam Bhumi, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Mosque Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200893323,
+  "lat": 27.5054418,
+  "lon": 77.6697932,
+  "tags": {
+    "addr:full": "Geet Gate, Deeg Marg, Janam Bhumi, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Mosque Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200897215,
+  "lat": 27.5054418,
+  "lon": 77.6697932,
+  "tags": {
+    "addr:full": "Geet Gate, Deeg Marg, Janam Bhumi, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Mosque Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200897220,
+  "lat": 27.2364251,
+  "lon": 77.4849820,
+  "tags": {
+    "addr:full": "6FPM+HXH, Gandhi Nagar Colony, Bharatpur, Bharatpur Chak 2, Rajasthan 321001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Nurani Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200897315,
+  "lat": 27.5063027,
+  "lon": 77.6798177,
+  "tags": {
+    "addr:full": "sabji mandi, Chatta Bazar, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200897322,
+  "lat": 27.3192622,
+  "lon": 77.7614145,
+  "tags": {
+    "addr:full": "8Q96+PH3, Farah, Uttar Pradesh 281122, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Juma Masjid Markaz Farah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200897328,
+  "lat": 27.2172332,
+  "lon": 77.9472502,
+  "tags": {
+    "addr:full": "6W8W+VWR, Tomb of Akbar The Great Area, Sikandra, Agra, Uttar Pradesh 282007, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Nuri Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200897812,
+  "lat": 27.3192622,
+  "lon": 77.7614145,
+  "tags": {
+    "addr:full": "8Q96+PH3, Farah, Uttar Pradesh 281122, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Juma Masjid Markaz Farah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200898115,
+  "lat": 27.5054418,
+  "lon": 77.6697932,
+  "tags": {
+    "addr:full": "Geet Gate, Deeg Marg, Janam Bhumi, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Mosque Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200898118,
+  "lat": 27.5063027,
+  "lon": 77.6798177,
+  "tags": {
+    "addr:full": "sabji mandi, Chatta Bazar, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200900202,
+  "lat": 27.5063027,
+  "lon": 77.6798177,
+  "tags": {
+    "addr:full": "sabji mandi, Chatta Bazar, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200908001,
+  "lat": 27.2361055,
+  "lon": 77.8758465,
+  "tags": {
+    "addr:full": "6VPG+C8X, Agra, Runkata, Uttar Pradesh 282007, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Ahmadiya Noor Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959512,
+  "lat": 27.9430633,
+  "lon": 77.8462092,
+  "tags": {
+    "addr:full": "WRVW+6FG, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Jama Masjid Khair { Markaz Khair",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959514,
+  "lat": 27.9409288,
+  "lon": 77.8437932,
+  "tags": {
+    "addr:full": "WRRV+9GF, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Saray Wali Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959521,
+  "lat": 27.8795039,
+  "lon": 77.8281998,
+  "tags": {
+    "addr:full": "VRHH+R74, Pala Chand, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Mosque",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959523,
+  "lat": 27.9391909,
+  "lon": 77.8422556,
+  "tags": {
+    "addr:full": "WRQR+MWC, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Baba Wali Mosque",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959533,
+  "lat": 27.5054418,
+  "lon": 77.6697932,
+  "tags": {
+    "addr:full": "Geet Gate, Deeg Marg, Janam Bhumi, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Mosque Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959818,
+  "lat": 27.8795039,
+  "lon": 77.8281998,
+  "tags": {
+    "addr:full": "VRHH+R74, Pala Chand, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Mosque",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959819,
+  "lat": 27.7075895,
+  "lon": 77.9385801,
+  "tags": {
+    "addr:full": "PW5Q+2CP, Iglas Rd, Lalpur, Iglas, Uttar Pradesh 202124, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "JANNAT MASJID IGLAS",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959820,
+  "lat": 27.9430633,
+  "lon": 77.8462092,
+  "tags": {
+    "addr:full": "WRVW+6FG, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Jama Masjid Khair { Markaz Khair",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959821,
+  "lat": 27.9376440,
+  "lon": 77.8435908,
+  "tags": {
+    "addr:full": "WRQV+2FC, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Khair Madarsa Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959822,
+  "lat": 27.9415347,
+  "lon": 77.8378220,
+  "tags": {
+    "addr:full": "WRRQ+J48, Tentigaon Bypass Rd, Malipura, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Khair Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959823,
+  "lat": 27.9107463,
+  "lon": 77.8335016,
+  "tags": {
+    "addr:full": "WR6M+7CR, Pala Chand-Khair Rd, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Masjid Abubakra",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959825,
+  "lat": 27.9480492,
+  "lon": 77.7936764,
+  "tags": {
+    "addr:full": "Vill Gomat, khair Pin no, Gomat, Uttar Pradesh 202135, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Masjid Aysha",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959904,
+  "lat": 27.7080526,
+  "lon": 77.9367409,
+  "tags": {
+    "addr:full": "PW5P+6MH, Iglas, Uttar Pradesh 202124, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "jama masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959908,
+  "lat": 27.6979505,
+  "lon": 77.9212283,
+  "tags": {
+    "addr:full": "MWXC+5FH, Bisahuli Rd, Bisahuli, Uttar Pradesh 202124, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959917,
+  "lat": 27.9461312,
+  "lon": 77.7995396,
+  "tags": {
+    "addr:full": "WQWX+FR3, Gomat Chauraha, Gomat, Uttar Pradesh 202135, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Eidgah,Gomat",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959918,
+  "lat": 27.9376440,
+  "lon": 77.8435908,
+  "tags": {
+    "addr:full": "WRQV+2FC, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Khair Madarsa Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959919,
+  "lat": 27.9107463,
+  "lon": 77.8335016,
+  "tags": {
+    "addr:full": "WR6M+7CR, Pala Chand-Khair Rd, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Masjid Abubakra",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959932,
+  "lat": 27.5063027,
+  "lon": 77.6798177,
+  "tags": {
+    "addr:full": "sabji mandi, Chatta Bazar, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959938,
+  "lat": 27.9391909,
+  "lon": 77.8422556,
+  "tags": {
+    "addr:full": "WRQR+MWC, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Baba Wali Mosque",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959939,
+  "lat": 27.9415347,
+  "lon": 77.8378220,
+  "tags": {
+    "addr:full": "WRRQ+J48, Tentigaon Bypass Rd, Malipura, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Khair Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200959942,
+  "lat": 27.8795039,
+  "lon": 77.8281998,
+  "tags": {
+    "addr:full": "VRHH+R74, Pala Chand, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Mosque",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200960220,
+  "lat": 27.8322642,
+  "lon": 77.8802340,
+  "tags": {
+    "addr:full": "RVJJ+W35, Pathwari Rd, Nagla Sabal Urf Gonda, Gonda, Uttar Pradesh 202123, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200960222,
+  "lat": 27.5062204,
+  "lon": 77.6846688,
+  "tags": {
+    "addr:full": "GM4M+FX3, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Historic mosque",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200963803,
+  "lat": 27.9376440,
+  "lon": 77.8435908,
+  "tags": {
+    "addr:full": "WRQV+2FC, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Khair Madarsa Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200963907,
+  "lat": 27.9391909,
+  "lon": 77.8422556,
+  "tags": {
+    "addr:full": "WRQR+MWC, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Baba Wali Mosque",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200963914,
+  "lat": 27.8795039,
+  "lon": 77.8281998,
+  "tags": {
+    "addr:full": "VRHH+R74, Pala Chand, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Mosque",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200963915,
+  "lat": 27.9461312,
+  "lon": 77.7995396,
+  "tags": {
+    "addr:full": "WQWX+FR3, Gomat Chauraha, Gomat, Uttar Pradesh 202135, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Eidgah,Gomat",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200963920,
+  "lat": 27.9152095,
+  "lon": 77.8797445,
+  "tags": {
+    "addr:full": "WV8H+3VQ, Gadoli - Kunwarpur Rd, Kunwarpur, Uttar Pradesh 202140, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Kunwarpur",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200963924,
+  "lat": 27.9409288,
+  "lon": 77.8437932,
+  "tags": {
+    "addr:full": "WRRV+9GF, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Saray Wali Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964004,
+  "lat": 27.9409288,
+  "lon": 77.8437932,
+  "tags": {
+    "addr:full": "WRRV+9GF, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Saray Wali Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964005,
+  "lat": 27.9415347,
+  "lon": 77.8378220,
+  "tags": {
+    "addr:full": "WRRQ+J48, Tentigaon Bypass Rd, Malipura, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Khair Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964016,
+  "lat": 27.9430633,
+  "lon": 77.8462092,
+  "tags": {
+    "addr:full": "WRVW+6FG, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Jama Masjid Khair { Markaz Khair",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964101,
+  "lat": 27.5054418,
+  "lon": 77.6697932,
+  "tags": {
+    "addr:full": "Geet Gate, Deeg Marg, Janam Bhumi, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Mosque Eidgah",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964102,
+  "lat": 27.5063027,
+  "lon": 77.6798177,
+  "tags": {
+    "addr:full": "sabji mandi, Chatta Bazar, Chowk Bazar, Mathura, Uttar Pradesh 281001, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Shahi Jama Masjid",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964106,
+  "lat": 27.7962835,
+  "lon": 77.8762446,
+  "tags": {
+    "addr:full": "QVWG+GF9, Unnamed Road, हसनगढ़, उत्तर प्रदेश 202123, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Jama Masjid Hasangarh",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964107,
+  "lat": 27.9480492,
+  "lon": 77.7936764,
+  "tags": {
+    "addr:full": "Vill Gomat, khair Pin no, Gomat, Uttar Pradesh 202135, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Masjid Aysha",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964202,
+  "lat": 27.9430633,
+  "lon": 77.8462092,
+  "tags": {
+    "addr:full": "WRVW+6FG, Khair, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Jama Masjid Khair { Markaz Khair",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964207,
+  "lat": 27.9107463,
+  "lon": 77.8335016,
+  "tags": {
+    "addr:full": "WR6M+7CR, Pala Chand-Khair Rd, Uttar Pradesh 202138, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Masjid Abubakra",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200964211,
+  "lat": 27.9461312,
+  "lon": 77.7995396,
+  "tags": {
+    "addr:full": "WQWX+FR3, Gomat Chauraha, Gomat, Uttar Pradesh 202135, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Eidgah,Gomat",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 14200979501,
+  "lat": 27.9480492,
+  "lon": 77.7936764,
+  "tags": {
+    "addr:full": "Vill Gomat, khair Pin no, Gomat, Uttar Pradesh 202135, India",
+    "amenity": "place_of_worship",
+    "building": "mosque",
+    "name": "Masjid Aysha",
+    "religion": "muslim"
+  }
+}
+
+  ]
+}

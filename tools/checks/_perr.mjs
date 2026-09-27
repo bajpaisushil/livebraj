@@ -1,0 +1,13 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch({ args:['--use-angle=swiftshader','--enable-unsafe-swiftshader'] });
+const p = await b.newPage({ viewport:{width:390,height:844} });
+const seen = new Map();
+p.on('pageerror', e => { const k = (e && (e.message||String(e))) || 'empty'; if(!seen.has(k)) console.log('PAGEERROR: '+k); seen.set(k, (seen.get(k)||0)+1); });
+p.on('console', m => { if (m.type()==='error') { const k='console: '+m.text().slice(0,200); if(!seen.has(k)) console.log(k); seen.set(k,(seen.get(k)||0)+1); } });
+await p.goto('http://localhost:8080/', { waitUntil:'networkidle' });
+await p.waitForFunction(()=>window.vrindavan?.ctx?.ui,null,{timeout:220000});
+await p.evaluate(()=>window.vrindavan.ctx.ui.show('world'));
+await p.waitForTimeout(6000);
+for (const [k,v] of [...seen].sort((a,c)=>c[1]-a[1]).slice(0,8)) console.log(v+' x  '+k);
+console.log('distinct:', seen.size);
+await b.close(); process.exit(0);

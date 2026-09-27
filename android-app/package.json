@@ -1,0 +1,17 @@
+{
+  "name": "vrindavan-dham",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vrindavan Dham - Android shell",
+  "scripts": {
+    "sync": "cap sync android",
+    "open": "cap open android",
+    "build": "cap sync android && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.2",
+    "@capacitor/cli": "^6.2.2",
+    "@capacitor/core": "^6.2.2",
+    "@capacitor/preferences": "^6.0.4"
+  }
+}

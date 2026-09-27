@@ -1,0 +1,2694 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-09-22T06:48:59Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 316684768,
+  "lat": 27.5763320,
+  "lon": 77.6942078,
+  "tags": {
+    "internet_access": "no",
+    "name": "Vrindavan",
+    "network": "IR",
+    "operator": "NCR",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "BDB",
+    "train": "yes",
+    "wikidata": "Q16902806",
+    "wikipedia": "en:Vrindavan railway station"
+  }
+},
+{
+  "type": "node",
+  "id": 617763098,
+  "lat": 27.5621729,
+  "lon": 77.6259754,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Indian Oil",
+    "brand:wikidata": "Q1289348",
+    "check_date": "2023-04-29",
+    "name": "Indian Oil"
+  }
+},
+{
+  "type": "node",
+  "id": 617987466,
+  "lat": 27.5609785,
+  "lon": 77.6247070,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Chhatikara",
+    "name:ru": "Чхатикара",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 617987467,
+  "lat": 27.5753726,
+  "lon": 77.6938045,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Vrindavan",
+    "name:ar": "فريندافان",
+    "name:en": "Vrindavan",
+    "name:hi": "वृन्दावन",
+    "name:kn": "ವೃಂದಾವನ",
+    "name:ml": "വൃന്ദാവനം",
+    "name:ru": "Вриндавана",
+    "name:uk": "Вріндаван",
+    "place": "town",
+    "wikidata": "Q688281",
+    "wikipedia": "hi:वृन्दावन",
+    "wikipedia:uk": "Вріндаван"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668314,
+  "lat": 27.5702475,
+  "lon": 77.6747601,
+  "tags": {
+    "name": "Asian Paints Colourworld",
+    "phone": "+91 9557705225",
+    "shop": "paint"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668315,
+  "lat": 27.5702112,
+  "lon": 77.6742295,
+  "tags": {
+    "email": "sriramrealestate@ymail.com",
+    "name": "Hare Krishna Associates",
+    "office": "estate_agent",
+    "phone": "+91 7500666697;+91 9927435915;+91 9627572255"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668317,
+  "lat": 27.5702718,
+  "lon": 77.6751293,
+  "tags": {
+    "name": "Kishori",
+    "phone": "+91 9756272741",
+    "shop": "musical_instrument",
+    "website": "https://kishorimusic.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668318,
+  "lat": 27.5701552,
+  "lon": 77.6742652,
+  "tags": {
+    "name": "Shree Jee Diamond Tools",
+    "phone": "+91 9045786903",
+    "shop": "hardware"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668319,
+  "lat": 27.5701086,
+  "lon": 77.6747895,
+  "tags": {
+    "name": "Shubham Family Bazar",
+    "shop": "convenience"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668321,
+  "lat": 27.5704440,
+  "lon": 77.6750962,
+  "tags": {
+    "name": "Singhal Agencies",
+    "phone": "+91 565 3204477;+91 9319996600",
+    "shop": "electronics;furniture"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668322,
+  "lat": 27.5705172,
+  "lon": 77.6750786,
+  "tags": {
+    "name": "Sleepwell",
+    "shop": "bed"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668323,
+  "lat": 27.5704159,
+  "lon": 77.6751028,
+  "tags": {
+    "craft": "photographic_laboratory",
+    "description": "A complete video and photo solution",
+    "name": "Sudhir Studio",
+    "phone": "+91 9219176536;+91 9837222056"
+  }
+},
+{
+  "type": "node",
+  "id": 2548668324,
+  "lat": 27.5700009,
+  "lon": 77.6745193,
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "brand:wikidata": "Q2005310",
+    "name": "UCO Bank",
+    "name:en": "UCO Bank",
+    "old_name": "United Commercial Bank",
+    "website": "https://www.ucobank.com"
+  }
+},
+{
+  "type": "node",
+  "id": 2550078185,
+  "lat": 27.5734458,
+  "lon": 77.6828095,
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "brand": "HDFC",
+    "brand:wikidata": "Q631047",
+    "name": "HDFC Bank",
+    "short_name": "HDFC",
+    "website": "https://www.hdfcbank.com"
+  }
+},
+{
+  "type": "node",
+  "id": 2550078186,
+  "lat": 27.5734812,
+  "lon": 77.6829160,
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "brand": "ICICI",
+    "brand:wikidata": "Q1653258",
+    "name": "ICICI Bank",
+    "name:en": "ICICI Bank",
+    "short_name": "ICICI",
+    "website": "https://www.icicibank.com",
+    "wikidata": "Q1653258",
+    "wikipedia": "en:ICICI Bank"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422068,
+  "lat": 27.5694401,
+  "lon": 77.6891107,
+  "tags": {
+    "brand": "Honda",
+    "motorcycle:repair": "yes",
+    "motorcycle:sales": "yes",
+    "name": "Brij Honda",
+    "note": "Not sure maybe sells and repairs other brands as well.",
+    "shop": "motorcycle"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422072,
+  "lat": 27.5689922,
+  "lon": 77.6899439,
+  "tags": {
+    "amenity": "bank",
+    "atm": "no",
+    "brand:wikidata": "Q2003387",
+    "name": "Corporation Bank",
+    "name:en": "Corporation Bank",
+    "website": "https://corpbank.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422075,
+  "lat": 27.5742253,
+  "lon": 77.6948040,
+  "tags": {
+    "email": "info@friendsofvrindavan.com",
+    "name": "Friends of Vrindavan",
+    "office": "ngo",
+    "phone": "+91 565 2442771;+91 9412279139",
+    "website": "http://www.friendsofvrindavan.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422077,
+  "lat": 27.5688869,
+  "lon": 77.6898442,
+  "tags": {
+    "amenity": "doctors",
+    "name": "Himanshi Hospital"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422078,
+  "lat": 27.5747197,
+  "lon": 77.6946789,
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "temple",
+    "email": "imlitala@mac.com",
+    "name": "Munger Raj Mandir",
+    "phone": "+91 9897836640",
+    "website": "https://rajaward.org/royalfamily/mungervrndvan.htm"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422079,
+  "lat": 27.5693667,
+  "lon": 77.6897745,
+  "tags": {
+    "amenity": "bank",
+    "atm": "yes",
+    "brand:wikidata": "Q367008",
+    "name": "Oriental Bank of Commerce",
+    "name:en": "Oriental Bank of Commerce",
+    "short_name": "OBC",
+    "website": "https://www.obcindia.co.in"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422080,
+  "lat": 27.5772660,
+  "lon": 77.6975997,
+  "tags": {
+    "name": "Pankaj Cycle Store",
+    "note": "Maybe repair also?",
+    "phone": "+91 9808660659",
+    "service:bicycle:retail": "yes",
+    "shop": "bicycle"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422081,
+  "lat": 27.5729070,
+  "lon": 77.6931990,
+  "tags": {
+    "amenity": "hospital",
+    "email": "info@rkmsvrind.org;rkmsvrnd@gmail.com",
+    "fax": "+91 565 2443310;+91 565 2442310",
+    "image": "http://rkmsvrind.org/images/rkm.gif",
+    "name": "Ramakrishna Math and Ramakrishna Mission Sevashrama",
+    "phone": "+91 9259271811",
+    "website": "https://rkmsvrind.org/"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422082,
+  "lat": 27.5693761,
+  "lon": 77.6891428,
+  "tags": {
+    "description": "UPS, accumulators, inverters",
+    "name": "Siddhant Traders",
+    "phone": "+91 9837115642",
+    "shop": "ups"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422083,
+  "lat": 27.5725287,
+  "lon": 77.6925349,
+  "tags": {
+    "email": "info@hotelvrindavangarden.in",
+    "internet_access": "yes",
+    "name": "Vrindavan Garden",
+    "phone": "+91 565 2442230;+91 9756709122",
+    "tourism": "hotel",
+    "website": "http://www.hotelvrindavangarden.in/"
+  }
+},
+{
+  "type": "node",
+  "id": 2568373518,
+  "lat": 27.5716331,
+  "lon": 77.6780336,
+  "tags": {
+    "amenity": "bank",
+    "atm": "no",
+    "brand:wikidata": "Q2018840",
+    "name": "Allahabad Bank",
+    "name:en": "Allahabad Bank",
+    "opening_hours": "Mo-Fr 10:00-14:00,15:00-16:00; Sa 10:00-13:00",
+    "website": "https://www.allahabadbank.in"
+  }
+},
+{
+  "type": "node",
+  "id": 3413008744,
+  "lat": 27.5728703,
+  "lon": 77.6773551,
+  "tags": {
+    "amenity": "restaurant",
+    "cuisine": "indian",
+    "name": "Govinda's Restaurant"
+  }
+},
+{
+  "type": "node",
+  "id": 3413009019,
+  "lat": 27.5725577,
+  "lon": 77.6771239,
+  "tags": {
+    "access": "yes",
+    "bicycle": "no",
+    "entrance": "yes",
+    "foot": "yes",
+    "name": "В"
+  }
+},
+{
+  "type": "node",
+  "id": 3417299004,
+  "lat": 27.5782141,
+  "lon": 77.6845106,
+  "tags": {
+    "name": "Kadamba tree",
+    "name:en": "Kadamba tree",
+    "name:ru": "Кадамба",
+    "natural": "tree"
+  }
+},
+{
+  "type": "node",
+  "id": 3417359576,
+  "lat": 27.5831797,
+  "lon": 77.6975586,
+  "tags": {
+    "name": "Gangotri",
+    "name:en": "Gangotri",
+    "name:ru": "Ганготри",
+    "shop": "mall"
+  }
+},
+{
+  "type": "node",
+  "id": 4569639794,
+  "lat": 27.5826874,
+  "lon": 77.6961268,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Shyamsundar Mandir",
+    "name:ru": "Радха-Шьямасундара",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569657292,
+  "lat": 27.5860483,
+  "lon": 77.6996206,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Gopinath Mandir",
+    "name:en": "Sri Radha Gopinath Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569668889,
+  "lat": 27.5674711,
+  "lon": 77.7002940,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Caitanya Mahaprabhu's Sitting Place",
+    "name:en": "Sri Caitanya Mahaprabhu's Sitting Place",
+    "name:ru": "Чайтанья Вишрама стхали",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648692292,
+  "lat": 27.5845022,
+  "lon": 77.7033788,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Vrinda Kunj",
+    "name:en": "Vrinda Kunj",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648837990,
+  "lat": 27.5826272,
+  "lon": 77.6959324,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Shyamsundar Temple",
+    "name:en": "Sri Radha Shyamsundar Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4649010790,
+  "lat": 27.5675119,
+  "lon": 77.7004473,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Murari Gupta Jagannath Temple",
+    "name:en": "Murari Gupta Jagannath Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4706937889,
+  "lat": 27.5727050,
+  "lon": 77.6969117,
+  "tags": {
+    "addr:street": "Gurukul Road, Vrindavan (U.P.) INDIA",
+    "amenity": "place_of_worship",
+    "name": "Pilot Baba Ashram",
+    "name:en": "Pilot Baba Ashram",
+    "name:ru": "Пайлот Баба Ашрам",
+    "opening_hours": "24/7",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4795308422,
+  "lat": 27.5691382,
+  "lon": 77.6851203,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Ramananda Ashram",
+    "name:en": "Ramananda Ashram"
+  }
+},
+{
+  "type": "node",
+  "id": 5469282928,
+  "lat": 27.6014809,
+  "lon": 77.6844417,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Belvan",
+    "name:en": "Belvan",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5808897855,
+  "lat": 27.5725271,
+  "lon": 77.6775721,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Krishna-Balaram Temple"
+  }
+},
+{
+  "type": "node",
+  "id": 6188103403,
+  "lat": 27.5556517,
+  "lon": 77.6237707,
+  "tags": {
+    "internet_access": "no",
+    "name": "Vrindaban Road",
+    "network": "IR",
+    "operator": "North Central Railway",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "VRBD",
+    "train": "yes",
+    "wikidata": "Q24949659"
+  }
+},
+{
+  "type": "node",
+  "id": 6288769324,
+  "lat": 27.5811484,
+  "lon": 77.6662910,
+  "tags": {
+    "name": "Sunrakh",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6313899527,
+  "lat": 27.5872629,
+  "lon": 77.6987417,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Keshi Ghat",
+    "name:ru": "Кеши-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 6337207487,
+  "lat": 27.5859773,
+  "lon": 77.7049256,
+  "tags": {
+    "name": "Sudama Kuti",
+    "name:hi": "सुदामा कुटी",
+    "operator": "Sutixna Das Maharaj",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "node",
+  "id": 6902109748,
+  "lat": 27.5718524,
+  "lon": 77.6944703,
+  "tags": {
+    "addr:city": "Vrindaban",
+    "addr:district": "MATHURA",
+    "addr:full": "Swami Vivekananda Road, Near Anandmayee Maa Temple, Mathura, Vrindaban",
+    "addr:postcode": "281121",
+    "addr:state": "Uttar Pradesh",
+    "amenity": "blood_bank",
+    "contact:phone": "5652442310",
+    "name": "Ramakrishna Mission Sevashrama",
+    "operator:type": "private",
+    "source": "OpenGovernmentData"
+  }
+},
+{
+  "type": "node",
+  "id": 7018603358,
+  "lat": 27.5719404,
+  "lon": 77.6944113,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Near Anandmayee Maa Temple,Vrindaban",
+    "addr:postcode": "281121",
+    "addr:state": "Uttar Pradesh",
+    "amenity": "hospital",
+    "name": "रामकृष्ण मिशन सेवाश्रम, मथुरा",
+    "name:en": "Ramakrishna Mission Sevashrama, Mathura",
+    "source": "OpenGovernmentData",
+    "website": "https://rkmsvrind.org/"
+  }
+},
+{
+  "type": "node",
+  "id": 7025432834,
+  "lat": 27.5646029,
+  "lon": 77.6718874,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Brindawan",
+    "addr:postcode": "281001",
+    "addr:state": "Uttar Pradesh",
+    "healthcare": "centre",
+    "name": "CHC, Brindawan",
+    "source": "OpenGovernmentData"
+  }
+},
+{
+  "type": "node",
+  "id": 7027409447,
+  "lat": 27.5605594,
+  "lon": 77.6815581,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Near Luteria Hanuman, Mathura Road, Vrindaban",
+    "addr:postcode": "281121",
+    "addr:state": "Uttar Pradesh",
+    "amenity": "hospital",
+    "name": "Shri Laxmi Life Line Hospital",
+    "source": "OpenGovernmentData"
+  }
+},
+{
+  "type": "node",
+  "id": 7035579184,
+  "lat": 27.5667357,
+  "lon": 77.6863807,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Near Brij Tb Sanitorium, Attala Chungi, Mathura-Vrindavan Road",
+    "addr:postcode": "281121",
+    "addr:state": "Uttar Pradesh",
+    "amenity": "clinic",
+    "name": "Brij Health Care & Research Center",
+    "source": "OpenGovernmentData"
+  }
+},
+{
+  "type": "node",
+  "id": 7036244924,
+  "lat": 27.5686497,
+  "lon": 77.6898703,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Atalla Chungi, Vrindaban",
+    "addr:postcode": "281121",
+    "addr:state": "Uttar Pradesh",
+    "amenity": "hospital",
+    "name": "Vrindaban Arogya Deep (P) Ltd",
+    "source": "OpenGovernmentData"
+  }
+},
+{
+  "type": "node",
+  "id": 7171661023,
+  "lat": 27.5733220,
+  "lon": 77.6792158,
+  "tags": {
+    "internet_access": "yes",
+    "name": "Дом Гуру",
+    "tourism": "guest_house"
+  }
+},
+{
+  "type": "node",
+  "id": 7171716172,
+  "lat": 27.5767900,
+  "lon": 77.6754809,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Ашрам Гаутамы риши"
+  }
+},
+{
+  "type": "node",
+  "id": 7171724228,
+  "lat": 27.5746250,
+  "lon": 77.6755001,
+  "tags": {
+    "name": "Дерево Кришна-Баларама",
+    "natural": "wood"
+  }
+},
+{
+  "type": "node",
+  "id": 7171760302,
+  "lat": 27.5723219,
+  "lon": 77.6773956,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Кришна-Баларам мандир"
+  }
+},
+{
+  "type": "node",
+  "id": 7171792398,
+  "lat": 27.5701644,
+  "lon": 77.6929867,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Тарас мандир"
+  }
+},
+{
+  "type": "node",
+  "id": 7171865698,
+  "lat": 27.5788988,
+  "lon": 77.7037404,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Katyayani",
+    "name:ru": "Храм Катьяяни",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172072781,
+  "lat": 27.5802569,
+  "lon": 77.6888572,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "храм Ашта-сакхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172091726,
+  "lat": 27.5799780,
+  "lon": 77.6905025,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Банкебихари",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292947,
+  "lat": 27.5830234,
+  "lon": 77.6952664,
+  "tags": {
+    "name": "ав",
+    "tourism": "guest_house"
+  }
+},
+{
+  "type": "node",
+  "id": 7247396549,
+  "lat": 27.5854780,
+  "lon": 77.6990090,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Radha-Ramana",
+    "name:ru": "Радха-Раман",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7280042585,
+  "lat": 27.5721545,
+  "lon": 77.6786115,
+  "tags": {
+    "name": "Vedanta international guesthouse",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 7287646376,
+  "lat": 27.5811092,
+  "lon": 77.6880385,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Сурья гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287711828,
+  "lat": 27.5779027,
+  "lon": 77.7077571,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Пани-гхат",
+    "name:en": "Pani-ghat",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287726154,
+  "lat": 27.5518014,
+  "lon": 77.6850479,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Акрура-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287733294,
+  "lat": 27.5566428,
+  "lon": 77.6879977,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Батхаран Бихари"
+  }
+},
+{
+  "type": "node",
+  "id": 7287742611,
+  "lat": 27.5761598,
+  "lon": 77.6752188,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Вараха-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287789485,
+  "lat": 27.5769074,
+  "lon": 77.6764355,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Мохана тер-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287803086,
+  "lat": 27.5785391,
+  "lon": 77.6856482,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Калия Мардана"
+  }
+},
+{
+  "type": "node",
+  "id": 7287891338,
+  "lat": 27.5838662,
+  "lon": 77.7001762,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Samadhi Bilvamangala",
+    "name:ru": "Самадхи Билвамангала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287918954,
+  "lat": 27.5832308,
+  "lon": 77.7000786,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Amiya Nimai",
+    "name:ru": "Храм Амия Нимая",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288046039,
+  "lat": 27.5851469,
+  "lon": 77.7029532,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Гопишвары Махадевы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288063453,
+  "lat": 27.5845889,
+  "lon": 77.7024710,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Радха Гопала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288063975,
+  "lat": 27.5869782,
+  "lon": 77.6986901,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Югалы Кишора",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292232952,
+  "lat": 27.5815351,
+  "lon": 77.6910818,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Югала-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292475319,
+  "lat": 27.5849563,
+  "lon": 77.6958144,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Джару Мандала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292485103,
+  "lat": 27.5846282,
+  "lon": 77.6959458,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Шрингара ват",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301328132,
+  "lat": 27.5863531,
+  "lon": 77.6982711,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Вамши Гопала и Гададхарв Дант самадхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301340398,
+  "lat": 27.5854985,
+  "lon": 77.6966316,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Чир-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301363993,
+  "lat": 27.5851321,
+  "lon": 77.6993599,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Sona Gaurangi",
+    "name:ru": "Храм Сона Гауранги",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7498021849,
+  "lat": 27.5783061,
+  "lon": 77.6874440,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Bankebihari Colony, Vrindavan",
+    "addr:postcode": "281121",
+    "addr:state": "Uttar Pradesh",
+    "amenity": "hospital",
+    "name": "Dr. K. Gopal Hospital",
+    "source": "Local Knowledge"
+  }
+},
+{
+  "type": "node",
+  "id": 7907785294,
+  "lat": 27.5709905,
+  "lon": 77.6536739,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Sunrakh",
+    "addr:postcode": "281121",
+    "addr:state": "Uttar Pradesh",
+    "description": "SubCentre",
+    "healthcare": "centre",
+    "name": "SubCentre, Sunrakh",
+    "source": "Local Knowledge"
+  }
+},
+{
+  "type": "node",
+  "id": 7990843725,
+  "lat": 27.6011904,
+  "lon": 77.6935489,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Begampur Bangar",
+    "addr:postcode": "281202",
+    "addr:state": "Uttar Pradesh",
+    "description": "SubCentre",
+    "healthcare": "centre",
+    "name": "SubCentre, Begampur Bangar",
+    "source": "Local Knowledge"
+  }
+},
+{
+  "type": "node",
+  "id": 8034772400,
+  "lat": 27.5694082,
+  "lon": 77.6997784,
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Rajpura",
+    "addr:postcode": "281121",
+    "addr:state": "Uttar Pradesh",
+    "description": "SubCentre",
+    "healthcare": "centre",
+    "name": "SubCentre, Rajpura",
+    "source": "Local Knowledge"
+  }
+},
+{
+  "type": "node",
+  "id": 8620783396,
+  "lat": 27.5697744,
+  "lon": 77.6661220,
+  "tags": {
+    "description": "Hotel Kridha Residency is a hotel in Mathura Vrindavan Near Prem Mandir and Banke Bihari Mandir",
+    "image": "https://www.kridharesidency.com/wp-content/uploads/2019/06/hotel-elevation.jpg",
+    "name": "Hotel Kridha Residency",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 9904060117,
+  "lat": 27.5819358,
+  "lon": 77.6935671,
+  "tags": {
+    "addr:postcode": "281121",
+    "addr:street": "Sewa Kunj Road, Gotam Nagar, Vrindavan, Uttar Pradesh 281121, Индия",
+    "amenity": "place_of_worship",
+    "name": "श्री कृष्णा बलराम मंदिर",
+    "name:en": "Shri Krishna Balram Temple",
+    "name:ru": "Шри Кришна Баларам Мандир",
+    "opening_hours": "Mo-Su 04:30-19:00",
+    "religion": "hindu",
+    "website": "http://visuddhagauravani.com"
+  }
+},
+{
+  "type": "node",
+  "id": 10855740760,
+  "lat": 27.5549822,
+  "lon": 77.6331170,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2023-04-29",
+    "cuisine": "indian",
+    "name": "Prakash Family Dhaba"
+  }
+},
+{
+  "type": "node",
+  "id": 10855740761,
+  "lat": 27.5692407,
+  "lon": 77.6208091,
+  "tags": {
+    "amenity": "fuel",
+    "brand": "Indian Oil",
+    "brand:wikidata": "Q1289348",
+    "check_date": "2023-04-29",
+    "name": "Indian Oil"
+  }
+},
+{
+  "type": "node",
+  "id": 11429010334,
+  "lat": 27.5875483,
+  "lon": 77.7003002,
+  "tags": {
+    "name": "Rahul Hair Dressing Salon",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11429160220,
+  "lat": 27.5840546,
+  "lon": 77.7026372,
+  "tags": {
+    "name": "Mahar Hair Dressing Salon",
+    "shop": "hairdresser"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683426,
+  "lat": 27.5790708,
+  "lon": 77.6937297,
+  "tags": {
+    "name": "Colorful Gate",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683437,
+  "lat": 27.5748541,
+  "lon": 77.6952230,
+  "tags": {
+    "name": "Yellow Temple",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683444,
+  "lat": 27.5751227,
+  "lon": 77.6950476,
+  "tags": {
+    "amenity": "cafe",
+    "cuisine": "indian",
+    "name": "Minti’s Cafe"
+  }
+},
+{
+  "type": "node",
+  "id": 12134910042,
+  "lat": 27.5561688,
+  "lon": 77.6231356,
+  "tags": {
+    "name": "Vrindaban Road",
+    "public_transport": "stop_position",
+    "source": "Esri World Imagery (2024-08-25)",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12134910043,
+  "lat": 27.5560878,
+  "lon": 77.6230111,
+  "tags": {
+    "name": "Vrindaban Road",
+    "public_transport": "stop_position",
+    "source": "Esri World Imagery (2024-08-25)",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12134910053,
+  "lat": 27.5560196,
+  "lon": 77.6228989,
+  "tags": {
+    "name": "Vrindaban Road",
+    "public_transport": "stop_position",
+    "source": "Esri World Imagery (2024-08-25)",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12134910132,
+  "lat": 27.5559365,
+  "lon": 77.6227673,
+  "tags": {
+    "name": "Vrindaban Road",
+    "public_transport": "stop_position",
+    "source": "Esri World Imagery (2024-08-25)",
+    "train": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325186,
+  "lat": 27.5706891,
+  "lon": 77.6723494,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "Thakur ji food plaza"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325187,
+  "lat": 27.5691036,
+  "lon": 77.6732000,
+  "tags": {
+    "amenity": "hospital",
+    "check_date": "2025-03-31",
+    "healthcare": "hospital",
+    "name": "Radha Rani hospital"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325188,
+  "lat": 27.5695891,
+  "lon": 77.6741968,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "Balaji bhojnalaya and dhaba"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325189,
+  "lat": 27.5700134,
+  "lon": 77.6739658,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Laxmi dormitory",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325190,
+  "lat": 27.5705832,
+  "lon": 77.6735262,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "Kanha food court"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325191,
+  "lat": 27.5707155,
+  "lon": 77.6734826,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "Vrindavan darbar"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325192,
+  "lat": 27.5712100,
+  "lon": 77.6730523,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "Bikanerwala"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325193,
+  "lat": 27.5711878,
+  "lon": 77.6727511,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Sri chintamani kunj",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325194,
+  "lat": 27.5711184,
+  "lon": 77.6723370,
+  "tags": {
+    "amenity": "social_facility",
+    "check_date": "2025-03-31",
+    "name": "Sant Vriddh Ashram",
+    "social_facility": "group_home",
+    "social_facility:for": "senior"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325195,
+  "lat": 27.5706715,
+  "lon": 77.6710374,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "The royal food plaza"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325196,
+  "lat": 27.5706885,
+  "lon": 77.6713000,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "Brijwasi restaurant and dhaba"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325197,
+  "lat": 27.5707067,
+  "lon": 77.6716476,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Banke Bihari emporium",
+    "shop": "craft"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325198,
+  "lat": 27.5682818,
+  "lon": 77.6720787,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "The Sarang High Impact school",
+    "office": "educational_institution"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337802,
+  "lat": 27.5721281,
+  "lon": 77.6729924,
+  "tags": {
+    "name": "Govardhan Leela",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337804,
+  "lat": 27.5716521,
+  "lon": 77.6729477,
+  "tags": {
+    "amenity": "fixme",
+    "check_date": "2025-03-31",
+    "fixme": "type",
+    "fixme:type": "shop",
+    "name": "Prem Sadhan Samagri"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337806,
+  "lat": 27.5705729,
+  "lon": 77.6717207,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "CRVS food court"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337807,
+  "lat": 27.5699959,
+  "lon": 77.6713853,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Hotel Anamsa",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337808,
+  "lat": 27.5707046,
+  "lon": 77.6720604,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "Radha Rani bhojnalaya"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337809,
+  "lat": 27.5707306,
+  "lon": 77.6722147,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "cuisine": "indian",
+    "name": "Banke bhojnalaya"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337811,
+  "lat": 27.5713069,
+  "lon": 77.6738911,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "name": "Shri banke Bihari family dhaba"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337812,
+  "lat": 27.5713283,
+  "lon": 77.6739504,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "name": "Bansi Wala"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337813,
+  "lat": 27.5713592,
+  "lon": 77.6740330,
+  "tags": {
+    "amenity": "restaurant",
+    "check_date": "2025-03-31",
+    "name": "Radha Rani"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337814,
+  "lat": 27.5713996,
+  "lon": 77.6744995,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Dakshin Mukhi Hanuman Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337815,
+  "lat": 27.5714880,
+  "lon": 77.6748746,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Shri Ji Dham ashram",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337818,
+  "lat": 27.5717482,
+  "lon": 77.6763821,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Hanuman Prasad dhanuka Saraswati Balika Vidya Mandir",
+    "office": "educational_institution"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337819,
+  "lat": 27.5714124,
+  "lon": 77.6765595,
+  "tags": {
+    "landuse": "residential",
+    "name": "Keshav Kunj",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337820,
+  "lat": 27.5717057,
+  "lon": 77.6792443,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Institute of Oriental philosophy",
+    "office": "educational_institution"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337821,
+  "lat": 27.5718603,
+  "lon": 77.6798054,
+  "tags": {
+    "amenity": "college",
+    "check_date": "2025-03-31",
+    "name": "Law college"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337822,
+  "lat": 27.5712590,
+  "lon": 77.6730069,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Hotel Prem Inn",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 13086877198,
+  "lat": 27.5673520,
+  "lon": 77.6723142,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shivji Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13086886805,
+  "lat": 27.5678930,
+  "lon": 77.6735362,
+  "tags": {
+    "addr:city": "Vrindavan",
+    "addr:district": "Mathura",
+    "addr:housenumber": "231",
+    "addr:postcode": "281121",
+    "addr:street": "Chaitanya Vihar, Phase 1",
+    "name": "Devfresco Supermarket India",
+    "opening_hours": "09:00-21:00",
+    "payment:cash": "yes",
+    "payment:upi": "yes",
+    "shop": "wholesale",
+    "wholesale": "general"
+  }
+},
+{
+  "type": "node",
+  "id": 13334394701,
+  "lat": 27.5803998,
+  "lon": 77.6723538,
+  "tags": {
+    "addr:postcode": "281121",
+    "addr:street": "Radha Keli Kunj, Varaha Ghat, Sri Premanand Rd, Raman Reiti",
+    "amenity": "place_of_worship",
+    "name": "Vrindavan Ras Mahima",
+    "opening_hours": "Mo-Su 04:00-20:00",
+    "phone": "+9106396384412",
+    "website": "https://vrindavanrasmahima.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13684658101,
+  "lat": 27.5657706,
+  "lon": 77.6951583,
+  "tags": {
+    "addr:street": "Banki Bihari Bazar",
+    "name": "Chhotu Room",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 44450008,
+  "center": {
+    "lat": 27.6767927,
+    "lon": 77.6932150
+  },
+  "tags": {
+    "name": "Yamuna",
+    "name:bn": "যমুনা",
+    "name:en": "Yamuna",
+    "name:gu": "યમુના",
+    "name:hi": "यमुना",
+    "name:kn": "ಯಮುನಾ",
+    "name:ml": "യമുന",
+    "name:mr": "यमुना",
+    "name:ta": "யமுனை",
+    "name:uk": "Ямуна",
+    "source:name:uk": "https://1drv.ms/b/s!Ar-WXIFaX7UdgQuO6WpVrTr6YYsQ",
+    "waterway": "river",
+    "width": "100"
+  }
+},
+{
+  "type": "way",
+  "id": 99418393,
+  "center": {
+    "lat": 27.5843536,
+    "lon": 77.6983001
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "leisure": "garden",
+    "name": "निधिवन",
+    "name:en": "Nidhivan",
+    "name:ru": "Сад Нидхувана",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99418402,
+  "center": {
+    "lat": 27.5707977,
+    "lon": 77.6790701
+  },
+  "tags": {
+    "amenity": "school",
+    "name": "Swami Bon Maharaj College"
+  }
+},
+{
+  "type": "way",
+  "id": 99418412,
+  "center": {
+    "lat": 27.5824020,
+    "lon": 77.6950840
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "leisure": "garden",
+    "name": "सेवा कुंज",
+    "name:en": "Seva Kunj",
+    "name:ru": "Сева-кунджа и Кишори-кунджа",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99418417,
+  "center": {
+    "lat": 27.5823375,
+    "lon": 77.7027746
+  },
+  "tags": {
+    "alt_name": "Sri Ranganath Mandir",
+    "amenity": "place_of_worship",
+    "name": "श्री रंगनाथ मंदिर",
+    "name:en": "Sri Ranganath Temple",
+    "name:ru": "Храм Ранганатхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99427126,
+  "center": {
+    "lat": 27.5742188,
+    "lon": 77.6993779
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Govinda Kund",
+    "name:ru": "Говинда-кунда",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 99427138,
+  "center": {
+    "lat": 27.5814379,
+    "lon": 77.6994134
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Govind Dev Temple",
+    "name:ru": "Радха-Говинда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99427181,
+  "center": {
+    "lat": 27.5773600,
+    "lon": 77.7035087
+  },
+  "tags": {
+    "leisure": "garden",
+    "name": "Rangaji Bhag Garden",
+    "name:ru": "Сады Рангаджи"
+  }
+},
+{
+  "type": "way",
+  "id": 99430983,
+  "center": {
+    "lat": 27.5736392,
+    "lon": 77.6867003
+  },
+  "tags": {
+    "landuse": "reservoir",
+    "name": "Motuhil Kund",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 99430992,
+  "center": {
+    "lat": 27.5705221,
+    "lon": 77.6859812
+  },
+  "tags": {
+    "landuse": "reservoir",
+    "name": "Davanala Kund",
+    "name:ru": "Даванала-кунда",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 99430993,
+  "center": {
+    "lat": 27.5755111,
+    "lon": 77.6883345
+  },
+  "tags": {
+    "landuse": "reservoir",
+    "name": "Ganga Kund",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 99462962,
+  "center": {
+    "lat": 27.5727414,
+    "lon": 77.6772721
+  },
+  "tags": {
+    "building": "hotel",
+    "denomination": "hare_krishna",
+    "name": "Krishna Balarame Guest House",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 116046190,
+  "center": {
+    "lat": 27.5571366,
+    "lon": 77.6807500
+  },
+  "tags": {
+    "name": "Vrindavan",
+    "power": "substation"
+  }
+},
+{
+  "type": "way",
+  "id": 334201982,
+  "center": {
+    "lat": 27.5726036,
+    "lon": 77.6777882
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Administration Offices",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201984,
+  "center": {
+    "lat": 27.5724151,
+    "lon": 77.6771836
+  },
+  "tags": {
+    "building": "yes",
+    "name": "BBT Book Display",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201985,
+  "center": {
+    "lat": 27.5729939,
+    "lon": 77.6781807
+  },
+  "tags": {
+    "building": "yes",
+    "name": "BBT Office",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201987,
+  "center": {
+    "lat": 27.5724256,
+    "lon": 77.6775793
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Bakery Kitchen",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201988,
+  "center": {
+    "lat": 27.5726997,
+    "lon": 77.6777648
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Balarama Hall",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201989,
+  "center": {
+    "lat": 27.5723514,
+    "lon": 77.6778770
+  },
+  "tags": {
+    "amenity": "school",
+    "building": "yes",
+    "name": "Bhaktivedanta Gurukul"
+  }
+},
+{
+  "type": "way",
+  "id": 334201990,
+  "center": {
+    "lat": 27.5722482,
+    "lon": 77.6772249
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Bhisma Office",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201991,
+  "center": {
+    "lat": 27.5723208,
+    "lon": 77.6776082
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Brahmacari Asrama",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201992,
+  "center": {
+    "lat": 27.5725847,
+    "lon": 77.6774997
+  },
+  "tags": {
+    "building": "yes",
+    "denomination": "hare_krishna",
+    "name": "Deity Kitchen",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201993,
+  "center": {
+    "lat": 27.5721911,
+    "lon": 77.6772378
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Internet Access",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201994,
+  "center": {
+    "lat": 27.5728103,
+    "lon": 77.6780318
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Krishna prasadam hall",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201995,
+  "center": {
+    "lat": 27.5721408,
+    "lon": 77.6778302
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Market Place",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201996,
+  "center": {
+    "lat": 27.5722156,
+    "lon": 77.6772323
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Matchless Gifts",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201997,
+  "center": {
+    "lat": 27.5722340,
+    "lon": 77.6776321
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Namahatta Preaching Office",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201998,
+  "center": {
+    "lat": 27.5725108,
+    "lon": 77.6773413
+  },
+  "tags": {
+    "building": "yes",
+    "denomination": "hare_krishna",
+    "name": "Shrila Prabhupada's House",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334201999,
+  "center": {
+    "lat": 27.5721072,
+    "lon": 77.6775971
+  },
+  "tags": {
+    "building": "yes",
+    "denomination": "hare_krishna",
+    "name": "Shrila Prabhupada's museum",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202000,
+  "center": {
+    "lat": 27.5720429,
+    "lon": 77.6773374
+  },
+  "tags": {
+    "building": "yes",
+    "denomination": "hare_krishna",
+    "name": "Shrila Prabhupada's samadhi",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202001,
+  "center": {
+    "lat": 27.5724629,
+    "lon": 77.6777276
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "barrier": "fence",
+    "denomination": "hare_krishna",
+    "name": "श्री श्री कृष्ण-बलराम मंदिर",
+    "name:en": "Sri Sri Krishna-Balaram Mandir",
+    "name:ru": "Кришна-Баларама мандир",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202002,
+  "center": {
+    "lat": 27.5726861,
+    "lon": 77.6780571
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Temple Kitchen",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202003,
+  "center": {
+    "lat": 27.5725779,
+    "lon": 77.6776406
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Tulasi House"
+  }
+},
+{
+  "type": "way",
+  "id": 334202004,
+  "center": {
+    "lat": 27.5723732,
+    "lon": 77.6771943
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Vrindavan.tv",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202005,
+  "center": {
+    "lat": 27.5721674,
+    "lon": 77.6772432
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Welkome Centre",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202006,
+  "center": {
+    "lat": 27.5726941,
+    "lon": 77.6775499
+  },
+  "tags": {
+    "building": "yes",
+    "denomination": "hare_krishna",
+    "name": "Офис общины храма и охраны",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202009,
+  "center": {
+    "lat": 27.5723243,
+    "lon": 77.6773845
+  },
+  "tags": {
+    "addr:city": "Vrindavan",
+    "addr:postcode": "281121",
+    "addr:street": "Bhaktivedanta Swami Marg",
+    "building": "temple",
+    "denomination": "hare_krishna",
+    "name": "ISKCON Vrindavan",
+    "name:ru": "Кришна-Баларам мандир",
+    "phone": "+91 565 254 0021",
+    "religion": "hindu",
+    "website": "https://www.iskconvrindavan.com/home/"
+  }
+},
+{
+  "type": "way",
+  "id": 334669313,
+  "center": {
+    "lat": 27.5784095,
+    "lon": 77.6846878
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Old Kaliya Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334669314,
+  "center": {
+    "lat": 27.5780658,
+    "lon": 77.6847832
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "vaishnavism",
+    "name": "Sripad Prabodhananda Sarasvati Samadhi",
+    "name:ru": "самадхи Прабодхананды Сарасвати",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334669315,
+  "center": {
+    "lat": 27.5728582,
+    "lon": 77.6828928
+  },
+  "tags": {
+    "building": "residential",
+    "name": "Баладжи",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "way",
+  "id": 334669919,
+  "center": {
+    "lat": 27.5783280,
+    "lon": 77.6846537
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "barrier": "fence",
+    "denomination": "vaishnavism",
+    "name": "Kaliya Ghata",
+    "name:ru": "Калия-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334671983,
+  "center": {
+    "lat": 27.5802525,
+    "lon": 77.6876099
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "मदन मोहन मंदिर",
+    "name:en": "Madan Mohan Temple",
+    "name:ru": "Радха-Мадана-Мохан",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334674939,
+  "center": {
+    "lat": 27.5837612,
+    "lon": 77.6956061
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Damodara Mandir",
+    "name:ru": "Радха-Дамодара",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334983476,
+  "center": {
+    "lat": 27.5835795,
+    "lon": 77.6955682
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Джива Госвами Самадхи"
+  }
+},
+{
+  "type": "way",
+  "id": 334983477,
+  "center": {
+    "lat": 27.5837781,
+    "lon": 77.6956133
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Комната Шрилы Прабхупады"
+  }
+},
+{
+  "type": "way",
+  "id": 334983478,
+  "center": {
+    "lat": 27.5835813,
+    "lon": 77.6955856
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Кришна Дас Кавирадж Самадхи"
+  }
+},
+{
+  "type": "way",
+  "id": 334983479,
+  "center": {
+    "lat": 27.5839002,
+    "lon": 77.6955493
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Рупа Госвами Самадхи"
+  }
+},
+{
+  "type": "way",
+  "id": 334983480,
+  "center": {
+    "lat": 27.5839719,
+    "lon": 77.6955824
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Шрила Бхугарва Госвами Самадхи"
+  }
+},
+{
+  "type": "way",
+  "id": 335527342,
+  "center": {
+    "lat": 27.5857061,
+    "lon": 77.6986598
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Sri Gopal Bhatta Samadhi Mandir",
+    "name:ru": "Самадхи Гопала Бхатты Госвами",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 335527344,
+  "center": {
+    "lat": 27.5853793,
+    "lon": 77.6987246
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Sri Radha Raman Mandir",
+    "religion": "hindu",
+    "wikidata": "Q7280191"
+  }
+},
+{
+  "type": "way",
+  "id": 335852213,
+  "center": {
+    "lat": 27.5861973,
+    "lon": 77.6987825
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "श्री राधा गोकुलानंद मंदिर",
+    "name:en": "Sri Radha Gokulanand Temple",
+    "name:ru": "Радха-Гокулананда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 491803653,
+  "center": {
+    "lat": 27.5720921,
+    "lon": 77.6720373
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Prem Mandir",
+    "religion": "hindu",
+    "wikidata": "Q16609019",
+    "wikipedia": "en:Prem Mandir, Vrindavan"
+  }
+},
+{
+  "type": "way",
+  "id": 671537041,
+  "center": {
+    "lat": 27.5888723,
+    "lon": 77.7161331
+  },
+  "tags": {
+    "landuse": "religious",
+    "name": "Devraha Baba Ashram",
+    "religion": "hindu",
+    "website": "https://devrahababa.com/"
+  }
+},
+{
+  "type": "way",
+  "id": 671638009,
+  "center": {
+    "lat": 27.5591684,
+    "lon": 77.6817633
+  },
+  "tags": {
+    "addr:district": "Mathura",
+    "addr:full": "Maat road, Vrindavan, Hundred beded Hospital Vrindavan Mathura",
+    "addr:postcode": "281001",
+    "addr:state": "Uttar Pradesh",
+    "amenity": "hospital",
+    "description": "District Hospital",
+    "name": "District Combined Hospital Mathura",
+    "source": "OpenGovernmentData"
+  }
+},
+{
+  "type": "way",
+  "id": 671678179,
+  "center": {
+    "lat": 27.5834597,
+    "lon": 77.7013773
+  },
+  "tags": {
+    "name": "Brahma Kund",
+    "natural": "water"
+  }
+},
+{
+  "type": "way",
+  "id": 671678180,
+  "center": {
+    "lat": 27.5833192,
+    "lon": 77.7013920
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Brahma Kund",
+    "name:ru": "Брахма-кунда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 671814558,
+  "center": {
+    "lat": 27.5469465,
+    "lon": 77.6827863
+  },
+  "tags": {
+    "gauge": "1000",
+    "name": "MTJ to BDB",
+    "railway": "narrow_gauge"
+  }
+},
+{
+  "type": "way",
+  "id": 672984841,
+  "center": {
+    "lat": 27.5725681,
+    "lon": 77.6438985
+  },
+  "tags": {
+    "building": "construction",
+    "construction": "temple",
+    "name": "Vrindavan Chandrodaya Mandir",
+    "name:en": "Vrindavan Chandrodaya Mandir",
+    "name:hi": "वृंदावन चन्द्रोदय मंदिर",
+    "wikidata": "Q16902821"
+  }
+},
+{
+  "type": "way",
+  "id": 673573044,
+  "center": {
+    "lat": 27.5720833,
+    "lon": 77.6719249
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "layer": "1",
+    "name": "Prem Mandir",
+    "name:hi": "प्रेम मंदिर",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673975825,
+  "center": {
+    "lat": 27.5836518,
+    "lon": 77.7032653
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Лал Бабу",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 679447890,
+  "center": {
+    "lat": 27.5722227,
+    "lon": 77.6903564
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Jaipur Mandir",
+    "name:ru": "Джаяпурский храм",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 768143156,
+  "center": {
+    "lat": 27.5798935,
+    "lon": 77.6872893
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Бхаджан кутир Санатаны Госвами"
+  }
+},
+{
+  "type": "way",
+  "id": 768144964,
+  "center": {
+    "lat": 27.5807012,
+    "lon": 77.6884994
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Адвайта ват"
+  }
+},
+{
+  "type": "way",
+  "id": 844941539,
+  "center": {
+    "lat": 27.5678756,
+    "lon": 77.6449362
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Krishna Bhumi"
+  }
+},
+{
+  "type": "way",
+  "id": 844941546,
+  "center": {
+    "lat": 27.5685581,
+    "lon": 77.6442258
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Akshaya Patra Temple, Vrindavan",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 1265415758,
+  "center": {
+    "lat": 27.5754450,
+    "lon": 77.6946690
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Dwarka Kunj",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "way",
+  "id": 1265415759,
+  "center": {
+    "lat": 27.5789940,
+    "lon": 77.6973888
+  },
+  "tags": {
+    "amenity": "police",
+    "building": "yes",
+    "name": "Mathuragate Police Station"
+  }
+},
+{
+  "type": "way",
+  "id": 1265415761,
+  "center": {
+    "lat": 27.5751347,
+    "lon": 77.6949972
+  },
+  "tags": {
+    "amenity": "restaurant",
+    "building": "yes",
+    "cuisine": "indian",
+    "diet:gluten_free": "no",
+    "diet:halal": "no",
+    "diet:kosher": "no",
+    "diet:lactose_free": "no",
+    "diet:pescetarian": "no",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "name": "Manuhaar"
+  }
+},
+{
+  "type": "way",
+  "id": 1265415762,
+  "center": {
+    "lat": 27.5721305,
+    "lon": 77.6830059
+  },
+  "tags": {
+    "amenity": "restaurant",
+    "building": "yes",
+    "cuisine": "indian",
+    "diet:gluten_free": "no",
+    "diet:halal": "no",
+    "diet:kosher": "no",
+    "diet:lactose_free": "no",
+    "diet:pescetarian": "no",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "name": "11flowers"
+  }
+},
+{
+  "type": "way",
+  "id": 1310963067,
+  "center": {
+    "lat": 27.6050471,
+    "lon": 77.5854655
+  },
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1676",
+    "maxspeed": "160",
+    "name": "New Delhi - Mathura",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:etcs": "1",
+    "source": "Esri World Imagery (2024-08-25)",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 1310963070,
+  "center": {
+    "lat": 27.6050223,
+    "lon": 77.5854219
+  },
+  "tags": {
+    "electrified": "contact_line",
+    "frequency": "50",
+    "gauge": "1676",
+    "maxspeed": "160",
+    "name": "New Delhi - Mathura",
+    "passenger_lines": "4",
+    "railway": "rail",
+    "railway:etcs": "1",
+    "source": "Esri World Imagery (2024-08-25)",
+    "usage": "main",
+    "voltage": "25000"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887891,
+  "center": {
+    "lat": 27.5684082,
+    "lon": 77.6723786
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 3",
+    "opening_hours": "24/7",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887892,
+  "center": {
+    "lat": 27.5688868,
+    "lon": 77.6739140
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 1",
+    "opening_hours": "24/7",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887893,
+  "center": {
+    "lat": 27.5680148,
+    "lon": 77.6723410
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 4",
+    "opening_hours": "24/7",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887894,
+  "center": {
+    "lat": 27.5674687,
+    "lon": 77.6723250
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 5",
+    "opening_hours": "sunrise-sunset",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887895,
+  "center": {
+    "lat": 27.5678608,
+    "lon": 77.6742199
+  },
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 2",
+    "opening_hours": "24/7",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+}
+
+  ]
+}

@@ -1,0 +1,3090 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-09-21T15:28:07Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 617987467,
+  "lat": 27.5753726,
+  "lon": 77.6938045,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Vrindavan",
+    "name:ar": "فريندافان",
+    "name:en": "Vrindavan",
+    "name:hi": "वृन्दावन",
+    "name:kn": "ವೃಂದಾವನ",
+    "name:ml": "വൃന്ദാവനം",
+    "name:ru": "Вриндавана",
+    "name:uk": "Вріндаван",
+    "place": "town",
+    "wikidata": "Q688281",
+    "wikipedia": "hi:वृन्दावन",
+    "wikipedia:uk": "Вріндаван"
+  }
+},
+{
+  "type": "node",
+  "id": 1469828353,
+  "lat": 27.5764791,
+  "lon": 77.6940894,
+  "tags": {
+    "tourism": "museum"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422078,
+  "lat": 27.5747197,
+  "lon": 77.6946789,
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "temple",
+    "email": "imlitala@mac.com",
+    "name": "Munger Raj Mandir",
+    "phone": "+91 9897836640",
+    "website": "https://rajaward.org/royalfamily/mungervrndvan.htm"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422083,
+  "lat": 27.5725287,
+  "lon": 77.6925349,
+  "tags": {
+    "email": "info@hotelvrindavangarden.in",
+    "internet_access": "yes",
+    "name": "Vrindavan Garden",
+    "phone": "+91 565 2442230;+91 9756709122",
+    "tourism": "hotel",
+    "website": "http://www.hotelvrindavangarden.in/"
+  }
+},
+{
+  "type": "node",
+  "id": 3413009024,
+  "lat": 27.5725718,
+  "lon": 77.6771616,
+  "tags": {
+    "information": "map",
+    "map_type": "scheme",
+    "tourism": "information"
+  }
+},
+{
+  "type": "node",
+  "id": 4569639794,
+  "lat": 27.5826874,
+  "lon": 77.6961268,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Shyamsundar Mandir",
+    "name:ru": "Радха-Шьямасундара",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569657292,
+  "lat": 27.5860483,
+  "lon": 77.6996206,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Gopinath Mandir",
+    "name:en": "Sri Radha Gopinath Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569657293,
+  "lat": 27.5673577,
+  "lon": 77.6760228,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Sri Sri Radha Govinda Mandir"
+  }
+},
+{
+  "type": "node",
+  "id": 4569668889,
+  "lat": 27.5674711,
+  "lon": 77.7002940,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Caitanya Mahaprabhu's Sitting Place",
+    "name:en": "Sri Caitanya Mahaprabhu's Sitting Place",
+    "name:ru": "Чайтанья Вишрама стхали",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648692292,
+  "lat": 27.5845022,
+  "lon": 77.7033788,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Vrinda Kunj",
+    "name:en": "Vrinda Kunj",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648837990,
+  "lat": 27.5826272,
+  "lon": 77.6959324,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Shyamsundar Temple",
+    "name:en": "Sri Radha Shyamsundar Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648837991,
+  "lat": 27.5674890,
+  "lon": 77.6759712,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Sri Sri Radha Govinda Mandir"
+  }
+},
+{
+  "type": "node",
+  "id": 4649010790,
+  "lat": 27.5675119,
+  "lon": 77.7004473,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Murari Gupta Jagannath Temple",
+    "name:en": "Murari Gupta Jagannath Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4706937889,
+  "lat": 27.5727050,
+  "lon": 77.6969117,
+  "tags": {
+    "addr:street": "Gurukul Road, Vrindavan (U.P.) INDIA",
+    "amenity": "place_of_worship",
+    "name": "Pilot Baba Ashram",
+    "name:en": "Pilot Baba Ashram",
+    "name:ru": "Пайлот Баба Ашрам",
+    "opening_hours": "24/7",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4739446121,
+  "lat": 27.5671282,
+  "lon": 77.6898364,
+  "tags": {
+    "name:en": "Use other one",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 4740893524,
+  "lat": 27.5677492,
+  "lon": 77.6703270,
+  "tags": {
+    "addr:housenumber": "106",
+    "addr:street": "Banki Bihari Bazar",
+    "name:en": "Hotel Shri Krishna Dham",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 4740893525,
+  "lat": 27.5673672,
+  "lon": 77.6896318,
+  "tags": {
+    "name:en": "Doesn't Exist --->",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 4795308422,
+  "lat": 27.5691382,
+  "lon": 77.6851203,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Ramananda Ashram",
+    "name:en": "Ramananda Ashram"
+  }
+},
+{
+  "type": "node",
+  "id": 5453980521,
+  "lat": 27.5834471,
+  "lon": 77.7054103,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Божества Наротама дас Тхакура",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5469282928,
+  "lat": 27.6014809,
+  "lon": 77.6844417,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Belvan",
+    "name:en": "Belvan",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5808897855,
+  "lat": 27.5725271,
+  "lon": 77.6775721,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Krishna-Balaram Temple"
+  }
+},
+{
+  "type": "node",
+  "id": 6094947292,
+  "lat": 27.5586304,
+  "lon": 77.6791564,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Pagal Baba temple"
+  }
+},
+{
+  "type": "node",
+  "id": 6288769324,
+  "lat": 27.5811484,
+  "lon": 77.6662910,
+  "tags": {
+    "name": "Sunrakh",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6298866285,
+  "lat": 27.5729198,
+  "lon": 77.6786552,
+  "tags": {
+    "internet_access": "wlan",
+    "name:en": "Shanti Niretan.",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 6313899527,
+  "lat": 27.5872629,
+  "lon": 77.6987417,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Keshi Ghat",
+    "name:ru": "Кеши-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 6337207487,
+  "lat": 27.5859773,
+  "lon": 77.7049256,
+  "tags": {
+    "name": "Sudama Kuti",
+    "name:hi": "सुदामा कुटी",
+    "operator": "Sutixna Das Maharaj",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "node",
+  "id": 6938692585,
+  "lat": 27.5798103,
+  "lon": 77.6850027,
+  "tags": {
+    "name:en": "No name (250rp)",
+    "phone": "9045033345",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 7171661023,
+  "lat": 27.5733220,
+  "lon": 77.6792158,
+  "tags": {
+    "internet_access": "yes",
+    "name": "Дом Гуру",
+    "tourism": "guest_house"
+  }
+},
+{
+  "type": "node",
+  "id": 7171716172,
+  "lat": 27.5767900,
+  "lon": 77.6754809,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Ашрам Гаутамы риши"
+  }
+},
+{
+  "type": "node",
+  "id": 7171760301,
+  "lat": 27.5724032,
+  "lon": 77.6777866,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7171760302,
+  "lat": 27.5723219,
+  "lon": 77.6773956,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Кришна-Баларам мандир"
+  }
+},
+{
+  "type": "node",
+  "id": 7171792398,
+  "lat": 27.5701644,
+  "lon": 77.6929867,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Тарас мандир"
+  }
+},
+{
+  "type": "node",
+  "id": 7171865698,
+  "lat": 27.5788988,
+  "lon": 77.7037404,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Katyayani",
+    "name:ru": "Храм Катьяяни",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172072781,
+  "lat": 27.5802569,
+  "lon": 77.6888572,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "храм Ашта-сакхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172091726,
+  "lat": 27.5799780,
+  "lon": 77.6905025,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Банкебихари",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172103529,
+  "lat": 27.5810739,
+  "lon": 77.6917198,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхи-Валлабхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172126073,
+  "lat": 27.5810397,
+  "lon": 77.6924374,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "храм Нрисимхадевы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292946,
+  "lat": 27.5828566,
+  "lon": 77.6950567,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храмы Пурнамаси и Адвайты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292947,
+  "lat": 27.5830234,
+  "lon": 77.6952664,
+  "tags": {
+    "name": "ав",
+    "tourism": "guest_house"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292949,
+  "lat": 27.5857657,
+  "lon": 77.7000490,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Шри Шри Радха-Гопинатха",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247396549,
+  "lat": 27.5854780,
+  "lon": 77.6990090,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Radha-Ramana",
+    "name:ru": "Радха-Раман",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7280042585,
+  "lat": 27.5721545,
+  "lon": 77.6786115,
+  "tags": {
+    "name": "Vedanta international guesthouse",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 7287646376,
+  "lat": 27.5811092,
+  "lon": 77.6880385,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Сурья гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287657604,
+  "lat": 27.5815504,
+  "lon": 77.6683140,
+  "tags": {
+    "amenity": "place_of_worship"
+  }
+},
+{
+  "type": "node",
+  "id": 7287711828,
+  "lat": 27.5779027,
+  "lon": 77.7077571,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Пани-гхат",
+    "name:en": "Pani-ghat",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287733294,
+  "lat": 27.5566428,
+  "lon": 77.6879977,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Батхаран Бихари"
+  }
+},
+{
+  "type": "node",
+  "id": 7287742611,
+  "lat": 27.5761598,
+  "lon": 77.6752188,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Вараха-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287789485,
+  "lat": 27.5769074,
+  "lon": 77.6764355,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Мохана тер-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287803086,
+  "lat": 27.5785391,
+  "lon": 77.6856482,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Калия Мардана"
+  }
+},
+{
+  "type": "node",
+  "id": 7287833608,
+  "lat": 27.5808263,
+  "lon": 77.7020754,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Сад 64х самадхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287891338,
+  "lat": 27.5838662,
+  "lon": 77.7001762,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Samadhi Bilvamangala",
+    "name:ru": "Самадхи Билвамангала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287918954,
+  "lat": 27.5832308,
+  "lon": 77.7000786,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Amiya Nimai",
+    "name:ru": "Храм Амия Нимая",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287972516,
+  "lat": 27.5840523,
+  "lon": 77.7075323,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Джаганнатха-темпл",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287986412,
+  "lat": 27.5838574,
+  "lon": 77.7063522,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Текари Рани",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288005900,
+  "lat": 27.5827139,
+  "lon": 77.7060598,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Туласи Рамы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288011437,
+  "lat": 27.5839942,
+  "lon": 77.7052082,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "ГЬяна Гудри",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288032404,
+  "lat": 27.5835849,
+  "lon": 77.7054241,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхи-Враджа-мохана",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288046039,
+  "lat": 27.5851469,
+  "lon": 77.7029532,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Гопишвары Махадевы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288063453,
+  "lat": 27.5845889,
+  "lon": 77.7024710,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Радха Гопала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288063975,
+  "lat": 27.5869782,
+  "lon": 77.6986901,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Югалы Кишора",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288064334,
+  "lat": 27.5859002,
+  "lon": 77.7024438,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхаканты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288072404,
+  "lat": 27.5862533,
+  "lon": 77.7035191,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Вамшиват",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288077196,
+  "lat": 27.5859146,
+  "lon": 77.7021043,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "самадхи Шриниваса Ачарьи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292232952,
+  "lat": 27.5815351,
+  "lon": 77.6910818,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Югала-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292258052,
+  "lat": 27.5811524,
+  "lon": 77.6954146,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Божества Мурари Гупты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292333038,
+  "lat": 27.5825618,
+  "lon": 77.6964734,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шалаграма",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292341999,
+  "lat": 27.5809789,
+  "lon": 77.6954974,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Банкханди Махадева",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292358445,
+  "lat": 27.5835148,
+  "lon": 77.6941441,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Имли Тала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292385205,
+  "lat": 27.5834988,
+  "lon": 77.6960683,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Тилака-стхана и самадхи Шьямананды",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292425230,
+  "lat": 27.5847566,
+  "lon": 77.6969865,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шахджи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292475319,
+  "lat": 27.5849563,
+  "lon": 77.6958144,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Джару Мандала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292485103,
+  "lat": 27.5846282,
+  "lon": 77.6959458,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Шрингара ват",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292485577,
+  "lat": 27.5841408,
+  "lon": 77.6970509,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Мирабай",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301328132,
+  "lat": 27.5863531,
+  "lon": 77.6982711,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Вамши Гопала и Гададхарв Дант самадхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301331130,
+  "lat": 27.5857591,
+  "lon": 77.6980820,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шадбхуджа Махапрабху",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301340398,
+  "lat": 27.5854985,
+  "lon": 77.6966316,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Чир-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301353522,
+  "lat": 27.5868163,
+  "lon": 77.7024473,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Дхира Самира-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301363295,
+  "lat": 27.5823146,
+  "lon": 77.6983143,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шриджи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301363993,
+  "lat": 27.5851321,
+  "lon": 77.6993599,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Sona Gaurangi",
+    "name:ru": "Храм Сона Гауранги",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 8620783396,
+  "lat": 27.5697744,
+  "lon": 77.6661220,
+  "tags": {
+    "description": "Hotel Kridha Residency is a hotel in Mathura Vrindavan Near Prem Mandir and Banke Bihari Mandir",
+    "image": "https://www.kridharesidency.com/wp-content/uploads/2019/06/hotel-elevation.jpg",
+    "name": "Hotel Kridha Residency",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 9904060117,
+  "lat": 27.5819358,
+  "lon": 77.6935671,
+  "tags": {
+    "addr:postcode": "281121",
+    "addr:street": "Sewa Kunj Road, Gotam Nagar, Vrindavan, Uttar Pradesh 281121, Индия",
+    "amenity": "place_of_worship",
+    "name": "श्री कृष्णा बलराम मंदिर",
+    "name:en": "Shri Krishna Balram Temple",
+    "name:ru": "Шри Кришна Баларам Мандир",
+    "opening_hours": "Mo-Su 04:30-19:00",
+    "religion": "hindu",
+    "website": "http://visuddhagauravani.com"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683426,
+  "lat": 27.5790708,
+  "lon": 77.6937297,
+  "tags": {
+    "name": "Colorful Gate",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683437,
+  "lat": 27.5748541,
+  "lon": 77.6952230,
+  "tags": {
+    "name": "Yellow Temple",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683438,
+  "lat": 27.5790459,
+  "lon": 77.6971569,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325189,
+  "lat": 27.5700134,
+  "lon": 77.6739658,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Laxmi dormitory",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325193,
+  "lat": 27.5711878,
+  "lon": 77.6727511,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Sri chintamani kunj",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337802,
+  "lat": 27.5721281,
+  "lon": 77.6729924,
+  "tags": {
+    "name": "Govardhan Leela",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337807,
+  "lat": 27.5699959,
+  "lon": 77.6713853,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Hotel Anamsa",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337814,
+  "lat": 27.5713996,
+  "lon": 77.6744995,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Dakshin Mukhi Hanuman Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337815,
+  "lat": 27.5714880,
+  "lon": 77.6748746,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Shri Ji Dham ashram",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337822,
+  "lat": 27.5712590,
+  "lon": 77.6730069,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Hotel Prem Inn",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 13086877198,
+  "lat": 27.5673520,
+  "lon": 77.6723142,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shivji Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13334394701,
+  "lat": 27.5803998,
+  "lon": 77.6723538,
+  "tags": {
+    "addr:postcode": "281121",
+    "addr:street": "Radha Keli Kunj, Varaha Ghat, Sri Premanand Rd, Raman Reiti",
+    "amenity": "place_of_worship",
+    "name": "Vrindavan Ras Mahima",
+    "opening_hours": "Mo-Su 04:00-20:00",
+    "phone": "+9106396384412",
+    "website": "https://vrindavanrasmahima.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13684658101,
+  "lat": 27.5657706,
+  "lon": 77.6951583,
+  "tags": {
+    "addr:street": "Banki Bihari Bazar",
+    "name": "Chhotu Room",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 99418393,
+  "bounds": {
+    "minlat": 27.5836228,
+    "minlon": 77.6976228,
+    "maxlat": 27.5850845,
+    "maxlon": 77.6989775
+  },
+  "nodes": [
+    1149772228,
+    1149772335,
+    1149772168,
+    1149772823,
+    1149772439,
+    1149772261,
+    1149772032,
+    1175969287,
+    1149772722,
+    1149772328,
+    1149772165,
+    1149772822,
+    1175969271,
+    1149772632,
+    1149772599,
+    1175969262,
+    1149772401,
+    1149772228
+  ],
+  "geometry": [
+    { "lat": 27.5844356, "lon": 77.6976228 },
+    { "lat": 27.5847968, "lon": 77.6979977 },
+    { "lat": 27.5850319, "lon": 77.6983121 },
+    { "lat": 27.5850845, "lon": 77.6985033 },
+    { "lat": 27.5850306, "lon": 77.6989730 },
+    { "lat": 27.5848113, "lon": 77.6989286 },
+    { "lat": 27.5847180, "lon": 77.6988945 },
+    { "lat": 27.5845632, "lon": 77.6989022 },
+    { "lat": 27.5845394, "lon": 77.6989034 },
+    { "lat": 27.5843385, "lon": 77.6989775 },
+    { "lat": 27.5840948, "lon": 77.6989745 },
+    { "lat": 27.5839101, "lon": 77.6986504 },
+    { "lat": 27.5838262, "lon": 77.6984446 },
+    { "lat": 27.5838157, "lon": 77.6984189 },
+    { "lat": 27.5836228, "lon": 77.6980808 },
+    { "lat": 27.5842129, "lon": 77.6976742 },
+    { "lat": 27.5842623, "lon": 77.6976402 },
+    { "lat": 27.5844356, "lon": 77.6976228 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "leisure": "garden",
+    "name": "निधिवन",
+    "name:en": "Nidhivan",
+    "name:ru": "Сад Нидхувана",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99418412,
+  "bounds": {
+    "minlat": 27.5820326,
+    "minlon": 77.6942823,
+    "maxlat": 27.5827714,
+    "maxlon": 77.6958857
+  },
+  "nodes": [
+    1149772207,
+    1149772319,
+    1149772153,
+    1149772800,
+    1149772766,
+    1149772577,
+    1149772381,
+    1149772222,
+    1149772709,
+    1149772502,
+    1149772307,
+    1149772118,
+    1149772085,
+    1149772748,
+    1149772548,
+    1149772207
+  ],
+  "geometry": [
+    { "lat": 27.5823635, "lon": 77.6942823 },
+    { "lat": 27.5825797, "lon": 77.6943857 },
+    { "lat": 27.5826783, "lon": 77.6944777 },
+    { "lat": 27.5827252, "lon": 77.6946730 },
+    { "lat": 27.5827637, "lon": 77.6949913 },
+    { "lat": 27.5826662, "lon": 77.6952142 },
+    { "lat": 27.5827714, "lon": 77.6957033 },
+    { "lat": 27.5823661, "lon": 77.6958857 },
+    { "lat": 27.5822635, "lon": 77.6956657 },
+    { "lat": 27.5822199, "lon": 77.6953618 },
+    { "lat": 27.5821070, "lon": 77.6952460 },
+    { "lat": 27.5821121, "lon": 77.6951129 },
+    { "lat": 27.5820326, "lon": 77.6949132 },
+    { "lat": 27.5820634, "lon": 77.6944935 },
+    { "lat": 27.5822301, "lon": 77.6943199 },
+    { "lat": 27.5823635, "lon": 77.6942823 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "leisure": "garden",
+    "name": "सेवा कुंज",
+    "name:en": "Seva Kunj",
+    "name:ru": "Сева-кунджа и Кишори-кунджа",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99418417,
+  "bounds": {
+    "minlat": 27.5816879,
+    "minlon": 77.7015437,
+    "maxlat": 27.5829870,
+    "maxlon": 77.7040054
+  },
+  "nodes": [
+    1149772793,
+    1149772469,
+    3426289048,
+    1149772293,
+    1149772277,
+    1149772793
+  ],
+  "geometry": [
+    { "lat": 27.5829620, "lon": 77.7015437 },
+    { "lat": 27.5829870, "lon": 77.7039794 },
+    { "lat": 27.5824017, "lon": 77.7040054 },
+    { "lat": 27.5817450, "lon": 77.7040020 },
+    { "lat": 27.5816879, "lon": 77.7015717 },
+    { "lat": 27.5829620, "lon": 77.7015437 }
+  ],
+  "tags": {
+    "alt_name": "Sri Ranganath Mandir",
+    "amenity": "place_of_worship",
+    "name": "श्री रंगनाथ मंदिर",
+    "name:en": "Sri Ranganath Temple",
+    "name:ru": "Храм Ранганатхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99427126,
+  "bounds": {
+    "minlat": 27.5739541,
+    "minlon": 77.6990783,
+    "maxlat": 27.5744836,
+    "maxlon": 77.6996776
+  },
+  "nodes": [
+    1149916332,
+    1149916541,
+    1149915885,
+    1149916256,
+    1149915674,
+    1149915955,
+    1149916363,
+    1149915762,
+    1149916332
+  ],
+  "geometry": [
+    { "lat": 27.5742144, "lon": 77.6990783 },
+    { "lat": 27.5744836, "lon": 77.6992964 },
+    { "lat": 27.5742410, "lon": 77.6996776 },
+    { "lat": 27.5739655, "lon": 77.6994543 },
+    { "lat": 27.5740236, "lon": 77.6993631 },
+    { "lat": 27.5739541, "lon": 77.6993068 },
+    { "lat": 27.5740816, "lon": 77.6991065 },
+    { "lat": 27.5741574, "lon": 77.6991679 },
+    { "lat": 27.5742144, "lon": 77.6990783 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Govinda Kund",
+    "name:ru": "Говинда-кунда",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 99427138,
+  "bounds": {
+    "minlat": 27.5812832,
+    "minlon": 77.6991286,
+    "maxlat": 27.5815926,
+    "maxlon": 77.6996982
+  },
+  "nodes": [
+    6289559752,
+    6289559751,
+    6289559750,
+    6289559749,
+    6289559748,
+    6289559747,
+    6289559746,
+    6289559745,
+    6289559744,
+    6289559743,
+    6289559742,
+    6289559741,
+    6289559740,
+    6289559739,
+    6289559738,
+    6289559737,
+    6289559736,
+    6289559735,
+    6289559734,
+    6289559733,
+    6289559732,
+    6289559731,
+    6289559730,
+    6289559729,
+    6289559728,
+    6289559727,
+    6289559726,
+    6289559725,
+    6289559724,
+    6289559723,
+    6289559722,
+    6289559721,
+    6289559720,
+    6289559719,
+    6289559718,
+    6289559717,
+    6289559716,
+    6289559715,
+    6289559714,
+    6289559713,
+    6289559712,
+    6289559711,
+    6289559710,
+    6289559709,
+    6289559708,
+    6289559707,
+    6289559706,
+    6289559705,
+    6289559704,
+    6289559703,
+    6289559702,
+    6289559701,
+    6289559700,
+    6289559699,
+    6289559698,
+    6289559697,
+    6289559696,
+    6289559695,
+    6289559694,
+    6289559693,
+    6289559692,
+    6289559691,
+    6289559690,
+    6289559689,
+    6289559688,
+    6289559687,
+    6289559686,
+    6289559685,
+    6289559184,
+    6289559183,
+    6289559182,
+    6289559181,
+    6289559180,
+    6289559179,
+    6289559178,
+    6289559177,
+    6289559176,
+    6289559175,
+    6289559174,
+    6289559173,
+    6289559172,
+    6289559171,
+    6289559170,
+    6289559169,
+    6289559168,
+    1149916483,
+    1149915545,
+    1149915850,
+    1149916004,
+    1149915919,
+    1149915695,
+    1149915724,
+    1149915573,
+    1149916297,
+    1149916414,
+    1149915877,
+    1149916220,
+    1149915654,
+    1149916055,
+    1149915978,
+    1149915637,
+    1149915889,
+    1149916544,
+    6289559167,
+    6289559166,
+    6289559165,
+    6289559164,
+    6289559163,
+    6289559162,
+    6289559161,
+    6289559160,
+    6289559159,
+    6289559158,
+    6289559157,
+    6289559156,
+    6289559155,
+    6289559154,
+    6289559153,
+    6289559152,
+    6289559151,
+    6289559150,
+    6289559149,
+    6289559148,
+    6289559147,
+    6289559146,
+    6289559145,
+    6289559144,
+    6289559143,
+    6289559142,
+    6289559141,
+    6289559140,
+    6289559139,
+    1149916187,
+    1149915764,
+    1149915605,
+    1149916260,
+    6289559138,
+    1149916369,
+    6289559137,
+    6289559136,
+    6289559135,
+    6289559134,
+    1149915961,
+    6289559133,
+    6289559132,
+    6289559131,
+    6289559130,
+    6289559129,
+    6289559128,
+    6289559127,
+    6289559126,
+    6289559125,
+    6289559124,
+    6289559123,
+    6289559122,
+    6289559121,
+    6289559120,
+    6289559119,
+    6289559118,
+    6289559117,
+    6289559752
+  ],
+  "geometry": [
+    { "lat": 27.5813725, "lon": 77.6996982 },
+    { "lat": 27.5813725, "lon": 77.6996910 },
+    { "lat": 27.5813670, "lon": 77.6996910 },
+    { "lat": 27.5813669, "lon": 77.6996575 },
+    { "lat": 27.5813720, "lon": 77.6996575 },
+    { "lat": 27.5813720, "lon": 77.6996494 },
+    { "lat": 27.5813840, "lon": 77.6996493 },
+    { "lat": 27.5813838, "lon": 77.6995934 },
+    { "lat": 27.5813729, "lon": 77.6995934 },
+    { "lat": 27.5813729, "lon": 77.6995888 },
+    { "lat": 27.5813605, "lon": 77.6995889 },
+    { "lat": 27.5813604, "lon": 77.6995726 },
+    { "lat": 27.5813270, "lon": 77.6995728 },
+    { "lat": 27.5813270, "lon": 77.6995866 },
+    { "lat": 27.5812900, "lon": 77.6995868 },
+    { "lat": 27.5812899, "lon": 77.6995797 },
+    { "lat": 27.5812838, "lon": 77.6995797 },
+    { "lat": 27.5812836, "lon": 77.6995451 },
+    { "lat": 27.5812893, "lon": 77.6995450 },
+    { "lat": 27.5812892, "lon": 77.6995374 },
+    { "lat": 27.5812997, "lon": 77.6995373 },
+    { "lat": 27.5812994, "lon": 77.6994819 },
+    { "lat": 27.5812892, "lon": 77.6994820 },
+    { "lat": 27.5812892, "lon": 77.6994749 },
+    { "lat": 27.5812833, "lon": 77.6994749 },
+    { "lat": 27.5812832, "lon": 77.6994443 },
+    { "lat": 27.5812892, "lon": 77.6994443 },
+    { "lat": 27.5812891, "lon": 77.6994349 },
+    { "lat": 27.5813199, "lon": 77.6994348 },
+    { "lat": 27.5813199, "lon": 77.6994405 },
+    { "lat": 27.5813273, "lon": 77.6994405 },
+    { "lat": 27.5813273, "lon": 77.6994426 },
+    { "lat": 27.5813579, "lon": 77.6994425 },
+    { "lat": 27.5813579, "lon": 77.6994375 },
+    { "lat": 27.5813604, "lon": 77.6994375 },
+    { "lat": 27.5813604, "lon": 77.6994286 },
+    { "lat": 27.5813738, "lon": 77.6994285 },
+    { "lat": 27.5813738, "lon": 77.6994241 },
+    { "lat": 27.5813815, "lon": 77.6994241 },
+    { "lat": 27.5813813, "lon": 77.6993734 },
+    { "lat": 27.5813754, "lon": 77.6993734 },
+    { "lat": 27.5813754, "lon": 77.6993696 },
+    { "lat": 27.5813678, "lon": 77.6993697 },
+    { "lat": 27.5813676, "lon": 77.6993355 },
+    { "lat": 27.5813743, "lon": 77.6993354 },
+    { "lat": 27.5813742, "lon": 77.6993286 },
+    { "lat": 27.5813845, "lon": 77.6993286 },
+    { "lat": 27.5813844, "lon": 77.6993132 },
+    { "lat": 27.5813747, "lon": 77.6993132 },
+    { "lat": 27.5813747, "lon": 77.6993039 },
+    { "lat": 27.5813655, "lon": 77.6993039 },
+    { "lat": 27.5813654, "lon": 77.6992623 },
+    { "lat": 27.5813753, "lon": 77.6992622 },
+    { "lat": 27.5813752, "lon": 77.6992452 },
+    { "lat": 27.5813251, "lon": 77.6992455 },
+    { "lat": 27.5813250, "lon": 77.6992408 },
+    { "lat": 27.5813148, "lon": 77.6992409 },
+    { "lat": 27.5813148, "lon": 77.6992354 },
+    { "lat": 27.5813010, "lon": 77.6992354 },
+    { "lat": 27.5813009, "lon": 77.6992226 },
+    { "lat": 27.5812952, "lon": 77.6992227 },
+    { "lat": 27.5812952, "lon": 77.6992082 },
+    { "lat": 27.5812903, "lon": 77.6992083 },
+    { "lat": 27.5812901, "lon": 77.6991670 },
+    { "lat": 27.5812953, "lon": 77.6991670 },
+    { "lat": 27.5812953, "lon": 77.6991566 },
+    { "lat": 27.5813017, "lon": 77.6991566 },
+    { "lat": 27.5813016, "lon": 77.6991403 },
+    { "lat": 27.5813140, "lon": 77.6991402 },
+    { "lat": 27.5813139, "lon": 77.6991355 },
+    { "lat": 27.5813214, "lon": 77.6991355 },
+    { "lat": 27.5813214, "lon": 77.6991304 },
+    { "lat": 27.5813601, "lon": 77.6991302 },
+    { "lat": 27.5813602, "lon": 77.6991339 },
+    { "lat": 27.5813692, "lon": 77.6991339 },
+    { "lat": 27.5813692, "lon": 77.6991398 },
+    { "lat": 27.5813845, "lon": 77.6991398 },
+    { "lat": 27.5813846, "lon": 77.6991550 },
+    { "lat": 27.5814085, "lon": 77.6991548 },
+    { "lat": 27.5814084, "lon": 77.6991380 },
+    { "lat": 27.5814665, "lon": 77.6991377 },
+    { "lat": 27.5814666, "lon": 77.6991543 },
+    { "lat": 27.5814905, "lon": 77.6991541 },
+    { "lat": 27.5814904, "lon": 77.6991388 },
+    { "lat": 27.5815057, "lon": 77.6991387 },
+    { "lat": 27.5815057, "lon": 77.6991327 },
+    { "lat": 27.5815147, "lon": 77.6991327 },
+    { "lat": 27.5815146, "lon": 77.6991288 },
+    { "lat": 27.5815534, "lon": 77.6991286 },
+    { "lat": 27.5815534, "lon": 77.6991335 },
+    { "lat": 27.5815609, "lon": 77.6991335 },
+    { "lat": 27.5815609, "lon": 77.6991379 },
+    { "lat": 27.5815770, "lon": 77.6991378 },
+    { "lat": 27.5815770, "lon": 77.6991540 },
+    { "lat": 27.5815819, "lon": 77.6991540 },
+    { "lat": 27.5815819, "lon": 77.6991655 },
+    { "lat": 27.5815891, "lon": 77.6991654 },
+    { "lat": 27.5815893, "lon": 77.6992055 },
+    { "lat": 27.5815841, "lon": 77.6992056 },
+    { "lat": 27.5815842, "lon": 77.6992196 },
+    { "lat": 27.5815777, "lon": 77.6992196 },
+    { "lat": 27.5815777, "lon": 77.6992334 },
+    { "lat": 27.5815614, "lon": 77.6992335 },
+    { "lat": 27.5815614, "lon": 77.6992388 },
+    { "lat": 27.5815512, "lon": 77.6992389 },
+    { "lat": 27.5815512, "lon": 77.6992438 },
+    { "lat": 27.5815011, "lon": 77.6992441 },
+    { "lat": 27.5815012, "lon": 77.6992611 },
+    { "lat": 27.5815112, "lon": 77.6992611 },
+    { "lat": 27.5815114, "lon": 77.6993028 },
+    { "lat": 27.5815024, "lon": 77.6993028 },
+    { "lat": 27.5815024, "lon": 77.6993122 },
+    { "lat": 27.5814928, "lon": 77.6993123 },
+    { "lat": 27.5814928, "lon": 77.6993276 },
+    { "lat": 27.5815032, "lon": 77.6993276 },
+    { "lat": 27.5815032, "lon": 77.6993344 },
+    { "lat": 27.5815099, "lon": 77.6993343 },
+    { "lat": 27.5815101, "lon": 77.6993685 },
+    { "lat": 27.5815025, "lon": 77.6993685 },
+    { "lat": 27.5815025, "lon": 77.6993724 },
+    { "lat": 27.5814968, "lon": 77.6993724 },
+    { "lat": 27.5814970, "lon": 77.6994231 },
+    { "lat": 27.5815048, "lon": 77.6994231 },
+    { "lat": 27.5815049, "lon": 77.6994274 },
+    { "lat": 27.5815183, "lon": 77.6994273 },
+    { "lat": 27.5815184, "lon": 77.6994362 },
+    { "lat": 27.5815209, "lon": 77.6994362 },
+    { "lat": 27.5815209, "lon": 77.6994410 },
+    { "lat": 27.5815516, "lon": 77.6994408 },
+    { "lat": 27.5815516, "lon": 77.6994386 },
+    { "lat": 27.5815589, "lon": 77.6994385 },
+    { "lat": 27.5815589, "lon": 77.6994325 },
+    { "lat": 27.5815861, "lon": 77.6994323 },
+    { "lat": 27.5815861, "lon": 77.6994395 },
+    { "lat": 27.5815913, "lon": 77.6994395 },
+    { "lat": 27.5815915, "lon": 77.6994727 },
+    { "lat": 27.5815858, "lon": 77.6994727 },
+    { "lat": 27.5815858, "lon": 77.6994793 },
+    { "lat": 27.5815755, "lon": 77.6994794 },
+    { "lat": 27.5815758, "lon": 77.6995338 },
+    { "lat": 27.5815871, "lon": 77.6995338 },
+    { "lat": 27.5815872, "lon": 77.6995422 },
+    { "lat": 27.5815924, "lon": 77.6995422 },
+    { "lat": 27.5815926, "lon": 77.6995766 },
+    { "lat": 27.5815872, "lon": 77.6995766 },
+    { "lat": 27.5815872, "lon": 77.6995828 },
+    { "lat": 27.5815541, "lon": 77.6995830 },
+    { "lat": 27.5815541, "lon": 77.6995710 },
+    { "lat": 27.5815202, "lon": 77.6995712 },
+    { "lat": 27.5815203, "lon": 77.6995876 },
+    { "lat": 27.5815079, "lon": 77.6995877 },
+    { "lat": 27.5815079, "lon": 77.6995923 },
+    { "lat": 27.5814972, "lon": 77.6995924 },
+    { "lat": 27.5814974, "lon": 77.6996483 },
+    { "lat": 27.5815096, "lon": 77.6996483 },
+    { "lat": 27.5815097, "lon": 77.6996564 },
+    { "lat": 27.5815149, "lon": 77.6996563 },
+    { "lat": 27.5815151, "lon": 77.6996898 },
+    { "lat": 27.5815097, "lon": 77.6996898 },
+    { "lat": 27.5815097, "lon": 77.6996974 },
+    { "lat": 27.5813725, "lon": 77.6996982 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Govind Dev Temple",
+    "name:ru": "Радха-Говинда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202001,
+  "bounds": {
+    "minlat": 27.5717988,
+    "minlon": 77.6770270,
+    "maxlat": 27.5731271,
+    "maxlon": 77.6784282
+  },
+  "nodes": [
+    3413009054,
+    3413009019,
+    3413009003,
+    3413009001,
+    3413008997,
+    3413008993,
+    3413008789,
+    3413008782,
+    3413008776,
+    3413008768,
+    3413008745,
+    3413008746,
+    3413008750,
+    3413008755,
+    3413008759,
+    3413009064,
+    3413009059,
+    3413009054
+  ],
+  "geometry": [
+    { "lat": 27.5729595, "lon": 77.6770270 },
+    { "lat": 27.5725577, "lon": 77.6771239 },
+    { "lat": 27.5724311, "lon": 77.6771542 },
+    { "lat": 27.5723894, "lon": 77.6771649 },
+    { "lat": 27.5723474, "lon": 77.6771757 },
+    { "lat": 27.5722633, "lon": 77.6771957 },
+    { "lat": 27.5722242, "lon": 77.6772045 },
+    { "lat": 27.5721981, "lon": 77.6772105 },
+    { "lat": 27.5721752, "lon": 77.6772157 },
+    { "lat": 27.5721509, "lon": 77.6772212 },
+    { "lat": 27.5717988, "lon": 77.6773068 },
+    { "lat": 27.5718549, "lon": 77.6775290 },
+    { "lat": 27.5719883, "lon": 77.6780344 },
+    { "lat": 27.5720555, "lon": 77.6782889 },
+    { "lat": 27.5720923, "lon": 77.6784282 },
+    { "lat": 27.5731271, "lon": 77.6782616 },
+    { "lat": 27.5730606, "lon": 77.6777722 },
+    { "lat": 27.5729595, "lon": 77.6770270 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "barrier": "fence",
+    "denomination": "hare_krishna",
+    "name": "श्री श्री कृष्ण-बलराम मंदिर",
+    "name:en": "Sri Sri Krishna-Balaram Mandir",
+    "name:ru": "Кришна-Баларама мандир",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334669314,
+  "bounds": {
+    "minlat": 27.5780395,
+    "minlon": 77.6847498,
+    "maxlat": 27.5780921,
+    "maxlon": 77.6848165
+  },
+  "nodes": [
+    3417299020,
+    3417299018,
+    3417299019,
+    3417299021,
+    3417299020
+  ],
+  "geometry": [
+    { "lat": 27.5780627, "lon": 77.6847498 },
+    { "lat": 27.5780395, "lon": 77.6847674 },
+    { "lat": 27.5780689, "lon": 77.6848165 },
+    { "lat": 27.5780921, "lon": 77.6847989 },
+    { "lat": 27.5780627, "lon": 77.6847498 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "vaishnavism",
+    "name": "Sripad Prabodhananda Sarasvati Samadhi",
+    "name:ru": "самадхи Прабодхананды Сарасвати",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334669315,
+  "bounds": {
+    "minlat": 27.5727065,
+    "minlon": 77.6827056,
+    "maxlat": 27.5730099,
+    "maxlon": 77.6830800
+  },
+  "nodes": [
+    3417299008,
+    3417299006,
+    3417299007,
+    3417299011,
+    3417299009,
+    3417299010,
+    3417299008
+  ],
+  "geometry": [
+    { "lat": 27.5728955, "lon": 77.6827056 },
+    { "lat": 27.5727065, "lon": 77.6828554 },
+    { "lat": 27.5728464, "lon": 77.6830800 },
+    { "lat": 27.5730099, "lon": 77.6829504 },
+    { "lat": 27.5729158, "lon": 77.6827992 },
+    { "lat": 27.5729413, "lon": 77.6827791 },
+    { "lat": 27.5728955, "lon": 77.6827056 }
+  ],
+  "tags": {
+    "building": "residential",
+    "name": "Баладжи",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "way",
+  "id": 334669919,
+  "bounds": {
+    "minlat": 27.5781461,
+    "minlon": 77.6843814,
+    "maxlat": 27.5785099,
+    "maxlon": 77.6849261
+  },
+  "nodes": [
+    3417301555,
+    3417301557,
+    3417301556,
+    3417301554,
+    3417301553,
+    3417301550,
+    3417301552,
+    3417301551,
+    3417301555
+  ],
+  "geometry": [
+    { "lat": 27.5782751, "lon": 77.6843814 },
+    { "lat": 27.5785099, "lon": 77.6847818 },
+    { "lat": 27.5784548, "lon": 77.6849261 },
+    { "lat": 27.5782497, "lon": 77.6846040 },
+    { "lat": 27.5781935, "lon": 77.6846276 },
+    { "lat": 27.5781461, "lon": 77.6845543 },
+    { "lat": 27.5781649, "lon": 77.6845306 },
+    { "lat": 27.5781505, "lon": 77.6844821 },
+    { "lat": 27.5782751, "lon": 77.6843814 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "barrier": "fence",
+    "denomination": "vaishnavism",
+    "name": "Kaliya Ghata",
+    "name:ru": "Калия-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334671983,
+  "bounds": {
+    "minlat": 27.5799740,
+    "minlon": 77.6873194,
+    "maxlat": 27.5805310,
+    "maxlon": 77.6879005
+  },
+  "nodes": [
+    3417329793,
+    3417314292,
+    3417329803,
+    3417329804,
+    3417329805,
+    3417329799,
+    3417329800,
+    3417329806,
+    3417329807,
+    6289797418,
+    6289797417,
+    3417314289,
+    1153534293,
+    1150585562,
+    1150585625,
+    1150585631,
+    1150585551,
+    1153534327,
+    3417329793
+  ],
+  "geometry": [
+    { "lat": 27.5802994, "lon": 77.6874176 },
+    { "lat": 27.5802873, "lon": 77.6873242 },
+    { "lat": 27.5804055, "lon": 77.6873194 },
+    { "lat": 27.5804216, "lon": 77.6875136 },
+    { "lat": 27.5804524, "lon": 77.6875830 },
+    { "lat": 27.5804749, "lon": 77.6876327 },
+    { "lat": 27.5804915, "lon": 77.6876776 },
+    { "lat": 27.5805253, "lon": 77.6876782 },
+    { "lat": 27.5805310, "lon": 77.6878452 },
+    { "lat": 27.5803924, "lon": 77.6878412 },
+    { "lat": 27.5803852, "lon": 77.6878895 },
+    { "lat": 27.5802062, "lon": 77.6879005 },
+    { "lat": 27.5802062, "lon": 77.6878719 },
+    { "lat": 27.5800857, "lon": 77.6878800 },
+    { "lat": 27.5800837, "lon": 77.6878195 },
+    { "lat": 27.5799780, "lon": 77.6878034 },
+    { "lat": 27.5799740, "lon": 77.6874510 },
+    { "lat": 27.5802188, "lon": 77.6874231 },
+    { "lat": 27.5802994, "lon": 77.6874176 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "मदन मोहन मंदिर",
+    "name:en": "Madan Mohan Temple",
+    "name:ru": "Радха-Мадана-Мохан",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334671985,
+  "bounds": {
+    "minlat": 27.5799827,
+    "minlon": 77.6871099,
+    "maxlat": 27.5800546,
+    "maxlon": 77.6871931
+  },
+  "nodes": [
+    3417314286,
+    3417314285,
+    3417314283,
+    3417314284,
+    3417314286
+  ],
+  "geometry": [
+    { "lat": 27.5800546, "lon": 77.6871891 },
+    { "lat": 27.5800510, "lon": 77.6871099 },
+    { "lat": 27.5799827, "lon": 77.6871139 },
+    { "lat": 27.5799863, "lon": 77.6871931 },
+    { "lat": 27.5800546, "lon": 77.6871891 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name:ru": "Санатана Госвами Самадхи"
+  }
+},
+{
+  "type": "way",
+  "id": 334674939,
+  "bounds": {
+    "minlat": 27.5834657,
+    "minlon": 77.6954086,
+    "maxlat": 27.5840566,
+    "maxlon": 77.6958036
+  },
+  "nodes": [
+    3417359589,
+    3417359579,
+    3417359580,
+    3417359581,
+    3417359582,
+    3417359583,
+    3417359588,
+    3417359587,
+    3417359590,
+    3417359589
+  ],
+  "geometry": [
+    { "lat": 27.5839822, "lon": 77.6954086 },
+    { "lat": 27.5834657, "lon": 77.6954764 },
+    { "lat": 27.5835101, "lon": 77.6956879 },
+    { "lat": 27.5836191, "lon": 77.6956728 },
+    { "lat": 27.5836419, "lon": 77.6958036 },
+    { "lat": 27.5837300, "lon": 77.6957934 },
+    { "lat": 27.5838002, "lon": 77.6957861 },
+    { "lat": 27.5837951, "lon": 77.6956436 },
+    { "lat": 27.5840566, "lon": 77.6956104 },
+    { "lat": 27.5839822, "lon": 77.6954086 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Damodara Mandir",
+    "name:ru": "Радха-Дамодара",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 335527342,
+  "bounds": {
+    "minlat": 27.5856441,
+    "minlon": 77.6986069,
+    "maxlat": 27.5857681,
+    "maxlon": 77.6987127
+  },
+  "nodes": [
+    3426275387,
+    3426275385,
+    3426275386,
+    3426275388,
+    3426275387
+  ],
+  "geometry": [
+    { "lat": 27.5857668, "lon": 77.6986069 },
+    { "lat": 27.5856441, "lon": 77.6986088 },
+    { "lat": 27.5856453, "lon": 77.6987127 },
+    { "lat": 27.5857681, "lon": 77.6987108 },
+    { "lat": 27.5857668, "lon": 77.6986069 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Sri Gopal Bhatta Samadhi Mandir",
+    "name:ru": "Самадхи Гопала Бхатты Госвами",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 335527344,
+  "bounds": {
+    "minlat": 27.5853104,
+    "minlon": 77.6986501,
+    "maxlat": 27.5854482,
+    "maxlon": 77.6987991
+  },
+  "nodes": [
+    3426275383,
+    3426275380,
+    3426275381,
+    3426275382,
+    3426275384,
+    3426275383
+  ],
+  "geometry": [
+    { "lat": 27.5854477, "lon": 77.6986501 },
+    { "lat": 27.5853104, "lon": 77.6986507 },
+    { "lat": 27.5853106, "lon": 77.6987086 },
+    { "lat": 27.5853109, "lon": 77.6987991 },
+    { "lat": 27.5854482, "lon": 77.6987986 },
+    { "lat": 27.5854477, "lon": 77.6986501 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Sri Radha Raman Mandir",
+    "religion": "hindu",
+    "wikidata": "Q7280191"
+  }
+},
+{
+  "type": "way",
+  "id": 335852213,
+  "bounds": {
+    "minlat": 27.5860079,
+    "minlon": 77.6986028,
+    "maxlat": 27.5863868,
+    "maxlon": 77.6989622
+  },
+  "nodes": [
+    3429648629,
+    3429648616,
+    3429648613,
+    3429648614,
+    3429648630,
+    3429648629
+  ],
+  "geometry": [
+    { "lat": 27.5863589, "lon": 77.6986221 },
+    { "lat": 27.5860957, "lon": 77.6986078 },
+    { "lat": 27.5860079, "lon": 77.6986028 },
+    { "lat": 27.5860186, "lon": 77.6989622 },
+    { "lat": 27.5863868, "lon": 77.6988184 },
+    { "lat": 27.5863589, "lon": 77.6986221 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "श्री राधा गोकुलानंद मंदिर",
+    "name:en": "Sri Radha Gokulanand Temple",
+    "name:ru": "Радха-Гокулананда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 491803653,
+  "bounds": {
+    "minlat": 27.5717847,
+    "minlon": 77.6714787,
+    "maxlat": 27.5723995,
+    "maxlon": 77.6725959
+  },
+  "nodes": [
+    4838914074,
+    4838914075,
+    6307843734,
+    6307843733,
+    6307843736,
+    6307843735,
+    6307843738,
+    6307843737,
+    4838914076,
+    4838914077,
+    6307843739,
+    6307843740,
+    6307843741,
+    6307843742,
+    6307843743,
+    6307843744,
+    4838914074
+  ],
+  "geometry": [
+    { "lat": 27.5723944, "lon": 77.6714787 },
+    { "lat": 27.5717847, "lon": 77.6714827 },
+    { "lat": 27.5717898, "lon": 77.6724641 },
+    { "lat": 27.5718059, "lon": 77.6724640 },
+    { "lat": 27.5718061, "lon": 77.6725057 },
+    { "lat": 27.5718499, "lon": 77.6725054 },
+    { "lat": 27.5718502, "lon": 77.6725616 },
+    { "lat": 27.5719842, "lon": 77.6725608 },
+    { "lat": 27.5719844, "lon": 77.6725959 },
+    { "lat": 27.5721935, "lon": 77.6725945 },
+    { "lat": 27.5721933, "lon": 77.6725562 },
+    { "lat": 27.5723291, "lon": 77.6725553 },
+    { "lat": 27.5723289, "lon": 77.6725005 },
+    { "lat": 27.5723695, "lon": 77.6725003 },
+    { "lat": 27.5723693, "lon": 77.6724563 },
+    { "lat": 27.5723995, "lon": 77.6724561 },
+    { "lat": 27.5723944, "lon": 77.6714787 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Prem Mandir",
+    "religion": "hindu",
+    "wikidata": "Q16609019",
+    "wikipedia": "en:Prem Mandir, Vrindavan"
+  }
+},
+{
+  "type": "way",
+  "id": 671678180,
+  "bounds": {
+    "minlat": 27.5830577,
+    "minlon": 77.7012115,
+    "maxlat": 27.5835806,
+    "maxlon": 77.7015725
+  },
+  "nodes": [
+    6289797570,
+    6289797569,
+    6289797568,
+    6289797567,
+    6289797566,
+    6289797565,
+    6289797564,
+    6289797563,
+    6289797570
+  ],
+  "geometry": [
+    { "lat": 27.5835766, "lon": 77.7012115 },
+    { "lat": 27.5835806, "lon": 77.7015677 },
+    { "lat": 27.5832452, "lon": 77.7015725 },
+    { "lat": 27.5832441, "lon": 77.7014715 },
+    { "lat": 27.5830595, "lon": 77.7014742 },
+    { "lat": 27.5830577, "lon": 77.7013199 },
+    { "lat": 27.5832286, "lon": 77.7013174 },
+    { "lat": 27.5832274, "lon": 77.7012165 },
+    { "lat": 27.5835766, "lon": 77.7012115 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Brahma Kund",
+    "name:ru": "Брахма-кунда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 671701938,
+  "bounds": {
+    "minlat": 27.5611396,
+    "minlon": 77.6732299,
+    "maxlat": 27.5617531,
+    "maxlon": 77.6739621
+  },
+  "nodes": [
+    6290036141,
+    6290036140,
+    6290036139,
+    6290036138,
+    6290036141
+  ],
+  "geometry": [
+    { "lat": 27.5617531, "lon": 77.6734914 },
+    { "lat": 27.5614725, "lon": 77.6739621 },
+    { "lat": 27.5611396, "lon": 77.6737113 },
+    { "lat": 27.5614190, "lon": 77.6732299 },
+    { "lat": 27.5617531, "lon": 77.6734914 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 672971332,
+  "bounds": {
+    "minlat": 27.5617210,
+    "minlon": 77.6923031,
+    "maxlat": 27.5623273,
+    "maxlon": 77.6930568
+  },
+  "nodes": [
+    6302104090,
+    6302104089,
+    6302104088,
+    6302104087,
+    6302104090
+  ],
+  "geometry": [
+    { "lat": 27.5619564, "lon": 77.6923031 },
+    { "lat": 27.5617210, "lon": 77.6928717 },
+    { "lat": 27.5621110, "lon": 77.6930568 },
+    { "lat": 27.5623273, "lon": 77.6925042 },
+    { "lat": 27.5619564, "lon": 77.6923031 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 672971337,
+  "bounds": {
+    "minlat": 27.5632808,
+    "minlon": 77.6929910,
+    "maxlat": 27.5639407,
+    "maxlon": 77.6940103
+  },
+  "nodes": [
+    6302104106,
+    6302104105,
+    6302104104,
+    6302104103,
+    6302104106
+  ],
+  "geometry": [
+    { "lat": 27.5635365, "lon": 77.6940103 },
+    { "lat": 27.5632808, "lon": 77.6938105 },
+    { "lat": 27.5636589, "lon": 77.6929910 },
+    { "lat": 27.5639407, "lon": 77.6931426 },
+    { "lat": 27.5635365, "lon": 77.6940103 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 672971373,
+  "bounds": {
+    "minlat": 27.5624664,
+    "minlon": 77.6880893,
+    "maxlat": 27.5628992,
+    "maxlon": 77.6885131
+  },
+  "nodes": [
+    6302104199,
+    6302104198,
+    6302104197,
+    6302104196,
+    6302104199
+  ],
+  "geometry": [
+    { "lat": 27.5628992, "lon": 77.6881470 },
+    { "lat": 27.5625081, "lon": 77.6880893 },
+    { "lat": 27.5624664, "lon": 77.6884675 },
+    { "lat": 27.5628552, "lon": 77.6885131 },
+    { "lat": 27.5628992, "lon": 77.6881470 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 672971374,
+  "bounds": {
+    "minlat": 27.5626305,
+    "minlon": 77.6867053,
+    "maxlat": 27.5628576,
+    "maxlon": 77.6869635
+  },
+  "nodes": [
+    6302104203,
+    6302104202,
+    6302104201,
+    6302104200,
+    6302104203
+  ],
+  "geometry": [
+    { "lat": 27.5628576, "lon": 77.6867643 },
+    { "lat": 27.5628190, "lon": 77.6869635 },
+    { "lat": 27.5626305, "lon": 77.6869306 },
+    { "lat": 27.5626650, "lon": 77.6867053 },
+    { "lat": 27.5628576, "lon": 77.6867643 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 672971393,
+  "bounds": {
+    "minlat": 27.5614155,
+    "minlon": 77.6879552,
+    "maxlat": 27.5618375,
+    "maxlon": 77.6883884
+  },
+  "nodes": [
+    6302104229,
+    6302104228,
+    6302104227,
+    6302104226,
+    6302104229
+  ],
+  "geometry": [
+    { "lat": 27.5618375, "lon": 77.6880048 },
+    { "lat": 27.5617983, "lon": 77.6883884 },
+    { "lat": 27.5614155, "lon": 77.6883495 },
+    { "lat": 27.5614428, "lon": 77.6879552 },
+    { "lat": 27.5618375, "lon": 77.6880048 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 672971405,
+  "bounds": {
+    "minlat": 27.5602741,
+    "minlon": 77.6876038,
+    "maxlat": 27.5605166,
+    "maxlon": 77.6880021
+  },
+  "nodes": [
+    6302104244,
+    6302104243,
+    6302104242,
+    6302104241,
+    6302104244
+  ],
+  "geometry": [
+    { "lat": 27.5605166, "lon": 77.6876307 },
+    { "lat": 27.5604822, "lon": 77.6880021 },
+    { "lat": 27.5602741, "lon": 77.6879807 },
+    { "lat": 27.5603014, "lon": 77.6876038 },
+    { "lat": 27.5605166, "lon": 77.6876307 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 673573044,
+  "bounds": {
+    "minlat": 27.5719008,
+    "minlon": 77.6716140,
+    "maxlat": 27.5722658,
+    "maxlon": 77.6722357
+  },
+  "nodes": [
+    6307843697,
+    6307843698,
+    6307843699,
+    6307843700,
+    6307843701,
+    6307843702,
+    6307843703,
+    6307843704,
+    6307843705,
+    6307843706,
+    6307843707,
+    6307843708,
+    6307843709,
+    6307843710,
+    6307843711,
+    6307843712,
+    6307843713,
+    6307843714,
+    6307843732,
+    6307843731,
+    6307843730,
+    6307843729,
+    6307843728,
+    6307843717,
+    6307843716,
+    6307843715,
+    6307843718,
+    6307843727,
+    6307843726,
+    6307843725,
+    6307843724,
+    6307843723,
+    6307843722,
+    6307843721,
+    6307843720,
+    6307843719,
+    6307843697
+  ],
+  "geometry": [
+    { "lat": 27.5720184, "lon": 77.6722345 },
+    { "lat": 27.5720192, "lon": 77.6721249 },
+    { "lat": 27.5719878, "lon": 77.6721246 },
+    { "lat": 27.5719881, "lon": 77.6720827 },
+    { "lat": 27.5719580, "lon": 77.6720824 },
+    { "lat": 27.5719584, "lon": 77.6720390 },
+    { "lat": 27.5719437, "lon": 77.6720389 },
+    { "lat": 27.5719441, "lon": 77.6719888 },
+    { "lat": 27.5719188, "lon": 77.6719886 },
+    { "lat": 27.5719192, "lon": 77.6719411 },
+    { "lat": 27.5719008, "lon": 77.6719409 },
+    { "lat": 27.5719017, "lon": 77.6718229 },
+    { "lat": 27.5719200, "lon": 77.6718230 },
+    { "lat": 27.5719203, "lon": 77.6717827 },
+    { "lat": 27.5719336, "lon": 77.6717829 },
+    { "lat": 27.5719341, "lon": 77.6717196 },
+    { "lat": 27.5719798, "lon": 77.6717200 },
+    { "lat": 27.5719806, "lon": 77.6716140 },
+    { "lat": 27.5721900, "lon": 77.6716160 },
+    { "lat": 27.5721892, "lon": 77.6717220 },
+    { "lat": 27.5722350, "lon": 77.6717224 },
+    { "lat": 27.5722345, "lon": 77.6717857 },
+    { "lat": 27.5722478, "lon": 77.6717858 },
+    { "lat": 27.5722475, "lon": 77.6718261 },
+    { "lat": 27.5722658, "lon": 77.6718263 },
+    { "lat": 27.5722650, "lon": 77.6719443 },
+    { "lat": 27.5722466, "lon": 77.6719441 },
+    { "lat": 27.5722463, "lon": 77.6719916 },
+    { "lat": 27.5722210, "lon": 77.6719914 },
+    { "lat": 27.5722206, "lon": 77.6720415 },
+    { "lat": 27.5722060, "lon": 77.6720413 },
+    { "lat": 27.5722057, "lon": 77.6720847 },
+    { "lat": 27.5721757, "lon": 77.6720844 },
+    { "lat": 27.5721754, "lon": 77.6721264 },
+    { "lat": 27.5721439, "lon": 77.6721261 },
+    { "lat": 27.5721431, "lon": 77.6722357 },
+    { "lat": 27.5720184, "lon": 77.6722345 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "layer": "1",
+    "name": "Prem Mandir",
+    "name:hi": "प्रेम मंदिर",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573091,
+  "bounds": {
+    "minlat": 27.5722376,
+    "minlon": 77.6931984,
+    "maxlat": 27.5729751,
+    "maxlon": 77.6940304
+  },
+  "nodes": [
+    6307844337,
+    6307844336,
+    6307844335,
+    6307844334,
+    6307844333,
+    6307844332,
+    6307844331,
+    6307844330,
+    6307844329,
+    6307844328,
+    6307844327,
+    6307844326,
+    6307844325,
+    6307844324,
+    6307844323,
+    6307844322,
+    6307844321,
+    6307844320,
+    6307844319,
+    6307844318,
+    6307844317,
+    6307844316,
+    6307844315,
+    6307844314,
+    6307844313,
+    6307844312,
+    6307844311,
+    6307844310,
+    6307844309,
+    6307844337
+  ],
+  "geometry": [
+    { "lat": 27.5728370, "lon": 77.6932900 },
+    { "lat": 27.5728936, "lon": 77.6933537 },
+    { "lat": 27.5729367, "lon": 77.6934296 },
+    { "lat": 27.5729643, "lon": 77.6935141 },
+    { "lat": 27.5729751, "lon": 77.6936034 },
+    { "lat": 27.5729687, "lon": 77.6936932 },
+    { "lat": 27.5729453, "lon": 77.6937794 },
+    { "lat": 27.5729061, "lon": 77.6938579 },
+    { "lat": 27.5728528, "lon": 77.6939250 },
+    { "lat": 27.5727879, "lon": 77.6939777 },
+    { "lat": 27.5727146, "lon": 77.6940134 },
+    { "lat": 27.5726361, "lon": 77.6940304 },
+    { "lat": 27.5725563, "lon": 77.6940281 },
+    { "lat": 27.5724788, "lon": 77.6940064 },
+    { "lat": 27.5724072, "lon": 77.6939664 },
+    { "lat": 27.5723448, "lon": 77.6939100 },
+    { "lat": 27.5722947, "lon": 77.6938398 },
+    { "lat": 27.5722592, "lon": 77.6937591 },
+    { "lat": 27.5722398, "lon": 77.6936717 },
+    { "lat": 27.5722376, "lon": 77.6935816 },
+    { "lat": 27.5722526, "lon": 77.6934931 },
+    { "lat": 27.5722841, "lon": 77.6934103 },
+    { "lat": 27.5723306, "lon": 77.6933370 },
+    { "lat": 27.5723901, "lon": 77.6932768 },
+    { "lat": 27.5724596, "lon": 77.6932324 },
+    { "lat": 27.5725359, "lon": 77.6932058 },
+    { "lat": 27.5726155, "lon": 77.6931984 },
+    { "lat": 27.5726947, "lon": 77.6932105 },
+    { "lat": 27.5727697, "lon": 77.6932415 },
+    { "lat": 27.5728370, "lon": 77.6932900 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 673573094,
+  "bounds": {
+    "minlat": 27.5664869,
+    "minlon": 77.6990569,
+    "maxlat": 27.5667482,
+    "maxlon": 77.6993496
+  },
+  "nodes": [
+    6307844405,
+    6307844402,
+    6307844403,
+    6307844404,
+    6307844405
+  ],
+  "geometry": [
+    { "lat": 27.5667482, "lon": 77.6991963 },
+    { "lat": 27.5666338, "lon": 77.6993496 },
+    { "lat": 27.5664869, "lon": 77.6992101 },
+    { "lat": 27.5666014, "lon": 77.6990569 },
+    { "lat": 27.5667482, "lon": 77.6991963 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573126,
+  "bounds": {
+    "minlat": 27.5723493,
+    "minlon": 77.6855077,
+    "maxlat": 27.5727036,
+    "maxlon": 77.6859114
+  },
+  "nodes": [
+    6307844550,
+    6307844549,
+    6307844548,
+    6307844547,
+    6307844550
+  ],
+  "geometry": [
+    { "lat": 27.5724979, "lon": 77.6855077 },
+    { "lat": 27.5723493, "lon": 77.6856525 },
+    { "lat": 27.5725502, "lon": 77.6859114 },
+    { "lat": 27.5727036, "lon": 77.6857477 },
+    { "lat": 27.5724979, "lon": 77.6855077 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573127,
+  "bounds": {
+    "minlat": 27.5738650,
+    "minlon": 77.6867643,
+    "maxlat": 27.5741242,
+    "maxlon": 77.6870862
+  },
+  "nodes": [
+    6307844554,
+    6307844553,
+    6307844552,
+    6307844551,
+    6307844554
+  ],
+  "geometry": [
+    { "lat": 27.5741242, "lon": 77.6869990 },
+    { "lat": 27.5739696, "lon": 77.6870862 },
+    { "lat": 27.5738650, "lon": 77.6868528 },
+    { "lat": 27.5740172, "lon": 77.6867643 },
+    { "lat": 27.5741242, "lon": 77.6869990 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573128,
+  "bounds": {
+    "minlat": 27.5756113,
+    "minlon": 77.6882274,
+    "maxlat": 27.5758669,
+    "maxlon": 77.6885372
+  },
+  "nodes": [
+    6307844558,
+    6307844557,
+    6307844556,
+    6307844555,
+    6307844558
+  ],
+  "geometry": [
+    { "lat": 27.5757456, "lon": 77.6885372 },
+    { "lat": 27.5756113, "lon": 77.6884232 },
+    { "lat": 27.5757528, "lon": 77.6882274 },
+    { "lat": 27.5758669, "lon": 77.6883656 },
+    { "lat": 27.5757456, "lon": 77.6885372 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573141,
+  "bounds": {
+    "minlat": 27.5753159,
+    "minlon": 77.6863378,
+    "maxlat": 27.5756345,
+    "maxlon": 77.6867281
+  },
+  "nodes": [
+    6307844794,
+    6307844793,
+    6307844792,
+    6307844791,
+    6307844794
+  ],
+  "geometry": [
+    { "lat": 27.5755073, "lon": 77.6863378 },
+    { "lat": 27.5753159, "lon": 77.6864666 },
+    { "lat": 27.5754532, "lon": 77.6867281 },
+    { "lat": 27.5756345, "lon": 77.6865906 },
+    { "lat": 27.5755073, "lon": 77.6863378 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 673882992,
+  "bounds": {
+    "minlat": 27.5724777,
+    "minlon": 77.6713886,
+    "maxlat": 27.5731756,
+    "maxlon": 77.6723957
+  },
+  "nodes": [
+    6310865096,
+    6310865095,
+    6310865094,
+    6310865093,
+    6310865096
+  ],
+  "geometry": [
+    { "lat": 27.5731756, "lon": 77.6723957 },
+    { "lat": 27.5731707, "lon": 77.6713899 },
+    { "lat": 27.5724860, "lon": 77.6713886 },
+    { "lat": 27.5724777, "lon": 77.6723917 },
+    { "lat": 27.5731756, "lon": 77.6723957 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 673975825,
+  "bounds": {
+    "minlat": 27.5834497,
+    "minlon": 77.7026188,
+    "maxlat": 27.5838538,
+    "maxlon": 77.7039117
+  },
+  "nodes": [
+    6311679130,
+    6311679129,
+    6311679128,
+    6311679127,
+    6311679130
+  ],
+  "geometry": [
+    { "lat": 27.5838301, "lon": 77.7026242 },
+    { "lat": 27.5838538, "lon": 77.7039036 },
+    { "lat": 27.5834758, "lon": 77.7039117 },
+    { "lat": 27.5834497, "lon": 77.7026188 },
+    { "lat": 27.5838301, "lon": 77.7026242 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Лал Бабу",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 674201634,
+  "bounds": {
+    "minlat": 27.5796245,
+    "minlon": 77.7004623,
+    "maxlat": 27.5807609,
+    "maxlon": 77.7013260
+  },
+  "nodes": [
+    6313899182,
+    6313899181,
+    6313899180,
+    6313899179,
+    6313899178,
+    6313899182
+  ],
+  "geometry": [
+    { "lat": 27.5807609, "lon": 77.7006742 },
+    { "lat": 27.5807228, "lon": 77.7012187 },
+    { "lat": 27.5800524, "lon": 77.7013260 },
+    { "lat": 27.5796245, "lon": 77.7012938 },
+    { "lat": 27.5798456, "lon": 77.7004623 },
+    { "lat": 27.5807609, "lon": 77.7006742 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 674216005,
+  "bounds": {
+    "minlat": 27.5718976,
+    "minlon": 77.6695311,
+    "maxlat": 27.5722994,
+    "maxlon": 77.6704350
+  },
+  "nodes": [
+    6314017222,
+    6314017221,
+    6314017220,
+    6314017219,
+    6314017222
+  ],
+  "geometry": [
+    { "lat": 27.5722923, "lon": 77.6695311 },
+    { "lat": 27.5722994, "lon": 77.6704350 },
+    { "lat": 27.5719023, "lon": 77.6704270 },
+    { "lat": 27.5718976, "lon": 77.6695392 },
+    { "lat": 27.5722923, "lon": 77.6695311 }
+  ],
+  "tags": {
+    "leisure": "park"
+  }
+},
+{
+  "type": "way",
+  "id": 679447890,
+  "bounds": {
+    "minlat": 27.5720533,
+    "minlon": 77.6901042,
+    "maxlat": 27.5723922,
+    "maxlon": 77.6906085
+  },
+  "nodes": [
+    6362364330,
+    6362364327,
+    6362364328,
+    6362364329,
+    6362364330
+  ],
+  "geometry": [
+    { "lat": 27.5723922, "lon": 77.6901182 },
+    { "lat": 27.5723754, "lon": 77.6906085 },
+    { "lat": 27.5720533, "lon": 77.6905945 },
+    { "lat": 27.5720701, "lon": 77.6901042 },
+    { "lat": 27.5723922, "lon": 77.6901182 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Jaipur Mandir",
+    "name:ru": "Джаяпурский храм",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 679447944,
+  "bounds": {
+    "minlat": 27.5732969,
+    "minlon": 77.6945100,
+    "maxlat": 27.5735892,
+    "maxlon": 77.6948639
+  },
+  "nodes": [
+    6362364725,
+    6362364724,
+    6362364723,
+    6362364722,
+    6362364721,
+    6362364720,
+    6362364719,
+    6362364718,
+    6362364717,
+    6362364716,
+    6362364715,
+    6362364714,
+    6362364713,
+    6362364712,
+    6362364711,
+    6362364710,
+    6362364709,
+    6362364726,
+    6362364727,
+    6362364728,
+    6362364729,
+    6362364730,
+    6362364731,
+    6362364732,
+    6362364733,
+    6362364734,
+    6362364735,
+    6362364736,
+    6362364737,
+    6362364738,
+    6362364739,
+    6362364740,
+    6362364725
+  ],
+  "geometry": [
+    { "lat": 27.5735417, "lon": 77.6945548 },
+    { "lat": 27.5735892, "lon": 77.6946024 },
+    { "lat": 27.5735393, "lon": 77.6946775 },
+    { "lat": 27.5735209, "lon": 77.6946802 },
+    { "lat": 27.5734787, "lon": 77.6947425 },
+    { "lat": 27.5734804, "lon": 77.6947647 },
+    { "lat": 27.5734686, "lon": 77.6947841 },
+    { "lat": 27.5734798, "lon": 77.6948069 },
+    { "lat": 27.5734650, "lon": 77.6948250 },
+    { "lat": 27.5734466, "lon": 77.6948136 },
+    { "lat": 27.5734281, "lon": 77.6948384 },
+    { "lat": 27.5734044, "lon": 77.6948465 },
+    { "lat": 27.5733925, "lon": 77.6948639 },
+    { "lat": 27.5733699, "lon": 77.6948585 },
+    { "lat": 27.5733574, "lon": 77.6948465 },
+    { "lat": 27.5733497, "lon": 77.6948572 },
+    { "lat": 27.5733283, "lon": 77.6948404 },
+    { "lat": 27.5733100, "lon": 77.6948195 },
+    { "lat": 27.5733181, "lon": 77.6948091 },
+    { "lat": 27.5733054, "lon": 77.6947972 },
+    { "lat": 27.5732969, "lon": 77.6947730 },
+    { "lat": 27.5733101, "lon": 77.6947569 },
+    { "lat": 27.5733131, "lon": 77.6947291 },
+    { "lat": 27.5733317, "lon": 77.6947044 },
+    { "lat": 27.5733186, "lon": 77.6946858 },
+    { "lat": 27.5733319, "lon": 77.6946662 },
+    { "lat": 27.5733537, "lon": 77.6946749 },
+    { "lat": 27.5733687, "lon": 77.6946584 },
+    { "lat": 27.5733897, "lon": 77.6946570 },
+    { "lat": 27.5734356, "lon": 77.6945992 },
+    { "lat": 27.5734349, "lon": 77.6945782 },
+    { "lat": 27.5734920, "lon": 77.6945100 },
+    { "lat": 27.5735417, "lon": 77.6945548 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 768143156,
+  "bounds": {
+    "minlat": 27.5798648,
+    "minlon": 77.6872554,
+    "maxlat": 27.5799222,
+    "maxlon": 77.6873232
+  },
+  "nodes": [
+    7172020968,
+    7172020969,
+    7172020970,
+    7172020971,
+    7172020968
+  ],
+  "geometry": [
+    { "lat": 27.5799222, "lon": 77.6873109 },
+    { "lat": 27.5799181, "lon": 77.6872554 },
+    { "lat": 27.5798648, "lon": 77.6872585 },
+    { "lat": 27.5798676, "lon": 77.6873232 },
+    { "lat": 27.5799222, "lon": 77.6873109 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Бхаджан кутир Санатаны Госвами"
+  }
+},
+{
+  "type": "way",
+  "id": 768144964,
+  "bounds": {
+    "minlat": 27.5805394,
+    "minlon": 77.6883846,
+    "maxlat": 27.5808630,
+    "maxlon": 77.6886142
+  },
+  "nodes": [
+    7172008379,
+    7172008380,
+    7172008381,
+    7172008382,
+    7172008379
+  ],
+  "geometry": [
+    { "lat": 27.5805776, "lon": 77.6883954 },
+    { "lat": 27.5808630, "lon": 77.6883846 },
+    { "lat": 27.5808179, "lon": 77.6886142 },
+    { "lat": 27.5805394, "lon": 77.6886034 },
+    { "lat": 27.5805776, "lon": 77.6883954 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Адвайта ват"
+  }
+},
+{
+  "type": "way",
+  "id": 1232208334,
+  "bounds": {
+    "minlat": 27.5850842,
+    "minlon": 77.7029811,
+    "maxlat": 27.5852184,
+    "maxlon": 77.7031264
+  },
+  "nodes": [
+    3426289062,
+    3426289063,
+    3426289061,
+    3426289060,
+    3426289062
+  ],
+  "geometry": [
+    { "lat": 27.5852130, "lon": 77.7029811 },
+    { "lat": 27.5852184, "lon": 77.7031264 },
+    { "lat": 27.5850883, "lon": 77.7031264 },
+    { "lat": 27.5850842, "lon": 77.7029866 },
+    { "lat": 27.5852130, "lon": 77.7029811 }
+  ],
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 1265415758,
+  "bounds": {
+    "minlat": 27.5751008,
+    "minlon": 77.6941526,
+    "maxlat": 27.5757892,
+    "maxlon": 77.6951854
+  },
+  "nodes": [
+    11754683439,
+    11754683430,
+    11754683427,
+    11754683434,
+    11754683442,
+    11754683435,
+    11754683439
+  ],
+  "geometry": [
+    { "lat": 27.5754210, "lon": 77.6951854 },
+    { "lat": 27.5757892, "lon": 77.6943721 },
+    { "lat": 27.5754083, "lon": 77.6941526 },
+    { "lat": 27.5751008, "lon": 77.6948318 },
+    { "lat": 27.5752328, "lon": 77.6949078 },
+    { "lat": 27.5751721, "lon": 77.6950420 },
+    { "lat": 27.5754210, "lon": 77.6951854 }
+  ],
+  "tags": {
+    "building": "yes",
+    "name": "Dwarka Kunj",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887891,
+  "bounds": {
+    "minlat": 27.5682541,
+    "minlon": 77.6722402,
+    "maxlat": 27.5685622,
+    "maxlon": 77.6725170
+  },
+  "nodes": [
+    13086877181,
+    13086877182,
+    13086877183,
+    13086877184,
+    13086877185,
+    13086877186,
+    13086877187,
+    13086877181
+  ],
+  "geometry": [
+    { "lat": 27.5684956, "lon": 77.6724376 },
+    { "lat": 27.5683625, "lon": 77.6725170 },
+    { "lat": 27.5682541, "lon": 77.6722917 },
+    { "lat": 27.5683644, "lon": 77.6722488 },
+    { "lat": 27.5685489, "lon": 77.6722402 },
+    { "lat": 27.5685622, "lon": 77.6722831 },
+    { "lat": 27.5684500, "lon": 77.6723389 },
+    { "lat": 27.5684956, "lon": 77.6724376 }
+  ],
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 3",
+    "opening_hours": "24/7",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887892,
+  "bounds": {
+    "minlat": 27.5684324,
+    "minlon": 77.6734664,
+    "maxlat": 27.5693412,
+    "maxlon": 77.6743616
+  },
+  "nodes": [
+    13086877188,
+    13086877189,
+    13086877190,
+    13086877191,
+    13086877188
+  ],
+  "geometry": [
+    { "lat": 27.5693412, "lon": 77.6739779 },
+    { "lat": 27.5686582, "lon": 77.6743616 },
+    { "lat": 27.5684324, "lon": 77.6738500 },
+    { "lat": 27.5691154, "lon": 77.6734664 },
+    { "lat": 27.5693412, "lon": 77.6739779 }
+  ],
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 1",
+    "opening_hours": "24/7",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887893,
+  "bounds": {
+    "minlat": 27.5678061,
+    "minlon": 77.6722488,
+    "maxlat": 27.5682236,
+    "maxlon": 77.6724333
+  },
+  "nodes": [
+    13086877192,
+    13086877193,
+    13086877194,
+    13086877192
+  ],
+  "geometry": [
+    { "lat": 27.5682236, "lon": 77.6722488 },
+    { "lat": 27.5678955, "lon": 77.6724333 },
+    { "lat": 27.5678061, "lon": 77.6722584 },
+    { "lat": 27.5682236, "lon": 77.6722488 }
+  ],
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 4",
+    "opening_hours": "24/7",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887894,
+  "bounds": {
+    "minlat": 27.5672944,
+    "minlon": 77.6722606,
+    "maxlat": 27.5676430,
+    "maxlon": 77.6723893
+  },
+  "nodes": [
+    13086877195,
+    13086877196,
+    13086877197,
+    13086877195
+  ],
+  "geometry": [
+    { "lat": 27.5676430, "lon": 77.6722606 },
+    { "lat": 27.5673406, "lon": 77.6723893 },
+    { "lat": 27.5672944, "lon": 77.6722681 },
+    { "lat": 27.5676430, "lon": 77.6722606 }
+  ],
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 5",
+    "opening_hours": "sunrise-sunset",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+},
+{
+  "type": "way",
+  "id": 1423887895,
+  "bounds": {
+    "minlat": 27.5676306,
+    "minlon": 77.6739978,
+    "maxlat": 27.5680909,
+    "maxlon": 77.6744419
+  },
+  "nodes": [
+    13086877199,
+    13086877200,
+    13086886801,
+    13086886802,
+    13086877199
+  ],
+  "geometry": [
+    { "lat": 27.5679911, "lon": 77.6739978 },
+    { "lat": 27.5680909, "lon": 77.6742392 },
+    { "lat": 27.5677314, "lon": 77.6744419 },
+    { "lat": 27.5676306, "lon": 77.6742005 },
+    { "lat": 27.5679911, "lon": 77.6739978 }
+  ],
+  "tags": {
+    "leisure": "park",
+    "name": "Chaitanya Vihar Park 2",
+    "opening_hours": "24/7",
+    "operator": "Nagar Nigam Mathura Vrindavan",
+    "operator:type": "public/government"
+  }
+}
+
+  ]
+}

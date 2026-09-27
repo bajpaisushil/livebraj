@@ -1,0 +1,4 @@
+# Nothing here is needed at runtime — index.html never references node_modules,
+# and the whole point of this client is that it has no build step: Three.js is
+# vendored under vendor/ and served directly as ES modules.
+node_modules

@@ -1,0 +1,1575 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-09-22T06:14:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 316684768,
+  "lat": 27.5763320,
+  "lon": 77.6942078,
+  "tags": {
+    "internet_access": "no",
+    "name": "Vrindavan",
+    "network": "IR",
+    "operator": "NCR",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "BDB",
+    "train": "yes",
+    "wikidata": "Q16902806",
+    "wikipedia": "en:Vrindavan railway station"
+  }
+},
+{
+  "type": "node",
+  "id": 617987466,
+  "lat": 27.5609785,
+  "lon": 77.6247070,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Chhatikara",
+    "name:ru": "Чхатикара",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 617987467,
+  "lat": 27.5753726,
+  "lon": 77.6938045,
+  "tags": {
+    "is_in": "Dist. Mathura",
+    "name": "Vrindavan",
+    "name:ar": "فريندافان",
+    "name:en": "Vrindavan",
+    "name:hi": "वृन्दावन",
+    "name:kn": "ವೃಂದಾವನ",
+    "name:ml": "വൃന്ദാവനം",
+    "name:ru": "Вриндавана",
+    "name:uk": "Вріндаван",
+    "place": "town",
+    "wikidata": "Q688281",
+    "wikipedia": "hi:वृन्दावन",
+    "wikipedia:uk": "Вріндаван"
+  }
+},
+{
+  "type": "node",
+  "id": 1469828353,
+  "lat": 27.5764791,
+  "lon": 77.6940894,
+  "tags": {
+    "tourism": "museum"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422078,
+  "lat": 27.5747197,
+  "lon": 77.6946789,
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "temple",
+    "email": "imlitala@mac.com",
+    "name": "Munger Raj Mandir",
+    "phone": "+91 9897836640",
+    "website": "https://rajaward.org/royalfamily/mungervrndvan.htm"
+  }
+},
+{
+  "type": "node",
+  "id": 2564422083,
+  "lat": 27.5725287,
+  "lon": 77.6925349,
+  "tags": {
+    "email": "info@hotelvrindavangarden.in",
+    "internet_access": "yes",
+    "name": "Vrindavan Garden",
+    "phone": "+91 565 2442230;+91 9756709122",
+    "tourism": "hotel",
+    "website": "http://www.hotelvrindavangarden.in/"
+  }
+},
+{
+  "type": "node",
+  "id": 3413009024,
+  "lat": 27.5725718,
+  "lon": 77.6771616,
+  "tags": {
+    "information": "map",
+    "map_type": "scheme",
+    "tourism": "information"
+  }
+},
+{
+  "type": "node",
+  "id": 4569639794,
+  "lat": 27.5826874,
+  "lon": 77.6961268,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Shyamsundar Mandir",
+    "name:ru": "Радха-Шьямасундара",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569657292,
+  "lat": 27.5860483,
+  "lon": 77.6996206,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Gopinath Mandir",
+    "name:en": "Sri Radha Gopinath Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4569657293,
+  "lat": 27.5673577,
+  "lon": 77.6760228,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Sri Sri Radha Govinda Mandir"
+  }
+},
+{
+  "type": "node",
+  "id": 4569668889,
+  "lat": 27.5674711,
+  "lon": 77.7002940,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Caitanya Mahaprabhu's Sitting Place",
+    "name:en": "Sri Caitanya Mahaprabhu's Sitting Place",
+    "name:ru": "Чайтанья Вишрама стхали",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648692292,
+  "lat": 27.5845022,
+  "lon": 77.7033788,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Vrinda Kunj",
+    "name:en": "Vrinda Kunj",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648837990,
+  "lat": 27.5826272,
+  "lon": 77.6959324,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Shyamsundar Temple",
+    "name:en": "Sri Radha Shyamsundar Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4648837991,
+  "lat": 27.5674890,
+  "lon": 77.6759712,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Sri Sri Radha Govinda Mandir"
+  }
+},
+{
+  "type": "node",
+  "id": 4649010790,
+  "lat": 27.5675119,
+  "lon": 77.7004473,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Murari Gupta Jagannath Temple",
+    "name:en": "Murari Gupta Jagannath Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4706937889,
+  "lat": 27.5727050,
+  "lon": 77.6969117,
+  "tags": {
+    "addr:street": "Gurukul Road, Vrindavan (U.P.) INDIA",
+    "amenity": "place_of_worship",
+    "name": "Pilot Baba Ashram",
+    "name:en": "Pilot Baba Ashram",
+    "name:ru": "Пайлот Баба Ашрам",
+    "opening_hours": "24/7",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 4739446121,
+  "lat": 27.5671282,
+  "lon": 77.6898364,
+  "tags": {
+    "name:en": "Use other one",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 4740893524,
+  "lat": 27.5677492,
+  "lon": 77.6703270,
+  "tags": {
+    "addr:housenumber": "106",
+    "addr:street": "Banki Bihari Bazar",
+    "name:en": "Hotel Shri Krishna Dham",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 4740893525,
+  "lat": 27.5673672,
+  "lon": 77.6896318,
+  "tags": {
+    "name:en": "Doesn't Exist --->",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 4795308422,
+  "lat": 27.5691382,
+  "lon": 77.6851203,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Ramananda Ashram",
+    "name:en": "Ramananda Ashram"
+  }
+},
+{
+  "type": "node",
+  "id": 5453980521,
+  "lat": 27.5834471,
+  "lon": 77.7054103,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Божества Наротама дас Тхакура",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5469282928,
+  "lat": 27.6014809,
+  "lon": 77.6844417,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Belvan",
+    "name:en": "Belvan",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 5808897855,
+  "lat": 27.5725271,
+  "lon": 77.6775721,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Krishna-Balaram Temple"
+  }
+},
+{
+  "type": "node",
+  "id": 6094947292,
+  "lat": 27.5586304,
+  "lon": 77.6791564,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:en": "Pagal Baba temple"
+  }
+},
+{
+  "type": "node",
+  "id": 6188103403,
+  "lat": 27.5556517,
+  "lon": 77.6237707,
+  "tags": {
+    "internet_access": "no",
+    "name": "Vrindaban Road",
+    "network": "IR",
+    "operator": "North Central Railway",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "VRBD",
+    "train": "yes",
+    "wikidata": "Q24949659"
+  }
+},
+{
+  "type": "node",
+  "id": 6288769324,
+  "lat": 27.5811484,
+  "lon": 77.6662910,
+  "tags": {
+    "name": "Sunrakh",
+    "place": "village",
+    "source": "GNS"
+  }
+},
+{
+  "type": "node",
+  "id": 6298866285,
+  "lat": 27.5729198,
+  "lon": 77.6786552,
+  "tags": {
+    "internet_access": "wlan",
+    "name:en": "Shanti Niretan.",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 6313899527,
+  "lat": 27.5872629,
+  "lon": 77.6987417,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Keshi Ghat",
+    "name:ru": "Кеши-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 6337207487,
+  "lat": 27.5859773,
+  "lon": 77.7049256,
+  "tags": {
+    "name": "Sudama Kuti",
+    "name:hi": "सुदामा कुटी",
+    "operator": "Sutixna Das Maharaj",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "node",
+  "id": 6938692585,
+  "lat": 27.5798103,
+  "lon": 77.6850027,
+  "tags": {
+    "name:en": "No name (250rp)",
+    "phone": "9045033345",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 7053885985,
+  "lat": 27.5602151,
+  "lon": 77.6316802,
+  "tags": {
+    "name:en": "Statue of MAA on Lion 140 foot",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 7171661023,
+  "lat": 27.5733220,
+  "lon": 77.6792158,
+  "tags": {
+    "internet_access": "yes",
+    "name": "Дом Гуру",
+    "tourism": "guest_house"
+  }
+},
+{
+  "type": "node",
+  "id": 7171716172,
+  "lat": 27.5767900,
+  "lon": 77.6754809,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Ашрам Гаутамы риши"
+  }
+},
+{
+  "type": "node",
+  "id": 7171760301,
+  "lat": 27.5724032,
+  "lon": 77.6777866,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7171760302,
+  "lat": 27.5723219,
+  "lon": 77.6773956,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Кришна-Баларам мандир"
+  }
+},
+{
+  "type": "node",
+  "id": 7171792398,
+  "lat": 27.5701644,
+  "lon": 77.6929867,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Тарас мандир"
+  }
+},
+{
+  "type": "node",
+  "id": 7171865698,
+  "lat": 27.5788988,
+  "lon": 77.7037404,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Katyayani",
+    "name:ru": "Храм Катьяяни",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172072781,
+  "lat": 27.5802569,
+  "lon": 77.6888572,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "храм Ашта-сакхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172091726,
+  "lat": 27.5799780,
+  "lon": 77.6905025,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Банкебихари",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172103529,
+  "lat": 27.5810739,
+  "lon": 77.6917198,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхи-Валлабхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7172126073,
+  "lat": 27.5810397,
+  "lon": 77.6924374,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "храм Нрисимхадевы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292946,
+  "lat": 27.5828566,
+  "lon": 77.6950567,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храмы Пурнамаси и Адвайты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292947,
+  "lat": 27.5830234,
+  "lon": 77.6952664,
+  "tags": {
+    "name": "ав",
+    "tourism": "guest_house"
+  }
+},
+{
+  "type": "node",
+  "id": 7247292949,
+  "lat": 27.5857657,
+  "lon": 77.7000490,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Шри Шри Радха-Гопинатха",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7247396549,
+  "lat": 27.5854780,
+  "lon": 77.6990090,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Radha-Ramana",
+    "name:ru": "Радха-Раман",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7280042585,
+  "lat": 27.5721545,
+  "lon": 77.6786115,
+  "tags": {
+    "name": "Vedanta international guesthouse",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 7287646376,
+  "lat": 27.5811092,
+  "lon": 77.6880385,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Сурья гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287657604,
+  "lat": 27.5815504,
+  "lon": 77.6683140,
+  "tags": {
+    "amenity": "place_of_worship"
+  }
+},
+{
+  "type": "node",
+  "id": 7287711828,
+  "lat": 27.5779027,
+  "lon": 77.7077571,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Пани-гхат",
+    "name:en": "Pani-ghat",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287726154,
+  "lat": 27.5518014,
+  "lon": 77.6850479,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Акрура-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287733294,
+  "lat": 27.5566428,
+  "lon": 77.6879977,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Батхаран Бихари"
+  }
+},
+{
+  "type": "node",
+  "id": 7287742611,
+  "lat": 27.5761598,
+  "lon": 77.6752188,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Вараха-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287789485,
+  "lat": 27.5769074,
+  "lon": 77.6764355,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Мохана тер-гхат"
+  }
+},
+{
+  "type": "node",
+  "id": 7287803086,
+  "lat": 27.5785391,
+  "lon": 77.6856482,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Калия Мардана"
+  }
+},
+{
+  "type": "node",
+  "id": 7287833608,
+  "lat": 27.5808263,
+  "lon": 77.7020754,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Сад 64х самадхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287891338,
+  "lat": 27.5838662,
+  "lon": 77.7001762,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Samadhi Bilvamangala",
+    "name:ru": "Самадхи Билвамангала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287918954,
+  "lat": 27.5832308,
+  "lon": 77.7000786,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Amiya Nimai",
+    "name:ru": "Храм Амия Нимая",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287972516,
+  "lat": 27.5840523,
+  "lon": 77.7075323,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Джаганнатха-темпл",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7287986412,
+  "lat": 27.5838574,
+  "lon": 77.7063522,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Текари Рани",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288005900,
+  "lat": 27.5827139,
+  "lon": 77.7060598,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Туласи Рамы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288011437,
+  "lat": 27.5839942,
+  "lon": 77.7052082,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "ГЬяна Гудри",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288032404,
+  "lat": 27.5835849,
+  "lon": 77.7054241,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхи-Враджа-мохана",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288046039,
+  "lat": 27.5851469,
+  "lon": 77.7029532,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Гопишвары Махадевы",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288063453,
+  "lat": 27.5845889,
+  "lon": 77.7024710,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Радха Гопала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288063975,
+  "lat": 27.5869782,
+  "lon": 77.6986901,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Югалы Кишора",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288064334,
+  "lat": 27.5859002,
+  "lon": 77.7024438,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Радхаканты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288072404,
+  "lat": 27.5862533,
+  "lon": 77.7035191,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Вамшиват",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7288077196,
+  "lat": 27.5859146,
+  "lon": 77.7021043,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "самадхи Шриниваса Ачарьи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292232952,
+  "lat": 27.5815351,
+  "lon": 77.6910818,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Югала-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292258052,
+  "lat": 27.5811524,
+  "lon": 77.6954146,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Божества Мурари Гупты",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292333038,
+  "lat": 27.5825618,
+  "lon": 77.6964734,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шалаграма",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292341999,
+  "lat": 27.5809789,
+  "lon": 77.6954974,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Банкханди Махадева",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292358445,
+  "lat": 27.5835148,
+  "lon": 77.6941441,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Имли Тала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292385205,
+  "lat": 27.5834988,
+  "lon": 77.6960683,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Тилака-стхана и самадхи Шьямананды",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292425230,
+  "lat": 27.5847566,
+  "lon": 77.6969865,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шахджи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292475319,
+  "lat": 27.5849563,
+  "lon": 77.6958144,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Джару Мандала",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292485103,
+  "lat": 27.5846282,
+  "lon": 77.6959458,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Шрингара ват",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7292485577,
+  "lat": 27.5841408,
+  "lon": 77.6970509,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Мирабай",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301328132,
+  "lat": 27.5863531,
+  "lon": 77.6982711,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Вамши Гопала и Гададхарв Дант самадхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301331130,
+  "lat": 27.5857591,
+  "lon": 77.6980820,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шадбхуджа Махапрабху",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301340398,
+  "lat": 27.5854985,
+  "lon": 77.6966316,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Чир-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301353522,
+  "lat": 27.5868163,
+  "lon": 77.7024473,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Дхира Самира-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301363295,
+  "lat": 27.5823146,
+  "lon": 77.6983143,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name:ru": "Храм Шриджи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 7301363993,
+  "lat": 27.5851321,
+  "lon": 77.6993599,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Khram Sona Gaurangi",
+    "name:ru": "Храм Сона Гауранги",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 8620783396,
+  "lat": 27.5697744,
+  "lon": 77.6661220,
+  "tags": {
+    "description": "Hotel Kridha Residency is a hotel in Mathura Vrindavan Near Prem Mandir and Banke Bihari Mandir",
+    "image": "https://www.kridharesidency.com/wp-content/uploads/2019/06/hotel-elevation.jpg",
+    "name": "Hotel Kridha Residency",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 9904060117,
+  "lat": 27.5819358,
+  "lon": 77.6935671,
+  "tags": {
+    "addr:postcode": "281121",
+    "addr:street": "Sewa Kunj Road, Gotam Nagar, Vrindavan, Uttar Pradesh 281121, Индия",
+    "amenity": "place_of_worship",
+    "name": "श्री कृष्णा बलराम मंदिर",
+    "name:en": "Shri Krishna Balram Temple",
+    "name:ru": "Шри Кришна Баларам Мандир",
+    "opening_hours": "Mo-Su 04:30-19:00",
+    "religion": "hindu",
+    "website": "http://visuddhagauravani.com"
+  }
+},
+{
+  "type": "node",
+  "id": 11240694138,
+  "lat": 27.5780536,
+  "lon": 77.6992345,
+  "tags": {
+    "amenity": "bus_station",
+    "name:en": "Vrindavan Bus Stand"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683426,
+  "lat": 27.5790708,
+  "lon": 77.6937297,
+  "tags": {
+    "name": "Colorful Gate",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683437,
+  "lat": 27.5748541,
+  "lon": 77.6952230,
+  "tags": {
+    "name": "Yellow Temple",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 11754683438,
+  "lat": 27.5790459,
+  "lon": 77.6971569,
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "muslim"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325189,
+  "lat": 27.5700134,
+  "lon": 77.6739658,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Laxmi dormitory",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719325193,
+  "lat": 27.5711878,
+  "lon": 77.6727511,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Sri chintamani kunj",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337802,
+  "lat": 27.5721281,
+  "lon": 77.6729924,
+  "tags": {
+    "name": "Govardhan Leela",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337807,
+  "lat": 27.5699959,
+  "lon": 77.6713853,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Hotel Anamsa",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337810,
+  "lat": 27.5715527,
+  "lon": 77.6765423,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337814,
+  "lat": 27.5713996,
+  "lon": 77.6744995,
+  "tags": {
+    "amenity": "place_of_worship",
+    "check_date": "2025-03-31",
+    "name": "Dakshin Mukhi Hanuman Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337815,
+  "lat": 27.5714880,
+  "lon": 77.6748746,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Shri Ji Dham ashram",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 12719337822,
+  "lat": 27.5712590,
+  "lon": 77.6730069,
+  "tags": {
+    "check_date": "2025-03-31",
+    "name": "Hotel Prem Inn",
+    "tourism": "hotel"
+  }
+},
+{
+  "type": "node",
+  "id": 13086877198,
+  "lat": 27.5673520,
+  "lon": 77.6723142,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Shivji Temple",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 13334394701,
+  "lat": 27.5803998,
+  "lon": 77.6723538,
+  "tags": {
+    "addr:postcode": "281121",
+    "addr:street": "Radha Keli Kunj, Varaha Ghat, Sri Premanand Rd, Raman Reiti",
+    "amenity": "place_of_worship",
+    "name": "Vrindavan Ras Mahima",
+    "opening_hours": "Mo-Su 04:00-20:00",
+    "phone": "+9106396384412",
+    "website": "https://vrindavanrasmahima.com/"
+  }
+},
+{
+  "type": "node",
+  "id": 13684658101,
+  "lat": 27.5657706,
+  "lon": 77.6951583,
+  "tags": {
+    "addr:street": "Banki Bihari Bazar",
+    "name": "Chhotu Room",
+    "tourism": "hostel"
+  }
+},
+{
+  "type": "way",
+  "id": 99418393,
+  "center": {
+    "lat": 27.5843536,
+    "lon": 77.6983001
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "leisure": "garden",
+    "name": "निधिवन",
+    "name:en": "Nidhivan",
+    "name:ru": "Сад Нидхувана",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99418412,
+  "center": {
+    "lat": 27.5824020,
+    "lon": 77.6950840
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "leisure": "garden",
+    "name": "सेवा कुंज",
+    "name:en": "Seva Kunj",
+    "name:ru": "Сева-кунджа и Кишори-кунджа",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99418417,
+  "center": {
+    "lat": 27.5823375,
+    "lon": 77.7027746
+  },
+  "tags": {
+    "alt_name": "Sri Ranganath Mandir",
+    "amenity": "place_of_worship",
+    "name": "श्री रंगनाथ मंदिर",
+    "name:en": "Sri Ranganath Temple",
+    "name:ru": "Храм Ранганатхи",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 99427126,
+  "center": {
+    "lat": 27.5742188,
+    "lon": 77.6993779
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Govinda Kund",
+    "name:ru": "Говинда-кунда",
+    "source": "Bing"
+  }
+},
+{
+  "type": "way",
+  "id": 99427138,
+  "center": {
+    "lat": 27.5814379,
+    "lon": 77.6994134
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Govind Dev Temple",
+    "name:ru": "Радха-Говинда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334202001,
+  "center": {
+    "lat": 27.5724629,
+    "lon": 77.6777276
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "barrier": "fence",
+    "denomination": "hare_krishna",
+    "name": "श्री श्री कृष्ण-बलराम मंदिर",
+    "name:en": "Sri Sri Krishna-Balaram Mandir",
+    "name:ru": "Кришна-Баларама мандир",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334669314,
+  "center": {
+    "lat": 27.5780658,
+    "lon": 77.6847832
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "denomination": "vaishnavism",
+    "name": "Sripad Prabodhananda Sarasvati Samadhi",
+    "name:ru": "самадхи Прабодхананды Сарасвати",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334669919,
+  "center": {
+    "lat": 27.5783280,
+    "lon": 77.6846537
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "barrier": "fence",
+    "denomination": "vaishnavism",
+    "name": "Kaliya Ghata",
+    "name:ru": "Калия-гхат",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334671983,
+  "center": {
+    "lat": 27.5802525,
+    "lon": 77.6876099
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "मदन मोहन मंदिर",
+    "name:en": "Madan Mohan Temple",
+    "name:ru": "Радха-Мадана-Мохан",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 334671985,
+  "center": {
+    "lat": 27.5800186,
+    "lon": 77.6871515
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name:ru": "Санатана Госвами Самадхи"
+  }
+},
+{
+  "type": "way",
+  "id": 334674939,
+  "center": {
+    "lat": 27.5837612,
+    "lon": 77.6956061
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Sri Radha Damodara Mandir",
+    "name:ru": "Радха-Дамодара",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 335527342,
+  "center": {
+    "lat": 27.5857061,
+    "lon": 77.6986598
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Sri Gopal Bhatta Samadhi Mandir",
+    "name:ru": "Самадхи Гопала Бхатты Госвами",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 335527344,
+  "center": {
+    "lat": 27.5853793,
+    "lon": 77.6987246
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Sri Radha Raman Mandir",
+    "religion": "hindu",
+    "wikidata": "Q7280191"
+  }
+},
+{
+  "type": "way",
+  "id": 335852213,
+  "center": {
+    "lat": 27.5861973,
+    "lon": 77.6987825
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "श्री राधा गोकुलानंद मंदिर",
+    "name:en": "Sri Radha Gokulanand Temple",
+    "name:ru": "Радха-Гокулананда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 491803653,
+  "center": {
+    "lat": 27.5720921,
+    "lon": 77.6720373
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Prem Mandir",
+    "religion": "hindu",
+    "wikidata": "Q16609019",
+    "wikipedia": "en:Prem Mandir, Vrindavan"
+  }
+},
+{
+  "type": "way",
+  "id": 671039232,
+  "center": {
+    "lat": 27.5634485,
+    "lon": 77.6382821
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 671678180,
+  "center": {
+    "lat": 27.5833192,
+    "lon": 77.7013920
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Brahma Kund",
+    "name:ru": "Брахма-кунда",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573044,
+  "center": {
+    "lat": 27.5720833,
+    "lon": 77.6719249
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "layer": "1",
+    "name": "Prem Mandir",
+    "name:hi": "प्रेम मंदिर",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573094,
+  "center": {
+    "lat": 27.5666176,
+    "lon": 77.6992033
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573126,
+  "center": {
+    "lat": 27.5725264,
+    "lon": 77.6857095
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573127,
+  "center": {
+    "lat": 27.5739946,
+    "lon": 77.6869253
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673573128,
+  "center": {
+    "lat": 27.5757391,
+    "lon": 77.6883823
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 673975825,
+  "center": {
+    "lat": 27.5836518,
+    "lon": 77.7032653
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Храм Лал Бабу",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 679447890,
+  "center": {
+    "lat": 27.5722227,
+    "lon": 77.6903564
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Jaipur Mandir",
+    "name:ru": "Джаяпурский храм",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 679447944,
+  "center": {
+    "lat": 27.5734431,
+    "lon": 77.6946870
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 768143156,
+  "center": {
+    "lat": 27.5798935,
+    "lon": 77.6872893
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Бхаджан кутир Санатаны Госвами"
+  }
+},
+{
+  "type": "way",
+  "id": 768144964,
+  "center": {
+    "lat": 27.5807012,
+    "lon": 77.6884994
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Адвайта ват"
+  }
+},
+{
+  "type": "way",
+  "id": 844941546,
+  "center": {
+    "lat": 27.5685581,
+    "lon": 77.6442258
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "name": "Akshaya Patra Temple, Vrindavan",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "way",
+  "id": 1232208334,
+  "center": {
+    "lat": 27.5851513,
+    "lon": 77.7030538
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "yes",
+    "religion": "hindu"
+  }
+}
+
+  ]
+}

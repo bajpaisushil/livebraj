@@ -1,0 +1,136 @@
+/**
+ * Behavioural test for map search and select-to-navigate.
+ * Boots the real client, types into the real input, clicks real rows.
+ */
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import { chromium } from 'playwright';
+
+const ROOT = path.resolve(process.cwd(), 'client');
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
+  '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.woff2': 'font/woff2' };
+const server = http.createServer((req, res) => {
+  const u = decodeURIComponent(req.url.split('?')[0]);
+  const f = path.join(ROOT, u === '/' ? 'index.html' : u);
+  if (!f.startsWith(ROOT) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
+  res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
+  fs.createReadStream(f).pipe(res);
+});
+await new Promise((r) => server.listen(8789, r));
+
+
+const PORT = 8789;
+const URL = `http://localhost:${PORT}/`;
+const errors = [];
+const results = [];
+function check(name, pass, detail) {
+  results.push({ name, pass, detail });
+  console.log(`  ${pass ? 'PASS' : 'FAIL'}  ${name}${detail ? '  — ' + detail : ''}`);
+}
+
+const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+page.on('console', (m) => { const t = m.text(); if (m.type() === 'error' && !/navigator.vibrate/.test(t)) errors.push(t); });
+page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
+
+await page.goto(URL, { waitUntil: 'networkidle' });
+await page.waitForFunction(() => window.vrindavan?.ctx?.map && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.player, null, { timeout: 60000 });
+
+// skip the intro and reveal everything so search has a full corpus
+await page.evaluate(() => {
+  const g = window.vrindavan.ctx;
+  for (const l of g.data.LOCATIONS) {
+    if (g.state.discovered instanceof Set) g.state.discovered.add(l.id);
+    else g.state.discovered[l.id] = true;
+  }
+  g.ui.show('map');
+});
+await page.waitForTimeout(700);
+
+/* ---- 1. index built ---- */
+const idx = await page.evaluate(() => {
+  const s = window.vrindavan.ctx.map._search || [];
+  const by = {};
+  for (const e of s) by[e.kind] = (by[e.kind] || 0) + 1;
+  return { total: s.length, by };
+});
+check('search index built', idx.total > 25, `${idx.total} entries ${JSON.stringify(idx.by)}`);
+check('roads deduped by name', (idx.by.road || 0) > 0 && (idx.by.road || 0) < 15,
+  `${idx.by.road} road entries from 2146 ways`);
+
+/* ---- 2. fuzzy matching ---- */
+const q = await page.evaluate(() => {
+  const m = window.vrindavan.ctx.map;
+  const t = (s) => m._searchFor(s).map((h) => h.e.name);
+  return {
+    iskon: t('iskon'), bhakti: t('bhakti'), radha: t('radha'),
+    noShri: t('radha raman'), chhat: t('chhatikara'), junk: t('zzqq'),
+  };
+});
+check('finds ISKCON from "iskon"', q.iskon.some((n) => /Krishna Balaram/i.test(n)), q.iskon[0] || 'none');
+check('finds road from "bhakti"', q.bhakti.some((n) => /Bhaktivedanta/i.test(n)), q.bhakti[0] || 'none');
+check('"radha" lists the Radha temples', q.radha.length >= 3, q.radha.slice(0, 3).join(', '));
+check('ignores a leading Shri', q.noShri.some((n) => /Radha Raman/i.test(n)), q.noShri[0] || 'none');
+check('finds Chhatikara', q.chhat.length > 0, q.chhat[0] || 'none');
+check('no match for nonsense', q.junk.length === 0, `${q.junk.length} hits`);
+
+/* ---- 3. the real input renders real rows ---- */
+await page.fill('#map-q', 'keshi');
+await page.waitForTimeout(260);
+const rows = await page.$$eval('#map-hits li', (ls) =>
+  ls.map((l) => ({ id: l.dataset.id, name: l.querySelector('.n')?.textContent, d: l.querySelector('.d')?.textContent })));
+check('typing renders result rows', rows.length > 0 && !!rows[0].name,
+  rows.map((r) => `${r.name} (${r.d})`).join(', ') || 'none');
+check('rows carry a distance', rows.every((r) => r.d && /\d/.test(r.d)), rows[0]?.d || '');
+
+/* ---- 4. clicking a row flies there and rings it ---- */
+const before = await page.evaluate(() => ({ ...window.vrindavan.ctx.map._pan, zoom: window.vrindavan.ctx.map._zoom }));
+await page.click('#map-hits li:first-child');
+await page.waitForTimeout(1600);
+const after = await page.evaluate(() => {
+  const m = window.vrindavan.ctx.map;
+  return { pan: { ...m._pan }, zoom: m._zoom, hl: m._highlight ? m._highlight.name : null,
+           selShown: document.getElementById('map-sel')?.classList.contains('show') };
+});
+const moved = Math.hypot(after.pan.x - before.x, after.pan.z - before.z);
+check('map flew to the hit', moved > 50, `moved ${Math.round(moved)} m, zoom ${before.zoom.toFixed(2)} -> ${after.zoom.toFixed(2)}`);
+check('hit is highlighted', !!after.hl, after.hl || 'none');
+check('landmark opens its panel', after.selShown === true, String(after.selShown));
+
+/* ---- 5. the panel answers "how far" ---- */
+const panel = await page.evaluate(() => {
+  const s = document.getElementById('map-sel');
+  return { nm: s?.querySelector('.nm')?.textContent, via: s?.querySelector('.via')?.textContent?.trim().replace(/\s+/g, ' '),
+           dist: s?.querySelector('.dist')?.textContent, walk: !!s?.querySelector('[data-walk]') };
+});
+check('panel names the place', !!panel.nm, panel.nm || '');
+check('panel shows straight-line distance', /\d/.test(panel.dist || ''), panel.dist || 'none');
+check('panel shows walking distance + road', /on foot/.test(panel.via || ''), panel.via || 'NONE');
+
+/* ---- 6. Walk here sets a route ---- */
+await page.evaluate(() => window.vrindavan.ctx.ui.show('map'));
+await page.waitForTimeout(300);
+const nav = await page.evaluate(() => {
+  const m = window.vrindavan.ctx.map;
+  const loc = m._selected;
+  if (!loc) return { ok: false };
+  m.setDestination(loc.id);
+  return { ok: true, dest: m.destination?.name, route: m.route ? m.route.length : 0 };
+});
+check('Walk here builds a route', nav.ok && nav.route > 1, `${nav.dest}: ${nav.route} nodes`);
+
+/* ---- 7. shots across zoom ---- */
+await page.evaluate(() => { const m = window.vrindavan.ctx.map; m.fitWorld(); m._mapDirty = true; m._drawFull(true); });
+await page.waitForTimeout(500);
+await page.screenshot({ path: 'docs/shots/map-search-world.png' });
+await page.fill('#map-q', 'prem');
+await page.waitForTimeout(300);
+await page.screenshot({ path: 'docs/shots/map-search-open.png' });
+
+console.log('');
+const bad = results.filter((r) => !r.pass);
+if (errors.length) { console.log('CONSOLE ERRORS:'); for (const e of errors.slice(0, 8)) console.log('  ' + e); }
+console.log(`${results.length - bad.length}/${results.length} passed, ${errors.length} console errors`);
+await browser.close(); server.close();
+process.exit(bad.length || errors.length ? 1 : 0);

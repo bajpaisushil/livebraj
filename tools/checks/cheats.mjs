@@ -1,0 +1,182 @@
+/**
+ * Typed words, driver talk, and a map that does not stop the ride.
+ */
+import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
+import { chromium } from 'playwright';
+const ROOT = path.resolve(process.cwd(), 'client');
+const T = { '.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css','.json':'application/json','.png':'image/png','.woff2':'font/woff2' };
+const server = http.createServer((q,r)=>{const u=decodeURIComponent(q.url.split('?')[0]);const f=path.join(ROOT,u==='/'?'index.html':u);
+ if(!f.startsWith(ROOT)||!fs.existsSync(f)||fs.statSync(f).isDirectory()){r.writeHead(404);r.end();return;}
+ r.writeHead(200,{'content-type':T[path.extname(f)]||'application/octet-stream'});fs.createReadStream(f).pipe(r);});
+await new Promise(r=>server.listen(8798,r));
+
+const results = []; const errors = [];
+const check = (n, pass, d) => { results.push(pass); console.log(`  ${pass?'PASS':'FAIL'}  ${n}${d?'  — '+d:''}`); };
+
+const b = await chromium.launch({ args:['--use-angle=swiftshader','--enable-unsafe-swiftshader'] });
+const p = await b.newPage({ viewport:{width:390,height:844}, hasTouch:true });
+p.on('pageerror', e => errors.push(e.message));
+p.on('console', m => { const t=m.text(); if (m.type()==='error' && !/vibrate/.test(t)) errors.push(t); });
+await p.goto('http://localhost:8798/',{waitUntil:'networkidle'});
+await p.waitForFunction(()=>window.vrindavan?.ctx?.cheats && window.vrindavan?.ctx?.rickshaw,null,{timeout:60000});
+await p.evaluate(()=>window.vrindavan.ctx.ui.show('world'));
+await p.waitForTimeout(700);
+
+check('cheat system is wired', await p.evaluate(()=>!!window.vrindavan.ctx.cheats), '');
+
+/* typing a vehicle word puts one beside you */
+const before = await p.evaluate(()=>window.vrindavan.ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0));
+await p.keyboard.type('rickshaw', { delay: 25 });
+await p.waitForTimeout(400);
+const after = await p.evaluate(()=>{
+  const ctx = window.vrindavan.ctx;
+  const total = ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0);
+  const pp = ctx.player.position;
+  // the one we just asked for is the LAST in the e-rickshaw slot, not whichever
+  // ambient vehicle happens to be driving over us at the time
+  const slot = ctx.crowd.vehicleInst.find(s => s.agents.length && s.agents[s.agents.length-1].spawnedByWord);
+  const mine = slot ? slot.agents[slot.agents.length-1] : null;
+  const near = mine ? Math.hypot(mine.x-pp.x, mine.z-pp.z) : -1;
+  return { total, near: Math.round(near * 10) / 10, found: !!mine };
+});
+// the per-type fleet is capacity-capped, so a spawn may replace rather than
+// add — what matters is that one is now within reach
+check('typing "rickshaw" puts one beside you', after.near > 0.5 && after.near < 14,
+  `${before} -> ${after.total} vehicles, nearest ${after.near} m`);
+
+/* typing in a text field must NOT trigger it */
+const ignored = await p.evaluate(async ()=>{
+  const i = document.createElement('input'); document.body.appendChild(i); i.focus();
+  const n0 = window.vrindavan.ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0);
+  for (const ch of 'rath') i.dispatchEvent(new KeyboardEvent('keydown',{key:ch,bubbles:true}));
+  await new Promise(r=>setTimeout(r,200));
+  const n1 = window.vrindavan.ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0);
+  i.remove();
+  return n1 === n0;
+});
+check('typing into a field does not fire a cheat', ignored, String(ignored));
+
+/* start a ride, then ask him to hurry */
+const pace = await p.evaluate(async ()=>{
+  const ctx = window.vrindavan.ctx, r = ctx.rickshaw;
+  r.state='idle'; r.ride=null; r._boarding=null; r.pending=null;
+  let v=null; for (const s of ctx.crowd.vehicleInst) if (s.agents.length){v=s.agents[0];break;}
+  v.chartered=false; v.x=ctx.player.position.x+2; v.z=ctx.player.position.z;
+  r._acc=99; r.update(0.5,ctx);
+  if (!r.board()) return { ok:false, why:'could not get in' };
+  for (let i=0;i<60;i++) r.update(1/30,ctx);
+  await new Promise(res=>setTimeout(res,200));
+  const el=document.querySelector('.rk-row[data-go]'); if(!el) return {ok:false,why:'no destinations'};
+  el.click(); await new Promise(res=>setTimeout(res,200));
+  if (!r.startRide()) return { ok:false, why:'start refused' };
+
+  // let him get up to speed first: measuring during the pull-away compares two
+  // near-zero numbers and tells you nothing about pace
+  for (let i=0;i<150;i++) r.update(1/30,ctx);
+  const m0 = r.ride.paceMult;
+  const car = r.ride.car;
+  const measure = () => { const a={x:car.x,z:car.z}; for(let i=0;i<30;i++) r.update(1/30,ctx); return Math.hypot(car.x-a.x,car.z-a.z); };
+  const slowRun = measure();
+  const okFast = r.setPace(1.6);
+  const fastRun = measure();
+  return { ok:true, m0, mult:r.ride.paceMult, okFast, slowRun:+slowRun.toFixed(1), fastRun:+fastRun.toFixed(1) };
+});
+check('asking the driver to hurry actually speeds him up',
+  pace.ok && pace.okFast && pace.fastRun > pace.slowRun * 1.25,
+  pace.ok ? `${pace.slowRun} m -> ${pace.fastRun} m per second, mult ${pace.mult}` : pace.why);
+
+/* the talk buttons exist on the bar */
+const btns = await p.evaluate(()=>['ride-start','ride-fast','ride-slow','ride-stop'].filter(id=>!!document.getElementById(id)));
+check('the ride bar carries start, jaldi, slow and stop', btns.length === 4, btns.join(', '));
+
+/* opening the map must not stop the ride */
+const live = await p.evaluate(async ()=>{
+  const ctx = window.vrindavan.ctx, app = window.vrindavan, r = ctx.rickshaw;
+  if (!r.ride) return { ok:false, why:'no ride running' };
+  ctx.ui.show('map');
+  await new Promise(res=>setTimeout(res,300));
+  const paused = app.paused;
+  const a = { x: ctx.player.position.x, z: ctx.player.position.z };
+  for (let i=0;i<60;i++) r.update(1/30,ctx);
+  const moved = Math.hypot(ctx.player.position.x-a.x, ctx.player.position.z-a.z);
+  ctx.ui.show('world');
+  return { ok:true, paused, moved: Math.round(moved) };
+});
+check('the ride keeps going while the map is open',
+  live.ok && live.paused === false && live.moved > 5,
+  live.ok ? `paused=${live.paused}, moved ${live.moved} m with the map up` : live.why);
+
+/* the same words must work without a keyboard */
+const mobile = await p.evaluate(async () => {
+  const ctx = window.vrindavan.ctx;
+  ctx.ui.show("menu");
+  await new Promise(r=>setTimeout(r,300));
+  const input = document.getElementById("code-input");
+  const go = document.getElementById("code-go");
+  if (!input || !go) return { ok:false, why:"no code field in the menu" };
+  const before = ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0);
+  const pp = { x: ctx.player.position.x, z: ctx.player.position.z };
+  input.value = "auto";
+  go.click();
+  await new Promise(r=>setTimeout(r,400));
+  let near = 1e9;
+  for (const s of ctx.crowd.vehicleInst) for (const a of s.agents) near = Math.min(near, Math.hypot(a.x-pp.x, a.z-pp.z));
+  return { ok:true, screen: ctx.ui.screen, near: Math.round(near) };
+});
+check("cheat words work without a keyboard", mobile.ok && mobile.near < 14,
+  mobile.ok ? `nearest vehicle ${mobile.near} m, screen ${mobile.screen}` : mobile.why);
+
+/* a vehicle you asked for is YOURS: it waits, and you drive it */
+const rath = await p.evaluate(async () => {
+  const ctx = window.vrindavan.ctx, r = ctx.rickshaw;
+  r.state='idle'; r.ride=null; r._boarding=null; r.pending=null; r.drive=null;
+  ctx.ui.show('world');
+  await new Promise(s=>setTimeout(s,250));
+
+  const before = { x: ctx.player.position.x, z: ctx.player.position.z };
+  ctx.cheats.codes.rath();
+  await new Promise(s=>setTimeout(s,300));
+
+  // find the one we just asked for
+  let mine = null;
+  for (const sl of ctx.crowd.vehicleInst) for (const a of sl.agents) if (a.personal) mine = a;
+  if (!mine) return { ok:false, why:'no personal vehicle spawned' };
+  const spawnAt = { x: mine.x, z: mine.z };
+  const dist = Math.hypot(mine.x-before.x, mine.z-before.z);
+
+  // it must NOT drive off on its own
+  for (let i=0;i<180;i++) ctx.crowd.update(1/30, ctx);
+  const wandered = Math.hypot(mine.x-spawnAt.x, mine.z-spawnAt.z);
+
+  // walking up to it should offer to DRIVE, not to hire
+  let label = null;
+  const off = ctx.bus.on('ui:prompt', d => { if (d.id === 'rickshaw') label = d.label; });
+  // the prompt only fires on a TRANSITION, so clear the target first
+  r.target = null;
+  ctx.player.position.set(mine.x - 2, ctx.player.position.y, mine.z);
+  r._acc = 99; r.update(0.5, ctx);
+  if (off) off();
+
+  // and boarding it should put you at the wheel, with no fare dialog
+  const boarded = r.board();
+  for (let i=0;i<60;i++) r.update(1/30, ctx);
+  await new Promise(s=>setTimeout(s,200));
+
+  return { ok:true, dist:+dist.toFixed(1), wandered:+wandered.toFixed(2), label,
+           boarded, state: r.state, driving: !!r.drive,
+           dialogOpen: document.querySelector('.rk-row[data-go]') !== null && r.state === 'offered' };
+});
+check('a rath you asked for waits for you', rath.ok && rath.wandered < 1.5,
+  rath.ok ? `spawned ${rath.dist} m away, drifted ${rath.wandered} m in 6 s` : rath.why);
+check('it offers to be DRIVEN, not hired', rath.ok && /drive/i.test(rath.label || ''),
+  rath.ok ? `prompt "${rath.label}"` : '');
+check('getting in puts you at the wheel', rath.ok && rath.state === 'driving' && rath.driving,
+  rath.ok ? `state ${rath.state}` : '');
+check('no fare dialog for your own vehicle', rath.ok && !rath.dialogOpen, String(rath.dialogOpen));
+
+console.log('');
+if (errors.length) { console.log('ERRORS:'); errors.slice(0,4).forEach(e=>console.log('  '+e)); }
+const passed = results.filter(Boolean).length;
+console.log(`${passed}/${results.length} passed, ${errors.length} errors`);
+await b.close(); server.close();
+process.exit(passed===results.length && !errors.length ? 0 : 1);

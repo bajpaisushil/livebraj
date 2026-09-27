@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#17100b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three/three.module.js",
+    "three/addons/": "./vendor/three/addons/"
+  }
+}
+</script>
+<title>Vrindavan Dham</title>
+<link rel="stylesheet" href="./vendor/fonts/fonts.css">
+
+<style>
+/* ============================================================
+   VRINDAVAN DHAM — shell styles
+   One committed visual world: warm Braj paper, sandstone, sindoor.
+   Every colour painted explicitly so the page never borrows a host theme.
+   ============================================================ */
+:root{
+  /* palette */
+  --paper:      #f2e6d0;
+  --paper-warm: #e8d7b8;
+  --paper-deep: #d9c29c;
+  --ink:        #2b1d14;
+  --ink-soft:   #5b4634;
+  --ink-faint:  #8a7057;
+  --sindoor:    #c8452a;
+  --marigold:   #e8961f;
+  --brass:      #b8873b;
+  --yamuna:     #2e6b70;
+  --leaf:       #4f7a3a;
+  --night:      #17100b;
+  --veil:       rgba(23,16,11,.72);
+
+  --glass:      rgba(242,230,208,.92);
+  --glass-dark: rgba(28,19,13,.78);
+  --hairline:   rgba(43,29,20,.16);
+  --hairline-l: rgba(242,230,208,.18);
+
+  /* type */
+  --f-display:  'Yatra One', 'Marcellus', Georgia, serif;
+  --f-head:     'Marcellus', Georgia, 'Times New Roman', serif;
+  --f-body:     'Spectral', Georgia, serif;
+  --f-ui:       'Jost', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --f-deva:     'Tiro Devanagari Hindi', 'Noto Sans Devanagari', serif;
+
+  --ui-scale: 1;
+  --r-sm: 8px; --r-md: 14px; --r-lg: 22px; --r-pill: 999px;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --dur: .42s;
+}
+:root[data-ui="large"]{ --ui-scale: 1.22; }
+:root[data-motion="reduced"] *{ animation-duration:.001s !important; transition-duration:.001s !important; }
+
+html,body{ height:100%; margin:0; padding:0; overflow:hidden; background:var(--night); }
+body{
+  font-family: var(--f-ui);
+  font-size: calc(15px * var(--ui-scale));
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+  touch-action: none;
+  user-select: none; -webkit-user-select: none;
+}
+*{ box-sizing: border-box; }
+button{ font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+:focus-visible{ outline: 2px solid var(--marigold); outline-offset: 3px; border-radius: 4px; }
+
+/* ---------- stage ---------- */
+#gl{ position:fixed; inset:0; width:100%; height:100%; display:block; z-index:0; background:var(--night); }
+#app{ position:fixed; inset:0; z-index:1; pointer-events:none; }
+#app .on{ pointer-events:auto; }
+
+/* ---------- loading ---------- */
+#loading{
+  position:fixed; inset:0; z-index:90; display:grid; place-items:center;
+  background: radial-gradient(120% 90% at 50% 40%, #241812 0%, #120c08 100%);
+  transition: opacity .8s var(--ease); pointer-events:auto;
+}
+#loading.gone{ opacity:0; pointer-events:none; }
+#loading .mark{ font-family:var(--f-deva); font-size:calc(42px * var(--ui-scale)); color:var(--marigold); letter-spacing:.04em; }
+#loading .bar{ margin-top:26px; width:min(240px,50vw); height:2px; background:rgba(232,150,31,.2); overflow:hidden; border-radius:2px; }
+#loading .bar i{ display:block; height:100%; width:30%; background:var(--marigold); animation: slide 1.5s var(--ease) infinite; }
+#loading .note{ margin-top:18px; font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-faint); }
+@keyframes slide{ 0%{transform:translateX(-110%)} 100%{transform:translateX(360%)} }
+
+/* ---------- screens ---------- */
+.screen{
+  position:absolute; inset:0; display:none; flex-direction:column;
+  padding: calc(20px + var(--safe-t)) calc(20px + var(--safe-r)) calc(20px + var(--safe-b)) calc(20px + var(--safe-l));
+}
+.screen.show{ display:flex; pointer-events:auto; animation: fadeUp var(--dur) var(--ease); }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
+
+/* ---------- intro ---------- */
+#screen-intro{ background: linear-gradient(180deg, rgba(23,16,11,.55), rgba(23,16,11,.85)); align-items:center; justify-content:center; text-align:center; }
+#screen-intro .beat{ opacity:0; }
+#screen-intro .beat.in{ animation: beat 4.2s var(--ease) forwards; }
+@keyframes beat{ 0%{opacity:0; transform:translateY(14px) scale(.98)} 18%,74%{opacity:1; transform:none} 100%{opacity:0; transform:translateY(-8px)} }
+#screen-intro .line1{ font-family:var(--f-head); font-size:clamp(26px,7vw,46px); color:var(--paper); letter-spacing:.02em; }
+#screen-intro .line2{ font-family:var(--f-deva); font-size:clamp(34px,10vw,64px); color:var(--marigold); }
+#screen-intro .skip{ position:absolute; bottom:calc(28px + var(--safe-b)); font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:rgba(242,230,208,.5); }
+
+/* ---------- main menu ---------- */
+#screen-menu{ background: linear-gradient(175deg, rgba(23,16,11,.28) 0%, rgba(23,16,11,.62) 46%, rgba(23,16,11,.88) 100%); justify-content:flex-end; }
+#screen-menu .brand{ margin-bottom:auto; padding-top:6vh; }
+#screen-menu .om{ font-family:var(--f-deva); font-size:calc(20px * var(--ui-scale)); color:var(--marigold); opacity:.9; }
+#screen-menu h1{
+  margin:.18em 0 .1em; font-family:var(--f-display); font-weight:400;
+  font-size:clamp(38px,12vw,74px); line-height:.98; color:var(--paper);
+  letter-spacing:.01em; text-wrap:balance; text-shadow:0 2px 26px rgba(0,0,0,.5);
+}
+#screen-menu .tag{ font-family:var(--f-body); font-style:italic; font-size:clamp(14px,3.6vw,18px); color:rgba(242,230,208,.74); }
+#screen-menu nav{ display:flex; flex-direction:column; gap:calc(9px * var(--ui-scale)); max-width:460px; width:100%; }
+.menu-item{
+  display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+  padding: calc(15px * var(--ui-scale)) 18px;
+  background: rgba(242,230,208,.07); border:1px solid rgba(242,230,208,.14);
+  border-radius: var(--r-md); color:var(--paper);
+  font-family:var(--f-ui); font-weight:400; font-size:calc(16px * var(--ui-scale));
+  letter-spacing:.10em; text-transform:uppercase;
+  transition: background .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.menu-item:hover,.menu-item:active{ background:rgba(232,150,31,.16); border-color:rgba(232,150,31,.5); transform:translateX(3px); }
+.menu-item.primary{ background:linear-gradient(100deg, var(--sindoor), #a8371f); border-color:rgba(232,150,31,.55); font-weight:500; }
+.menu-item.primary:hover{ background:linear-gradient(100deg,#d4502f,#b53d22); }
+.menu-item .g{ width:22px; text-align:center; color:var(--marigold); font-family:var(--f-deva); font-size:1.05em; }
+.menu-item .sub{ margin-left:auto; font-size:.72em; letter-spacing:.06em; text-transform:none; color:rgba(242,230,208,.45); font-family:var(--f-body); font-style:italic; }
+#screen-menu .foot{ margin-top:16px; font-size:11px; letter-spacing:.14em; color:rgba(242,230,208,.34); text-align:center; }
+
+/* ---------- panel screens (places / journey / settings / avatar) ---------- */
+.panel{ background: linear-gradient(180deg, #f6ecd9, #e9d8ba); color:var(--ink); }
+.panel-head{ display:flex; align-items:center; gap:12px; padding-bottom:14px; border-bottom:1px solid var(--hairline); flex:0 0 auto; }
+.panel-head h2{ margin:0; font-family:var(--f-head); font-weight:400; font-size:calc(22px * var(--ui-scale)); letter-spacing:.01em; }
+.panel-head .deva{ font-family:var(--f-deva); color:var(--sindoor); font-size:calc(15px * var(--ui-scale)); }
+.back{ width:38px; height:38px; border-radius:var(--r-pill); background:rgba(43,29,20,.07); display:grid; place-items:center; font-size:19px; color:var(--ink-soft); flex:0 0 auto; }
+.back:hover{ background:rgba(43,29,20,.13); }
+.panel-body{ flex:1 1 auto; overflow-y:auto; overflow-x:hidden; padding:16px 2px 8px; -webkit-overflow-scrolling:touch; touch-action:pan-y; }
+.panel-body::-webkit-scrollbar{ width:5px; }
+.panel-body::-webkit-scrollbar-thumb{ background:rgba(43,29,20,.2); border-radius:3px; }
+
+/* place rows */
+.place{ display:flex; gap:13px; align-items:flex-start; padding:13px 12px; border-radius:var(--r-md); background:rgba(255,255,255,.44); border:1px solid rgba(43,29,20,.07); margin-bottom:9px; }
+.place.locked{ background:rgba(43,29,20,.045); border-style:dashed; border-color:rgba(43,29,20,.13); }
+.place .ico{ width:40px; height:40px; flex:0 0 auto; border-radius:10px; display:grid; place-items:center; background:linear-gradient(160deg,#e5cfa6,#d3b585); color:var(--sindoor); font-size:19px; }
+.place.locked .ico{ background:rgba(43,29,20,.07); color:rgba(43,29,20,.22); }
+.place .txt{ flex:1 1 auto; min-width:0; }
+.place .nm{ font-family:var(--f-head); font-size:calc(15.5px * var(--ui-scale)); line-height:1.25; }
+.place .hi{ font-family:var(--f-deva); font-size:calc(12.5px * var(--ui-scale)); color:var(--sindoor); margin-top:1px; }
+.place .sn{ font-family:var(--f-body); font-size:calc(12.5px * var(--ui-scale)); color:var(--ink-soft); margin-top:5px; line-height:1.5; }
+.place .meta{ display:flex; gap:10px; margin-top:7px; align-items:center; font-size:calc(11px * var(--ui-scale)); color:var(--ink-faint); letter-spacing:.06em; }
+.walkbtn{ padding:6px 13px; border-radius:var(--r-pill); background:var(--sindoor); color:#fff7ea; font-size:calc(11.5px * var(--ui-scale)); letter-spacing:.09em; text-transform:uppercase; }
+.walkbtn:hover{ background:#a8371f; }
+
+/* journey prose */
+.journey-line{ font-family:var(--f-body); font-size:calc(17px * var(--ui-scale)); line-height:1.72; color:var(--ink); margin:0 0 15px; max-width:62ch; }
+.journey-line b{ font-weight:600; color:var(--sindoor); font-variant-numeric:tabular-nums; }
+.journey-close{ margin-top:26px; padding-top:18px; border-top:1px solid var(--hairline); font-family:var(--f-body); font-style:italic; color:var(--ink-soft); line-height:1.7; max-width:56ch; }
+
+/* settings */
+.set-group{ margin-bottom:22px; }
+.set-group h3{ margin:0 0 10px; font-size:calc(11px * var(--ui-scale)); letter-spacing:.2em; text-transform:uppercase; color:var(--ink-faint); font-weight:500; }
+.set-row{ display:flex; align-items:center; gap:14px; padding:11px 12px; background:rgba(255,255,255,.4); border-radius:var(--r-sm); margin-bottom:7px; border:1px solid rgba(43,29,20,.06); }
+.set-row label{ flex:1 1 auto; font-size:calc(14px * var(--ui-scale)); }
+.set-row .hint{ display:block; font-family:var(--f-body); font-size:calc(11.5px * var(--ui-scale)); color:var(--ink-faint); margin-top:2px; }
+.set-credit{ margin:0; padding:11px 12px; background:rgba(255,255,255,.4); border-radius:var(--r-sm); border:1px solid rgba(43,29,20,.06); font-family:var(--f-body); font-size:calc(11.5px * var(--ui-scale)); line-height:1.65; color:var(--ink-faint); }
+.set-credit span{ color:var(--ink-soft); }
+input[type=range]{ flex:0 0 132px; accent-color:var(--sindoor); height:22px; }
+.seg{ display:flex; gap:3px; background:rgba(43,29,20,.08); padding:3px; border-radius:var(--r-pill); }
+.seg button{ padding:6px 12px; border-radius:var(--r-pill); font-size:calc(12px * var(--ui-scale)); color:var(--ink-soft); letter-spacing:.04em; }
+.seg button.sel{ background:var(--paper); color:var(--ink); box-shadow:0 1px 3px rgba(43,29,20,.16); }
+.tgl{ width:46px; height:27px; border-radius:var(--r-pill); background:rgba(43,29,20,.2); position:relative; flex:0 0 auto; transition:background .2s var(--ease); }
+.tgl i{ position:absolute; top:3px; left:3px; width:21px; height:21px; border-radius:50%; background:var(--paper); transition:transform .2s var(--ease); box-shadow:0 1px 3px rgba(0,0,0,.24); }
+.tgl.on{ background:var(--leaf); } .tgl.on i{ transform:translateX(19px); }
+.danger{ color:var(--sindoor); border-color:rgba(200,69,42,.3) !important; }
+
+/* avatar screen */
+#screen-avatar{ background:linear-gradient(180deg, rgba(23,16,11,.10) 0%, rgba(23,16,11,.55) 42%, rgba(23,16,11,.92) 100%); color:var(--paper); }
+#screen-avatar .panel-head{ border-bottom-color:var(--hairline-l); }
+#screen-avatar .panel-head h2{ color:var(--paper); }
+#screen-avatar .back{ background:rgba(242,230,208,.12); color:var(--paper); }
+.av-rows{ margin-top:auto; display:flex; flex-direction:column; gap:13px; }
+.av-row{ display:flex; align-items:center; gap:12px; }
+.av-row > span{ flex:0 0 74px; font-size:calc(10.5px * var(--ui-scale)); letter-spacing:.17em; text-transform:uppercase; color:rgba(242,230,208,.55); }
+.chips{ display:flex; gap:7px; flex:1 1 auto; overflow-x:auto; padding:2px; touch-action:pan-x; scrollbar-width:none; }
+.chips::-webkit-scrollbar{ display:none; }
+.chip{ flex:0 0 auto; padding:8px 14px; border-radius:var(--r-pill); background:rgba(242,230,208,.1); border:1px solid rgba(242,230,208,.18); color:var(--paper); font-size:calc(12.5px * var(--ui-scale)); white-space:nowrap; }
+.chip.sel{ background:var(--marigold); border-color:var(--marigold); color:#2b1d14; font-weight:500; }
+.chip.dot{ width:34px; height:34px; padding:0; border-radius:50%; }
+.chip.dot.sel{ box-shadow:0 0 0 2px var(--paper), 0 0 0 4px var(--marigold); }
+#av-name{ width:100%; padding:12px 14px; border-radius:var(--r-md); background:rgba(242,230,208,.1); border:1px solid rgba(242,230,208,.2); color:var(--paper); font-family:var(--f-body); font-size:calc(15px * var(--ui-scale)); }
+#av-name::placeholder{ color:rgba(242,230,208,.4); }
+.photo-note{ display:flex; gap:11px; align-items:flex-start; padding:12px 14px; border:1px dashed rgba(242,230,208,.24); border-radius:var(--r-md); font-family:var(--f-body); font-size:calc(12.5px * var(--ui-scale)); color:rgba(242,230,208,.62); line-height:1.55; }
+.cta{ width:100%; padding:calc(16px * var(--ui-scale)); margin-top:15px; border-radius:var(--r-md); background:linear-gradient(100deg,var(--sindoor),#a8371f); color:#fff7ea; font-size:calc(15px * var(--ui-scale)); letter-spacing:.14em; text-transform:uppercase; font-weight:500; }
+
+/* ---------- map screen ---------- */
+#screen-map{ padding:0; background:#e9dcc0; }
+#worldmap{ position:absolute; inset:0; width:100%; height:100%; touch-action:none; }
+#map-chrome{ position:absolute; inset:0; pointer-events:none; }
+#map-top{
+  position:absolute; top:0; left:0; right:0; display:flex; align-items:center; gap:12px;
+  padding: calc(14px + var(--safe-t)) 16px 26px;
+  background:linear-gradient(180deg, rgba(233,220,192,.96) 30%, rgba(233,220,192,0));
+  pointer-events:auto;
+}
+#map-top h2{ margin:0; font-family:var(--f-head); font-size:calc(19px * var(--ui-scale)); font-weight:400; }
+#map-top .deva{ font-family:var(--f-deva); color:var(--sindoor); font-size:calc(13px * var(--ui-scale)); }
+/* ---------- pulling the camera in and out ---------- */
+#world-zoom{
+  position:absolute; right:calc(14px + var(--safe-r)); top:calc(96px + var(--safe-t));
+  display:flex; flex-direction:column; gap:9px; z-index:14; pointer-events:auto;
+}
+#world-zoom .wz{
+  width:calc(44px * var(--ui-scale)); height:calc(44px * var(--ui-scale));
+  border-radius:50%; border:1px solid rgba(242,230,208,.26);
+  background:rgba(28,19,13,.55); color:rgba(242,230,208,.92);
+  font-size:calc(19px * var(--ui-scale)); line-height:1; cursor:pointer;
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  display:grid; place-items:center;
+}
+#world-zoom .wz:active{ background:rgba(232,150,31,.75); color:#2b1d14; transform:scale(.94); }
+
+/* ---------- saying a word, without a keyboard ---------- */
+#code-row{
+  display:flex; align-items:center; gap:10px; margin-top:10px; padding:0 13px;
+  height:calc(44px * var(--ui-scale)); border-radius:var(--r-lg);
+  background:rgba(43,29,20,.05); border:1px solid rgba(43,29,20,.10);
+}
+#code-row .g{ color:var(--ink-faint); font-size:calc(14px * var(--ui-scale)); }
+#code-input{
+  flex:1; min-width:0; border:0; background:none; outline:none;
+  font-family:var(--f-body); font-size:calc(14px * var(--ui-scale)); color:var(--ink);
+  -webkit-appearance:none; appearance:none;
+}
+#code-input::placeholder{ color:var(--ink-faint); }
+#code-go{
+  flex:none; border:0; cursor:pointer; padding:7px 15px; border-radius:10px;
+  background:var(--sindoor); color:#fff4dc; font-family:var(--f-body);
+  font-size:calc(12px * var(--ui-scale)); letter-spacing:.1em;
+}
+#code-go:active{ transform:scale(.96); }
+
+/* ---------- map search ---------- */
+#map-search{
+  position:absolute; left:14px; right:14px; top:calc(58px + var(--safe-t));
+  max-width:520px; margin:0 auto; pointer-events:auto; z-index:6;
+}
+#map-search .bar{
+  display:flex; align-items:center; gap:9px; padding:0 13px;
+  height:calc(42px * var(--ui-scale)); border-radius:var(--r-lg);
+  background:var(--glass); border:1px solid rgba(43,29,20,.14);
+  box-shadow:0 6px 22px rgba(43,29,20,.18);
+}
+#map-search .ic{
+  border:0; background:none; padding:0; cursor:pointer; flex:none;
+  color:var(--ink-faint); font-size:calc(15px * var(--ui-scale)); line-height:1;
+}
+/* Collapsed, the bar is just the glyph — so it never sits over a place name.
+   The map keeps the whole width; only this button remains. */
+#map-search.mini{ width:calc(42px * var(--ui-scale)); left:auto; right:14px; margin:0; }
+#map-search.mini .bar{ padding:0; justify-content:center; }
+#map-search.mini #map-q,
+#map-search.mini .clr{ display:none; }
+#map-search.mini .ic{ color:var(--ink); }
+#map-search.mini #map-hits{ display:none; }
+#map-q{
+  flex:1; min-width:0; border:0; background:none; outline:none;
+  font-family:var(--f-body); font-size:calc(14px * var(--ui-scale)); color:var(--ink);
+  -webkit-appearance:none; appearance:none;
+}
+#map-q::placeholder{ color:var(--ink-faint); }
+#map-q::-webkit-search-cancel-button{ display:none; }
+#map-search .clr{
+  display:none; border:0; background:none; color:var(--ink-faint); cursor:pointer;
+  font-size:calc(19px * var(--ui-scale)); line-height:1; padding:2px 2px 4px;
+}
+#map-search.has-q .clr{ display:block; }
+#map-hits{
+  list-style:none; margin:8px 0 0; padding:0; max-height:46vh; overflow-y:auto;
+  -webkit-overflow-scrolling:touch; border-radius:var(--r-lg); display:none;
+  background:var(--glass); border:1px solid rgba(43,29,20,.12);
+  box-shadow:0 12px 34px rgba(43,29,20,.22);
+}
+#map-hits.show{ display:block; }
+#map-hits li{
+  display:flex; align-items:center; gap:11px; padding:11px 14px; cursor:pointer;
+  border-bottom:1px solid rgba(43,29,20,.07);
+}
+#map-hits li:last-child{ border-bottom:0; }
+#map-hits li:active{ background:rgba(184,135,59,.16); }
+#map-hits .g{ width:19px; text-align:center; color:var(--sindoor); font-size:calc(14px * var(--ui-scale)); flex:none; }
+#map-hits .tx{ flex:1; min-width:0; }
+#map-hits .n{ font-family:var(--f-head); font-size:calc(14px * var(--ui-scale));
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#map-hits .s{ font-size:calc(11px * var(--ui-scale)); color:var(--ink-faint); margin-top:2px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#map-hits .d{ font-size:calc(11.5px * var(--ui-scale)); color:var(--ink-faint);
+  font-variant-numeric:tabular-nums; flex:none; }
+#map-hits .none{ padding:15px 14px; color:var(--ink-faint); font-size:calc(13px * var(--ui-scale)); cursor:default; }
+#map-sel{
+  position:absolute; left:14px; right:14px; bottom:calc(14px + var(--safe-b));
+  padding:15px 17px; border-radius:var(--r-lg); background:var(--glass);
+  border:1px solid rgba(43,29,20,.12); box-shadow:0 10px 34px rgba(43,29,20,.2);
+  pointer-events:auto; display:none; max-width:520px; margin:0 auto;
+}
+#map-sel.show{ display:block; animation:fadeUp .3s var(--ease); }
+#map-sel .nm{ font-family:var(--f-head); font-size:calc(17px * var(--ui-scale)); }
+#map-sel .hi{ font-family:var(--f-deva); color:var(--sindoor); font-size:calc(13px * var(--ui-scale)); margin-top:1px; }
+#map-sel .sn{ font-family:var(--f-body); font-size:calc(13px * var(--ui-scale)); color:var(--ink-soft); margin-top:7px; line-height:1.55; }
+#map-sel .act{ display:flex; gap:9px; align-items:center; margin-top:13px; }
+#map-sel .via{ display:flex; gap:7px; align-items:baseline; margin-top:9px;
+  font-size:calc(12px * var(--ui-scale)); color:var(--ink-soft); }
+#map-sel .via b{ font-weight:400; color:var(--ink); font-variant-numeric:tabular-nums; }
+#map-sel .via .rd{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#map-sel .clsbtn{ border:0; background:none; color:var(--ink-faint); cursor:pointer;
+  font-size:calc(11.5px * var(--ui-scale)); letter-spacing:.07em; padding:4px 2px; }
+#map-sel .dist{ margin-left:auto; font-size:calc(11.5px * var(--ui-scale)); color:var(--ink-faint); letter-spacing:.07em; font-variant-numeric:tabular-nums; }
+
+/* ---------- riding ---------- */
+#ride-hud{
+  position:absolute; left:14px; right:14px; bottom:calc(16px + var(--safe-b));
+  max-width:520px; margin:0 auto; display:none; pointer-events:none; z-index:15;
+}
+#ride-hud.show{ display:block; animation:fadeUp .3s var(--ease); }
+#ride-hud .rh-card{
+  padding:13px 15px 12px; border-radius:var(--r-lg); background:var(--glass);
+  border:1px solid rgba(43,29,20,.12); box-shadow:0 10px 34px rgba(43,29,20,.22);
+  pointer-events:auto;
+}
+#ride-hud .rh-to{ display:flex; align-items:baseline; gap:8px; }
+#ride-hud .rh-lbl{ font-size:calc(11px * var(--ui-scale)); letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-faint); }
+#ride-hud .rh-dest{ font-family:var(--f-head); font-size:calc(16px * var(--ui-scale));
+  min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#ride-hud .rh-bar{ height:4px; border-radius:2px; background:rgba(43,29,20,.13);
+  margin:10px 0 9px; overflow:hidden; }
+#ride-hud .rh-bar i{ display:block; height:100%; width:0%; border-radius:2px;
+  background:linear-gradient(90deg,#c9a03c,#e8891f); transition:width .2s linear; }
+#ride-hud .rh-foot{ display:flex; align-items:center; gap:10px; }
+#ride-hud .rh-left{ flex:1; font-size:calc(12px * var(--ui-scale)); color:var(--ink-soft);
+  font-variant-numeric:tabular-nums; }
+#ride-hud .rh-stop{
+  flex:none; border:0; cursor:pointer; padding:9px 17px; border-radius:11px;
+  background:var(--sindoor); color:#fff4dc; font-family:var(--f-body);
+  font-size:calc(12.5px * var(--ui-scale)); letter-spacing:.1em;
+}
+#ride-hud .rh-stop:active,
+#ride-hud .rh-talk:active,
+#ride-hud .rh-go:active{ transform:scale(.96); }
+/* speaking to the driver: quieter than STOP, because you will use them more */
+#ride-hud .rh-talk{
+  flex:none; border:1px solid rgba(43,29,20,.16); cursor:pointer;
+  padding:8px 12px; border-radius:11px; background:rgba(255,255,255,.55);
+  color:var(--ink); font-family:var(--f-body);
+  font-size:calc(11.5px * var(--ui-scale)); letter-spacing:.09em;
+}
+#ride-hud.waiting .rh-talk{ display:none; }
+/* He has nothing left. Reads as "asked and answered", not as a dead button —
+   still tappable, because tapping it is what produces the toast that says so. */
+#ride-hud .rh-talk.at-max{
+  background:rgba(180,120,46,.16); border-color:rgba(180,120,46,.42);
+  color:#8a5a1e; letter-spacing:.06em;
+}
+#ride-hud .rh-go{
+  flex:none; border:0; cursor:pointer; padding:9px 17px; border-radius:11px;
+  background:#1d4f3f; color:#f5e8c8; font-family:var(--f-body);
+  font-size:calc(12.5px * var(--ui-scale)); letter-spacing:.1em;
+}
+/* only one of the two is ever the thing to do next */
+#ride-hud:not(.waiting) .rh-go{ display:none; }
+#ride-hud.waiting .rh-bar{ opacity:.35; }
+/* taking the wheel, and giving it back — same weight as speaking to him,
+   because that is what it is: another thing you say to the driver */
+#ride-hud .rh-drive, #ride-hud .rh-hand{
+  flex:none; border:1px solid rgba(200,69,42,.28); cursor:pointer;
+  padding:8px 12px; border-radius:11px; background:rgba(200,69,42,.10);
+  color:var(--ink); font-family:var(--f-body);
+  font-size:calc(11.5px * var(--ui-scale)); letter-spacing:.09em;
+}
+#ride-hud .rh-drive:active, #ride-hud .rh-hand:active{ transform:scale(.96); }
+#ride-hud .rh-hand{ display:none; }
+#ride-hud.driving .rh-hand{ display:block; }
+#ride-hud.driving .rh-drive,
+#ride-hud.driving .rh-talk,
+#ride-hud.driving .rh-go{ display:none; }
+
+/* ---------- HUD ---------- */
+#hud{ position:absolute; inset:0; display:none; }
+#hud.show{ display:block; }
+#minimap-wrap{
+  position:absolute; left:calc(14px + var(--safe-l)); bottom:calc(14px + var(--safe-b));
+  width:calc(132px * var(--ui-scale)); height:calc(132px * var(--ui-scale));
+  border-radius:50%; overflow:hidden;
+  box-shadow:0 0 0 2px rgba(184,135,59,.75), 0 0 0 4px rgba(23,16,11,.45), 0 6px 22px rgba(0,0,0,.4);
+  background:#e6d7b6;
+}
+#minimap{ width:100%; height:100%; display:block; }
+#compass{
+  position:absolute; left:50%; top:-1px; transform:translateX(-50%);
+  font-size:9px; letter-spacing:.2em; color:var(--sindoor); font-weight:600;
+  background:rgba(242,230,208,.9); padding:2px 7px; border-radius:0 0 6px 6px; pointer-events:none;
+}
+#nav-readout{
+  position:absolute; left:calc(14px + var(--safe-l)); bottom:calc(158px * var(--ui-scale) + var(--safe-b));
+  max-width:min(58vw,260px); padding:9px 13px; border-radius:var(--r-pill);
+  background:var(--glass-dark); border:1px solid rgba(232,150,31,.28);
+  color:var(--paper); font-size:calc(12px * var(--ui-scale)); display:none; align-items:center; gap:9px;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+#nav-readout.show{ display:flex; }
+#nav-readout .d{ color:var(--marigold); font-variant-numeric:tabular-nums; font-weight:500; }
+#nav-readout .n{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+#flower-count{
+  position:absolute; right:calc(14px + var(--safe-r)); top:calc(14px + var(--safe-t));
+  display:none; align-items:center; gap:7px; padding:8px 14px 8px 11px; border-radius:var(--r-pill);
+  background:var(--glass-dark); border:1px solid rgba(232,150,31,.3); color:var(--paper);
+  font-size:calc(12.5px * var(--ui-scale)); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+#flower-count.show{ display:flex; }
+#flower-count .b{ font-size:15px; }
+
+#prompts{
+  z-index:14; pointer-events:auto;
+  position:absolute; right:calc(14px + var(--safe-r)); bottom:calc(20px + var(--safe-b));
+  display:flex; flex-direction:column; align-items:flex-end; gap:9px;
+}
+.prompt{
+  display:flex; align-items:center; gap:11px; padding:calc(12px * var(--ui-scale)) calc(19px * var(--ui-scale));
+  border-radius:var(--r-pill); background:var(--glass); border:1px solid rgba(184,135,59,.5);
+  color:var(--ink); font-size:calc(14px * var(--ui-scale)); letter-spacing:.05em; font-weight:500;
+  box-shadow:0 5px 20px rgba(0,0,0,.34); animation:pop .26s var(--ease);
+}
+.prompt .k{ font-size:10px; letter-spacing:.1em; color:var(--ink-faint); border:1px solid var(--hairline); padding:2px 6px; border-radius:5px; }
+.prompt:active{ background:var(--marigold); }
+@keyframes pop{ from{opacity:0; transform:scale(.9) translateY(7px)} to{opacity:1; transform:none} }
+
+#toasts{ position:absolute; top:calc(140px + var(--safe-t)); left:50%; transform:translateX(-50%); width:min(88vw,430px); display:flex; flex-direction:column; gap:8px; align-items:center; }
+.toast{
+  padding:11px 20px; border-radius:var(--r-pill); background:var(--glass-dark);
+  border:1px solid rgba(232,150,31,.3); color:var(--paper); text-align:center;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  animation: toastIn .5s var(--ease); max-width:100%;
+}
+.toast .t{ font-family:var(--f-head); font-size:calc(14.5px * var(--ui-scale)); letter-spacing:.01em; }
+.toast .s{ font-family:var(--f-deva); font-size:calc(12.5px * var(--ui-scale)); color:var(--marigold); margin-top:2px; }
+.toast.out{ animation: toastOut .45s var(--ease) forwards; }
+@keyframes toastIn{ from{opacity:0; transform:translateY(-12px)} to{opacity:1; transform:none} }
+@keyframes toastOut{ to{opacity:0; transform:translateY(-10px)} }
+
+#hud-btns{ position:absolute; left:calc(14px + var(--safe-l)); top:calc(14px + var(--safe-t)); display:flex; gap:8px; z-index:20; pointer-events:auto; }
+.hud-btn{
+  width:auto; min-width:calc(44px * var(--ui-scale)); padding:0 calc(11px * var(--ui-scale));
+  height:calc(44px * var(--ui-scale)); border-radius:var(--r-pill);
+  pointer-events:auto;
+  background:var(--glass-dark); border:1px solid rgba(242,230,208,.2); color:var(--paper);
+  display:grid; place-items:center; font-size:calc(13px * var(--ui-scale));
+  letter-spacing:.12em; font-weight:500;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+.hud-btn:active{ background:rgba(232,150,31,.34); }
+
+/* parikrama banner */
+#pari-bar{
+  position:absolute; top:calc(140px + var(--safe-t)); left:50%; transform:translateX(-50%);
+  width:min(90vw,420px); padding:11px 17px; border-radius:var(--r-md);
+  background:var(--glass-dark); border:1px solid rgba(232,150,31,.32); color:var(--paper);
+  display:none; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+}
+#pari-bar.show{ display:block; }
+#pari-bar .row{ display:flex; align-items:baseline; gap:9px; font-size:calc(12px * var(--ui-scale)); }
+#pari-bar .ttl{ font-family:var(--f-head); font-size:calc(13.5px * var(--ui-scale)); }
+#pari-bar .km{ margin-left:auto; color:var(--marigold); font-variant-numeric:tabular-nums; }
+#pari-bar .track{ height:3px; background:rgba(242,230,208,.16); border-radius:2px; margin-top:8px; overflow:hidden; }
+#pari-bar .track i{ display:block; height:100%; width:0; background:linear-gradient(90deg,var(--marigold),var(--sindoor)); transition:width .5s var(--ease); }
+#pari-bar .next{ margin-top:6px; font-family:var(--f-body); font-style:italic; font-size:calc(11.5px * var(--ui-scale)); color:rgba(242,230,208,.62); }
+
+/* ---------- story card ---------- */
+/* Above the touch layer.
+   #touch-layer is full-screen with z-index:1 and sits later in the document,
+   so with no z-index of its own the card painted underneath it and its Close
+   button could not be clicked at all — the card opened and would not go away.
+   Anything with buttons that floats over the world needs to out-rank that
+   layer explicitly. */
+#card{
+  position:absolute; left:0; right:0; bottom:0; max-height:76%; z-index:20;
+  display:none; flex-direction:column;
+  background:linear-gradient(180deg,#f6ecd9,#ead9bc);
+  border-radius:var(--r-lg) var(--r-lg) 0 0; box-shadow:0 -12px 44px rgba(0,0,0,.44);
+  padding: 18px calc(20px + var(--safe-r)) calc(18px + var(--safe-b)) calc(20px + var(--safe-l));
+  pointer-events:auto;
+}
+/* The card fades in; it does not slide.
+   It used to animate from translateY(100%), and wherever that animation does
+   not advance — a throttled tab, a paused compositor, reduced-motion handling —
+   it stayed parked one full card-height low. The heading and a line of story
+   showed above the fold while Close, Listen and Walk here sat below the bottom
+   of the screen, so the card opened and could not be dismissed. Position is now
+   plain layout and nothing about where it sits depends on an animation having
+   run. */
+#card.show{ display:flex; animation: cardIn .34s var(--ease); }
+@keyframes cardIn{ from{ opacity:0 } to{ opacity:1 } }
+#card .grip{ width:38px; height:4px; border-radius:2px; background:rgba(43,29,20,.2); margin:0 auto 14px; flex:0 0 auto; }
+/* The story scrolls; the buttons do not move. A long description used to push
+   the actions row out of the card's box entirely. */
+#card .body{ flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+#card .acts{ flex:0 0 auto; }
+#card .eyebrow{ font-size:calc(10px * var(--ui-scale)); letter-spacing:.24em; text-transform:uppercase; color:var(--brass); }
+#card h3{ margin:5px 0 2px; font-family:var(--f-head); font-weight:400; font-size:calc(23px * var(--ui-scale)); line-height:1.2; text-wrap:balance; }
+#card .hi{ font-family:var(--f-deva); color:var(--sindoor); font-size:calc(15px * var(--ui-scale)); }
+#card .body{ flex:1 1 auto; overflow-y:auto; margin-top:13px; touch-action:pan-y; -webkit-overflow-scrolling:touch; }
+#card .body p{ font-family:var(--f-body); font-size:calc(15.5px * var(--ui-scale)); line-height:1.74; color:var(--ink-soft); margin:0 0 13px; max-width:64ch; }
+#card .src{ font-size:calc(10.5px * var(--ui-scale)); color:var(--ink-faint); letter-spacing:.04em; font-style:italic; }
+#card .acts{ display:flex; gap:9px; margin-top:15px; flex:0 0 auto; }
+#card .acts button{ flex:1 1 auto; padding:13px; border-radius:var(--r-md); font-size:calc(13px * var(--ui-scale)); letter-spacing:.11em; text-transform:uppercase; }
+#card .ghost{ background:rgba(43,29,20,.07); color:var(--ink-soft); }
+#card .solid{ background:var(--sindoor); color:#fff7ea; }
+
+/* ---------- touch layer + joystick ---------- */
+#touch-layer{ position:absolute; inset:0; display:none; touch-action:none; z-index:1; }
+#touch-layer.on{ display:block; pointer-events:auto; }
+#stick-base{
+  position:absolute; width:calc(124px * var(--ui-scale)); height:calc(124px * var(--ui-scale));
+  margin-left:calc(-62px * var(--ui-scale)); margin-top:calc(-62px * var(--ui-scale));
+  border-radius:50%; border:2px solid rgba(242,230,208,.26);
+  background:radial-gradient(circle, rgba(242,230,208,.12) 0%, rgba(242,230,208,.03) 68%, transparent 72%);
+  opacity:0; transition:opacity .18s var(--ease); pointer-events:none;
+}
+#stick-knob{
+  position:absolute; width:calc(50px * var(--ui-scale)); height:calc(50px * var(--ui-scale));
+  margin-left:calc(-25px * var(--ui-scale)); margin-top:calc(-25px * var(--ui-scale));
+  border-radius:50%; background:rgba(242,230,208,.34); border:1.5px solid rgba(242,230,208,.55);
+  box-shadow:0 2px 12px rgba(0,0,0,.34); opacity:0; transition:opacity .18s var(--ease); pointer-events:none;
+}
+#stick-base.on,#stick-knob.on{ opacity:1; }
+
+/* ---------- place readout: the street you are standing on ---------- */
+/* Top centre, always on. Knowing where you are should never require opening
+   the map — this is the first thing the eye goes to. */
+#place-readout{
+  position:absolute; left:50%; transform:translateX(-50%);
+  top:calc(64px + var(--safe-t)); text-align:center; pointer-events:none;
+  max-width:min(78vw, calc(100vw - 150px)); display:none; flex-direction:column; gap:2px;
+  padding:9px 18px; border-radius:var(--r-pill);
+  background:linear-gradient(180deg, rgba(23,16,11,.72), rgba(23,16,11,.55));
+  border:1px solid rgba(232,150,31,.3);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  box-shadow:0 4px 18px rgba(0,0,0,.35);
+}
+#place-readout.show{ display:flex; }
+/* Tap either the location bar or the radar to shrink it out of the way.
+   Both remember the choice. */
+#place-readout{ pointer-events:auto; cursor:pointer; z-index:14; transition:padding .2s var(--ease), opacity .2s; }
+#place-readout.min{ padding:5px 12px; opacity:.55; }
+#place-readout.min #place-road{ font-size:calc(11px * var(--ui-scale)); }
+#place-readout.min #place-area{ display:none; }
+#place-readout.off{ display:none !important; }
+
+#minimap-wrap{ transition:width .22s var(--ease), height .22s var(--ease), opacity .22s; cursor:pointer; pointer-events:auto; z-index:14; }
+#minimap-wrap.min{ width:calc(58px * var(--ui-scale)); height:calc(58px * var(--ui-scale)); opacity:.7; }
+#minimap-wrap.min #compass{ font-size:7px; padding:1px 4px; }
+#minimap-wrap.off{ display:none !important; }
+#place-road{
+  font-family:var(--f-head); font-size:calc(15.5px * var(--ui-scale)); color:var(--paper);
+  text-shadow:0 2px 10px rgba(0,0,0,.9), 0 0 24px rgba(0,0,0,.6);
+  line-height:1.2; text-wrap:balance;
+}
+#place-area{
+  font-size:calc(10.5px * var(--ui-scale)); letter-spacing:.24em; text-transform:uppercase;
+  color:var(--marigold); text-shadow:0 2px 8px rgba(0,0,0,.9);
+}
+
+/* ---------- D-pad: the floating stick is invisible until touched, which is
+     not discoverable for anyone who does not already play games ---------- */
+#dpad{
+  position:absolute; display:none;
+  left:calc(12px + var(--safe-l)); bottom:calc(152px * var(--ui-scale) + var(--safe-b));
+  width:calc(150px * var(--ui-scale)); height:calc(150px * var(--ui-scale)); z-index:6;
+}
+#dpad.on{ display:block; pointer-events:auto; }
+.dp{
+  position:absolute; width:calc(48px * var(--ui-scale)); height:calc(48px * var(--ui-scale));
+  border-radius:14px; background:rgba(28,19,13,.55); border:1px solid rgba(242,230,208,.28);
+  color:rgba(242,230,208,.88); font-size:calc(15px * var(--ui-scale));
+  display:grid; place-items:center; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  transition:background .12s, transform .12s;
+}
+.dp:active,.dp.held{ background:rgba(232,150,31,.75); color:#2b1d14; transform:scale(.94); }
+.dp.up{ left:calc(51px * var(--ui-scale)); top:0; }
+.dp.down{ left:calc(51px * var(--ui-scale)); top:calc(102px * var(--ui-scale)); }
+.dp.left{ left:0; top:calc(51px * var(--ui-scale)); }
+.dp.right{ left:calc(102px * var(--ui-scale)); top:calc(51px * var(--ui-scale)); }
+.dp.run{
+  left:calc(51px * var(--ui-scale)); top:calc(51px * var(--ui-scale));
+  font-size:calc(9.5px * var(--ui-scale)); letter-spacing:.12em; border-radius:50%;
+}
+
+/* ---------- map zoom ---------- */
+#map-zoom{
+  position:absolute; right:14px; bottom:calc(150px + var(--safe-b));
+  display:flex; flex-direction:column; gap:8px; pointer-events:auto;
+}
+.zb{
+  width:46px; height:46px; border-radius:14px; background:var(--glass);
+  border:1px solid rgba(43,29,20,.2); color:var(--ink); font-size:20px;
+  display:grid; place-items:center; box-shadow:0 4px 14px rgba(43,29,20,.22);
+}
+.zb:active{ background:var(--marigold); }
+/* Below the search bar, not under it.
+   The bar runs from 58px to about 100px; this used to sit at 78px, i.e. inside
+   it, so the name of whatever you tapped was drawn behind the search field and
+   you never saw it. Reserving the bar's box in the canvas label pass fixed the
+   drawn labels but not this, because this is DOM. */
+#map-tap{
+  position:absolute; left:50%; top:calc(112px + var(--safe-t)); transform:translateX(-50%);
+  padding:8px 16px; border-radius:var(--r-pill); background:var(--glass);
+  border:1px solid rgba(43,29,20,.15); font-size:13px; color:var(--ink);
+  pointer-events:none; opacity:0; transition:opacity .2s, top .2s; white-space:nowrap;
+  max-width:86vw; overflow:hidden; text-overflow:ellipsis;
+  box-shadow:0 6px 20px rgba(43,29,20,.18); z-index:8;
+}
+/* with the bar collapsed the space is free again, so it moves back up */
+#map-chrome:has(#map-search.mini) #map-tap{ top:calc(70px + var(--safe-t)); }
+#map-tap.show{ opacity:1; }
+
+/* ---------- misc ---------- */
+.hidden{ display:none !important; }
+@media (max-height:520px){ #screen-menu h1{ font-size:clamp(28px,9vw,44px); } .menu-item{ padding:11px 16px; } }
+
+/* ---- sound, reachable from the world ---- */
+#vol-pop{
+  position:absolute; left:12px; top:calc(env(safe-area-inset-top,0px) + 64px);
+  display:none; flex-direction:column; gap:10px; z-index:6;
+  padding:13px 14px; border-radius:14px; min-width:196px;
+  background:rgba(250,246,238,.93); border:1px solid rgba(43,29,20,.16);
+  box-shadow:0 10px 30px rgba(24,14,6,.22); backdrop-filter:blur(7px);
+}
+#vol-pop.show{ display:flex; }
+#vol-pop label{ display:flex; flex-direction:column; gap:5px;
+  font-family:var(--f-body); font-size:calc(11.5px * var(--ui-scale));
+  letter-spacing:.06em; color:var(--ink); }
+#vol-pop input[type=range]{ width:100%; accent-color:#b0722e; }
+#vol-pop .vol-mute{
+  margin-top:2px; padding:7px 10px; border-radius:10px; cursor:pointer;
+  border:1px solid rgba(43,29,20,.18); background:rgba(255,255,255,.6);
+  color:var(--ink); font-family:var(--f-body);
+  font-size:calc(11px * var(--ui-scale)); letter-spacing:.08em;
+}
+#vol-pop .vol-mute.on{ background:rgba(176,71,46,.16); border-color:rgba(176,71,46,.45); color:#8a2f24; }
+
+/* ---- a line over the speaker's head ---- */
+#say-bubble{
+  position:absolute; z-index:5; display:none; pointer-events:none;
+  transform:translate(-50%, -100%);
+  padding:7px 12px; border-radius:13px; max-width:58vw;
+  background:rgba(250,246,238,.94); border:1px solid rgba(43,29,20,.14);
+  box-shadow:0 6px 18px rgba(24,14,6,.2);
+  font-family:var(--f-body); font-size:calc(12.5px * var(--ui-scale));
+  color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  transition:opacity .18s ease;
+}
+#say-bubble.show{ display:block; }
+#say-bubble.fade{ opacity:0; }
+</style>
+
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+<div id="app">
+
+  <!-- ===== INTRO ===== -->
+  <section class="screen" id="screen-intro">
+    <div class="beat" data-beat="0"><div class="line1">Welcome to Vrindavan.</div></div>
+    <div class="beat" data-beat="1"><div class="line2">वृन्दावन धाम</div></div>
+    <div class="beat" data-beat="2"><div class="line1">Take a walk.</div></div>
+    <button class="skip ui-interactive" id="intro-skip">Tap to skip</button>
+  </section>
+
+  <!-- ===== MAIN MENU ===== -->
+  <section class="screen" id="screen-menu">
+    <div class="brand">
+      <div class="om">॥ श्री वृन्दावन धाम ॥</div>
+      <h1>Vrindavan Dham</h1>
+      <div class="tag">Don't just play. Visit the Dham.</div>
+    </div>
+    <nav>
+      <button class="menu-item primary ui-interactive" data-go="world"><span class="g">॥</span>Enter Vrindavan</button>
+      <button class="menu-item ui-interactive" data-go="map"><span class="g">◈</span>Map<span class="sub">the Dham, drawn</span></button>
+      <div id="code-row">
+        <span class="g">⌨</span>
+        <input id="code-input" class="ui-interactive" type="text" autocomplete="off"
+               autocorrect="off" autocapitalize="none" spellcheck="false"
+               placeholder="say a word" aria-label="Type a word" />
+        <button class="ui-interactive" id="code-go" aria-label="Say it">GO</button>
+      </div>
+      <button class="menu-item ui-interactive" data-go="parikrama"><span class="g">◎</span>Parikrama<span class="sub">10.4 km</span></button>
+      <button class="menu-item ui-interactive" data-go="places"><span class="g">卍</span>Places</button>
+      <button class="menu-item ui-interactive" data-go="journey"><span class="g">✧</span>My Journey</button>
+      <button class="menu-item ui-interactive" data-go="settings"><span class="g">⚙</span>Settings</button>
+    </nav>
+    <div class="foot">Map data © OpenStreetMap contributors (ODbL)</div>
+  </section>
+
+  <!-- ===== PLACES ===== -->
+  <section class="screen panel" id="screen-places">
+    <div class="panel-head">
+      <button class="back ui-interactive" data-back>←</button>
+      <div><h2>Places</h2><div class="deva">स्थान</div></div>
+    </div>
+    <div class="panel-body" id="places-list"></div>
+  </section>
+
+  <!-- ===== MY JOURNEY ===== -->
+  <section class="screen panel" id="screen-journey">
+    <div class="panel-head">
+      <button class="back ui-interactive" data-back>←</button>
+      <div><h2>My Journey</h2><div class="deva">मेरी यात्रा</div></div>
+    </div>
+    <div class="panel-body" id="journey-body"></div>
+  </section>
+
+  <!-- ===== SETTINGS ===== -->
+  <section class="screen panel" id="screen-settings">
+    <div class="panel-head">
+      <button class="back ui-interactive" data-back>←</button>
+      <div><h2>Settings</h2><div class="deva">सेटिंग्स</div></div>
+    </div>
+    <div class="panel-body" id="settings-body"></div>
+  </section>
+
+  <!-- ===== AVATAR ===== -->
+  <section class="screen" id="screen-avatar">
+    <div class="panel-head">
+      <button class="back ui-interactive" data-back>←</button>
+      <div><h2>Your Avatar</h2></div>
+    </div>
+    <div class="av-rows" id="avatar-rows"></div>
+  </section>
+
+  <!-- ===== FULL MAP ===== -->
+  <section class="screen" id="screen-map">
+    <canvas id="worldmap"></canvas>
+    <div id="map-chrome">
+      <div id="map-top">
+        <button class="back ui-interactive" data-back>←</button>
+        <div><h2>Vrindavan</h2><div class="deva">वृन्दावन</div></div>
+      </div>
+      <div id="map-search">
+        <div class="bar">
+          <button class="ic ui-interactive" id="map-q-toggle"
+                  aria-label="Hide search" aria-expanded="true">&#9906;</button>
+          <input id="map-q" class="ui-interactive" type="search" autocomplete="off"
+                 autocorrect="off" spellcheck="false"
+                 placeholder="Search temples, ghats, roads" aria-label="Search Vrindavan" />
+          <button class="clr ui-interactive" id="map-q-clear" aria-label="Clear search">&times;</button>
+        </div>
+        <ul id="map-hits" role="listbox"></ul>
+      </div>
+      <div id="map-zoom">
+        <button class="zb ui-interactive" id="zoom-in" aria-label="Zoom in">+</button>
+        <button class="zb ui-interactive" id="zoom-out" aria-label="Zoom out">&#8722;</button>
+        <button class="zb ui-interactive" id="zoom-me" aria-label="Centre on me">&#9678;</button>
+      </div>
+      <div id="map-tap"></div>
+      <div id="map-sel"></div>
+    </div>
+  </section>
+
+  <!-- ===== HUD ===== -->
+  <!-- A line somebody says belongs over THEIR head, not in the corner. A toast
+       has no idea where the speaker is, which is why they stayed up after you
+       had walked away. -->
+  <div id="say-bubble"></div>
+  <div id="hud">
+    <div id="hud-btns">
+      <button class="hud-btn ui-interactive" id="btn-menu">☰</button>
+      <button class="hud-btn ui-interactive" id="btn-map" aria-label="Open the map">MAP</button>
+      <button class="hud-btn ui-interactive" id="btn-vol" aria-label="Sound">&#9834;</button>
+    </div>
+    <!-- Sound, without leaving what you are doing. The settings existed; there
+         was no way to reach them while a bell was going off in your ear. -->
+    <div id="vol-pop" class="ui-interactive">
+      <label><span>Sound</span>
+        <input type="range" id="vol-master" min="0" max="100" step="1" aria-label="Overall volume">
+      </label>
+      <label><span>Bells &amp; effects</span>
+        <input type="range" id="vol-sfx" min="0" max="100" step="1" aria-label="Effects volume">
+      </label>
+      <button class="vol-mute ui-interactive" id="vol-mute">Mute everything</button>
+    </div>
+    <div id="world-zoom">
+      <button class="wz ui-interactive" id="wz-in" aria-label="Closer">+</button>
+      <button class="wz ui-interactive" id="wz-out" aria-label="Further back">&#8722;</button>
+    </div>
+    <div id="flower-count"><span class="b">✾</span><span id="flower-text">1 marigold</span></div>
+    <div id="pari-bar">
+      <div class="row"><span class="ttl">Parikrama</span><span class="km" id="pari-km">0.0 / 10.4 km</span></div>
+      <div class="track"><i id="pari-fill"></i></div>
+      <div class="next" id="pari-next">Walking toward Keshi Ghat</div>
+    </div>
+    <div id="minimap-wrap"><canvas id="minimap"></canvas><div id="compass">N</div></div>
+    <div id="nav-readout"><span class="d" id="nav-dist">—</span><span class="n" id="nav-name"></span></div>
+    <div id="place-readout"><span id="place-road"></span><span id="place-area"></span></div>
+    <div id="prompts"></div>
+    <div id="toasts"></div>
+  </div>
+
+  <!-- ===== STORY CARD ===== -->
+  <div id="card"></div>
+
+  <!-- ===== TOUCH ===== -->
+  <div id="dpad">
+    <button class="dp up ui-interactive" data-dir="up" aria-label="Walk forward">&#9650;</button>
+    <button class="dp left ui-interactive" data-dir="left" aria-label="Turn left">&#9664;</button>
+    <button class="dp right ui-interactive" data-dir="right" aria-label="Turn right">&#9654;</button>
+    <button class="dp down ui-interactive" data-dir="down" aria-label="Walk back">&#9660;</button>
+    <button class="dp run ui-interactive" data-dir="run" aria-label="Run">RUN</button>
+  </div>
+  <div id="touch-layer">
+    <div id="stick-base"></div>
+    <div id="stick-knob"></div>
+  </div>
+</div>
+
+<div id="ride-hud">
+  <div class="rh-card">
+    <div class="rh-to"><span class="rh-lbl">Going to</span><span class="rh-dest">&mdash;</span></div>
+    <div class="rh-bar"><i></i></div>
+    <div class="rh-foot">
+      <span class="rh-left">&mdash;</span>
+      <button class="rh-go ui-interactive" id="ride-start" aria-label="Tell the driver to start">START</button>
+      <button class="rh-talk ui-interactive" id="ride-slow" aria-label="Ask the driver to slow down">&#9660;</button>
+      <button class="rh-talk ui-interactive" id="ride-fast" aria-label="Ask the driver to go faster">JALDI</button>
+      <button class="rh-drive ui-interactive" id="ride-drive" aria-label="Drive it yourself">I&rsquo;LL DRIVE</button>
+      <button class="rh-hand ui-interactive" id="ride-hand" aria-label="Give the controls back to the driver">HAND BACK</button>
+      <button class="rh-stop ui-interactive" id="ride-stop" aria-label="Ask the driver to stop">STOP</button>
+    </div>
+  </div>
+</div>
+
+<div id="loading">
+  <div style="text-align:center">
+    <div class="mark">वृन्दावन</div>
+    <div class="bar"><i></i></div>
+    <div class="note" id="load-note">Building the Dham</div>
+  </div>
+</div>
+
+<script type="module">
+  import './src/main.js';
+</script>
+
+</body>
+</html>
