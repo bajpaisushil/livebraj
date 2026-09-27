@@ -1,14 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-
-  "//": "There is deliberately NO buildCommand and NO outputDirectory here. This client has no build step at all: Three.js is vendored under vendor/ and the browser imports it directly through the import map in index.html. There is not even a package.json in this directory, so Vercel has nothing it could build. Left alone, Vercel serves these files exactly as they sit on disk, which is what we want and what was verified by booting the whole game off a plain `python3 -m http.server` with zero failed requests. Setting buildCommand to null or \"\" invites an argument with Vercel's framework detection for no gain.",
-
   "framework": null,
   "cleanUrls": false,
   "trailingSlash": false,
-
-  "//cache": "Nothing here is content-hashed, so aggressive immutable caching would strand users on a stale build after a deploy. index.html always revalidates so a new deploy is picked up at once; src/ is short-lived because it changes most; vendor/ and assets/ get a week because Three.js and the fonts effectively never change, with stale-while-revalidate so nobody ever waits on them.",
-
   "headers": [
     {
       "source": "/",
