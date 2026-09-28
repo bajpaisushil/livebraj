@@ -2546,3 +2546,43 @@ stands buried in".
 proved. But the decision stands for now, because the player is actively
 reporting being trapped at this very temple and a new half-metre level change
 is a new chance to trap them. Revisit once the collision complaints stop.
+
+## 2026-09-28 06:30 — Stopping point
+
+The "keep going till 10am" mandate was for 10am on the 27th, not the 28th.
+Clarified by the user after the fact; work continued about 20 hours past it.
+Recorded here so the next session does not read the earlier entries as a
+standing instruction to run unattended.
+
+Everything is committed and pushed. Working tree clean at c2edf87.
+
+### Research filed and NOT yet built
+
+Ten surveys are now on disk that no geometry has been drawn from. Each has
+its own "what NOT to build" and its own uncertainty list, and each was
+checked by a second agent whose brief was to refute the first.
+
+| survey | what it says we have wrong |
+|---|---|
+| `rangaji.md` | a 236 x 135 m walled temple-city, five concentric prakaras, a 28.35 m gatehouse and a seven-tala gopuram. Ours is a 70 x 110 generic block. |
+| `shahji.md` | "not a temple in any Indian temple sense at all: a single-storey Lucknow/Awadhi palace pavilion" |
+| `radha-vallabh.md` | TWO buildings on one cramped bazaar plot — a derelict early-17th-century hall-temple and a later one. We build one generic gable temple. |
+| `madan-mohan.md` | a RUINED 16th-century hall-and-sanctum temple |
+| `radha-raman.md` | "a modest two-storey Braj haveli-temple rebuilt in 1826 by a Lucknow banker" |
+| `radha-damodar.md` | "not a temple at all in the shikhara sense" |
+| `radha-gopinath.md` | "a small, east-facing, LINEAR red-sandstone shrine" |
+| `jugal-kishore.md` | ASI N-UP-A196, 1627 CE, two-storey |
+
+Note the pattern across all eight: every one of them says the building is
+SMALLER, PLAINER and LESS TOWER-LIKE than the generic builder assumes. That
+is the same finding as docs/research/lane-temple.md — this project's default
+instinct is to make Vrindavan grander than it is.
+
+### The one thing still open from play
+
+Whether the player can now get out of the ISKCON hall. The hall-rail cage is
+removed and proven (escape distance 8.6 m -> 20.9 m) and an unstick is in, but
+it has not been confirmed by the person who kept getting trapped. If it
+recurs, the console now logs `[player] unstuck from X Z` and that coordinate
+is worth more than any further probing from this end — four probes were
+written against guessed positions and all four found my own errors instead.
