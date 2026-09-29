@@ -771,6 +771,8 @@ export class MapSystem {
         </div>` : ''}
       <div class="act">
         <button class="walkbtn ui-interactive" data-walk>Walk here</button>
+        <button class="clsbtn ui-interactive" data-here
+          title="Continue your journey from this place">Start from here</button>
         <button class="clsbtn ui-interactive" data-close>DISMISS</button>
         <span class="dist">${formatDistance(d)}</span>
       </div>`;
@@ -779,6 +781,48 @@ export class MapSystem {
       this.setDestination(loc.id);
       if (this.ctx.ui) this.ctx.ui.show('world');
     });
+    /*
+     * START FROM HERE.
+     *
+     * Walking is the point of this whole thing, so this sits second and is
+     * styled quietly — but it has to exist. A 1:1 town of this much geometry
+     * will occasionally wedge somebody, and until now their only recourse was
+     * to close the app and begin again at Chhatikara, 5 km from anything.
+     * "I am stuck in somewhere… any other way to restart from somewhere."
+     *
+     * It lands you at the place's DARSHAN ANCHOR where the builder publishes
+     * one — the spot the game already walks you to, and therefore a spot
+     * already proven standable — and falls back to the location centre. Player
+     * .placeAt then searches outward from there for ground a body can stand
+     * on, so this can never itself become a new way to be stuck.
+     */
+    this.sel.querySelector('[data-here]').addEventListener('click', () => {
+      const ctx = this.ctx;
+      const a = ctx.world && ctx.world.anchors && ctx.world.anchors[loc.id];
+      const tx = a && a.darshan ? a.darshan.x : loc.pos[0];
+      const tz = a && a.darshan ? a.darshan.z : loc.pos[1];
+      const ok = ctx.player && ctx.player.placeAt
+        ? ctx.player.placeAt(ctx, tx, tz) : false;
+      if (!ok) {
+        if (ctx.bus) {
+          ctx.bus.emit('ui:toast', {
+            title: 'No clear ground there',
+            sub: 'कोई खुली जगह नहीं मिली',
+          });
+        }
+        return;
+      }
+      // arriving somewhere counts as finding it
+      if (ctx.state && ctx.state.discovered && !ctx.state.discovered.has(loc.id)) {
+        ctx.state.discovered.add(loc.id);
+      }
+      this.sel.classList.remove('show');
+      if (ctx.ui) ctx.ui.show('world');
+      if (ctx.bus) {
+        ctx.bus.emit('ui:toast', { title: loc.name, sub: loc.hindi || 'आप यहाँ हैं' });
+      }
+    });
+
     this.sel.querySelector('[data-close]').addEventListener('click', () => {
       this.sel.classList.remove('show');
       this._selected = null;

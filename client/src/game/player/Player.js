@@ -845,16 +845,19 @@ export class Player {
    * inside of a staircase as a fine place to stand. That mistake has cost
    * this project three separate wrong diagnoses.
    */
-  _wayOut(ctx) {
-    const p = this.root.position;
-    const feet = this._standY !== null && this._standY !== undefined
-      ? this._standY : ctx.world.groundHeight(p.x, p.z);
-    for (let r = 2.5; r <= 20; r += 1.5) {
+  _wayOut(ctx, at = null, maxR = 20) {
+    const p = at || this.root.position;
+    const feet = at
+      ? ctx.world.groundHeight(p.x, p.z)
+      : (this._standY !== null && this._standY !== undefined
+        ? this._standY : ctx.world.groundHeight(p.x, p.z));
+    for (let r = at ? 0 : 2.5; r <= maxR; r += 1.5) {
       for (let k = 0; k < 24; k++) {
         // rotate the sample pattern per ring so rings do not line up and
         // re-test the same blocked bearing over and over
         const a = (k / 24) * Math.PI * 2 + r * 0.7;
         const x = p.x + Math.cos(a) * r, z = p.z + Math.sin(a) * r;
+        if (r === 0 && k > 0) break;              // the centre is one sample
         const q = { x, y: 0, z };
         ctx.world.collide(q, RADIUS, feet);
         if (Math.hypot(q.x - x, q.z - z) > 0.05) continue;      // inside masonry
@@ -867,6 +870,38 @@ export class Player {
       }
     }
     return null;
+  }
+
+  /**
+   * Put the player down somewhere, safely.
+   *
+   * "I am stuck in somewhere" — and until now the only ways out of that were
+   * the automatic unstick, which needs you to be pressing a direction, and
+   * closing the app. A pilgrim who has wedged themselves somewhere the
+   * unstick cannot solve needs to be able to say "put me over there" and
+   * have it work.
+   *
+   * It does NOT drop you on the exact coordinate asked for: it searches
+   * outward for a spot a body can actually stand on, using collide() and
+   * standHeight() rather than isClear(), which is feet-blind. Teleporting
+   * someone precisely into a wall would be a new way to be stuck rather than
+   * a way out of the old one.
+   *
+   * @returns {boolean} whether a standable spot was found
+   */
+  placeAt(ctx, x, z) {
+    const spot = this._wayOut(ctx, { x, z }, 30);
+    if (!spot) return false;
+    const p = this.root.position;
+    p.x = spot.x; p.z = spot.z; p.y = spot.y;
+    this._standY = spot.y;
+    this._speed = 0;
+    this._vel.set(0, 0, 0);
+    this._stuckT = 0;
+    this._navPath = null;
+    // a placement is not a step — see _feet(), which starts its ground
+    // reckoning again from the root after a jump this large
+    return true;
   }
 
   _updateAnimation(dt) {
