@@ -2586,3 +2586,46 @@ it has not been confirmed by the person who kept getting trapped. If it
 recurs, the console now logs `[player] unstuck from X Z` and that coordinate
 is worth more than any further probing from this end — four probes were
 written against guessed positions and all four found my own errors instead.
+
+## 2026-09-29 — "Start from here", and a note on recovery
+
+> "i am stuck in somewhere so implement something like there sould be option
+> in map as 'start from here' on searching a location so we directly start
+> from there instead of chhatikara again? any other way to restart from
+> somewhere"
+
+Built. Search a place, open its panel, and there is a quiet second button
+beside "Walk here". New `Player.placeAt()` does the placing.
+
+Two decisions worth keeping:
+
+- **It does not drop you on the coordinate asked for.** It lands on the
+  DARSHAN ANCHOR where the builder publishes one — the spot the game already
+  walks you to, therefore already proven standable — and then searches
+  outward from there for ground a body can stand on. Teleporting somebody
+  precisely into a wall would be a new way to be stuck, not a way out of the
+  old one. If nothing standable is found within 30 m it says so and does
+  nothing rather than moving you somewhere worse.
+- **It uses collide() and standHeight(), never isClear().** isClear is
+  feet-blind and has now caused three wrong diagnoses in this project.
+
+### The test is a rescue, not a teleport
+
+`map-search` now buries the player inside Banke Bihari's masonry, calls the
+button, and then checks they can WALK — 8 directions probed with the engine's
+own step rules, requiring at least 5 of them to give more than 1.5 m. A
+placement that lands you somewhere you cannot move from would pass a "did the
+position change" assertion and fail the person holding the phone. 26/26.
+
+### Three layers of recovery now exist, and they are for different failures
+
+1. **The automatic unstick** — you are pressing a direction and covering
+   under 12% of it for 1.5 s. Silent wedges while walking.
+2. **Start from here** — you are stuck in a way the unstick cannot solve, or
+   simply want to be elsewhere. Needs you to open the map.
+3. **`?reset`** — clears the save entirely. The last resort, and it puts you
+   back at Chhatikara, which is exactly what the player was complaining about.
+
+What is still missing is a reason for (1) and (2) to be needed at all. Every
+`[player] unstuck from X Z` in the console is a geometry bug with a
+coordinate attached, and nobody has yet read one back.

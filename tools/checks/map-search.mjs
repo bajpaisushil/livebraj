@@ -163,6 +163,56 @@ check('m still toggles the map when not typing', toggled === 'world', `screen "$
 await page.evaluate(() => window.vrindavan.ctx.ui.show('map'));
 await page.evaluate(() => { document.getElementById('map-q').value = ''; });
 
+/* ---- 6c. "Start from here" actually moves you, and to standable ground ---- */
+/*
+ * The point of this button is recovery, so the test has to be a recovery:
+ * bury the player inside a temple's masonry first, then use it, then check
+ * they can WALK afterwards. A teleport that lands you somewhere you cannot
+ * move from would pass a "did the position change" test and fail the player.
+ */
+const rescue = await page.evaluate(async () => {
+  const ctx = window.vrindavan.ctx;
+  const target = ctx.data.LOCATIONS.find((l) => l.id === 'radha-raman')
+    || ctx.data.LOCATIONS[0];
+  // wedge the player inside the middle of a building
+  const wall = ctx.data.LOCATIONS.find((l) => l.id === 'banke-bihari') || target;
+  ctx.player.root.position.set(wall.pos[0], ctx.world.groundHeight(wall.pos[0], wall.pos[1]), wall.pos[1]);
+  const before = { x: ctx.player.root.position.x, z: ctx.player.root.position.z };
+
+  const ok = ctx.player.placeAt(ctx, target.pos[0], target.pos[1]);
+  const after = { x: ctx.player.root.position.x, z: ctx.player.root.position.z };
+
+  // can a body actually walk away from where it was put?
+  const R = 0.42, STEP_UP = 0.52;
+  const feet = ctx.world.standHeight(after.x, after.z, ctx.world.groundHeight(after.x, after.z));
+  let freeDirs = 0;
+  for (let k = 0; k < 8; k++) {
+    const a = (k / 8) * Math.PI * 2;
+    let x = after.x, z = after.z, f = feet, got = 0;
+    for (let i = 0; i < 25; i++) {
+      const nx = x + Math.cos(a) * 0.12, nz = z + Math.sin(a) * 0.12;
+      const q = { x: nx, y: 0, z: nz };
+      ctx.world.collide(q, R, f);
+      if (Math.hypot(q.x - nx, q.z - nz) > 0.02) break;
+      const h = ctx.world.standHeight(nx, nz, f);
+      if (h === null || h === undefined || h - f > STEP_UP) break;
+      x = nx; z = nz; f = h; got += 0.12;
+    }
+    if (got > 1.5) freeDirs++;
+  }
+  return {
+    ok, movedBy: Math.hypot(after.x - before.x, after.z - before.z),
+    nearTarget: Math.hypot(after.x - target.pos[0], after.z - target.pos[1]),
+    freeDirs, name: target.name,
+  };
+});
+check('Start from here reports success', rescue.ok, rescue.ok ? 'placed' : 'found no standable ground');
+check('and actually moves the player', rescue.movedBy > 50, `moved ${rescue.movedBy.toFixed(0)} m`);
+check('landing near the place asked for', rescue.nearTarget < 40,
+  `${rescue.nearTarget.toFixed(0)} m from ${rescue.name}`);
+check('and you can walk away from where it put you',
+  rescue.freeDirs >= 5, `${rescue.freeDirs}/8 directions open`);
+
 /* ---- 7. shots across zoom ---- */
 await page.evaluate(() => { const m = window.vrindavan.ctx.map; m.fitWorld(); m._mapDirty = true; m._drawFull(true); });
 await page.waitForTimeout(500);
