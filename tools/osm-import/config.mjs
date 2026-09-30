@@ -230,10 +230,20 @@ export const LANDMARKS = [
     id: 'radha-vallabh', match: ['Radha Vallabh', 'Radhavallabh'],
     name: 'Shri Radha Vallabh Mandir', hindi: 'श्री राधावल्लभ मंदिर',
     type: 'temple', deity: 'Shri Radha Vallabh', icon: 'temple',
-    build: { kind: 'temple-gable', w: 30, d: 40, h: 14, color: '#a8563c', accent: '#8a4230' },
-    rot: Math.PI * 0.5, radius: 24, district: 'temple-quarter',
+    /*
+     * On its real site now (docs/research/radha-vallabh.md, "Coordinate,
+     * resolved"): OSM node 7172103529 is the temple, and ESRI imagery over it
+     * shows the old temple's long roof due east-west 3.3 m north of the node,
+     * centred 3.2 m west of it — which is this point. It stood 430 m NE. The
+     * frame's +lz is EAST, the old temple's front; the living temple is
+     * south. Build: both temples' footprint, the old one's measured stone.
+     */
+    at: [27.5811038, 77.6916876],
+    build: { kind: 'temple-gable', w: 34, d: 37, h: 14, color: '#ac866a', accent: '#61230e', measured: true },
+    rot: -Math.PI * 0.5, radius: 26, district: 'temple-quarter',
+    compound: { lx0: -28.7, lx1: 6.17, lz0: -19.6, lz1: 31.8, ring: false },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
-    fallback: [27.58330, 77.69540],
+    fallback: [27.5811038, 77.6916876],
   },
   {
     id: 'rangaji', match: ['रंगनाथ', 'Ranganath', 'Rangaji'],

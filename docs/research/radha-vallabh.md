@@ -220,3 +220,12 @@ survey's "UNRESOLVED" is resolved. The project's 27.58330 / 77.69540 is about
 430 m NE of it. Every "MEASURED from ESRI" setting figure above, taken over
 the old point, is void and must be re-measured over this one. The same mapper
 put the Narasimhadeva temple (node 7172126073) 70 m east at 27.58104, 77.692437.
+
+Measured over that point, ESRI z19 (0.26 m/px, measurement only): the old
+temple's roof runs due east-west, 37.7 m by 11.9 m over its eaves (Growse's
+117 ft plus the chhajjas); from the west, a grey block ~9 m (the kitchen room
+on the octagon's plinth), a ~6 m band (the jagmohan), then the red-brown nave
+with a shaded north slope; the lane (OSM way 973929899) hugs its north wall and
+ends at its north-east corner; a white roof ~11.6 x 15.4 m lies 11-27 m south
+of the axis (the living temple's covered court). The old temple's axis is
+3.3 m north of the OSM node and its centre 3.2 m west of it.

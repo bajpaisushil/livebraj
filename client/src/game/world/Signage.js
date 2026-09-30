@@ -89,6 +89,14 @@ export const CAMPUS_BOARDS = [
   // his gilded seat ("Samadhi Mandir, Srila Prabhupad, ISKCON, Vrindavan.jpg")
   { key: 'samadhi-stone', bg: '#161515', fg: '#e8e2d2', name: 'Samadhi Mandir', deva: 'समाधि मन्दिर · श्रील प्रभुपाद' },
   { key: 'acbsp', bg: '#f6f3ea', fg: '#2a2622', name: 'A.C. Bhaktivedanta Swami Prabhupada', deva: 'Founder-Acharya · ISKCON' },
+  // Radha Vallabh: the yellow board across the street gate's arch ("Radhavallabh
+  // Lal ju Maharaj Temple Vrindavan 2022 01", the checker's reading of it), and
+  // the ASI's blue board at the old temple ("हमारी विरासत, हमारा गौरव")
+  { key: 'rv-gate', bg: '#f7e997', fg: '#8a1c12', name: 'Shri Radhavallabh Lal Ju', deva: 'विराजमान राधावल्लभ लाल जू महाराज' },
+  { key: 'asi', bg: '#1f4f9a', fg: '#ffffff', name: 'Protected Monument · ASI', deva: 'हमारी विरासत, हमारा गौरव' },
+  // the two other temples Entwistle puts inside the Radhavallabh Ghera
+  { key: 'anandi', bg: '#f2ede1', fg: '#7a2a1a', name: 'Anandi Bai ka Mandir', deva: 'आनन्दी बाई का मन्दिर' },
+  { key: 'calcutta', bg: '#f2ede1', fg: '#7a2a1a', name: 'Calcuttawala Mandir', deva: 'कलकत्ते वाला मन्दिर' },
 ];
 
 /** Atlas slot of one of Krishna Balaram's boards, or -1. */

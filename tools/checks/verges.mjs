@@ -92,6 +92,7 @@ const r = await p.evaluate(() => {
   const STRIKE = 0.85;
   const clear = [];
   let strikes = 0, pairs = 0;
+  const strikeAt = [];
   for (const slot of ctx.crowd.vehicleInst || []) {
     for (const v of slot.agents || []) {
       let best = Infinity;
@@ -100,7 +101,20 @@ const r = await p.evaluate(() => {
         const dd = Math.hypot(dx, dz);
         if (dd < 12) pairs++;
         if (dd < best) best = dd;
-        if (dd < STRIKE) strikes++;
+        if (dd < STRIKE) {
+          strikes++;
+          // where, and what each was doing, so a strike can be found again
+          if (strikeAt.length < 3) {
+            let near = null, nd = Infinity;
+            for (const l of ctx.data.LOCATIONS) {
+              const d2 = Math.hypot(l.pos[0] - v.x, l.pos[1] - v.z);
+              if (d2 < nd) { nd = d2; near = l.id; }
+            }
+            strikeAt.push({ at: [Math.round(v.x), Math.round(v.z)], gap: +dd.toFixed(2), near, nearM: Math.round(nd),
+              vehicle: { type: slot.type && slot.type.id || slot.id || '?', speed: +(v.speed || 0).toFixed(1), state: v.state || v.mode || '' },
+              person: { type: a.type && a.type.id || a.kind || '?', state: a.state || a.mode || '', speed: +(a.speed || 0).toFixed(2) } });
+          }
+        }
       }
       if (best < Infinity) clear.push(best);
     }
@@ -108,7 +122,7 @@ const r = await p.evaluate(() => {
   clear.sort((x, y) => x - y);
 
   return {
-    STRIKE, strikes, pairs,
+    STRIKE, strikes, pairs, strikeAt,
     clearMin: clear.length ? +clear[0].toFixed(2) : -1,
     clearMedian: clear.length ? +clear[Math.floor(clear.length / 2)].toFixed(2) : -1,
     walkers: off.length, onNarrow: narrow.length,
@@ -144,7 +158,8 @@ check('vehicles hold their own lane', r.diag.offLegMedian < 2.0,
 check('no vehicle is standing in somebody', r.strikes === 0,
   `${r.strikes} vehicle/person pairs closer than ${r.STRIKE} m`
   + ` | nearest person to a vehicle: min ${r.clearMin} m, median ${r.clearMedian} m`
-  + ` | ${r.pairs} pairs within 12 m`);
+  + ` | ${r.pairs} pairs within 12 m`
+  + (r.strikes ? ` | ${JSON.stringify(r.strikeAt)}` : ''));
 
 console.log('');
 const passed=res.filter(Boolean).length;

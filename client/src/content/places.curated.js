@@ -180,9 +180,21 @@ const PLACES = [
      * ROUTED to — the true-looking coordinates put it beside a lane that is
      * in the map but not connected to the network, so `nav-smoke` reported it
      * unreachable and it would have been a temple nobody could walk to.
+     *
+     * AND THEN OSM TURNED OUT TO HAVE IT (2026-09-30). The research's search
+     * matched names in Latin and Devanagari; the old town's pilgrimage mapper
+     * writes in Russian, and node 7172072781 is "храм Ашта-сакхи", at
+     * 27.580257 / 77.688857 — 163 m from Banke Bihari, which is the two
+     * minutes' walk, on a narrow lane running SSE, in dense fabric where a
+     * plot-filling building stands on the lane's SW side. The same mapper's
+     * Radha Vallabh node sits exactly on that temple's roof in the imagery.
+     * The swept spot it had been moved to was inside the Radhavallabh Ghera,
+     * 27 m from that temple's own centre. So: the building's centre 10.5 m
+     * back from the node, its street door (+lz in this builder's mirror
+     * frame, world (sin rot, cos rot)) facing ENE onto the lane — 123 deg.
      */
-    geo: [27.581101, 77.691966],
-    rot: 180 * DEG,
+    geo: [27.5802056, 77.6887679],
+    rot: 123 * DEG,
     radius: 16,
     icon: 'temple',
     deity: 'Shri Shri Radha Ras Bihari with the eight sakhis',

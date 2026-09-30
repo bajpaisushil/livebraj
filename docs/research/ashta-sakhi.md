@@ -256,3 +256,16 @@ The temple's claim — from its own site — is that it "is the first Indian tem
 - F. S. Growse, 'Mathura: A District Memoir', 3rd ed. 1883 (archive.org item mathurdistrict00growrich, full text downloaded and searched). No mention of any Ashta Sakhi temple in Vrindavan, of Hetampur, or of a 'Ras Bihari' — unsurprising, since all three editions (1874, 1880, 1883) predate the claimed 1886 foundation, so Growse's silence is not evidence either way. He DOES describe an Ashta Sakhi temple at Barsana, at the foot of the hill below Ladli Ji: 'One of them is dedicated to Radha's female companions, called the Sakhis, who are eight in number, as follows: Lalita, Visakha, Champaka-lata, Ranga-devi, Chitra-lekha, Dulekha, Sudevi, and Chandnivali.' Note his list differs from the temple's — Chandnivali in place of Tungavidya.
 - nativeplanet.com page on this temple — CHECKED AND FOUND UNRELIABLE. It states the temple is 'Located on the grounds of the Krishna Janmabhomi temple' (that is in Mathura, not Vrindavan) and calls it 'India's oldest temple'. Do not use it for anything.
 - Press on the Banke Bihari Corridor: Deccan Herald (families to be rehabilitated at Rukmini Vihar and Sunrakh Bangar; trader protests), LawBeat (PIL before the Allahabad High Court over demolition of the Kunj Galis and century-old temples), Tribune India (Supreme Court clearing the way). Figures: about 5–5.5 acres, 285 houses and families, around 200 shopkeepers. No source names Ashta Sakhi Mandir among the affected.
+
+
+## OSM has it after all (2026-09-30)
+
+"OSM DOES NOT CONTAIN THIS TEMPLE" above is wrong, for a reason worth
+remembering: the search matched Latin and Devanagari names, and the old town's
+pilgrimage mapper writes in Russian. Node 7172072781 is `amenity=
+place_of_worship`, `name=храм Ашта-сакхи`, at 27.580257 / 77.688857 — 163 m
+from Banke Bihari (the temple's own "2 minutes walk"), on a narrow lane
+running SSE, in plot-filling fabric. The same mapper's Radha Vallabh node sits
+exactly on that temple's roof in the imagery. The game's swept position,
+27.581101 / 77.691966, turned out to be inside the Radhavallabh Ghera, so the
+temple has moved to the node, its street door turned onto the lane.

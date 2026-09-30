@@ -179,10 +179,11 @@ export const LOCATIONS = [
     "type": "temple",
     "district": "temple-quarter",
     "grounds": null,
-    "pos": [483.83, -367.9],
-    "geo": [27.5833, 77.6954],
-    "rot": 1.5707963267948966,
-    "radius": 24,
+    "compound": { "lx0": -28.7, "lx1": 6.17, "lz0": -19.6, "lz1": 31.8, "ring": false },
+    "pos": [117.26, -124.53],
+    "geo": [27.5811038, 77.6916876],
+    "rot": -1.5707963267948966,
+    "radius": 26,
     "icon": "temple",
     "deity": "Shri Radha Vallabh",
     "interactions": [
@@ -193,11 +194,12 @@ export const LOCATIONS = [
     ],
     "build": {
       "kind": "temple-gable",
-      "w": 30,
-      "d": 40,
+      "w": 34,
+      "d": 37,
       "h": 14,
-      "color": "#a8563c",
-      "accent": "#8a4230"
+      "color": "#ac866a",
+      "accent": "#61230e",
+      "measured": true
     },
     "osm": null
   },

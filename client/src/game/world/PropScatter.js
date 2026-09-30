@@ -882,6 +882,10 @@ function plantVerges(ctx, terrain, rng, plant, density) {
     // ring round the pin would run straight through the campus.
     if (l.compound) {
       const c = l.compound, cs = Math.cos(l.rot), sn = Math.sin(l.rot);
+      // a compound wedged into the bazaar has no ground round it to plant:
+      // Radha Vallabh's ghera is "wall-to-wall town fabric", and a ring of
+      // trees stood in the lane in front of its gate
+      if (c.ring === false) continue;
       const P2 = (lx, lz) => [l.pos[0] + lx * cs - lz * sn, l.pos[1] + lx * sn + lz * cs];
       const per = 2 * ((c.lx1 - c.lx0) + (c.lz1 - c.lz0));
       const n = Math.max(6, Math.round(PLANTING.templeRing * thin * per / 120));

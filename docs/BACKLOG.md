@@ -3364,3 +3364,61 @@ Done the same day:
   1.6 m from the towers, so the walk between the two feet is about 5 m, the
   arch's own width. The survey's double quarter turn on the samadhi's road
   face and the big palm planters at the path's edges came off.
+
+2026-09-30 — "how lon g?" again, after a15456d. Answered: Radha Vallabh ~2 h next, then the five other surveyed temples ~1.5-2 h each; ~9-12 h all told, each pushed as it passes.
+
+## 2026-09-30 — Shri Radha Vallabh Mandir, built from its survey and checker, on its real site
+
+RadhaVallabhMandir.js, replacing a builder that had Govind Dev's ten-foot walls,
+a square sanctum plinth and a clerestory band for a top storey, 430 m NE of the
+temple.
+
+- **Where.** OSM node 7172103529 (name:ru "Храм Радхи-Валлабхи") settles the
+  survey's unresolved coordinate. ESRI z19 over it: the old temple's long
+  red-brown roof due east-west, 37.7 x 11.9 m over its eaves, a grey block at
+  its west end, a white-roofed court immediately south, the lane hard along its
+  north wall. Origin 3.3 m N and 3.2 m W of the node; +lz east to the front.
+- **The old temple (Hit Mandir), off Growse's plate:** the 62 x 32 ft nave with
+  7 ft walls (not Govind Dev's 10), 54 x 18 ft inside; the 20 ft jagmohan,
+  flat-roofed now; the OCTAGON, 36 ft across the flats, overlapping it — its
+  plinth with the broken stubs of the ring slabs, and the later grey kitchen
+  room on it ("only the plinth remains, upon which a room has been built").
+  The east front in three stages over five bays: the end bays solid (the
+  stairs), three square-headed doorways on brackets (the two outer ones behind
+  the ASI's chain-link, the middle open), gobar swastikas on the lintels; five
+  simple pointed arches with rosettes; the open loggia of square piers under a
+  deep chhajja (the checker's correction). The flanks: pilastered bays, a small
+  clerestory window to each bay "looking on to the street", a chhajja on
+  brackets. The STEEP STONE GABLE, 40 degrees, ridge ~14 m, with three trees
+  rooted between its slabs. Inside, a hall you walk into: the double tier of
+  openings each side (trabeate below, arched above into the gallery), sooted
+  paired piers, the flat-centred, deeply coved, ribbed ceiling (not Govind
+  Dev's vault), a sadhu in the colonnade, the teal door in its gold surround at
+  the west end. ASI's blue boards before it. The measured colours (checker).
+  No murti in it.
+- **The living temple, south:** a covered court (the satellite's white roof),
+  a two-storey arcade of sandstone piers and cusped arches, geru walls,
+  chequer and chevrons, red-and-gold valances, marigold strings, lanterns;
+  Radhavallabh Lal in the sanctum at its west end on a silver throne under a
+  gold canopy, Radha's crown and chhatra on HIS left (buildDeities handed the
+  frame turned half round so altars.js's crownBeside lands there), lamps, the
+  hundi. Sizes beyond the court are INFERRED; nothing from the Banke Bihari
+  photo set the checker caught.
+- **The ghera:** a flagged court east of both temples; the street gate — a
+  vermilion arch flush in a row of shop shutters, gold-ochre jamb strips,
+  painted flowers, the yellow "विराजमान राधावल्लभ लाल जू महाराज" board, a
+  corrugated canopy and a floodlight — on the lane at the court's corner
+  (which street is INFERRED); Anandi Bai ka Mandir and the Calcuttawala temple
+  on its east side (Entwistle; positions and form INFERRED); the backs of the
+  houses round it. No planting ring: "wall-to-wall town fabric" (PropScatter
+  honours `compound.ring: false`, new).
+- **Not built, queued:** Sundar Das's chhatri "on the opposite side of the
+  street" (unverified today; placing it needs a second keep-out across the
+  lane).
+- **Ashta Sakhi moved.** Its curated spot, "APPROXIMATE, AND SAID SO", was 27 m
+  from Radha Vallabh's centre, inside the ghera. OSM has it after all: node
+  7172072781, "храм Ашта-сакхи" (the research's name search was in Latin and
+  Devanagari), 163 m from Banke Bihari on a narrow lane. Moved there, its
+  street door turned onto the lane (123 degrees). nav-smoke: reachable.
+- InteriorSystem: a builder's room may be a `hall` (entered as a temple is, no
+  roof cut) and `quiet` (no bell where there is no murti).

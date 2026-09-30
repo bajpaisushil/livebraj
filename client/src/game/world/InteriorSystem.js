@@ -138,13 +138,16 @@ export class InteriorSystem {
     const rooms = (this.ctx.world.landmarks && this.ctx.world.landmarks.rooms) || [];
     for (const r of rooms) {
       this.volumes.push({
-        loc: { id: r.id, name: r.name, hindi: r.hindi || '', deity: r.deity || null, type: 'house' },
+        loc: { id: r.id, name: r.name, hindi: r.hindi || '', deity: r.deity || null, type: r.hall ? 'hall' : 'house' },
         x: r.x, z: r.z, hw: r.hw, hd: r.hd, rot: r.rot,
         cos: Math.cos(-r.rot), sin: Math.sin(-r.rot),
         door: r.door || null,
         anchor: null,
-        house: true,
+        // a tall hall is entered as a temple is (the camera pulled in, no
+        // cut); a small room as a shop is (the roof off, the view from above)
+        house: !r.hall,
         room: true,
+        quiet: !!r.quiet,
         ceil: r.ceil,
       });
     }
@@ -372,7 +375,7 @@ export class InteriorSystem {
 
     ctx.bus.emit('interior:enter', { loc });
     ctx.bus.emit('haptic', { pattern: 'soft' });
-    if (!v.house) ctx.bus.emit('sfx', { name: 'bell', position: v.anchor ? v.anchor.altar : undefined });
+    if (!v.house) { if (!v.quiet) ctx.bus.emit('sfx', { name: 'bell', position: v.anchor ? v.anchor.altar : undefined }); }
     else ctx.bus.emit('sfx', { name: 'chime' });
 
     const rig = ctx.cameraRig;

@@ -134,7 +134,7 @@ searching the backlog for it. That is the failure this file exists to stop.*
    in docs/research/iskcon-krishna-balaram.md, then photographs and OSM —
    then build, photograph, measure. Next after Start from here ships.
 
-4. **Eight surveyed temples — Shahji and Rangaji BUILT 2026-09-30, six to go.** Each
+4. **Eight surveyed temples — Shahji, Rangaji and Radha Vallabh BUILT 2026-09-30, five to go.** Each
    gets built from its survey AND its checker's corrections (re-paired
    correctly 2026-09-30 — see the backlog), photographed, and measured against
    the survey's own numbers. ~~Shahji~~ · ~~Rangaji~~ · Radha Vallabh · Madan
@@ -190,6 +190,9 @@ searching the backlog for it. That is the failure this file exists to stop.*
     and map-open rides now run Chhatikara to ISKCON in fixed steps over
     20-second stretches, and the rath test moves passing traffic on before
     asking what it is offered (5/5 alone, green in parallel).
+    `verges` ("no vehicle is standing in somebody", 0.85 m) has missed by
+    3-15 cm in some parallel runs since 2026-09-30 and passed 3/3 alone after;
+    it now reports WHERE a strike is, so the next one can be looked at.
 
 12. **The ghats stand in town with no river in sight.** Found photographing
     Kaliya Ghat for the arch fix. Research first, per ghat, what is actually

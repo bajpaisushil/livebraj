@@ -15,6 +15,7 @@ import { TAU } from '../../engine/math/MathUtils.js';
 import { PEOPLE, buildSeated, buildStanding } from '../npc/Archetypes.js';
 import { buildIskconCampus } from './IskconCampus.js';
 import { buildShahji } from './ShahjiMandir.js';
+import { buildRadhaVallabhMandir } from './RadhaVallabhMandir.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
@@ -4320,159 +4321,6 @@ function buildJugalKishore({ loc, b, ground }) {
  * Shri Radha Vallabh Mandir — the old temple
  * ================================================================ */
 
-/**
- * "It looks more like a medieval European hall than a North Indian temple."
- *
- * The research's two distinguishing facts drive everything here. First, there
- * is NO TOWER ON THE HALL — the outer roof is a STEEP STONE GABLE, still
- * perfect in Growse's day. Second, the cella was demolished by Aurangzeb
- * exactly as at Govind Dev and ONLY THE PLINTH REMAINS: a headless sanctum
- * behind a hall that survived.
- *
- * Growse's measurements: nave interior 63 x 20 ft (19.2 x 6.1 m), a long
- * vaulted hall, tall and narrow; east facade 34 ft (10.4 m) broad; walls TEN
- * FEET thick, so the external width is about 12 m against a 6 m interior.
- *
- * The east facade is a deliberate stylistic SANDWICH in three stages: upper
- * Hindu, middle PURELY MUHAMMADAN and arched, lower Hindu again. The flanks
- * carry a DOUBLE TIER of openings — bracketed and architraved below, arched
- * above — with an internal staircase climbing to a narrow gallery, a regular
- * triforium running in the thickness of the wall.
- *
- * And "trees growing from the roof joints are a real and documented feature",
- * so there are trees growing out of the roof.
- */
-function buildRadhaVallabh({ loc, b, ground, rng }) {
-  const { color, accent } = loc.build;
-  const [x, z] = loc.pos;
-  const rot = loc.rot;
-  const cs = Math.cos(rot), sn = Math.sin(rot);
-  const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
-  const colliders = [];
-
-  const HALL = 19.2;            // 63 ft
-  const IN_HW = 3.05;           // 20 ft interior, halved
-  const WALL = 3.05;            // "walls ten feet thick"
-  const HW = IN_HW + WALL;      // about 6 m: a 12 m external width
-  const FL = ground + 0.8;
-  const H = 9.5;                // tall and narrow
-
-  b.box(x, ground - 0.3, z, HW * 2 + 7, 1.1, HALL + 12, 0xbfae8e, rot);
-
-  const face = (lx, lz, fw, fd, hh, col) => {
-    const q = p(lx, lz);
-    b.box(q[0], FL, q[1], fw, hh, fd, col || color, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: fw, d: fd + 0.2, rot });
-  };
-
-  /* ---- the hall: ten-foot walls, a double tier of openings each side ---- */
-  const DOOR = 3.0;
-  for (const sgn of [-1, 1]) {
-    // the flank, in piers between the lower-tier openings
-    const n = 4, op = 2.2;
-    const pier = (HALL - op * n) / (n + 1);
-    for (let i = 0; i <= n; i++) {
-      const lz = -HALL / 2 + pier / 2 + i * (pier + op);
-      face(sgn * (HW - WALL / 2), lz, WALL, pier, H);
-    }
-    // LOWER tier: bracketed and architraved, so a flat lintel on brackets
-    for (let i = 0; i < n; i++) {
-      const lz = -HALL / 2 + pier + op / 2 + i * (pier + op);
-      const q = p(sgn * (HW - WALL / 2), lz);
-      b.box(q[0], FL + 3.4, q[1], WALL + 0.4, 0.45, op + 0.8, accent, rot);
-      for (const t of [-1, 1]) {
-        const br = p(sgn * (HW - WALL / 2), lz + t * (op / 2 + 0.2));
-        b.box(br[0], FL + 2.9, br[1], WALL + 0.3, 0.5, 0.45, tint(accent, 0.92), rot);
-      }
-    }
-    // UPPER tier: arched, and the gallery behind it
-    for (let i = 0; i < n; i++) {
-      const lz = -HALL / 2 + pier + op / 2 + i * (pier + op);
-      const q = p(sgn * (HW + 0.05), lz);
-      cuspedArch(b, q[0], FL + 5.2, q[1], op * 0.8, 3.0, 0.4, rot, accent, 5, 0x241a12);
-    }
-    // the clerestory the gallery looks out of
-    const cq = p(sgn * (HW - WALL / 2), 0);
-    b.box(cq[0], FL + H, cq[1], WALL + 0.5, 0.5, HALL + 0.5, accent, rot);
-  }
-  // the back, and the east front split around its door
-  face(0, -HALL / 2 + WALL / 2, HW * 2, WALL, H);
-  {
-    const seg = (HW * 2 - DOOR) / 2;
-    for (const sgn of [-1, 1]) face(sgn * (DOOR / 2 + seg / 2), HALL / 2 - WALL / 2, seg, WALL, H);
-  }
-  {
-    const q = p(0, 0);
-    b.box(q[0], FL - 0.1, q[1], IN_HW * 2, 0.14, HALL - WALL, 0xc9bda2, rot);
-  }
-
-  /* ---- the east facade: Hindu, Muhammadan, Hindu ---- */
-  {
-    const fz = HALL / 2 - WALL / 2;
-    const q = p(0, fz);
-    // lower stage, Hindu: a trabeate doorway, lintel on jambs
-    b.box(q[0], FL + 4.0, q[1], 10.4, 0.7, WALL + 0.5, accent, rot);
-    for (const sgn of [-1, 1]) {
-      const j = p(sgn * (DOOR / 2 + 0.5), fz);
-      b.box(j[0], FL, j[1], 1.0, 4.0, WALL + 0.5, tint(color, 0.94), rot);
-    }
-    // middle stage, PURELY MUHAMMADAN: a run of arches and nothing Hindu
-    for (let i = -1; i <= 1; i++) {
-      const a2 = p(i * 3.2, fz + 0.1);
-      cuspedArch(b, a2[0], FL + 4.7, a2[1], 2.4, 2.9, 0.4, rot + Math.PI / 2, accent, 5, 0x241a12);
-    }
-    // upper stage, Hindu again: a bracketed eave
-    b.box(q[0], FL + 7.9, q[1], 11.0, 0.5, WALL + 1.1, accent, rot);
-    for (let i = -2; i <= 2; i++) {
-      const br = p(i * 2.2, fz + WALL * 0.5 + 0.4);
-      b.box(br[0], FL + 7.4, br[1], 0.5, 0.55, 0.9, tint(accent, 0.9), rot);
-    }
-  }
-
-  /* ---- the STEEP STONE GABLE, which is the whole point ---- */
-  {
-    const STEPS = 13, GH = 7.2;
-    for (let i = 0; i < STEPS; i++) {
-      const t = i / STEPS;
-      b.box(x, FL + H + 0.5 + i * (GH / STEPS), z,
-        HW * 2 * (1 - t * 0.94), GH / STEPS, HALL + 0.6,
-        i % 2 ? accent : color, rot);
-    }
-    // "trees growing from the roof joints are a real and documented feature"
-    for (const [tx, tz] of [[-2.6, 4.4], [1.9, -3.1], [0.4, 7.2]]) {
-      const q = p(tx, tz);
-      const ty = FL + H + 0.5 + (1 - Math.abs(tx) / (HW * 1.4)) * GH * 0.7;
-      b.box(q[0], ty, q[1], 0.22, 1.5, 0.22, 0x6a5240, rot);
-      b.box(q[0], ty + 1.4, q[1], 1.5, 1.0, 1.5, 0x4a7a3a, rot);
-      b.box(q[0], ty + 2.1, q[1], 1.0, 0.8, 1.0, 0x5c8a46, rot);
-    }
-  }
-
-  /* ---- the headless sanctum: ONLY THE PLINTH REMAINS ---- */
-  {
-    const sz = -HALL / 2 - 5.0;
-    const q = p(0, sz);
-    b.box(q[0], ground + 0.8, q[1], 10.5, 1.6, 9.5, tint(color, 0.9), rot);
-    b.box(q[0], ground + 2.4, q[1], 8.0, 0.6, 7.2, accent, rot);
-    // the later room built on it, low and plain
-    b.box(q[0], ground + 3.0, q[1], 6.4, 3.2, 5.8, 0xd2c3a4, rot);
-    b.box(q[0], ground + 6.2, q[1], 7.0, 0.4, 6.4, 0xb8a684, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: 10.5, d: 9.5, rot });
-  }
-
-  const darsh = p(0, HALL / 2 - 4.5);
-  return {
-    altarY: 2.0,
-    colliders,
-    interior: {
-      altar: [p(0, -HALL / 2 + WALL + 1.2)[0], FL + 1.3, p(0, -HALL / 2 + WALL + 1.2)[1]],
-      darshan: [darsh[0], darsh[1]],
-      facing: rot + Math.PI,
-      floor: FL,
-      volume: { x, z, hw: HW, hd: HALL * 0.5, rot, door: p(0, HALL / 2 + 1.2) },
-    },
-  };
-}
 
 
 /* ================================================================
@@ -5916,7 +5764,16 @@ const BUILDERS = {
     const { w, d, h, color, accent } = loc.build;
     const [x, z] = loc.pos;
     const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
-    const p = (lx, lz) => [x + lx * cs + lz * sn, z - lx * sn + lz * cs];
+    /*
+     * THE BOX FRAME. This read `x + lx*cs + lz*sn, z - lx*sn + lz*cs`, the
+     * mirror, while every box and collider here is turned the box frame's way
+     * — which agree only at rot 0 and 180, where the temple happened to sit.
+     * Moved onto its OSM node and turned to face its lane, its walls and their
+     * colliders parted company: temples.mjs found 79% of the wall line open,
+     * platforms.mjs walked into the upstairs floor. At 180 the two frames are
+     * the same, so nothing that was right before has moved.
+     */
+    const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
     const colliders = [];
         /*
      * Drawn into the SHARED mesh, not an interior one.
@@ -6022,7 +5879,7 @@ const BUILDERS = {
       const q = p(0, az);
       ib.box(q[0], UP, q[1], w - WT * 2, 3.6, 2.4, 0xf2ece0, rot);
       // the white marble arch, filled with the feather fan
-      cuspedArch(ib, q[0], UP, q[1] + 1.2, 5.2, 2.9, 0.4, rot, 0xf6f2e8, 9, null);
+      { const qa = p(0, az + 1.2); cuspedArch(ib, qa[0], UP, qa[1], 5.2, 2.9, 0.4, rot, 0xf6f2e8, 9, null); }   // on the altar's front face, round the fan (a world +z, it had stood at the block's back)
       for (let ring = 0; ring < 3; ring++) {
         const rr = 1.5 + ring * 0.7;
         const N2 = 9 + ring * 4;
@@ -6068,7 +5925,8 @@ const BUILDERS = {
       interior: {
         altar: [altar[0], UP + 1.1, altar[1]],
         darshan: [darshan[0], darshan[1]],
-        facing: rot + Math.PI, floor: UP,
+        // the way a devotee faces, from where he stands to the altar
+        facing: Math.atan2(altar[0] - darshan[0], altar[1] - darshan[1]), floor: UP,
         volume: { x, z, hw: HW - WT, hd: HD - WT, rot, door: p(0, HD + 1.0) },
       },
     };
@@ -7149,11 +7007,46 @@ const BUILDERS = {
   },
 
   /**
-   * Radha Vallabh: no tower on the hall. A steep stone gable, and a two-tier
-   * arcaded flank with clerestory windows looking over the street.
+   * Radha Vallabh: the old temple (Hit Mandir) with its steep stone gable and
+   * its headless octagonal sanctum, and the living temple on its south side,
+   * in the Radhavallabh Ghera — built in RadhaVallabhMandir.js from its
+   * survey and checker. What stood here had Govind Dev's ten-foot walls, a
+   * square sanctum and a clerestory band for a top storey, 430 m off.
    */
-  /** Radha Vallabh — the steep stone gable, and the headless sanctum. */
-  'temple-gable': (args) => buildRadhaVallabh(args),
+  'temple-gable': ({ loc, b, ground, rng, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const signB = new MeshBuilder();
+    const place = (geo, lx, y, lz, faceLocal) => {
+      const q = p(lx, lz);
+      const wa = rot + faceLocal;
+      const yaw = Math.atan2(Math.cos(wa), Math.sin(wa));
+      _kbM.compose(_kbV.set(q[0], y, q[1]), _kbQ.setFromEuler(_kbE.set(0, yaw, 0)), _kbS);
+      b.addGeometry(geo, _kbM);
+      geo.dispose();
+    };
+    const r = buildRadhaVallabhMandir({ b, signB, loc, ground, terrain, colliders, rng, h: {
+      cuspedArch, tint, buildStanding, buildSeated, PEOPLE, place, signUV, buildDeities,
+      SIGN: { GARLANDS: 0, PRASAD: 3, CLOTH: 5, PUJA: 6, PHOTO: 9, BANGLES: 13 },
+    } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const H = r.hall;
+    const V = p((H.lx0 + H.lx1) / 2, (H.lz0 + H.lz1) / 2);
+    return {
+      altarY: r.altar.y - ground,
+      colliders,
+      meshes: [{ name: 'RadhaVallabhSigns', builder: signB, x: loc.pos[0], z: loc.pos[1], r: 60, map: signAtlas }],
+      rooms: r.rooms,
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.FL,
+        volume: { x: V[0], z: V[1], hw: (H.lx1 - H.lx0) / 2, hd: (H.lz1 - H.lz0) / 2, rot, door: p(H.door[0], H.door[1]) },
+      },
+    };
+  },
 
   'temple-gable-plain': ({ loc, b, ground }) => {
     const { w, d, h, color, accent } = loc.build;
