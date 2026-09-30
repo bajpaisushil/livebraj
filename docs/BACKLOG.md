@@ -3226,3 +3226,82 @@ west forecourt:
 
 Checks all green first time (arches, platforms, halls, deities, steps,
 stairs, temples, nav-smoke, walls, houses, interior, gates).
+
+## 2026-09-30 — "the golden prabhupada deities room ... just after the entry on left side is not there"
+
+The user, with a photograph of the view north through the arch-bridge: *"still
+iskcon vrindavan is not that exact, the golden prabhupada deities room present
+just after the entry on left side is not there see as attached and make some
+more space in the corridor of it it's very narrow as of now"*. Queued as NOW
+0a and taken ahead of Radha Vallabh. Two asks: the golden Prabhupada room on
+the left just inside the entry, and a wider corridor.
+
+Found on the way, for Radha Vallabh: OSM node 7172103529,
+`name:ru=Храм Радхи-Валлабхи`, at 27.581074 / 77.69172. It agrees with the
+Wikipedia infobox (27.5811 / 77.6919) and lies 46 m from the high-precision
+Wikidata point, so it settles the survey's unresolved coordinate. The project's
+27.5833 / 77.6954 is ~430 m off. The Narasimhadeva temple, node 7172126073, is
+70 m east of it at 27.58104 / 77.692437.
+
+Then, the same turn: *"there is a small door on both left and right sides of
+deities room of iskcon temple allowing to walk in out of corridor alos"* —
+queued as 0a(c).
+
+### What was done (0a)
+
+Researched first, off 125 Commons photographs of the campus (the "In and
+around of Sri Krishna-Balaram Mandir, Vrindavan" 01-50 set, "Sri Krishna
+Balaram Mandir Vrindavan" 01-42, the samadhi interior, the 2013 street views)
+and the official campus signboard (07), which puts "YOU ARE HERE" beside the
+samadhi just inside the road gate. Measured against OSM and fresh ESRI z19
+imagery; photographs used for measurement only.
+
+- **The golden Prabhupada room is built, and you walk into it.** It is the
+  samadhi's ground floor, behind the door on the samadhi's front, the first
+  door on your left inside the road gate. It was a painted chamber behind a
+  sill, with a tan-skinned figure. Now, from "Samadhi Mandir, Srila
+  Prabhupad, ISKCON, Vrindavan.jpg": the GOLDEN murti in saffron with two
+  marigold garlands, on a gilded two-tier seat with its white plaque, under a
+  white marble round arch on lotus-vase columns with a scrolled crest, on a
+  raised white platform with an elephant frieze, a black "Samadhi Mandir"
+  stone before him, dark stone behind, a lion on a pedestal under a tall vase
+  column either side, a bell on its bracket. A real floor, walls with tops, an
+  open door, and an InteriorSystem room (the roof comes off over it, as in a
+  shop). The room's size (7.6 x 8.3 m) is INFERRED.
+- **The corridor is wide.** Two corridors were too narrow, both my doing:
+  1. The way in from the road gate was a double arcade of piers with chalice
+     planters, 6 m between them. That arcade is the WEST corridor's (the
+     "GATE:2" photographs walk it) and was put on the main approach by
+     mistake. The approach is now what photographs 35-42 show: an open
+     forecourt of black and white marble laid on the diagonal, from the
+     railing to the samadhi, the museum and on under the arch to the temple's
+     door, with two big palm planters at the path's edges before the arch.
+  2. The west corridor (kiosks to temple wall) was 2.5 m and less at the
+     counters: OSM draws the six kiosks 5 m deep and they were built so. The
+     photographs show shopfronts, a row of goblet-planter columns down the
+     middle, shade netting on a frame, benches and a green-and-white chequer
+     laid square. Kiosks are now 2.5 m deep with bookshelves in the fronts, and
+     the walk is 4.8 m, with the columns, the frame, murals on the temple's
+     outer wall and three benches. (OSM's outline taking in the walk in front
+     of the kiosks is my reading, INFERRED.)
+- **The small doors either side of the deities' room.** Cut through both side
+  walls at the altar end of the court, where photographs 13-16 show one: a
+  square-headed wooden door in the mural wall with "निकास EXIT" over it,
+  salmon architrave, the leaf swung in. Walk in or out to the corridor.
+- **The road gate is plain piers and iron leaves, not a gatehouse.** The 2013
+  street photograph (6734): stone piers, ornate black iron leaves standing
+  open, a black iron railing on a low plinth either side through which the
+  samadhi is seen. The cream gatehouse with chhatris that stood there was the
+  TEMPLE's own portal (the checker said so on 2026-09-27). Guards and booth
+  kept. The front of the site along the forecourt is railing, not wall.
+- **The peepal is east of the gate**, beside the right-hand pier as you face
+  it from the road (6734). It stood 10 m west.
+- **GATE:2, the west gate,** is as photographs 01-02 show: cream columns ringed
+  in salmon, an arched head with an iron grille, black wrought-iron leaves
+  picked out in gold, the red "GATE:2" board, Govinda's board on the wall. Not
+  the survey's "green metal gate".
+
+Still open, queued: the two swan staircases (the photographs show a long flight
+up each building's front, rising away from the path, not the double quarter
+turn built); the walk under the arch is blank-walled where the towers have
+cusped openings; the museum as a room; the temple block's 35.3 m length.

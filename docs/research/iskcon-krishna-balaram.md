@@ -277,3 +277,66 @@ Confidence: High on the dome finding and on the OSM arithmetic; medium on colour
 - Wikimedia Commons, Category:ISKCON Temple, Vrindavan (126 files, CC-licensed) - the photographic evidence base. Key files measured: 'Krishna Balaram Mandir - ISKCON - Bhaktivedanta Swami Marg - Vrindaban 2013-02-24 6732.JPG' (3840x2550, street elevation, shikhara detail); '...6734.JPG' (gate and samadhi from the road); 'Shri Krishna Balaram Mandir.jpg' (samadhi from the courtyard, full composition); 'Srila Prabhupada samadhi in Vrindavan.jpg' (geotagged 27.571994/77.677528, 2019, night); 'Sri Krishna Balaram Temple, Vrindavan.JPG' (great arch and gatehouse); 'Krishna-Balaram-Mandir.JPG'; 'ISKON TEMPLE 1.jpg' and '2.jpg' (swan staircase); 'Sri Krishna Balaram Mandir Vrindavan 29/35/36.jpg' (courtyard arcade, colours, chequerboard, sunken floor); 'In and around of Sri Krishna-Balaram Mandir, Vrindavan 06/32/46-50.jpg' (outer arcade, murals, swan balusters).
 - vrajvrindavan.com, 'ISKCON Sri Sri Krishna Balarama Mandir, Vrindavan': https://vrajvrindavan.com/iskcon-krishna-balarama-mandir-vrindavan/ - altar arrangement (left Gaur Nitai with Prabhupada and Bhaktisiddhanta; centre Krishna and Balarama; right Lalita, Krishna, Radharani, Vishakha), agreeing with Wikipedia.
 - NOT A SOURCE, stated for the record: F. S. Growse, 'Mathura: A District Memoir' (1883). Published 92 years before this temple was built. It contains nothing about the Krishna Balaram Mandir, and any claim attributing an account of it to Growse would be fabricated. A full text is cached in the project scratchpad at MathuraADistrictMemoir.txt and I checked it holds nothing relevant.
+
+
+## Corrections from the photographs, 2026-09-30
+
+*Taken while answering "the golden prabhupada deities room present just after
+the entry on left side is not there", "make some more space in the corridor"
+and "there is a small door on both left and right sides of deities room".
+Sources: Commons Category:ISKCON Temple, Vrindavan (126 files, all
+thumbnailed and read), the campus signboard "Sri Krishna Balaram Mandir
+Vrindavan 07.jpg" at full size, OSM, and ESRI z19 imagery.*
+
+- THE ROAD GATE (Gate 1) is plain stone piers with ornate black wrought-iron
+  leaves between them, a black iron railing on a low plinth wall either side,
+  and the peepal EAST of the gate, beside the right-hand pier seen from the
+  road. SOURCED: "Krishna Balaram Mandir - ISKCON - Bhaktivedanta Swami Marg -
+  Vrindaban 2013-02-24 6734.JPG" and "Krishna Balaram Mandir (2010).jpg".
+  Confirms the checker's point that the gatehouse in section D is the temple's
+  own portal.
+- THE "ARCADED, MURAL-LINED WALK WITH SHOPS" is the WEST corridor, reached from
+  GATE:2 on the west lane, not the approach from the road gate. SOURCED: "In
+  and around of Sri Krishna-Balaram Mandir, Vrindavan" 01-20: the red "GATE:2
+  ISKCON VRINDAVAN" board on black wrought-iron leaves picked out in gold in a
+  cream gatehouse with salmon-ringed columns and an arched iron grille;
+  Govinda's board on the lane wall; then a corridor with small shopfronts
+  (books, Matchless Gifts), a row of tall columns carrying goblet planters
+  down its middle, shade netting on a frame, benches, the temple's outer wall
+  hung with large paintings in pink cusped frames, and a green-grey and white
+  chequer laid square with dark grout lines. Toward its south end the
+  samadhi's spire is seen over it. Its width, read against the people in it,
+  is about 5 m between shopfronts and temple wall (ESTIMATED).
+- THE FORECOURT inside the road gate is open black-and-white marble laid on
+  the DIAGONAL, from the railing to the samadhi's and the museum's fronts and
+  on under the great arch. SOURCED: the same set, 35-42; the chequer is also
+  seen through the open gate in 6734. Big marble planters with palms stand at
+  the path's edges before the arch ("Sri Krishna Balaram Temple,
+  Vrindavan.JPG").
+- THE SAMADHI SHRINE is on the ground floor, entered by the door in the
+  samadhi's front (south) face, up a few steps: the first door on the left
+  inside the road gate. The campus signboard's "YOU ARE HERE" stands beside
+  the samadhi just inside that gate. The murti is GOLDEN (face and hands),
+  in saffron, garlanded, on a gilded two-tier seat with a white plaque ("His
+  Divine Grace A.C. Bhaktivedanta Swami Prabhupada, Founder-Acharya,
+  International Society for Krishna Consciousness"), under a white marble
+  round arch on two lotus-vase columns with a scrolled crest, on a raised
+  white platform with an elephant frieze; a black stone before him lettered
+  "समाधि मन्दिर ... श्रील प्रभुपाद"; dark stone walls behind; carved lions on
+  pedestals under tall vase columns either side; a bell on a bracket. SOURCED:
+  "Samadhi Mandir, Srila Prabhupad, ISKCON, Vrindavan.jpg". The room's size
+  is published nowhere (UNKNOWN).
+- THE TEMPLE HAS A SMALL DOOR IN ITS SIDE WALLS onto the corridor: a
+  square-headed wooden leaf with a mesh window, "निकास EXIT" over it. SOURCED:
+  "In and around ..." 13 and 14 (the west side). The verandah photographs
+  "Sri Krishna Balaram Mandir Vrindavan 15" and "16" show a small door under
+  a mural beside the altar flight. The east door is by the user's report ("a
+  small door on both left and right sides of deities room"), not photographed.
+- THE SWAN STAIRCASES run as long flights up each marble building's front,
+  rising away from the path (6734; "ISKON TEMPLE 1.jpg"; "Sri Krishna Balaram
+  Temple, Vrindavan.JPG"), not as the double quarter-turn this model built.
+  Not yet rebuilt.
+- THE ARCH'S CLEAR SPAN. OSM leaves 5.45 m between the samadhi's and the
+  museum's tower faces; the photograph looking north through the arch shows a
+  span of about 1.6 tower widths. Both fit a span of 5.4-6 m, narrower than
+  the survey's derived 8-11 m. Use OSM.

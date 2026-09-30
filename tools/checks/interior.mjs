@@ -193,18 +193,30 @@ const walls = await page.evaluate(() => {
   const loc = ctx.data.LOCATIONS.find((l) => l.id === 'iskcon-krishna-balaram');
   const cs = Math.cos(loc.rot), sn = Math.sin(loc.rot);
   const at = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
-  let leaks = 0, tested = 0;
+  /*
+   * The builder DECLARES its side doors — "a small door on both left and
+   * right sides of deities room" — and they are the only gaps allowed. Each
+   * must really be open, and every other point on both walls solid.
+   */
+  const vol = ctx.world.landmarks.interiors['iskcon-krishna-balaram'] || {};
+  const doors = vol.sideDoors || [];
+  const inDoor = (lx, lz) => doors.some((d) => Math.sign(d.lx) === Math.sign(lx) && Math.abs(lz - d.lz) < d.w / 2 + 0.3);
+  let leaks = 0, tested = 0, skipped = 0;
   for (let lz = -15; lz <= 15; lz += 1) {
     for (const lx of [-11.9, 11.9]) {
+      if (inDoor(lx, lz)) { skipped++; continue; }
       const q = at(lx, lz);
       tested++;
       if (ctx.world.isClear(q[0], q[1], 0.3)) leaks++;
     }
   }
-  return { leaks, tested };
+  const open = doors.filter((d) => { const q = at(d.lx, d.lz); return ctx.world.isClear(q[0], q[1], 0.3); }).length;
+  return { leaks, tested, skipped, doors: doors.length, open };
 });
-check('the side walls are solid end to end', walls.leaks === 0,
-  `${walls.tested - walls.leaks}/${walls.tested} sample points solid`);
+check('the side walls are solid end to end, but for their declared doors', walls.leaks === 0,
+  `${walls.tested - walls.leaks}/${walls.tested} sample points solid, ${walls.skipped} in ${walls.doors} doorways`);
+check('and both small side doors are open to walk through', walls.doors === 2 && walls.open === 2,
+  `${walls.open}/${walls.doors} side doors clear`);
 
 /* ---- 8. darshan happens in front of the deities, standing on something ---- */
 const anchors = await page.evaluate(() => {
@@ -274,6 +286,48 @@ check('an interior is its own mesh, drawn near and dropped from across town',
   && culled.wrong === 0,
   `${culled.count} interior meshes — ${culled.nearOn} up at ISKCON, `
   + `${culled.farOn} up 900 m away, ${culled.wrong} on the wrong side of the draw radius`);
+
+/* ---- 9b. Srila Prabhupada's samadhi: a room you walk into ---- */
+/*
+ * "the golden prabhupada deities room present just after the entry on left
+ * side is not there". It is a room now, behind the samadhi's front door: walk
+ * a body from the corona at the foot of its steps toward the murti with the
+ * engine's own collide and standHeight, and it must get up the steps, through
+ * the door and onto the room's floor, and the room must know it is inside.
+ */
+const sam = await page.evaluate(() => {
+  const ctx = window.vrindavan.ctx, W = ctx.world;
+  const v = ctx.interior.volumes.find((q) => q.room && q.loc.id === 'iskcon-samadhi');
+  if (!v) return { found: false };
+  const R = 0.42, STEP_UP = 0.52;
+  let x = v.door[0], z = v.door[1];
+  const g0 = W.groundHeight(x, z);
+  let feet = W.standHeight(x, z, g0);
+  const startFeet = feet;
+  for (let k = 0; k < 260; k++) {
+    let vx = v.x - x, vz = v.z - z;
+    const d = Math.hypot(vx, vz);
+    if (d < 0.5) break;
+    vx /= d; vz /= d;
+    const q = { x: x + vx * 0.08, y: 0, z: z + vz * 0.08 };
+    W.collide(q, R, feet);
+    const h = W.standHeight(q.x, q.z, feet);
+    if (h === null || h === undefined || h - feet > STEP_UP) break;
+    x = q.x; z = q.z; feet = h;
+  }
+  return {
+    found: true,
+    left: +Math.hypot(v.x - x, v.z - z).toFixed(2),
+    rose: +(feet - startFeet).toFixed(2),
+    inside: ctx.interior._contains(v, x, z, 0.82),
+    ceilOver: +(v.ceil - feet).toFixed(2),
+  };
+});
+check('the samadhi is a room the game knows about', sam.found, sam.found ? 'iskcon-samadhi' : 'no room volume');
+check('you can walk from the forecourt up its steps and into the room', sam.found && sam.left < 1.5 && sam.rose > 1.0,
+  sam.found ? `ended ${sam.left} m from the room's middle, ${sam.rose} m up` : '');
+check('and once in, the room knows you are inside, under its ceiling', sam.found && sam.inside && sam.ceilOver > 2.4,
+  sam.found ? `inside ${sam.inside}, ceiling ${sam.ceilOver} m over the feet` : '');
 
 /* ---- 10. the rickshaw stops at the gate ---- */
 const setDown = await page.evaluate(() => {

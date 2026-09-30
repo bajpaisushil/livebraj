@@ -17,6 +17,7 @@
  */
 
 import { TAU } from '../../engine/math/MathUtils.js';
+import { MeshBuilder } from '../../engine/render/MeshBuilder.js';
 import { campusSign } from './Signage.js';
 
 /** OSM outlines, in the builder's frame. */
@@ -90,6 +91,8 @@ export function buildIskconCampus(o) {
   const { b, signB, p, rot, ground, terrain, colliders, rng } = o;
   const { cuspedArch, shikhara, ribbedDome, tint, buildSeated, buildStanding, PEOPLE, place } = o.helpers;
   const cs = Math.cos(rot), sn = Math.sin(rot);
+  // rooms you walk into, for InteriorSystem: the roof comes off, as in a shop
+  const rooms = [];
 
   const tH = (lx, lz) => {
     const q = p(lx, lz);
@@ -211,22 +214,50 @@ export function buildIskconCampus(o) {
       const ang = Math.atan2(B[1] - A[1], B[0] - A[0]);
       const STEP = 0.25;
       let t0 = null;
-      const emit = (ta, tb) => {
+      const emit = (ta, tb, railed) => {
         if (tb - ta < 0.3) return;
         const m = [A[0] + (B[0] - A[0]) * ((ta + tb) / 2 / L), A[1] + (B[1] - A[1]) * ((ta + tb) / 2 / L)];
         const base = Math.min(tH(A[0] + (B[0] - A[0]) * (ta / L), A[1] + (B[1] - A[1]) * (ta / L)),
           tH(A[0] + (B[0] - A[0]) * (tb / L), A[1] + (B[1] - A[1]) * (tb / L)), tH(m[0], m[1])) - 0.15;
+        if (railed) {
+          /*
+           * The front, where the samadhi is: a low plinth wall carrying a black
+           * iron railing with spear-headed bars, which the whole street sees the
+           * marble through (the 2013 street photographs, 6732 and 6734).
+           */
+          const PL = 0.8, RH = 1.55;
+          box(m[0], base, m[1], tb - ta, PL + 0.15, WALL_T, C.CREAM, ang);
+          box(m[0], base + PL + 0.15, m[1], tb - ta + 0.04, 0.1, WALL_T + 0.12, C.CREAM_SH, ang);
+          const y0 = base + PL + 0.25;
+          const ux = (B[0] - A[0]) / L, uz = (B[1] - A[1]) / L;
+          box(m[0], y0 + 0.1, m[1], tb - ta, 0.05, 0.05, C.IRON, ang);
+          box(m[0], y0 + RH - 0.18, m[1], tb - ta, 0.05, 0.05, C.IRON, ang);
+          for (let t = ta + 0.09; t < tb - 0.05; t += 0.17) {
+            const bx = A[0] + ux * t, bz = A[1] + uz * t;
+            box(bx, y0, bz, 0.03, RH, 0.03, C.IRON, ang);
+          }
+          for (let t = ta + 1.2; t < tb - 0.6; t += 2.4) {              // its posts
+            box(A[0] + ux * t, y0, A[1] + uz * t, 0.09, RH + 0.08, 0.09, C.IRON, ang);
+          }
+          solid(m[0], m[1], tb - ta, WALL_T + 0.35, ang, { top: y0 + RH });
+          return;
+        }
         box(m[0], base, m[1], tb - ta, WALL_H + 0.15, WALL_T, C.CREAM, ang);
         box(m[0], base + WALL_H + 0.15, m[1], tb - ta + 0.04, 0.14, WALL_T + 0.16, C.SALMON, ang);
         solid(m[0], m[1], tb - ta, WALL_T + 0.35, ang);
       };
+      // the stretch of the road front before the samadhi and the museum
+      const railedAt = (lx, lz) => lz > 45 && lx < 27;
+      let mode = null;
       for (let t = 0; t <= L + 1e-6; t += STEP) {
         const lx = A[0] + (B[0] - A[0]) * (t / L), lz = A[1] + (B[1] - A[1]) * (t / L);
         const gap = inGate(lx, lz);
-        if (!gap && t0 === null) t0 = t;
-        if (gap && t0 !== null) { emit(t0, t); t0 = null; }
+        const rl = railedAt(lx, lz);
+        if (!gap && t0 === null) { t0 = t; mode = rl; }
+        else if (!gap && t0 !== null && rl !== mode) { emit(t0, t, mode); t0 = t; mode = rl; }
+        if (gap && t0 !== null) { emit(t0, t, mode); t0 = null; }
       }
-      if (t0 !== null) emit(t0, L);
+      if (t0 !== null) emit(t0, L, mode);
     }
   }
 
@@ -267,197 +298,209 @@ export function buildIskconCampus(o) {
     solid(lx, lz, 1.6, 1.6, ang);
   };
 
-  /* ---- the main gatehouse ---- */
+  /* ---- the main gate, on Bhaktivedanta Swami Marg ---- */
   /*
-   * "A cream/buff painted gatehouse with pink-outlined arches, two cream domed
-   * chhatris with pink-tipped finials, a tall cusped-arch portal with heavy
-   * brown studded wooden doors, a framed deity painting on each side, and
-   * black wrought-iron double gates with ornamental scrollwork. NOT marble."
-   * Its dimensions are not surveyed; these are sized to the 6 m opening.
+   * TWO PLAIN PIERS AND A PAIR OF IRON LEAVES — not a gatehouse. Commons
+   * "Krishna Balaram Mandir - ISKCON - Bhaktivedanta Swami Marg - Vrindaban
+   * 2013-02-24 6734.JPG", taken from the road: square stone piers about the
+   * height of a man and a half, ornate black wrought-iron leaves standing open
+   * between them, the chequer floor just inside, the peepal beside it, and
+   * either side a black iron railing on a low plinth wall through which the
+   * samadhi is seen. "Krishna Balaram Mandir (2010).jpg" shows the same piers
+   * and leaves from inside the railing. The checker said so from the start:
+   * "The road gate on Bhaktivedanta Swami Marg is black iron leaves between
+   * masonry piers with a peepal tree beside it" — the cream gatehouse with
+   * chhatris that stood here was the TEMPLE'S own portal, seen through the
+   * great arch, moved onto the road by mistake. It is taken off.
+   * Pier and leaf sizes are read off those two photographs against the people
+   * in them, not measured.
    */
   {
     const g = GATES[0];
     const ang = Math.atan2(g.u[1], g.u[0]);
     const y = pave(g.at[0], g.at[1]);
     const at = (a, v) => [g.at[0] + g.u[0] * a + g.v[0] * v, g.at[1] + g.u[1] * a + g.v[1] * v];
-    const PW = 2.4, PD = 3.2, PH = 6.2;
+    const PW = 0.8, PH = 2.9, STONE = 0xd9d0bd, STONE_SH = 0xbdb3a0;
     for (const sd of [-1, 1]) {
       const [lx, lz] = at(sd * (g.half + PW / 2), 0);
-      box(lx, y - 0.2, lz, PW, PH + 0.2, PD, C.CREAM, ang);
-      for (const hy of [0.9, 4.4]) box(lx, y + hy, lz, PW + 0.12, 0.22, PD + 0.12, C.SALMON, ang);
-      box(lx, y + PH, lz, PW + 0.3, 0.3, PD + 0.3, C.SALMON, ang);
-      solid(lx, lz, PW, PD, ang);
-      // a pink-outlined arch on the road face of each pier, framing its painting
-      const [fx, fz] = at(sd * (g.half + PW / 2), PD / 2 + 0.02);
-      const [ox, oz] = at(sd * (g.half + PW / 2), -(PD / 2 + 0.02));
-      for (const [ax, az] of [[fx, fz], [ox, oz]]) {
-        const q = p(ax, az);
-        cuspedArch(b, q[0], y + 1.3, q[1], 1.6, 2.8, 0.1, rot + ang, C.PINK, 5, 0x3d6b45);
-      }
-      // the framed deity painting, road side: gold frame, and the two
-      // brothers — dark blue Krishna, white Balaram — which is who this is
-      {
-        const face = faceR(Math.atan2(-g.v[1], -g.v[0]));        // toward the road
-        const q = p(...at(sd * (g.half + PW / 2), -(PD / 2 + 0.06)));
-        const ux = Math.cos(rot + ang), uz = Math.sin(rot + ang);
-        b.panel(q[0], y + 2.5, q[1], 1.2, 1.5, C.GILT, face, 0.02);
-        b.panel(q[0], y + 2.5, q[1], 1.02, 1.32, 0x2f5a3a, face, 0.04);
-        b.panel(q[0] - ux * 0.22, y + 2.42, q[1] - uz * 0.22, 0.26, 0.86, 0x2b3f7a, face, 0.06);
-        b.panel(q[0] + ux * 0.22, y + 2.42, q[1] + uz * 0.22, 0.26, 0.86, 0xf2ece0, face, 0.06);
-      }
-      // a cream domed chhatri on each pier, pink-tipped
-      const [cx, cz] = at(sd * (g.half + PW / 2), 0);
-      const cq = p(cx, cz);
-      for (let k = 0; k < 4; k++) {
-        const a2 = (k / 4) * TAU + Math.PI / 4;
-        b.box(cq[0] + Math.cos(a2) * 0.75, y + PH + 0.3, cq[1] + Math.sin(a2) * 0.75, 0.2, 1.4, 0.2, C.CREAM);
-      }
-      b.box(cq[0], y + PH + 1.7, cq[1], 2.0, 0.18, 2.0, C.SALMON, rot + ang);
-      ribbedDome(b, cq[0], y + PH + 1.88, cq[1], 0.95, 1.1, C.CREAM, C.CREAM_SH, 16);
-      b.box(cq[0], y + PH + 3.0, cq[1], 0.12, 0.45, 0.12, C.PINK);
+      box(lx, y - 0.2, lz, PW, PH + 0.2, PW, STONE, ang);
+      box(lx, y + 0.35, lz, PW + 0.1, 0.12, PW + 0.1, STONE_SH, ang);
+      box(lx, y + PH, lz, PW + 0.16, 0.14, PW + 0.16, STONE_SH, ang);       // the cap
+      box(lx, y + PH + 0.14, lz, PW - 0.2, 0.1, PW - 0.2, STONE, ang);
+      solid(lx, lz, PW, PW, ang, { top: y + PH + 0.3 });
     }
-    // the portal between the piers, and the attic over it
-    {
-      const q = p(g.at[0], g.at[1]);
-      cuspedArch(b, q[0], y, q[1], g.half * 2, 5.4, PD, rot + ang, C.CREAM, 7, null);
-      const [ax, az] = at(0, 0);
-      box(ax, y + 5.4, az, g.half * 2 + 0.2, PH - 5.4, PD, C.CREAM, ang);
-      box(ax, y + PH, az, g.half * 2 + 0.3, 0.3, PD + 0.3, C.SALMON, ang);
-      // the name over the gate, on both faces
-      const [ix, iz] = at(0, PD / 2 + 0.05), [ox, oz] = at(0, -(PD / 2 + 0.05));
-      sign('mandir', ix, y + 5.8, iz, 4.6, 0.95, Math.atan2(g.v[1], g.v[0]));
-      sign('mandir', ox, y + 5.8, oz, 4.6, 0.95, Math.atan2(-g.v[1], -g.v[0]));
-    }
-    // the doors stand open against the jambs: studded wood inside, iron outside
+    /*
+     * The leaves, swung in and left open: a frame of bars with a band of
+     * scrollwork near the top, which at this size is a double rail and a row
+     * of rings. Open by day, and swinging inward, is what the photographs show.
+     */
     for (const sd of [-1, 1]) {
-      const [dx, dz] = at(sd * (g.half - 0.1), -0.9);
-      box(dx, y, dz, 0.14, 4.4, 2.6, C.WOOD, ang);
-      for (let r2 = 0; r2 < 5; r2++) {
-        for (let c2 = 0; c2 < 3; c2++) {
-          const [sx, sz] = at(sd * (g.half - 0.18), -0.9 - 0.9 + c2 * 0.9);
-          box(sx, y + 0.5 + r2 * 0.85, sz, 0.06, 0.1, 0.1, 0x2a2018, ang);
-        }
+      const LW = g.half - 0.05, LH = 2.5;
+      const hinge = at(sd * (g.half - 0.04), 0);
+      const tip = at(sd * (g.half - 0.04), LW);           // swung in, square to the fence
+      const cx = (hinge[0] + tip[0]) / 2, cz = (hinge[1] + tip[1]) / 2;
+      const la = ang + Math.PI / 2;                        // the leaf runs along v
+      box(cx, y + 0.12, cz, LW, 0.07, 0.06, C.IRON, la);
+      box(cx, y + LH - 0.1, cz, LW, 0.07, 0.06, C.IRON, la);
+      box(cx, y + LH - 0.55, cz, LW, 0.05, 0.05, C.IRON, la);
+      const nb = Math.round(LW / 0.16);
+      for (let k = 0; k <= nb; k++) {
+        const [bx, bz] = at(sd * (g.half - 0.04), k * (LW / nb));
+        box(bx, y + 0.12, bz, 0.035, LH - 0.12 + (k % 2 ? 0.14 : 0.24), 0.035, C.IRON, la);
       }
-      const [ix, iz] = at(sd * (g.half - 0.1), 1.2);
-      for (let k = 0; k < 9; k++) {
-        const [bx, bz] = at(sd * (g.half - 0.1), 1.2 - 1.0 + k * 0.25);
-        box(bx, y, bz, 0.05, 2.6, 0.05, C.IRON, ang);
+      for (let k = 0; k < nb; k += 2) {
+        const [rx, rz] = at(sd * (g.half - 0.04), (k + 1) * (LW / nb));
+        box(rx, y + LH - 0.47, rz, 0.24, 0.24, 0.03, C.IRON, la);          // the scroll band
       }
-      box(ix, y + 0.2, iz, 0.06, 0.08, 2.2, C.IRON, ang);
-      box(ix, y + 2.5, iz, 0.06, 0.08, 2.2, C.IRON, ang);
-      // the guards, just inside, facing the road
-      const [gx, gz] = at(sd * (g.half - 0.9), -2.6);
+      // the guards, just inside, one each side of the way in, facing the road
+      const [gx, gz] = at(sd * (g.half + 1.3), 1.9);
       guard(gx, gz, Math.atan2(-g.v[1], -g.v[0]));
     }
-    const [bx, bz] = at(g.half + 3.6, -3.2);
+    // the temple's own name, a board on the plinth wall beside the gate
+    {
+      const face = Math.atan2(-g.v[1], -g.v[0]);
+      const [sx, sz] = at(-(g.half + 3.2), -0.32);
+      sign('mandir', sx, y + 1.55, sz, 2.8, 0.62, face);
+    }
+    const [bx, bz] = at(g.half + 3.6, 3.2);
     booth(bx, bz, ang);
   }
 
-  /* ---- the west gate: "a green metal gate" ---- */
+  /* ---- the west gate, GATE:2 ---- */
+  /*
+   * Commons "In and around of Sri Krishna-Balaram Mandir, Vrindavan 01" and
+   * "02", from the lane and from inside: cream columns ringed in salmon, an
+   * arched head with an iron grille in it, black wrought-iron leaves picked
+   * out in gold, a red board lettered "GATE:2 ISKCON VRINDAVAN", and on the
+   * wall beside it "Govinda's Pure Vegetarian Restaurant" with an arrow. The
+   * survey's "green metal gate" is not what the photographs show. Where along
+   * the west fence it stands is still INFERRED (queued).
+   */
   {
     const g = GATES[1];
     const ang = Math.atan2(g.u[1], g.u[0]);
     const y = pave(g.at[0], g.at[1]);
     const at = (a, v) => [g.at[0] + g.u[0] * a + g.v[0] * v, g.at[1] + g.u[1] * a + g.v[1] * v];
+    const CW = 0.72, CH = 3.6;
     for (const sd of [-1, 1]) {
-      const [lx, lz] = at(sd * (g.half + 0.45), 0);
-      box(lx, y - 0.15, lz, 0.9, 3.2, 0.9, C.CREAM, ang);
-      box(lx, y + 3.05, lz, 1.1, 0.25, 1.1, C.SALMON, ang);
-      solid(lx, lz, 0.9, 0.9, ang);
+      const [lx, lz] = at(sd * (g.half + CW / 2), 0);
+      box(lx, y - 0.15, lz, CW + 0.12, 0.6, CW + 0.12, C.CREAM, ang);             // its base
+      box(lx, y + 0.45, lz, CW, CH - 0.45, CW, C.CREAM, ang);
+      for (const hy of [0.45, 1.5, 2.6]) box(lx, y + hy, lz, CW + 0.08, 0.12, CW + 0.08, C.SALMON, ang);
+      box(lx, y + CH, lz, CW + 0.24, 0.24, CW + 0.24, C.SALMON, ang);            // the capital
+      solid(lx, lz, CW, CW, ang, { top: y + CH + 0.3 });
     }
-    // both leaves swung in against the wall and left open, green-painted iron
-    // (open by day is INFERRED; so is which way they swing)
+    // the arched head: a round archivolt spanning the columns, drawn from both
+    // faces, and the iron grille that fills it
+    {
+      const SPR = y + CH + 0.24, R0 = g.half + 0.02, R1 = g.half + 0.34, SEG = 16;
+      const P = (an, r, v) => { const [lx, lz] = at(-Math.cos(an) * r, v); const q = p(lx, lz); return [q[0], SPR + Math.sin(an) * r, q[1]]; };
+      const quad2 = (A, B, Cq, D, col) => { b.quad(A, B, Cq, D, col); b.quad(D, Cq, B, A, col); };
+      for (let k = 0; k < SEG; k++) {
+        const a0 = Math.PI * (k / SEG), a1 = Math.PI * ((k + 1) / SEG);
+        for (const v of [-0.36, 0.36]) quad2(P(a0, R0, v), P(a0, R1, v), P(a1, R1, v), P(a1, R0, v), C.CREAM);
+        quad2(P(a0, R0, -0.36), P(a0, R0, 0.36), P(a1, R0, 0.36), P(a1, R0, -0.36), C.CREAM_SH);
+        quad2(P(a0, R1, -0.36), P(a0, R1, 0.36), P(a1, R1, 0.36), P(a1, R1, -0.36), C.SALMON);
+      }
+      for (let uu = -g.half + 0.2; uu < g.half - 0.1; uu += 0.22) {
+        const hh = Math.sqrt(Math.max(0, R0 * R0 - uu * uu));
+        const [bx, bz] = at(uu, 0);
+        box(bx, SPR - 0.1, bz, 0.03, hh + 0.08, 0.03, C.IRON, ang);
+      }
+      const [rx, rz] = at(0, 0);
+      box(rx, SPR + 0.55, rz, 0.5, 0.5, 0.05, C.GILT, ang);                        // the gilt rosette
+      box(rx, SPR - 0.12, rz, g.half * 2, 0.08, 0.06, C.IRON, ang);
+    }
+    // both leaves swung in and left open, black iron with gold in the scrolls
     for (const sd of [-1, 1]) {
       const [lx, lz] = at(sd * (g.half - 0.06), 1.15);
-      for (let k = 0; k < 8; k++) {
-        const [bx, bz] = at(sd * (g.half - 0.06), 0.15 + k * 0.28);
-        box(bx, y, bz, 0.05, 2.2, 0.05, 0x2f5a3a, ang);
+      for (let k = 0; k < 9; k++) {
+        const [bx, bz] = at(sd * (g.half - 0.06), 0.12 + k * 0.26);
+        box(bx, y, bz, 0.04, 2.5 + (k % 2) * 0.12, 0.04, C.IRON, ang);
       }
-      box(lx, y + 0.15, lz, 0.06, 0.08, 2.1, 0x2f5a3a, ang);
-      box(lx, y + 2.1, lz, 0.06, 0.08, 2.1, 0x2f5a3a, ang);
-      solid(lx, lz, 0.2, 2.1, ang);
+      box(lx, y + 0.15, lz, 0.06, 0.08, 2.2, C.IRON, ang);
+      box(lx, y + 2.1, lz, 0.06, 0.08, 2.2, C.IRON, ang);
+      box(lx, y + 2.45, lz, 0.06, 0.06, 2.2, C.IRON, ang);
+      for (let k = 0; k < 4; k++) {
+        const [sx, sz] = at(sd * (g.half - 0.06), 0.4 + k * 0.55);
+        box(sx, y + 2.18, sz, 0.05, 0.22, 0.22, C.GILT, ang);                     // gold in the scrollwork
+        box(sx, y + 1.0, sz, 0.05, 0.3, 0.3, k % 2 ? C.GILT : C.IRON, ang);
+      }
+      solid(lx, lz, 0.2, 2.2, ang);
+    }
+    // GATE:2, on the column's lane face and inside; Govinda's on the wall
+    const toLane = Math.atan2(-g.v[1], -g.v[0]), inward = Math.atan2(g.v[1], g.v[0]);
+    {
+      const [ox, oz] = at(-(g.half + CW / 2), -(CW / 2 + 0.03));
+      sign('gate2', ox, y + 1.75, oz, 0.62, 0.62, toLane);
+      const [ix, iz] = at(g.half + CW / 2, CW / 2 + 0.03);
+      sign('gate2', ix, y + 1.75, iz, 0.62, 0.62, inward);
+      const [gx2, gz2] = at(-(g.half + 3.4), -0.26);
+      sign('govindas', gx2, y + 2.05, gz2, 2.2, 0.55, toLane);
     }
     // the guard stands to one side of the way in, not in it
     const [gx, gz] = at(g.half - 0.7, 2.8);
-    guard(gx, gz, Math.atan2(-g.v[1], -g.v[0]));
+    guard(gx, gz, toLane);
     const [bx, bz] = at(g.half + 2.4, 2.6);
     booth(bx, bz, ang);
   }
 
   /* ================================================================
-   * THE OUTER ARCADED APPROACH, from the gate to the great arch
+   * THE FORECOURT, from the gate to the great arch and the temple's door
    * ================================================================ */
   /*
-   * "Same cream piers and cusped arches, but freestanding and lined with large
-   * mural paintings in pink-outlined cusped frames set into the boundary wall.
-   * Distinctive detail: large CHALICE/GOBLET-SHAPED PLANTERS sit on top of
-   * short piers along the walk. Paving here is chequerboard laid orthogonally,
-   * not diagonally."
+   * OPEN MARBLE, BLACK AND WHITE ON THE DIAGONAL, AND NOTHING STANDING IN IT.
+   *
+   * You said the corridor was "very narrow", and it was, for a reason that was
+   * mine: a double arcade of cream piers with chalice planters ran from the
+   * gate to the arch, 6 m between the planters, walling the samadhi off from
+   * the way in. That arcade is not here. It is the WEST corridor's — the
+   * "GATE:2" set on Commons ("In and around of Sri Krishna-Balaram Mandir,
+   * Vrindavan 01-20") walks it: the goblet-planter columns, the murals, the
+   * shops, the orthogonal green-and-white chequer — and it is built there now.
+   * Inside the road gate is a forecourt: the same set, 35-42, shows it
+   * black-and-white marble laid on the diagonal, the railing and hedge along
+   * the road, the samadhi's swan staircase on one side, and people walking
+   * straight across it; the 2013 street photograph shows the chequer through
+   * the open gate. Its size is the space OSM leaves between the fence and the
+   * two marble buildings. Square size (0.6 m) is read off the photographs
+   * against feet, not measured.
    */
   {
-    const AX = 0.9, Z0 = 40.6, Z1 = 52.4, OFF = 4.6, BAYS = 4;
-    const bay = (Z1 - Z0) / BAYS;
-    for (const sd of [-1, 1]) {
-      for (let i = 0; i <= BAYS; i++) {
-        const lz = Z0 + i * bay, lx = AX + sd * OFF;
-        const y = pave(lx, lz);
-        box(lx, y, lz, 0.6, 3.3, 0.6, C.CREAM);
-        box(lx, y, lz, 0.72, 0.5, 0.72, C.SALMON);
-        box(lx, y + 3.3, lz, 0.8, 0.22, 0.8, C.SALMON);
-        post(lx, lz, 0.38);
-        if (i < BAYS) {
-          const mz = lz + bay / 2;
-          const q = p(lx, mz);
-          // a run along lz: the arch spans along lz, so rot + PI/2
-          cuspedArch(b, q[0], y, q[1], bay - 0.6, 4.7, 0.5, rot + Math.PI / 2, C.CREAM, 7, null);
-          box(lx, y + 3.52, mz, 0.5, 1.2, bay - 0.6, C.GREEN);
-          box(lx, y + 4.72, mz, 0.62, 0.3, bay + 0.2, C.SALMON);
-          box(lx, y + 5.02, mz, 0.36, 0.7, bay, C.CREAM);
-        }
-      }
-      // the chalice planters on their short piers, between arcade and path
-      for (let i = 0; i < BAYS; i++) {
-        const lz = Z0 + (i + 0.5) * bay, lx = AX + sd * (OFF - 1.4);
-        const y = pave(lx, lz);
-        box(lx, y, lz, 0.55, 0.9, 0.55, C.CREAM);
-        const q = p(lx, lz);
-        b.prism(q[0], y + 0.9, q[1], 0.18, 0.18, 0.18, 0.18, 0.35, C.CREAM);          // stem
-        b.prism(q[0], y + 1.25, q[1], 0.2, 0.2, 0.95, 0.95, 0.55, C.CREAM);           // the cup
-        b.box(q[0], y + 1.78, q[1], 0.86, 0.1, 0.86, 0x5a3a24);                       // earth
-        b.bevelBox(q[0], y + 1.85, q[1], 0.8, 0.55, 0.8, 0x3f7a3a, 0, 0.2);           // the plant
-        post(lx, lz, 0.4);
+    const S = 0.6, e = S * Math.SQRT1_2;
+    const courtAt = (lx, lz) => lz > 16.8 && lz < 53.4 && lx > -19.3 && lx < 25.4
+      && !(lx > 17.8 && lz < 18.4) && !(lx > 24.2 && lz < 25.4)
+      && inPoly(CP, lx, lz) && !solidPolys.some((q) => inPoly(q, lx, lz));
+    for (let clz = 16.8 + e; clz < 53.4; clz += 2 * e) {
+      for (let clx = -19.3 + e; clx < 25.4; clx += 2 * e) {
+        if (!courtAt(clx, clz) || !courtAt(clx - e, clz) || !courtAt(clx + e, clz)
+          || !courtAt(clx, clz - e) || !courtAt(clx, clz + e)) continue;
+        const y = pave(clx, clz) + 0.035;
+        const A = p(clx - e, clz), E = p(clx, clz + e), Cc = p(clx + e, clz), D = p(clx, clz - e);
+        b.quad([A[0], y, A[1]], [E[0], y, E[1]], [Cc[0], y, Cc[1]], [D[0], y, D[1]], C.CHQ_B);
       }
     }
-    // the orthogonal chequer down the walk, from the gate to the arch
-    for (let lz = 30.0; lz < 53.2; lz += 0.6) {
-      for (let lx = AX - 2.4; lx < AX + 2.4; lx += 0.6) {
-        const k = Math.round((lx - AX) / 0.6 + 100) + Math.round(lz / 0.6);
-        if (k % 2) continue;
-        if (solidPolys.some((q) => inPoly(q, lx, lz))) continue;
-        box(lx + 0.3, pave(lx, lz) - 0.005, lz + 0.3, 0.6, 0.02, 0.6, C.CHQ_B);
+    /*
+     * Two big marble planters with palms, one each side of the way in, where
+     * the path runs between the two buildings toward the arch ("Sri Krishna
+     * Balaram Temple, Vrindavan.JPG"). Placed at the path's edges, clear of
+     * both OSM outlines.
+     */
+    for (const [lx, lz] of [[-2.9, 33.9], [5.3, 33.4]]) {
+      const y = pave(lx, lz);
+      box(lx, y, lz, 1.5, 0.25, 1.5, C.MARBLE_SH);
+      box(lx, y + 0.25, lz, 1.3, 0.75, 1.3, C.MARBLE);
+      box(lx, y + 1.0, lz, 1.45, 0.12, 1.45, C.MARBLE_SH);
+      box(lx, y + 1.05, lz, 1.1, 0.08, 1.1, 0x5a3a24);
+      const q = p(lx, lz);
+      b.box(q[0], y + 1.1, q[1], 0.12, 0.7, 0.12, 0x6a5234);
+      b.bevelBox(q[0], y + 1.7, q[1], 0.7, 0.45, 0.7, 0x3f7a3a, 0, 0.2);
+      for (let k = 0; k < 7; k++) {
+        const a2 = (k / 7) * TAU;
+        b.box(q[0] + Math.cos(a2) * 0.55, y + 1.85 + (k % 2) * 0.12, q[1] + Math.sin(a2) * 0.55,
+          1.1, 0.05, 0.16, 0x4d8a3f, a2);   // w runs along (cos r, sin r): radial
       }
-    }
-    // the murals set into the boundary wall either side of the gate, facing in
-    const g = GATES[0];
-    const wallFace = Math.atan2(g.v[1], g.v[0]);            // local angle of "inward"
-    for (const sd of [-1, 1]) {
-      for (let i = 0; i < 3; i++) {
-        const a = sd * (g.half + 4.2 + i * 3.6);
-        const lx = g.at[0] + g.u[0] * a + g.v[0] * 0.26, lz = g.at[1] + g.u[1] * a + g.v[1] * 0.26;
-        const y = pave(lx, lz);
-        const face = faceR(wallFace);
-        const q = p(lx, lz);
-        b.panel(q[0], y + 1.55, q[1], 3.0, 2.3, C.PINK, face, 0.02);
-        b.panel(q[0], y + 1.55, q[1], 2.7, 2.05, 0x3d6b45, face, 0.04);
-        b.panel(q[0], y + 0.8, q[1], 2.7, 0.55, 0x54803f, face, 0.05);
-        b.panel(q[0], y + 2.35, q[1], 2.4, 0.4, tint(C.GILT, 0.9), face, 0.05);
-        const tx = Math.cos(rot + Math.atan2(g.u[1], g.u[0])), tz = Math.sin(rot + Math.atan2(g.u[1], g.u[0]));
-        const s = (i + (sd > 0 ? 1 : 0)) % 2 ? 1 : -1;
-        b.panel(q[0] + tx * s * 0.4, y + 1.45, q[1] + tz * s * 0.4, 0.42, 1.05, 0xe8c04c, face, 0.07);
-        b.panel(q[0] + tx * s * 0.4, y + 2.1, q[1] + tz * s * 0.4, 0.24, 0.26, 0x2f4f8a, face, 0.08);
-        b.panel(q[0] - tx * s * 0.45, y + 1.4, q[1] - tz * s * 0.45, 0.4, 0.95, 0xc8452a, face, 0.07);
-        b.panel(q[0] - tx * s * 0.45, y + 2.0, q[1] - tz * s * 0.45, 0.22, 0.24, 0xd8a878, face, 0.08);
-      }
+      solid(lx, lz, 1.5, 1.5, 0, { top: y + 1.1 });
     }
   }
 
@@ -690,7 +733,18 @@ export function buildIskconCampus(o) {
     cornice(SA, CO1 - 0.05, C.MARBLE);
     cornice(grow(SA, 0.3), CO2 + 0.1, C.MARBLE);
     parapet(grow(SA, 0.3), TER, C.MARBLE);
-    edgeWalls(SA, TER + 1.0);
+    // every face walled but the front, which is walled either side of its door
+    edgeWalls(SA, TER + 1.0, (i) => i === doorEdge);
+    {
+      const A = SA[doorEdge], B = SA[doorEdge + 1];
+      const L = Math.hypot(B[0] - A[0], B[1] - A[1]);
+      const u = edgeDir(A, B), inw = area2(SA) > 0 ? [-u[1], u[0]] : [u[1], -u[0]];
+      for (const [t0, t1] of [[0, doorT - 1.2], [doorT + 1.2, L]]) {
+        const tm = (t0 + t1) / 2;
+        solid(A[0] + u[0] * tm + inw[0] * 0.3, A[1] + u[1] * tm + inw[1] * 0.3, t1 - t0 + 0.15, 0.6,
+          Math.atan2(u[1], u[0]), { top: TER + 1.0 });
+      }
+    }
 
     // steps up to the ground-floor door, and what is seen through it
     {
@@ -704,50 +758,223 @@ export function buildIskconCampus(o) {
         box(DOOR_X, yS - 0.05 + i * RISE, lz, 3.4, RISE + 0.05, TR, C.MARBLE);
         solid(DOOR_X, lz, 3.4, TR, 0, { top: yS + (i + 1) * RISE, tag: 'temple-step', standOnly: true });
       }
-      // a sill across the doorway: this is where visitors stand and look in.
-      // The chamber itself is not built yet — queued, not pretended.
-      solid(DOOR_X, 39.3, 2.4, 0.3, 0, { top: ST1 + 1.0, tag: 'kb-sill' });
       /*
-       * SRILA PRABHUPADA, in his samadhi mandir. The interior photograph
-       * "Samadhi Mandir, Srila Prabhupad, ISKCON, Vrindavan.jpg" (per the
-       * checker) "shows the Prabhupada murti with flanking carved lions under
-       * it", and Back to Godhead (Sept 1980): "Carved lions flank the inner
-       * shrine". Seated, in saffron, on his vyasasana; the lions in marble.
+       * SRILA PRABHUPADA'S SAMADHI: THE ROOM, AND NOW YOU CAN WALK INTO IT.
+       *
+       * "the golden prabhupada deities room present just after the entry on
+       * left side is not there". It was a painted chamber behind a sill you
+       * could not cross, and the murti in it was a tan-skinned man. Behind this
+       * door, the first door on your left inside the road gate, is the room,
+       * and what is in it is read off one photograph, Commons "Samadhi Mandir,
+       * Srila Prabhupad, ISKCON, Vrindavan.jpg": the GOLDEN murti of Srila
+       * Prabhupada in saffron, garlanded with marigolds, seated on a gilded
+       * two-tier seat carrying a white plaque, under a white marble arch on two
+       * lotus-vase columns with a scrolled crest; all of it on a raised white
+       * platform whose face is a frieze of elephants in file, a black stone
+       * lettered "Samadhi Mandir" before him, dark stone behind, and either
+       * side a carved lion on a pedestal under a tall marble vase column.
+       * The room's size is published nowhere: 7.6 x 8.3 m is what the plan
+       * leaves behind this door (INFERRED).
        */
-      // the shrine, a chamber lined on the inside so it reads through the door:
-      // from inside, the building's own walls face away and would show you
-      // the courtyard behind. Back, sides, ceiling, floor.
-      const my = ST1, FRONT = 39.46 - 0.05, BACK = 34.1, aw = 4.4, ah = 4.4;
+      const my = ST1 + 0.03;                       // the marble slab's top, which the plinth band lays
+      const CEIL = my + 4.6;
+      const RX0 = DOOR_X - 3.82, RX1 = DOOR_X + 3.82, RZ0 = 31.2, RZ1 = 38.86, FZ = 39.465;
+      const DHW = 1.2, SPRING = ST1 + 3.4 - DHW, CROWN = ST1 + 3.4;   // the extrusion's own door
+      const DARK = 0x1c1a1b, DARK2 = 0x2c2826, CEILC = 0xe6dfd1;
+      const lq = (A, B, Cq, D, col) => {
+        const a2 = p(A[0], A[2]), b2 = p(B[0], B[2]), c2 = p(Cq[0], Cq[2]), d2 = p(D[0], D[2]);
+        b.quad([a2[0], A[1], a2[1]], [b2[0], B[1], b2[1]], [c2[0], Cq[1], c2[1]], [d2[0], D[1], d2[1]], col);
+      };
+      // a wall facing -lz / +lz / +lx / -lx, in LOCAL coordinates
+      const wallN = (x0, x1, z, y0, y1, col) => lq([x0, y0, z], [x0, y1, z], [x1, y1, z], [x1, y0, z], col);
+      const wallS = (x0, x1, z, y0, y1, col) => lq([x1, y0, z], [x1, y1, z], [x0, y1, z], [x0, y0, z], col);
+      const wallE = (x, z0, z1, y0, y1, col) => lq([x, y0, z0], [x, y1, z0], [x, y1, z1], [x, y0, z1], col);
+      const wallW = (x, z0, z1, y0, y1, col) => lq([x, y0, z1], [x, y1, z1], [x, y1, z0], [x, y0, z0], col);
       {
-        const bq = p(DOOR_X, BACK);
-        b.panel(bq[0], my + ah / 2, bq[1], aw, ah, 0xe8d9b8, faceR(FACE.S), 0.01);
-        for (const sd of [-1, 1]) {
-          const sq = p(DOOR_X + sd * aw / 2, (FRONT + BACK) / 2);
-          b.panel(sq[0], my + ah / 2, sq[1], FRONT - BACK, ah, 0xdcc9a4, faceR(sd > 0 ? FACE.W : FACE.E), 0.01);
+        // the floor, white, with a dark border
+        const up = (x0, x1, z0, z1, y, col) => lq([x0, y, z0], [x0, y, z1], [x1, y, z1], [x1, y, z0], col);
+        up(RX0, RX1, RZ0, FZ, my + 0.004, C.MARBLE);
+        for (const [x0, x1, z0, z1] of [[RX0, RX1, RZ0, RZ0 + 0.3], [RX0, RX0 + 0.3, RZ0, RZ1], [RX1 - 0.3, RX1, RZ0, RZ1], [RX0, DOOR_X - DHW, RZ1 - 0.3, RZ1], [DOOR_X + DHW, RX1, RZ1 - 0.3, RZ1]]) {
+          up(x0, x1, z0, z1, my + 0.007, DARK2);
         }
-        box(DOOR_X, my + ah, (FRONT + BACK) / 2, aw, 0.2, FRONT - BACK, 0xd8ccb2);  // the ceiling
-        box(DOOR_X, my - 0.1, (FRONT + BACK) / 2, aw, 0.14, FRONT - BACK, 0xe3dccb); // the floor
-        // a lamp's warmth on the back wall behind him
-        b.panel(bq[0], my + 2.6, bq[1], 2.6, 2.2, 0xf4e2b0, faceR(FACE.S), 0.02);
+        // the ceiling, carved white, with a gilt rosette
+        lq([RX0, CEIL, RZ0], [RX1, CEIL, RZ0], [RX1, CEIL, RZ1], [RX0, CEIL, RZ1], CEILC);
+        const cz = (RZ0 + RZ1) / 2;
+        lq([DOOR_X - 0.9, CEIL - 0.01, cz - 0.9], [DOOR_X + 0.9, CEIL - 0.01, cz - 0.9], [DOOR_X + 0.9, CEIL - 0.01, cz + 0.9], [DOOR_X - 0.9, CEIL - 0.01, cz + 0.9], tint(C.GILT, 0.95));
+        // the back: dark stone. The sides: marble over a dark dado, a dark
+        // arched recess in each bay
+        wallS(RX0, RX1, RZ0, my, CEIL, DARK);
+        wallE(RX0, RZ0, RZ1, my, CEIL, C.MARBLE_SH);
+        wallW(RX1, RZ0, RZ1, my, CEIL, C.MARBLE_SH);
+        wallE(RX0 + 0.01, RZ0, RZ1, my, my + 0.9, DARK2);
+        wallW(RX1 - 0.01, RZ0, RZ1, my, my + 0.9, DARK2);
+        for (const zc of [33.0, 36.5]) {
+          wallE(RX0 + 0.02, zc - 0.8, zc + 0.8, my + 1.2, my + 3.4, DARK);
+          wallW(RX1 - 0.02, zc - 0.8, zc + 0.8, my + 1.2, my + 3.4, DARK);
+          for (const [x, rr] of [[RX0 + 0.1, rot + Math.PI / 2], [RX1 - 0.1, rot + Math.PI / 2]]) {
+            const q2 = p(x, zc);
+            cuspedArch(b, q2[0], my + 2.6, q2[1], 1.7, 1.0, 0.16, rr, C.MARBLE, 5, null);
+          }
+        }
+        // the front wall's inner face, its arched door, and the depth of the door
+        wallN(RX0, DOOR_X - DHW, RZ1, my, CEIL, C.MARBLE_SH);
+        wallN(DOOR_X + DHW, RX1, RZ1, my, CEIL, C.MARBLE_SH);
+        wallN(DOOR_X - DHW, DOOR_X + DHW, RZ1, CROWN, CEIL, C.MARBLE_SH);
+        wallE(DOOR_X - DHW, RZ1, FZ, my, SPRING, C.MARBLE);
+        wallW(DOOR_X + DHW, RZ1, FZ, my, SPRING, C.MARBLE);
+        const SEG = 12;
+        for (let k = 0; k < SEG; k++) {
+          const a0 = Math.PI * (k / SEG), a1 = Math.PI * ((k + 1) / SEG);
+          const x0 = DOOR_X - Math.cos(a0) * DHW, y0 = SPRING + Math.sin(a0) * DHW;
+          const x1 = DOOR_X - Math.cos(a1) * DHW, y1 = SPRING + Math.sin(a1) * DHW;
+          lq([x0, y0, RZ1], [x1, y1, RZ1], [x1, y1, FZ], [x0, y0, FZ], C.MARBLE);          // the soffit
+          lq([x0, y0, RZ1], [x0, CROWN, RZ1], [x1, CROWN, RZ1], [x1, y1, RZ1], C.MARBLE_SH);  // spandrel
+        }
+        // what holds it up, and what keeps you in the room rather than in the
+        // hollow of the building behind its walls
+        solid(DOOR_X, RZ0 - 0.2, RX1 - RX0 + 0.8, 0.4, 0, { top: CEIL });
+        solid(RX0 - 0.2, (RZ0 + RZ1) / 2, 0.4, RZ1 - RZ0 + 0.4, 0, { top: CEIL });
+        solid(RX1 + 0.2, (RZ0 + RZ1) / 2, 0.4, RZ1 - RZ0 + 0.4, 0, { top: CEIL });
+        solid(DOOR_X, (RZ0 + FZ) / 2, RX1 - RX0, FZ - RZ0, 0, { top: my, tag: 'temple-floor', floor: true });
       }
-      const MZ = 35.4;
-      box(DOOR_X, my, MZ, 1.9, 0.9, 1.3, 0x7a2a22);                              // the vyasasana
-      box(DOOR_X, my + 0.9, MZ, 2.0, 0.1, 1.4, C.GILT);
-      box(DOOR_X, my + 1.0, MZ - 0.55, 1.9, 1.7, 0.25, 0x8a2f24);                // its back
-      box(DOOR_X, my + 2.7, MZ - 0.55, 2.1, 0.22, 0.4, C.GILT);
-      if (buildSeated && place) {
-        // a sannyasi in saffron, shaven-headed, with tilak and beads
-        const t = { id: 'prabhupada', cloth: 0xe8891f, skin: 0xc99464, scale: 1.12,
-          dhoti: 0xe8891f, tilak: 1, beads: true, shaven: true, shawl: 0xe07a18 };
-        place(buildSeated(t, 'lap', null), DOOR_X, my + 1.0, MZ + 0.05, FACE.S);
+      {
+        // the platform, with its elephants in file
+        const PZ0 = 31.5, PZ1 = 33.9, PH = 0.95, PW = 4.2;
+        box(DOOR_X, my, (PZ0 + PZ1) / 2, PW + 0.1, 0.12, PZ1 - PZ0 + 0.1, C.MARBLE_SH);
+        box(DOOR_X, my, (PZ0 + PZ1) / 2, PW, PH, PZ1 - PZ0, C.MARBLE);
+        box(DOOR_X, my + PH - 0.08, (PZ0 + PZ1) / 2, PW + 0.16, 0.08, PZ1 - PZ0 + 0.16, C.MARBLE_SH);
+        for (let t = -1.75; t <= 1.76; t += 0.7) {
+          box(DOOR_X + t, my + 0.3, PZ1 + 0.03, 0.44, 0.24, 0.06, tint(C.MARBLE, 0.96));
+          box(DOOR_X + t + 0.27, my + 0.4, PZ1 + 0.03, 0.12, 0.16, 0.06, tint(C.MARBLE, 0.96));
+          box(DOOR_X + t - 0.12, my + 0.18, PZ1 + 0.03, 0.07, 0.12, 0.05, C.MARBLE_SH);
+          box(DOOR_X + t + 0.12, my + 0.18, PZ1 + 0.03, 0.07, 0.12, 0.05, C.MARBLE_SH);
+        }
+        solid(DOOR_X, (PZ0 + PZ1) / 2, PW, PZ1 - PZ0, 0, { top: my + PH });
+        // the black stone before him
+        const top = my + PH;
+        // a low slab at the platform's front edge, so the plaque on his seat
+        // still shows over it, as in the photograph
+        box(DOOR_X, top, PZ1 - 0.2, 1.7, 0.05, 0.36, 0x141313);
+        box(DOOR_X, top + 0.02, PZ1 - 0.2, 1.6, 0.32, 0.07, 0x161515);
+        sign('samadhi-stone', DOOR_X, top + 0.18, PZ1 - 0.155, 1.48, 0.28, FACE.S);
+        // the gilded seat, two tiers, the white plaque on its face
+        const SZ = 32.4;
+        box(DOOR_X, top, SZ, 1.85, 0.34, 1.35, C.GILT);
+        box(DOOR_X, top + 0.34, SZ, 1.95, 0.06, 1.45, tint(C.GILT, 1.12));
+        box(DOOR_X, top + 0.4, SZ - 0.04, 1.55, 0.24, 1.12, C.GILT);
+        sign('acbsp', DOOR_X, top + 0.52, SZ + 0.53, 1.3, 0.2, FACE.S);        // on the upper tier, over the stone
+        const SEAT = top + 0.64;
+        box(DOOR_X, SEAT, SZ - 0.04, 1.3, 0.04, 0.95, 0xe8891f);
+        // marigolds strewn along the front of the seat
+        for (let k = 0; k < 11; k++) {
+          const t = -0.8 + k * 0.16;
+          box(DOOR_X + t, top + 0.64, SZ + 0.52 + (k % 2) * 0.05, 0.1, 0.07, 0.1, k % 3 ? 0xf08a1c : 0xf5b72a);
+        }
+        if (buildSeated && place) {
+          /*
+           * GOLDEN, which is what everybody who has stood here remembers, and
+           * what the photograph shows: face and hands gold, the cloth saffron.
+           * Larger than life ("a larger-than-life-size murti", Back to Godhead,
+           * January 1984).
+           */
+          const t = { id: 'prabhupada', cloth: 0xe8891f, skin: 0xd4a23a, scale: 1.3,
+            dhoti: 0xe8891f, tilak: 1, beads: true, shaven: true, shawl: 0xe07a18 };
+          place(buildSeated(t, 'lap', null), DOOR_X, SEAT + 0.04, SZ - 0.05, FACE.S);
+          // two garlands of marigold, the long one to the knees
+          const g = new MeshBuilder();
+          const s2 = t.scale;
+          for (const [w, drop, y0, z0, n] of [[0.2, 0.46, 0.64, 0.13, 13], [0.27, 0.62, 0.5, 0.15, 17]]) {
+            for (let k = 0; k < n; k++) {
+              const u = -1 + (2 * k) / (n - 1);
+              const col = k === (n - 1) / 2 ? 0xc8302a : (k % 2 ? 0xf08a1c : 0xf5b72a);
+              g.box(w * s2 * u, (y0 + drop * u * u) * s2, (z0 + 0.1 * (1 - u * u)) * s2, 0.075, 0.075, 0.06, col);
+            }
+          }
+          place(g.build(), DOOR_X, SEAT + 0.04, SZ - 0.05, FACE.S);
+        }
+        // the canopy: two lotus-vase columns and a round arch with its crest
+        const CZ = SZ - 0.1;
+        for (const sd of [-1, 1]) {
+          const cx = DOOR_X + sd * 1.15;
+          const q2 = p(cx, CZ);
+          let y = top;
+          const stack = [
+            ['box', 0.42, 0.18], ['taper', 0.26, 0.4, 0.2], ['taper', 0.4, 0.24, 0.2], ['box', 0.2, 0.36],
+            ['taper', 0.24, 0.44, 0.26], ['taper', 0.44, 0.22, 0.26], ['box', 0.17, 0.2], ['taper', 0.2, 0.46, 0.18], ['box', 0.5, 0.07],
+          ];
+          for (const st of stack) {
+            if (st[0] === 'box') { b.box(q2[0], y, q2[1], st[1], st[2], st[1], C.MARBLE, rot); y += st[2]; }
+            else { b.prism(q2[0], y, q2[1], st[1], st[1], st[2], st[2], st[3], C.MARBLE); y += st[3]; }
+          }
+          solid(cx, CZ, 0.46, 0.46, 0, { top: y });
+        }
+        const SPR = top + 1.95, R0 = 1.01, R1 = 1.29, AD = 0.32;
+        {
+          const SEGA = 16;
+          for (let k = 0; k < SEGA; k++) {
+            const a0 = Math.PI * (k / SEGA), a1 = Math.PI * ((k + 1) / SEGA);
+            const P = (a, r, z) => [DOOR_X - Math.cos(a) * r, SPR + Math.sin(a) * r, z];
+            const zf = CZ + AD / 2, zb = CZ - AD / 2;
+            lq(P(a0, R0, zf), P(a0, R1, zf), P(a1, R1, zf), P(a1, R0, zf), C.MARBLE);        // its face
+            lq(P(a1, R0, zb), P(a1, R1, zb), P(a0, R1, zb), P(a0, R0, zb), C.MARBLE_SH);     // its back
+            lq(P(a0, R0, zb), P(a0, R0, zf), P(a1, R0, zf), P(a1, R0, zb), C.MARBLE_SH);     // under it
+            lq(P(a0, R1, zf), P(a0, R1, zb), P(a1, R1, zb), P(a1, R1, zf), C.MARBLE);        // over it
+          }
+          // the scrolled crest, and a knob on it
+          box(DOOR_X, SPR + R1 - 0.06, CZ, 0.56, 0.34, 0.2, C.MARBLE);
+          for (const sd of [-1, 1]) box(DOOR_X + sd * 0.42, SPR + R1 - 0.2, CZ, 0.3, 0.2, 0.18, C.MARBLE, sd * 0.5);
+          box(DOOR_X, SPR + R1 + 0.28, CZ, 0.16, 0.14, 0.16, C.MARBLE_SH);
+        }
+        // dark stone behind him, and the lamps' glow on it
+        {
+          const q2 = p(DOOR_X, RZ0 + 0.02);
+          b.panel(q2[0], my + 2.6, q2[1], 3.2, 3.4, 0x0f0e0f, faceR(FACE.S), 0.01);
+          b.panel(q2[0], my + 3.9, q2[1], 1.4, 0.5, 0xf6e2a8, faceR(FACE.S), 0.02);
+          for (const sd of [-1, 1]) b.panel(q2[0] + Math.cos(rot) * sd * 0.5, my + 4.3, q2[1] + Math.sin(rot) * sd * 0.5, 0.18, 0.18, 0xfff4d0, faceR(FACE.S), 0.03);
+        }
+        // the lions on their pedestals, and the vase columns over them
+        for (const sd of [-1, 1]) {
+          const lx = DOOR_X + sd * 2.78, lz = 33.55;
+          box(lx, my, lz, 0.84, 1.0, 0.84, C.MARBLE);
+          box(lx, my + 0.92, lz, 0.94, 0.08, 0.94, C.MARBLE_SH);
+          const y = my + 1.0;
+          box(lx, y, lz - 0.12, 0.56, 0.36, 0.6, C.MARBLE);                  // haunches
+          box(lx, y + 0.3, lz + 0.08, 0.46, 0.48, 0.36, C.MARBLE);           // chest
+          box(lx, y + 0.72, lz + 0.14, 0.48, 0.42, 0.38, tint(C.MARBLE, 0.97));   // the mane
+          box(lx, y + 0.78, lz + 0.34, 0.26, 0.24, 0.14, C.MARBLE);          // the face
+          box(lx, y + 0.8, lz + 0.42, 0.14, 0.08, 0.04, C.MARBLE_SH);        // the open jaw
+          for (const k of [-1, 1]) box(lx + k * 0.13, y, lz + 0.26, 0.12, 0.34, 0.14, C.MARBLE);
+          solid(lx, lz, 0.84, 0.84, 0, { top: my + 1.0 });
+          // the column behind and over him, to the ceiling
+          const q2 = p(lx, lz - 0.34);
+          let yy = y + 0.36;
+          const stack = [['box', 0.46, 0.2], ['taper', 0.3, 0.52, 0.34], ['taper', 0.52, 0.3, 0.3], ['box', 0.26, 0.5],
+            ['taper', 0.3, 0.56, 0.4], ['taper', 0.56, 0.28, 0.36], ['box', 0.24, 0.3], ['taper', 0.26, 0.6, 0.3]];
+          for (const st of stack) {
+            if (yy > CEIL - 0.1) break;
+            if (st[0] === 'box') { b.box(q2[0], yy, q2[1], st[1], st[2], st[1], C.MARBLE, rot); yy += st[2]; }
+            else { b.prism(q2[0], yy, q2[1], st[1], st[1], st[2], st[2], st[3], C.MARBLE); yy += st[3]; }
+          }
+          if (yy < CEIL) b.box(q2[0], yy, q2[1], 0.62, CEIL - yy, 0.62, C.MARBLE, rot);
+        }
+        // the bell on its bracket, on the left as you face him
+        box(DOOR_X - 2.3, my + 1.9, 33.7, 0.5, 0.05, 0.05, tint(C.GILT, 0.9));
+        {
+          const q2 = p(DOOR_X - 2.06, 33.7);
+          b.prism(q2[0], my + 1.55, q2[1], 0.2, 0.2, 0.09, 0.09, 0.3, tint(C.GILT, 0.85));
+        }
       }
-      for (const sd of [-1, 1]) {                                               // the lions
-        const lx = DOOR_X + sd * 1.45, lz = MZ + 1.4;
-        box(lx, my + 0.12, lz, 0.5, 0.35, 0.9, C.MARBLE);
-        box(lx, my + 0.47, lz + 0.1, 0.44, 0.5, 0.5, C.MARBLE);
-        box(lx, my + 0.97, lz + 0.25, 0.4, 0.36, 0.34, tint(C.MARBLE, 0.97));
-        box(lx, my + 1.0, lz + 0.46, 0.22, 0.18, 0.1, C.MARBLE_SH);
-      }
+      rooms.push({
+        id: 'iskcon-samadhi',
+        name: "Srila Prabhupada's Samadhi",
+        hindi: 'श्रील प्रभुपाद समाधि मंदिर',
+        deity: 'Srila Prabhupada',
+        ...(() => { const c2 = p(DOOR_X, (RZ0 + FZ) / 2); return { x: c2[0], z: c2[1] }; })(),
+        hw: (RX1 - RX0) / 2, hd: (FZ - RZ0) / 2, rot,
+        // the door's glow on the forecourt at the foot of the steps
+        door: p(DOOR_X, FZ + 1.4 + 3 * 0.45 + 0.6),
+        ceil: CEIL - 0.05,
+      });
       sign('samadhi', DOOR_X, CO1 - 0.8, 39.46 + 0.62, 3.6, 0.75, FACE.S);
     }
 
@@ -969,31 +1196,140 @@ export function buildIskconCampus(o) {
   }
 
   /* ================================================================
-   * THE KIOSKS ALONG THE WEST FENCE, and the corridor they make
+   * THE WEST CORRIDOR: the kiosks, the goblet-planter columns, the murals
    * ================================================================ */
   /*
-   * "Welcome Centre, Internet Access, Matchless Gifts, Bhisma Office,
-   * Vrindavan.tv, BBT Book Display (a strip of small kiosks along the west
-   * side)". OSM draws them as a neat row against the fence, 2.7 m from the
-   * temple's west wall — so the walk between them and the temple is a lane of
-   * shopfronts, which is the outer corridor you walk along.
+   * "make some more space in the corridor of it it's very narrow as of now".
+   * It was 2.5 m, and less at the counters: OSM draws the six kiosks 5 m deep
+   * against the fence and they were built that deep, so between them and the
+   * temple's blank west wall was a slot two pilgrims could not pass in. The
+   * photographs of this corridor — Commons "In and around of Sri
+   * Krishna-Balaram Mandir, Vrindavan" 05-20, walked from GATE:2 toward the
+   * samadhi's spire — show a lane of small shopfronts on one side and the
+   * temple's mural wall on the other, a row of tall columns carrying GOBLET
+   * planters down the middle, shade netting on a frame over it, benches, and
+   * green-grey and white chequer laid square. So the kiosks are 2.5 m deep
+   * here (OSM's outline takes in the walk in front of them, is my reading),
+   * and the walk is 4.8 m. Figures are read off those photographs against
+   * the people in them (INFERRED), not measured.
    */
   {
     const K = [
       ['bbt', -16.4, -11.7], ['vtv', -11.7, -6.9], ['bhisma', 2.6, 7.1],
       ['matchless', 7.1, 10.1], ['internet', 10.0, 12.7], ['welcome', 12.6, 15.4],
     ];
-    const X0 = -19.8, X1 = -14.75, cx = (X0 + X1) / 2, w = X1 - X0;
+    const X0 = -19.5, X1 = -17.0, cx = (X0 + X1) / 2, w = X1 - X0, KH = 3.3;
+    const BOOKS = [0xb0283a, 0x2b5f8a, 0xe8c040, 0x2f6f4f, 0xf2ece0, 0x7a4a86, 0xc0562f];
     for (const [key, z0, z1] of K) {
       const cz = (z0 + z1) / 2, d = z1 - z0 - 0.08;
       const y = pave(cx, cz);
-      box(cx, y - 0.1, cz, w, 3.1, d, C.CREAM);
-      box(cx, y + 3.0, cz, w + 0.3, 0.22, d + 0.2, C.SALMON);
-      box(X1 + 0.02, y + 0.95, cz, 0.06, 1.5, d - 0.7, 0x2f3b3a);            // the window
-      box(X1 + 0.35, y + 0.85, cz, 0.6, 0.1, d - 0.5, 0x8a6a42);              // its counter
-      box(X1 + 0.5, y + 2.55, cz, 1.0, 0.1, d + 0.1, C.GREEN);                // the awning
-      sign(key, X1 + 0.1, y + 2.1, cz, Math.min(d - 0.4, 2.2), 0.6, FACE.E);
-      solid(cx, cz, w, d);
+      box(cx, y - 0.1, cz, w, KH + 0.1, d, C.CREAM);
+      box(cx, y + KH - 0.05, cz, w + 0.3, 0.22, d + 0.2, C.SALMON);
+      box(cx, y + KH + 0.17, cz, w + 0.1, 0.45, d + 0.05, C.CREAM);            // its parapet
+      // the shopfront: a case of books, and a wooden door at one end
+      const caseW = d - 1.9, caseZ = cz - 0.45;
+      box(X1 + 0.02, y + 0.3, caseZ, 0.05, 2.0, caseW, 0x2f3b3a);
+      const nb = Math.floor((caseW - 0.1) / 0.14);
+      for (let r = 0; r < 4; r++) {
+        box(X1 + 0.05, y + 0.4 + r * 0.46, caseZ, 0.05, 0.03, caseW - 0.06, 0x8a6a42);   // a shelf
+        for (let k = 0; k < nb; k++) {
+          const bz = caseZ - (nb * 0.14) / 2 + 0.07 + k * 0.14;
+          box(X1 + 0.06, y + 0.43 + r * 0.46, bz, 0.04, 0.3, 0.1, BOOKS[(k * 3 + r) % BOOKS.length]);
+        }
+      }
+      box(X1 + 0.03, y, cz + d / 2 - 0.75, 0.07, 2.3, 0.95, 0x6a4424);            // the door
+      box(X1 + 0.05, y + 2.35, cz, 0.05, 0.12, d - 0.2, C.SALMON);
+      box(X1 + 0.45, y + 2.62, cz, 0.9, 0.08, d + 0.1, C.GREEN);                   // the awning
+      sign(key, X1 + 0.08, y + 2.95, cz, Math.min(d - 0.4, 2.4), 0.55, FACE.E);
+      solid(cx, cz, w, d, 0, { top: y + KH + 0.6 });
+    }
+
+    // the green-grey and white chequer, laid square, with its dark grout lines
+    {
+      const XA = -17.0, XB = -12.3, ZA = -16.4, ZB = 16.8, T = 0.6;
+      for (let lz = ZA; lz < ZB - 1e-6; lz += T) {
+        for (let lx = XA; lx < XB - 1e-6; lx += T) {
+          const i = Math.round((lx - XA) / T), j = Math.round((lz - ZA) / T);
+          if ((i + j) % 2) continue;
+          const x1 = Math.min(lx + T, XB), z1 = Math.min(lz + T, ZB);
+          const y = pave((lx + x1) / 2, (lz + z1) / 2) + 0.035;
+          const A = p(lx + 0.02, lz + 0.02), B = p(lx + 0.02, z1 - 0.02), Cc = p(x1 - 0.02, z1 - 0.02), D = p(x1 - 0.02, lz + 0.02);
+          b.quad([A[0], y, A[1]], [B[0], y, B[1]], [Cc[0], y, Cc[1]], [D[0], y, D[1]], 0x8f9b8c);
+        }
+      }
+      for (let lz = ZA; lz <= ZB + 1e-6; lz += T) {
+        const y = pave((XA + XB) / 2, lz) + 0.037;
+        const A = p(XA, lz - 0.015), B = p(XA, lz + 0.015), Cc = p(XB, lz + 0.015), D = p(XB, lz - 0.015);
+        b.quad([A[0], y, A[1]], [B[0], y, B[1]], [Cc[0], y, Cc[1]], [D[0], y, D[1]], 0x2b2d2c);
+      }
+      for (let lx = XA; lx <= XB + 1e-6; lx += T) {
+        for (let lz = ZA; lz < ZB - 1e-6; lz += 4.2) {
+          const z1 = Math.min(lz + 4.2, ZB), y = pave(lx, (lz + z1) / 2) + 0.037;
+          const A = p(lx - 0.015, lz), B = p(lx - 0.015, z1), Cc = p(lx + 0.015, z1), D = p(lx + 0.015, lz);
+          b.quad([A[0], y, A[1]], [B[0], y, B[1]], [Cc[0], y, Cc[1]], [D[0], y, D[1]], 0x2b2d2c);
+        }
+      }
+    }
+
+    // the goblet-planter columns down the middle of the walk, and the frame
+    // the shade netting hangs on (the net itself is left out: a dark sheet
+    // over the lane would sit between the camera and you)
+    const COLX = -15.2, COLS = [-14.2, -9.6, -5.0, 3.4, 8.0, 12.6];
+    for (const lz of COLS) {
+      const y = pave(COLX, lz);
+      box(COLX, y, lz, 0.7, 0.55, 0.7, C.CREAM);
+      box(COLX, y + 0.55, lz, 0.78, 0.1, 0.78, C.SALMON);
+      box(COLX, y + 0.65, lz, 0.42, 2.2, 0.42, C.CREAM);
+      for (const hy of [0.95, 1.9, 2.65]) box(COLX, y + hy, lz, 0.47, 0.07, 0.47, C.SALMON);
+      const q = p(COLX, lz);
+      b.prism(q[0], y + 2.85, q[1], 0.42, 0.42, 0.62, 0.62, 0.18, C.CREAM);          // capital
+      b.prism(q[0], y + 3.03, q[1], 0.16, 0.16, 0.22, 0.22, 0.22, C.SALMON);          // the goblet's stem
+      b.prism(q[0], y + 3.25, q[1], 0.32, 0.32, 1.0, 1.0, 0.62, 0xe0a07a);           // its cup
+      b.box(q[0], y + 3.85, q[1], 1.04, 0.07, 1.04, C.SALMON, rot);
+      b.bevelBox(q[0], y + 3.9, q[1], 0.9, 0.55, 0.9, 0x3f7a3a, 0, 0.25);             // the plant
+      post(COLX, lz, 0.38, { top: y + 4.4 });
+      // a cross member from the column to the temple wall, 4.6 m up
+      box((COLX - 12.3) / 2, y + 4.6, lz, -12.3 - COLX, 0.06, 0.06, 0x3a3d3a);
+    }
+    {
+      const y = pave(COLX, 0) + 4.6;
+      box(COLX, y, 0, 0.06, 0.06, 33.0, 0x3a3d3a);
+      box(-12.4, y, 0, 0.06, 0.06, 33.0, 0x3a3d3a);
+    }
+
+    // the temple's west wall seen from here: large framed paintings in pink
+    // cusped frames, and benches under them
+    const muralW = (lz, seed) => {
+      const lx = -12.27, y = pave(-12.8, lz) + 2.35, face = faceR(FACE.W), q = p(lx, lz);
+      const ux = -Math.sin(rot), uz = Math.cos(rot);                     // +lz, in world
+      b.panel(q[0], y, q[1], 2.9, 3.2, C.PINK, face, 0.02);
+      b.panel(q[0], y, q[1], 2.6, 2.9, 0x3d6b45, face, 0.04);
+      b.panel(q[0], y - 1.05, q[1], 2.6, 0.7, 0x54803f, face, 0.05);
+      b.panel(q[0], y + 1.12, q[1], 2.3, 0.5, tint(C.GILT, 0.88), face, 0.05);
+      const sd = seed % 2 ? 1 : -1;
+      b.panel(q[0] + ux * sd * 0.42, y - 0.12, q[1] + uz * sd * 0.42, 0.52, 1.3, 0xe8c04c, face, 0.07);
+      b.panel(q[0] + ux * sd * 0.42, y + 0.68, q[1] + uz * sd * 0.42, 0.3, 0.32, 0x2f4f8a, face, 0.08);
+      b.panel(q[0] - ux * sd * 0.46, y - 0.18, q[1] - uz * sd * 0.46, 0.5, 1.18, 0xc8452a, face, 0.07);
+      b.panel(q[0] - ux * sd * 0.46, y + 0.55, q[1] - uz * sd * 0.46, 0.28, 0.3, 0xd8a878, face, 0.08);
+      const a2 = p(lx - 0.03, lz);
+      cuspedArch(b, a2[0], y + 0.9, a2[1], 2.9, 0.75, 0.08, rot + Math.PI / 2, C.PINK, 5, null);
+    };
+    [-12.6, -7.8, 3.8, 8.6, 13.4].forEach((lz, i) => muralW(lz, i));
+    for (const lz of [-10.2, 6.2, 11.0]) {
+      const y = pave(-12.8, lz);
+      box(-12.78, y + 0.4, lz, 0.46, 0.07, 1.8, 0x7a5230);                        // the seat
+      box(-12.97, y + 0.47, lz, 0.07, 0.45, 1.8, 0x7a5230);                       // its back
+      for (const k of [-0.8, 0.8]) box(-12.78, y, lz + k, 0.4, 0.4, 0.07, 0x5a3a22);
+      solid(-12.78, lz, 0.5, 1.8, 0, { top: y + 0.47 });
+    }
+    /*
+     * The small door into the temple, on both sides, which LandmarkGenerator
+     * cuts through the walls: "निकास EXIT" over it, outside and in.
+     */
+    for (const sd of [-1, 1]) {
+      const y = pave(sd * 12.8, -1.1);
+      sign('exit', sd * 12.29, y + 2.78, -1.1, 0.95, 0.34, sd < 0 ? FACE.W : FACE.E);
+      sign('exit', sd * 11.52, y + 2.78, -1.1, 0.95, 0.34, sd < 0 ? FACE.E : FACE.W);
     }
   }
 
@@ -1156,13 +1492,17 @@ export function buildIskconCampus(o) {
   {
     const g = GATES[0];
     const out = (a, v) => [g.at[0] + g.u[0] * a - g.v[0] * v, g.at[1] + g.u[1] * a - g.v[1] * v];
-    // the peepal, just west of the gate
+    // the peepal, just EAST of the gate — beside the right-hand pier as you
+    // face the gate from the road, trunk banded red and white, sadhus at its
+    // foot (the 2013 street photograph, 6734). It stood 10 m west.
+    const PEEPAL_A = g.half + 2.4;
     {
       // as close to the gate as it stands in the photographs, and never in the
-      // carriageway: step it in toward the wall until the road is 3.5 m off
-      let [tx, tz] = out(-(g.half + 7.0), 3.0);
-      for (let k = 0; k < 8 && o.roadDistance && o.roadDistance(...p(tx, tz)) < 3.5; k++) {
-        [tx, tz] = out(-(g.half + 7.0), 3.0 - (k + 1) * 0.3);
+      // carriageway: step it in toward the railing until the road is 3.5 m
+      // off, but never so far that its platform crosses the railing
+      let [tx, tz] = out(PEEPAL_A, 3.0);
+      for (let k = 0; k < 4 && o.roadDistance && o.roadDistance(...p(tx, tz)) < 3.5; k++) {
+        [tx, tz] = out(PEEPAL_A, 3.0 - (k + 1) * 0.28);
       }
       const y = tH(tx, tz);
       const q = p(tx, tz);
@@ -1191,7 +1531,7 @@ export function buildIskconCampus(o) {
     for (const sd of [-1, 1]) {
       for (let i = 0; i < 3; i++) {
         const a = sd * (g.half + 4.8 + i * 3.4);
-        if (sd < 0 && i === 2) continue;                      // the peepal is there
+        if (sd > 0 && i === 0) continue;                      // the peepal is there
         const [lx, lz] = out(a, 1.55);
         const y = tH(lx, lz);
         const ang = Math.atan2(g.u[1], g.u[0]);
@@ -1217,5 +1557,7 @@ export function buildIskconCampus(o) {
     // what `gates.mjs` and anyone else asks of the wall: its line, and its gates
     outline: CP,
     gates: GATES.map((g) => ({ id: g.id, at: g.at, u: g.u, v: g.v, half: g.half })),
+    // rooms you walk into, which InteriorSystem opens the way it opens a shop
+    rooms,
   };
 }

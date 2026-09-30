@@ -62,6 +62,30 @@ searching the backlog for it. That is the failure this file exists to stop.*
    platform's centre, an eastern bow with two ornamental pools, and the flag
    on its own mast beside the kalash rather than on it.
 
+## NOW — added mid-turn
+
+0a. **ISKCON: the golden Prabhupada room just inside the entry, on the LEFT,
+   is missing, and the corridor is too narrow.** *"still iskcon vrindavan is
+   not that exact, the golden prabhupada deities room present just after the
+   entry on left side is not there see as attached and make some more space
+   in the corridor of it it's very narrow as of now"* (2026-09-30, with a
+   photograph: the view north through the white arch-bridge between the two
+   domed towers, the chequer court, the curving white stair on the left, the
+   temple door and domes beyond). Wanted: (a) the room with the golden murti
+   of Srila Prabhupada on the left just after the entry — research what and
+   where it really is before building it; (b) more room in the corridor —
+   measure the real width off the photograph and OSM and widen what is too
+   narrow. **BUILT 2026-09-30, pending the checks** — the golden murti's
+   room behind the samadhi's door (walk-in), the approach opened into the
+   forecourt it really is, the west corridor widened from 2.5 m to 4.8 m,
+   both side doors, the road gate and GATE:2 as photographed, the peepal
+   east of the gate; see the backlog. Still to come: the swan staircases'
+   true run, the towers' openings under the arch, the museum room.
+   **Added the same turn:** *"there is a small door on both left and right
+   sides of deities room of iskcon temple allowing to walk in out of corridor
+   alos"* — (c) a small door in EACH side wall of the deities room, so you can
+   walk in and out from the corridor, not only through the front.
+
 ## NEXT — queued, in this order
 
 0. ~~**ISKCON Krishna Balaram does not look like the real one.**~~ **BUILT

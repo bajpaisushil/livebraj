@@ -207,3 +207,16 @@ Confidence: HIGH on: the Banke Bihari misidentification (direct side-by-side ima
 - brajrasik.org, 'Old Radha Vallabh Temple, Vrindavan' — the name 'Hith Mandir', 'now abandoned but protected monument', the deity's move to the adjacent temple, the Kunj Gali approach, and the red-sandstone-permission tradition. https://www.brajrasik.org/articles/5a899d3882274812fecf969b/old-radha-vallabh-temple-vrindavan
 - ESRI World Imagery, z19 (0.2646 m/px at this latitude), tiles fetched and stitched for MEASUREMENT only, over 27.58330/77.69540. Used for lane widths and roofscape density. Not traced.
 - Wikipedia, 'Radha Vallabh Temple, Vrindavan' — cited here as the SOURCE OF THE ERROR: it carries Growse's Govind Dev wall description ('10 feet thick ... pierced in 2 stages') as if it were Radha Vallabh's, and this has propagated to srimandir.com, holidify.com, templepurohit.com, faujitoursandtravels.com and others, some of which further garble 'triforium' into 'Trifolium'. https://en.wikipedia.org/wiki/Radha_Vallabh_Temple,_Vrindavan
+
+
+## Coordinate, resolved 2026-09-30
+
+OpenStreetMap node 7172103529 (`amenity=place_of_worship`,
+`name:ru=Храм Радхи-Валлабхи`, i.e. "Radha Vallabh temple") stands at
+27.581074, 77.69172. It agrees with English Wikipedia's infobox (27.5811,
+77.6919, within 17 m) and lies 46 m from Wikidata's high-precision value
+(27.58065833, 77.69156111), so the three independent points cluster and the
+survey's "UNRESOLVED" is resolved. The project's 27.58330 / 77.69540 is about
+430 m NE of it. Every "MEASURED from ESRI" setting figure above, taken over
+the old point, is void and must be re-measured over this one. The same mapper
+put the Narasimhadeva temple (node 7172126073) 70 m east at 27.58104, 77.692437.

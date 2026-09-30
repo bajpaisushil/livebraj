@@ -49,6 +49,8 @@ export function buildLandmarks(ctx, terrain) {
   // a builder asked to keep out of the shared mesh
   const interiors = {};
   const extra = [];
+  // small rooms a builder authored inside its own campus, entered like a shop
+  const rooms = [];
 
   for (const loc of ctx.data.LOCATIONS) {
     const kind = loc.build.kind;
@@ -163,6 +165,7 @@ export function buildLandmarks(ctx, terrain) {
       // must not be left to work it out from a constant
       if (inner.altars) anchors[loc.id].altars = inner.altars;
       if (inner.volume) interiors[loc.id] = inner.volume;
+      if (out.rooms) rooms.push(...out.rooms.map((r) => ({ ...r, owner: loc.id })));
     } else if (ENTERABLE.has(kind)) {
       colliders.push(...hollowColliders(loc));
       const inner = buildInterior(b, loc, ground);
@@ -433,7 +436,7 @@ export function buildLandmarks(ctx, terrain) {
     + (interiorMeshes.length ? ` (${Math.round(extraTris / 1000)}k in ${interiorMeshes.length} culled interior)` : ''));
   // hand the lamps back so TimeOfDay can raise them as the sun goes
   if (ARCH_LOG) globalThis.__archLog = ARCH_LOG;
-  return { group, colliders, anchors, templeLights, interiors, interiorMeshes };
+  return { group, colliders, anchors, templeLights, interiors, interiorMeshes, rooms };
 }
 
 /* ================================================================
@@ -1591,11 +1594,54 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
 
   /* ---------------- the block: outer walls and the doorway ---------------- */
 
+  /*
+   * A SMALL DOOR IN EACH SIDE WALL, at the altar end of the court.
+   *
+   * "there is a small door on both left and right sides of deities room of
+   * iskcon temple allowing to walk in out of corridor also" — and Commons
+   * "In and around of Sri Krishna-Balaram Mandir, Vrindavan 13" and "14" show
+   * the west one from the corridor: a single wooden leaf with a mesh window
+   * in the mural wall, "निकास EXIT" over it. "Sri Krishna Balaram Mandir
+   * Vrindavan 15" and "16" show a small door under a mural in the verandah
+   * wall beside the altar flight, which is where these are cut. Its size is
+   * read off those photographs against the people in them, not measured.
+   */
+  const SIDE_DOOR_Z = KB_CZ - KB_COURT + 1.9;         // where the first verandah mural hung
+  const SIDE_DOOR_W = 1.4, SIDE_DOOR_H = 2.5;
   for (const sx of [-1, 1]) {
-    const q = p(sx * (HW - WT * 0.5), 0);
-    b.box(q[0], g0, q[1], WT, WALL_H, KB_LEN, KB_CREAM, rot);
-    wall(sx * (HW - WT * 0.5), -HL * 0.5, WT, HL);
-    wall(sx * (HW - WT * 0.5), HL * 0.5, WT, HL);
+    const lx = sx * (HW - WT * 0.5);
+    const z0 = SIDE_DOOR_Z - SIDE_DOOR_W * 0.5, z1 = SIDE_DOOR_Z + SIDE_DOOR_W * 0.5;
+    for (const [a, c] of [[-HL, z0], [z1, HL]]) {
+      const q = p(lx, (a + c) * 0.5);
+      b.box(q[0], g0, q[1], WT, WALL_H, c - a, KB_CREAM, rot);
+    }
+    const dq = p(lx, SIDE_DOOR_Z);
+    b.box(dq[0], g0 + SIDE_DOOR_H, dq[1], WT, WALL_H - SIDE_DOOR_H, SIDE_DOOR_W, KB_CREAM, rot);
+    // the threshold, a marble sill level with the floor either side
+    b.box(dq[0], FL - 0.12, dq[1], WT + 0.3, 0.12, SIDE_DOOR_W, KB_MARBLE_W, rot);
+    // a plain salmon architrave round it, both faces — the photographs show a
+    // square-headed wooden door, not an arch
+    for (const face of [HW + 0.02, HW - WT - 0.02]) {
+      const fx = sx * face;
+      for (const zz of [z0 - 0.08, z1 + 0.08]) {
+        const jq = p(fx, zz);
+        b.box(jq[0], g0, jq[1], 0.06, SIDE_DOOR_H + 0.16, 0.16, KB_SALMON, rot);
+      }
+      const hq = p(fx, SIDE_DOOR_Z);
+      b.box(hq[0], g0 + SIDE_DOOR_H, hq[1], 0.06, 0.16, SIDE_DOOR_W + 0.32, KB_SALMON, rot);
+    }
+    // the leaf, wood with a mesh window, swung in flat against the wall
+    {
+      const lf = p(sx * (HW - WT - 0.04), z0 - SIDE_DOOR_W * 0.5 - 0.02);
+      b.box(lf[0], FL, lf[1], 0.06, SIDE_DOOR_H - 0.05, SIDE_DOOR_W - 0.08, 0x6a4424, rot);
+      const wq = p(sx * (HW - WT - 0.075), z0 - SIDE_DOOR_W * 0.5 - 0.02);
+      b.box(wq[0], FL + 1.35, wq[1], 0.02, 0.8, SIDE_DOOR_W - 0.5, 0xb9a57a, rot);
+    }
+    // colliders in short runs (see `wall`), the doorway left open
+    wall(lx, (-HL + z0) * 0.5, WT, z0 + HL);
+    const mid = (z1 + HL) * 0.5;
+    wall(lx, (z1 + mid) * 0.5, WT, mid - z1);
+    wall(lx, (mid + HL) * 0.5, WT, HL - mid);
   }
   {
     const q = p(0, -(HL - WT * 0.5));
@@ -1889,7 +1935,8 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
   };
 
   const WALL_X = HW - WT - 0.05;
-  for (let i = 0; i < 4; i++) {
+  for (let i = 1; i < 4; i++) {
+    // i = 0 hung where the small side doors are cut now
     const lz = KB_CZ - KB_COURT + 1.9 + i * 3.7;
     mural(-WALL_X, lz, PN_X, 2.6, i);
     mural(WALL_X, lz, PN_NX, 2.6, i + 1);
@@ -2437,6 +2484,8 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
     mesh: { name: 'IskconInterior', builder: ib, x, z, r: KB_LEN },
     // the campus's painted boards, on the town's sign atlas
     meshes: [{ name: 'IskconSigns', builder: signB, x, z, r: 140, map: signAtlas }],
+    // rooms inside the campus you can walk into: Srila Prabhupada's samadhi
+    rooms: campus.rooms || [],
     interior: {
       altar: [altarW[0], HALL_FLOOR + 1.35, altarW[1]],
       darshan: [darshanW[0], darshanW[1]],
@@ -2464,6 +2513,9 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
         x, z, hw: HW, hd: HL, rot, open: true, door: p(0, HL + 0.9),
         // the fence's line and both gates, from OSM, in this builder's frame
         compound: campus,
+        // the small doors cut through both side walls, in this builder's frame:
+        // walls declared open here, and nowhere else
+        sideDoors: [-1, 1].map((sx) => ({ lx: sx * (HW - WT * 0.5), lz: SIDE_DOOR_Z, w: SIDE_DOOR_W })),
       },
       // where each altar actually is, in world coordinates. `side` matches the
       // `side` on each entry in content/deities.js.

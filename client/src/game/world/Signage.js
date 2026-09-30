@@ -80,6 +80,15 @@ export const CAMPUS_BOARDS = [
   { key: 'bbt', bg: '#1d4f3f', fg: '#f5e8c8', name: 'BBT Book Display', deva: 'बीबीटी पुस्तकें' },
   { key: 'security', bg: '#3a3a42', fg: '#f0f0f0', name: 'Security Office', deva: 'सुरक्षा कार्यालय' },
   { key: 'prasadam', bg: '#a8563c', fg: '#fff0d8', name: 'Krishna Prasadam Hall', deva: 'प्रसादम हॉल' },
+  // over the small doors in the temple's side walls: "निकास EXIT" on a white
+  // board (Commons "In and around ... Vrindavan 13" and "14")
+  { key: 'exit', bg: '#f4f1e8', fg: '#1d1d1d', name: 'EXIT', deva: 'निकास' },
+  // the west gate's red board, "GATE:2 ISKCON VRINDAVAN" (the same set, 01 and 02)
+  { key: 'gate2', bg: '#d0221c', fg: '#fff6ec', name: 'GATE : 2', deva: 'इस्कॉन वृन्दावन' },
+  // in the samadhi: the black stone before the murti, and the white plaque on
+  // his gilded seat ("Samadhi Mandir, Srila Prabhupad, ISKCON, Vrindavan.jpg")
+  { key: 'samadhi-stone', bg: '#161515', fg: '#e8e2d2', name: 'Samadhi Mandir', deva: 'समाधि मन्दिर · श्रील प्रभुपाद' },
+  { key: 'acbsp', bg: '#f6f3ea', fg: '#2a2622', name: 'A.C. Bhaktivedanta Swami Prabhupada', deva: 'Founder-Acharya · ISKCON' },
 ];
 
 /** Atlas slot of one of Krishna Balaram's boards, or -1. */

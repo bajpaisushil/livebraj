@@ -128,6 +128,27 @@ export class InteriorSystem {
         open: vol ? !!vol.open : false,
       });
     }
+    /*
+     * Rooms a landmark builder made inside its own grounds — Srila
+     * Prabhupada's samadhi at Krishna Balaram — are walked into the way a shop
+     * is: the roof comes off over them and the camera looks down into the
+     * room. They are authored in the builders' box frame, like the temples,
+     * so their axes come from cos(-rot) and sin(-rot).
+     */
+    const rooms = (this.ctx.world.landmarks && this.ctx.world.landmarks.rooms) || [];
+    for (const r of rooms) {
+      this.volumes.push({
+        loc: { id: r.id, name: r.name, hindi: r.hindi || '', deity: r.deity || null, type: 'house' },
+        x: r.x, z: r.z, hw: r.hw, hd: r.hd, rot: r.rot,
+        cos: Math.cos(-r.rot), sin: Math.sin(-r.rot),
+        door: r.door || null,
+        anchor: null,
+        house: true,
+        room: true,
+        ceil: r.ceil,
+      });
+    }
+
     // house interiors: shops, homes and dharamshalas marked enterable by the
     // building generator. Same threshold, smaller rooms, no deity.
     const houses = (this.ctx.world.buildings && this.ctx.world.buildings.interiors) || [];
