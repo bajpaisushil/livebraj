@@ -3336,3 +3336,31 @@ they were looked at rather than waved through.
   traffic away before asking what it is offered: a hired rickshaw nearer than
   yours is correctly the one offered. 5/5 alone, green in parallel.
 - `traffic` still fails under the parallel suite, passes alone — queued (11).
+
+## 2026-09-30 — "prabhupada deities are before the stairs towards gate which is wrong"
+
+*"no still not right prabhupada deity are after the top stairs and between the
+stairs and out of deity main temple room on elft side of enter and on right
+side is a shop currently prabhupada deities are beofre the stairs towards gate
+which is wrong"*. Queued as NOW 0b. The room goes to the samadhi's north-east
+face, onto the court between the arch's staircases and the temple's door, on
+the left of that door; a shop on the museum's face on the right.
+
+Done the same day:
+
+- **The room moved** to the samadhi's north-east face, onto the court between
+  the arch's staircases and the temple's door, on the LEFT as you walk up to
+  it — the door, its landing and three steps, the "Srila Prabhupada's
+  Samadhi" board, and the whole room behind (the golden murti, the gilded
+  seat, canopy, platform, stone, lions, bell), carried over in a frame laid on
+  that face so no measurement changed. The road face is plain jali now.
+- **The shop on the right:** a "Gift Shop" booth of books and brass against the
+  museum's north-west face, across the court from his door.
+- **The swan staircases** now run as the photographs show: one long straight
+  flight up each marble building's diagonal face, the foot at the path beside
+  its tower, rising away from the path to a first-floor door at the far
+  corner, a balustrade of swans from the fourth step, a potted palm on the
+  newel. The three bottom steps are open to the path and the flights start
+  1.6 m from the towers, so the walk between the two feet is about 5 m, the
+  arch's own width. The survey's double quarter turn on the samadhi's road
+  face and the big palm planters at the path's edges came off.

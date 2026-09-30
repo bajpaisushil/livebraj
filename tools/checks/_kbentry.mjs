@@ -14,10 +14,18 @@ const VIEWS = [
   ['road', [5, 1.6, 64], [0.9, 3.5, 44]],
   ['entry', [0.9, 1.6, 50], [0.9, 6, 20]],
   ['left', [0.9, 1.6, 50], [-10, 2.6, 38]],
-  ['samadhidoor', [-12.48, 1.6, 47.5], [-12.48, 2.6, 36]],
-  ['samadhiin', [-12.48, 2.95, 38.2], [-12.48, 2.9, 31.5]],
-  ['samadhitop', [-12.48, 7.8, 41.2], [-12.48, 1.6, 34.5], { clip: 'room' }],
+  // past the stairs, walking up to the temple's door: Srila Prabhupada's door
+  // on the left, the shop on the right
+  ['court', [0.9, 1.6, 28.5], [0.9, 3.0, 14]],
+  ['samadhidoor', [-2.05, 1.6, 16.97], [-8.16, 2.6, 24.24]],
+  ['samadhiin', [-6.745, 2.95, 22.557], [-11.05, 2.9, 27.69]],
+  ['samadhitop', [-5.01, 7.8, 20.49], [-9.12, 1.6, 25.39], { clip: 'room' }],
+  ['shop', [-1.5, 1.6, 18.6], [7.1, 1.8, 21.9]],
   ['underarch', [0.9, 1.6, 36], [0.9, 3.2, 18]],
+  // the view the user sent: north through the arch, a swan staircase each side
+  ['userview', [0.9, 1.6, 41], [0.9, 7.5, 22]],
+  ['samstair', [5, 1.6, 45], [-4.5, 3.5, 34]],
+  ['musstair', [-3, 1.6, 45], [7, 3.5, 34]],
   ['westcorr', [-14.2, 1.6, -15], [-14.2, 1.8, 16]],
   ['westcorrS', [-14.2, 1.6, 15], [-14.2, 1.8, -12]],
   ['westdoor', [-16.2, 1.6, 1.5], [-12.3, 1.5, -1.1]],

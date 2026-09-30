@@ -340,3 +340,14 @@ Vrindavan 07.jpg" at full size, OSM, and ESRI z19 imagery.*
   museum's tower faces; the photograph looking north through the arch shows a
   span of about 1.6 tower widths. Both fit a span of 5.4-6 m, narrower than
   the survey's derived 8-11 m. Use OSM.
+
+- WHERE THE SAMADHI SHRINE'S DOOR IS — corrected the same day, by the user, who
+  has walked it: "prabhupada deity are after the top stairs and between the
+  stairs and out of deity main temple room on left side of enter and on right
+  side is a shop". The golden murti's room is entered from the little court
+  between the arch (with its two staircases) and the temple's own door, on the
+  LEFT as you walk up to the temple; a shop faces it on the right. That is the
+  samadhi's north-east face. It fits the photographs: "In and around ...
+  Vrindavan" 28 and 29 show a black door up broad steps under a carved portico
+  with the cream (painted, not marble) temple behind it, which only that face
+  can have. The earlier reading here — the door on the road face — is wrong.

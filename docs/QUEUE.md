@@ -86,6 +86,25 @@ searching the backlog for it. That is the failure this file exists to stop.*
    alos"* — (c) a small door in EACH side wall of the deities room, so you can
    walk in and out from the corridor, not only through the front.
 
+0b. **ISKCON: the golden Prabhupada room is on the wrong side.** *"no still
+   not right prabhupada deity are after the top stairs and between the stairs
+   and out of deity main temple room on elft side of enter and on right side
+   is a shop currently prabhupada deities are beofre the stairs towards gate
+   which is wrong"* (2026-09-30). Read as: past the swan staircases, in the
+   small court between them and the main temple's door, on the LEFT as you
+   walk up to the temple entrance, is Srila Prabhupada's murti; on the RIGHT
+   a shop. It was built behind the samadhi's road face, before the stairs,
+   toward the gate. Fix: the room's door on the samadhi's north-east face,
+   which looks onto that court (the photograph of its black door up broad
+   steps under a carved portico is taken from there, the cream temple behind);
+   a shop on the museum's face opposite. **BUILT 2026-09-30** — the room,
+   its steps and the Samadhi board moved onto the north-east face in its own
+   frame (every figure kept); the road face is jali now; the "Gift Shop"
+   booth of books and brass across the court; the two swan staircases up the
+   buildings' diagonal faces to the path, as the photographs run them (the
+   survey's double quarter turn removed). interior 30/30 walks you in from
+   the new door; platforms, stairs, steps and 11 more green.
+
 ## NEXT — queued, in this order
 
 0. ~~**ISKCON Krishna Balaram does not look like the real one.**~~ **BUILT

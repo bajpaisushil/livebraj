@@ -480,28 +480,9 @@ export function buildIskconCampus(o) {
         b.quad([A[0], y, A[1]], [E[0], y, E[1]], [Cc[0], y, Cc[1]], [D[0], y, D[1]], C.CHQ_B);
       }
     }
-    /*
-     * Two big marble planters with palms, one each side of the way in, where
-     * the path runs between the two buildings toward the arch ("Sri Krishna
-     * Balaram Temple, Vrindavan.JPG"). Placed at the path's edges, clear of
-     * both OSM outlines.
-     */
-    for (const [lx, lz] of [[-2.9, 33.9], [5.3, 33.4]]) {
-      const y = pave(lx, lz);
-      box(lx, y, lz, 1.5, 0.25, 1.5, C.MARBLE_SH);
-      box(lx, y + 0.25, lz, 1.3, 0.75, 1.3, C.MARBLE);
-      box(lx, y + 1.0, lz, 1.45, 0.12, 1.45, C.MARBLE_SH);
-      box(lx, y + 1.05, lz, 1.1, 0.08, 1.1, 0x5a3a24);
-      const q = p(lx, lz);
-      b.box(q[0], y + 1.1, q[1], 0.12, 0.7, 0.12, 0x6a5234);
-      b.bevelBox(q[0], y + 1.7, q[1], 0.7, 0.45, 0.7, 0x3f7a3a, 0, 0.2);
-      for (let k = 0; k < 7; k++) {
-        const a2 = (k / 7) * TAU;
-        b.box(q[0] + Math.cos(a2) * 0.55, y + 1.85 + (k % 2) * 0.12, q[1] + Math.sin(a2) * 0.55,
-          1.1, 0.05, 0.16, 0x4d8a3f, a2);   // w runs along (cos r, sin r): radial
-      }
-      solid(lx, lz, 1.5, 1.5, 0, { top: y + 1.1 });
-    }
+    // (the big palm planters at the path's edges came off when the swan
+    // staircases went where the photographs put them: a potted palm now
+    // stands on each staircase's newel instead)
   }
 
   /* ================================================================
@@ -588,6 +569,82 @@ export function buildIskconCampus(o) {
       // as tall as the building and no taller: a chhatri on the roof is not in
       // this wall, and the camera may look over it
       solid((A[0] + B[0]) / 2 + inw[0] * 0.3, (A[1] + B[1]) / 2 + inw[1] * 0.3, L + 0.3, 0.6, Math.atan2(u[1], u[0]), { top });
+    }
+  };
+  /** The outward normal of a polygon's edge i, whichever way it winds. */
+  const outward = (pts, i) => {
+    const u = edgeDir(pts[i], pts[(i + 1) % pts.length]);
+    return area2(pts) > 0 ? [u[1], -u[0]] : [-u[1], u[0]];
+  };
+  /**
+   * THE SWAN STAIRCASE: one long straight flight up a marble building's face.
+   *
+   * Both buildings have one, and the photographs agree on how they run: the
+   * foot at the path beside the building's tower, by the great arch, rising
+   * AWAY from the path along the building's diagonal face to a first-floor
+   * door at its far corner, with a balustrade of carved swans on its open
+   * side — "Sri Krishna Balaram Temple, Vrindavan.JPG" and the view you sent,
+   * looking north through the arch with a flight on each hand; the 2013
+   * street photograph 6734 from the road; "ISKON TEMPLE 1.jpg". (The double
+   * quarter turn on the samadhi's front that stood here was the survey's
+   * words, "a DOUBLE CURVING STAIRCASE climbs the front", drawn without a
+   * photograph.)
+   *
+   * `E` is the face's corner at the tower and `Fz` its far corner. The flight
+   * starts 1.6 m along from the tower and is 1.5 m wide, and its three bottom
+   * steps are open to the path, so the walk between the two feet stays about
+   * 5 m — the arch's own width — rather than pinching the way in again.
+   * Rise and going are what the storey height leaves (~0.19 / 0.26 m).
+   */
+  const swanFlight = (E, Fz, nrm, yFoot, yTop, tag) => {
+    const Lf = Math.hypot(Fz[0] - E[0], Fz[1] - E[1]);
+    const u = [(Fz[0] - E[0]) / Lf, (Fz[1] - E[1]) / Lf];
+    const ang = Math.atan2(u[1], u[0]);
+    const W = 1.5, T0 = 1.6, LAND = 1.0, T1 = Lf - LAND - 0.1;
+    const N = Math.max(6, Math.round((yTop - yFoot) / 0.19));
+    const rise = (yTop - yFoot) / N, run = (T1 - T0) / N;
+    const at = (t, o) => [E[0] + u[0] * t + nrm[0] * o, E[1] + u[1] * t + nrm[1] * o];
+    for (let i = 0; i < N; i++) {
+      const tt = yFoot + (i + 1) * rise, tc = T0 + (i + 0.5) * run;
+      const [cx, cz] = at(tc, W / 2);
+      // the tread, and the masonry under it down to the paving
+      box(cx, yFoot - 0.1, cz, run + 0.02, tt - yFoot + 0.1, W, i % 2 ? C.MARBLE : tint(C.MARBLE, 0.985), ang);
+      solid(cx, cz, run + 0.02, W, ang, { top: tt, tag, standOnly: true });
+      if (i < 3) continue;                       // the bottom steps open to the path
+      // the balustrade of swans on the open side: a plinth course, a swan to
+      // each step (breast, neck, head), and the rail over them
+      const [bx, bz] = at(tc, W + 0.08);
+      box(bx, tt, bz, run + 0.02, 0.22, 0.16, C.MARBLE, ang);
+      box(bx, tt + 0.22, bz, 0.13, 0.3, 0.12, tint(C.MARBLE, 0.97), ang);
+      box(bx + u[0] * 0.05, tt + 0.5, bz + u[1] * 0.05, 0.05, 0.2, 0.05, C.MARBLE, ang);
+      box(bx + u[0] * 0.09, tt + 0.68, bz + u[1] * 0.09, 0.11, 0.06, 0.06, C.MARBLE, ang);
+      box(bx, tt + 0.84, bz, run + 0.03, 0.08, 0.2, C.MARBLE_SH, ang);
+      solid(bx, bz, run + 0.02, 0.3, ang, { top: tt + 1.0, tag: 'temple-rail' });
+    }
+    // the newel where the swans begin, with a potted palm on it
+    {
+      const tc = T0 + 3 * run, [nx, nz] = at(tc, W + 0.08), y = yFoot + 3 * rise;
+      box(nx, yFoot - 0.1, nz, 0.42, y - yFoot + 1.1, 0.42, C.MARBLE, ang);
+      box(nx, y + 1.0, nz, 0.52, 0.1, 0.52, C.MARBLE_SH, ang);
+      const q = p(nx, nz);
+      b.prism(q[0], y + 1.1, q[1], 0.26, 0.26, 0.4, 0.4, 0.3, C.MARBLE);
+      b.bevelBox(q[0], y + 1.4, q[1], 0.5, 0.4, 0.5, 0x3f7a3a, 0, 0.2);
+      post(nx, nz, 0.3, { top: y + 1.6 });
+    }
+    // the landing at the top, and the first-floor door it serves
+    {
+      const tc = T1 + LAND / 2, [lx, lz] = at(tc, W / 2);
+      box(lx, yFoot - 0.1, lz, LAND + 0.02, yTop - yFoot + 0.1, W, C.MARBLE, ang);
+      solid(lx, lz, LAND, W, ang, { top: yTop, tag: 'temple-floor', floor: true });
+      // its rail on the open side and across the end
+      const [rx, rz] = at(tc, W + 0.08);
+      box(rx, yTop, rz, LAND + 0.1, 0.92, 0.16, C.MARBLE, ang);
+      const [ex, ez] = at(T1 + LAND + 0.05, W / 2);
+      box(ex, yTop, ez, 0.16, 0.92, W + 0.2, C.MARBLE, ang);
+      // the door: dark wood in a marble frame, on the upper storey's face
+      const [dx, dz] = at(tc, -0.1);
+      box(dx, yTop, dz, 1.3, 2.55, 0.1, C.MARBLE_SH, ang);
+      box(dx + nrm[0] * 0.03, yTop, dz + nrm[1] * 0.03, 1.05, 2.35, 0.1, 0x3b3226, ang);
     }
   };
   /** Bays along each edge: pilasters and cusped recesses with fish-scale jali. */
@@ -699,13 +756,32 @@ export function buildIskconCampus(o) {
   const SA = KB_OSM.samadhi;
   const yS = topOf(-18.2, -1.8, 18.2, 39.5) + 0.04;
   const ST1 = yS + 1.3, CO1 = yS + 6.0, ST2 = yS + 6.35, CO2 = yS + 10.4, TER = yS + 10.8;
+  /*
+   * WHERE SRILA PRABHUPADA'S DOOR IS: on the samadhi's NORTH-EAST face, the
+   * one that looks onto the little court between the arch's staircases and
+   * the temple's own door. "prabhupada deity are after the top stairs and
+   * between the stairs and out of deity main temple room on left side of
+   * enter and on right side is a shop" — past the stairs, on the left as you
+   * walk up to the temple, a shop on the right. It was on the road face,
+   * before the stairs, toward the gate, which you said is wrong; and the
+   * photograph of this door ("In and around ... Vrindavan" 28 and 29: black
+   * doors up broad steps where people sit, under a carved portico) has the
+   * cream temple behind it, which the road face never could.
+   * SA edge 4 -> 5 runs from the tower by the arch to the north-west corner.
+   */
+  const doorEdge = 4;
+  const doorT = Math.hypot(SA[5][0] - SA[4][0], SA[5][1] - SA[4][1]) / 2;
+  const DU = edgeDir(SA[4], SA[5]);
+  const DN = area2(SA) > 0 ? [DU[1], -DU[0]] : [-DU[1], DU[0]];       // outward, onto the court
+  const D0 = [SA[4][0] + DU[0] * doorT, SA[4][1] + DU[1] * doorT];
+  const FA = Math.atan2(DU[1], DU[0]);                               // the room frame's X axis, local
   {
     // "Moulded marble plinth ~1.2–1.5 m, carrying a carved frieze of elephants
     // in file and a lotus-petal course"
     extrude(grow(SA, 0.35), yS - 0.25, ST1, C.MARBLE_SH);
     extrude(grow(SA, 0.42), yS + 0.5, yS + 0.9, tint(C.VEIN, 0.95));
     extrude(grow(SA, 0.48), ST1 - 0.12, ST1 + 0.03, C.MARBLE);
-    extrude(SA, ST1, CO1, C.MARBLE, C.MARBLE, { at: [-12.48, 39.465], hw: 1.2, crown: ST1 + 3.4 });
+    extrude(SA, ST1, CO1, C.MARBLE, C.MARBLE, { at: D0, hw: 1.2, crown: ST1 + 3.4 });
     extrude(grow(SA, 0.2), CO1, CO1 + 0.18, C.MARBLE_SH);
     extrude(grow(SA, -0.12), ST2, CO2, C.MARBLE, C.MARBLE_SH);
     extrude(grow(SA, 0.3), CO2, TER, C.MARBLE);
@@ -724,10 +800,7 @@ export function buildIskconCampus(o) {
         }
       }
     }
-    // the south face is the front: its door, and the double staircase
-    // (SA edge 1 -> 2 runs along the south face, lz 39.46)
-    const DOOR_X = -12.48;
-    const doorEdge = 1, doorT = Math.hypot(DOOR_X - SA[1][0], 39.46 - SA[1][1]);
+    // the door is on the north-east face (see D0); the road face is jali
     bays(SA, ST1, CO1 - ST1 - 0.1, C.MARBLE, 0xb9b3a6, () => false, [{ edge: doorEdge, t: doorT }]);
     bays(grow(SA, -0.12), ST2 + 0.2, CO2 - ST2 - 0.5, C.MARBLE, 0x9b968c);
     cornice(SA, CO1 - 0.05, C.MARBLE);
@@ -748,15 +821,30 @@ export function buildIskconCampus(o) {
 
     // steps up to the ground-floor door, and what is seen through it
     {
+      /*
+       * Written in the room's own frame: the door at (DOOR_X, FZ0) facing +lz,
+       * which is what these figures were measured in, carried onto the
+       * north-east face by M — X along the face, +Z out onto the court. The
+       * frame is a rotation, so every length and every left and right is kept.
+       */
+      const DOOR_X = 0, FZ0 = 39.465;
+      const M = (lx, lz) => { const X = lx - DOOR_X, Z = lz - FZ0; return [D0[0] + DU[0] * X + DN[0] * Z, D0[1] + DU[1] * X + DN[1] * Z]; };
+      const box2 = (lx, y, lz, w, h, d, color, ang = 0) => { const q = M(lx, lz); box(q[0], y, q[1], w, h, d, color, ang + FA); };
+      const solid2 = (lx, lz, w, d, ang = 0, extra = {}) => { const q = M(lx, lz); solid(q[0], q[1], w, d, ang + FA, extra); };
+      const sign2 = (key, lx, y, lz, w, h, face) => { const q = M(lx, lz); sign(key, q[0], y, q[1], w, h, face + FA); };
+      const place2 = (geo, lx, y, lz, face) => { const q = M(lx, lz); place(geo, q[0], y, q[1], face + FA); };
+      const p2 = (lx, lz) => p(...M(lx, lz));
+      const faceR2 = (a2) => faceR(a2 + FA);
+      const RR = rot + FA;                       // this frame's world rotation
       // three steps and a deep top landing that runs right up to the door
       const N = 4, RISE = (ST1 - yS) / N, TR = 0.45, LAND = 1.4;
       const F = 39.46;
-      box(DOOR_X, yS - 0.05, F + LAND / 2, 3.4, ST1 - yS + 0.05, LAND, C.MARBLE);
-      solid(DOOR_X, F + LAND / 2, 3.4, LAND, 0, { top: ST1, tag: 'temple-step', standOnly: true });
+      box2(DOOR_X, yS - 0.05, F + LAND / 2, 3.4, ST1 - yS + 0.05, LAND, C.MARBLE);
+      solid2(DOOR_X, F + LAND / 2, 3.4, LAND, 0, { top: ST1, tag: 'temple-step', standOnly: true });
       for (let i = 0; i < N - 1; i++) {
         const lz = F + LAND + (N - 1 - i) * TR - TR / 2;
-        box(DOOR_X, yS - 0.05 + i * RISE, lz, 3.4, RISE + 0.05, TR, C.MARBLE);
-        solid(DOOR_X, lz, 3.4, TR, 0, { top: yS + (i + 1) * RISE, tag: 'temple-step', standOnly: true });
+        box2(DOOR_X, yS - 0.05 + i * RISE, lz, 3.4, RISE + 0.05, TR, C.MARBLE);
+        solid2(DOOR_X, lz, 3.4, TR, 0, { top: yS + (i + 1) * RISE, tag: 'temple-step', standOnly: true });
       }
       /*
        * SRILA PRABHUPADA'S SAMADHI: THE ROOM, AND NOW YOU CAN WALK INTO IT.
@@ -782,7 +870,7 @@ export function buildIskconCampus(o) {
       const DHW = 1.2, SPRING = ST1 + 3.4 - DHW, CROWN = ST1 + 3.4;   // the extrusion's own door
       const DARK = 0x1c1a1b, DARK2 = 0x2c2826, CEILC = 0xe6dfd1;
       const lq = (A, B, Cq, D, col) => {
-        const a2 = p(A[0], A[2]), b2 = p(B[0], B[2]), c2 = p(Cq[0], Cq[2]), d2 = p(D[0], D[2]);
+        const a2 = p2(A[0], A[2]), b2 = p2(B[0], B[2]), c2 = p2(Cq[0], Cq[2]), d2 = p2(D[0], D[2]);
         b.quad([a2[0], A[1], a2[1]], [b2[0], B[1], b2[1]], [c2[0], Cq[1], c2[1]], [d2[0], D[1], d2[1]], col);
       };
       // a wall facing -lz / +lz / +lx / -lx, in LOCAL coordinates
@@ -811,8 +899,8 @@ export function buildIskconCampus(o) {
         for (const zc of [33.0, 36.5]) {
           wallE(RX0 + 0.02, zc - 0.8, zc + 0.8, my + 1.2, my + 3.4, DARK);
           wallW(RX1 - 0.02, zc - 0.8, zc + 0.8, my + 1.2, my + 3.4, DARK);
-          for (const [x, rr] of [[RX0 + 0.1, rot + Math.PI / 2], [RX1 - 0.1, rot + Math.PI / 2]]) {
-            const q2 = p(x, zc);
+          for (const [x, rr] of [[RX0 + 0.1, RR + Math.PI / 2], [RX1 - 0.1, RR + Math.PI / 2]]) {
+            const q2 = p2(x, zc);
             cuspedArch(b, q2[0], my + 2.6, q2[1], 1.7, 1.0, 0.16, rr, C.MARBLE, 5, null);
           }
         }
@@ -832,43 +920,43 @@ export function buildIskconCampus(o) {
         }
         // what holds it up, and what keeps you in the room rather than in the
         // hollow of the building behind its walls
-        solid(DOOR_X, RZ0 - 0.2, RX1 - RX0 + 0.8, 0.4, 0, { top: CEIL });
-        solid(RX0 - 0.2, (RZ0 + RZ1) / 2, 0.4, RZ1 - RZ0 + 0.4, 0, { top: CEIL });
-        solid(RX1 + 0.2, (RZ0 + RZ1) / 2, 0.4, RZ1 - RZ0 + 0.4, 0, { top: CEIL });
-        solid(DOOR_X, (RZ0 + FZ) / 2, RX1 - RX0, FZ - RZ0, 0, { top: my, tag: 'temple-floor', floor: true });
+        solid2(DOOR_X, RZ0 - 0.2, RX1 - RX0 + 0.8, 0.4, 0, { top: CEIL });
+        solid2(RX0 - 0.2, (RZ0 + RZ1) / 2, 0.4, RZ1 - RZ0 + 0.4, 0, { top: CEIL });
+        solid2(RX1 + 0.2, (RZ0 + RZ1) / 2, 0.4, RZ1 - RZ0 + 0.4, 0, { top: CEIL });
+        solid2(DOOR_X, (RZ0 + FZ) / 2, RX1 - RX0, FZ - RZ0, 0, { top: my, tag: 'temple-floor', floor: true });
       }
       {
         // the platform, with its elephants in file
         const PZ0 = 31.5, PZ1 = 33.9, PH = 0.95, PW = 4.2;
-        box(DOOR_X, my, (PZ0 + PZ1) / 2, PW + 0.1, 0.12, PZ1 - PZ0 + 0.1, C.MARBLE_SH);
-        box(DOOR_X, my, (PZ0 + PZ1) / 2, PW, PH, PZ1 - PZ0, C.MARBLE);
-        box(DOOR_X, my + PH - 0.08, (PZ0 + PZ1) / 2, PW + 0.16, 0.08, PZ1 - PZ0 + 0.16, C.MARBLE_SH);
+        box2(DOOR_X, my, (PZ0 + PZ1) / 2, PW + 0.1, 0.12, PZ1 - PZ0 + 0.1, C.MARBLE_SH);
+        box2(DOOR_X, my, (PZ0 + PZ1) / 2, PW, PH, PZ1 - PZ0, C.MARBLE);
+        box2(DOOR_X, my + PH - 0.08, (PZ0 + PZ1) / 2, PW + 0.16, 0.08, PZ1 - PZ0 + 0.16, C.MARBLE_SH);
         for (let t = -1.75; t <= 1.76; t += 0.7) {
-          box(DOOR_X + t, my + 0.3, PZ1 + 0.03, 0.44, 0.24, 0.06, tint(C.MARBLE, 0.96));
-          box(DOOR_X + t + 0.27, my + 0.4, PZ1 + 0.03, 0.12, 0.16, 0.06, tint(C.MARBLE, 0.96));
-          box(DOOR_X + t - 0.12, my + 0.18, PZ1 + 0.03, 0.07, 0.12, 0.05, C.MARBLE_SH);
-          box(DOOR_X + t + 0.12, my + 0.18, PZ1 + 0.03, 0.07, 0.12, 0.05, C.MARBLE_SH);
+          box2(DOOR_X + t, my + 0.3, PZ1 + 0.03, 0.44, 0.24, 0.06, tint(C.MARBLE, 0.96));
+          box2(DOOR_X + t + 0.27, my + 0.4, PZ1 + 0.03, 0.12, 0.16, 0.06, tint(C.MARBLE, 0.96));
+          box2(DOOR_X + t - 0.12, my + 0.18, PZ1 + 0.03, 0.07, 0.12, 0.05, C.MARBLE_SH);
+          box2(DOOR_X + t + 0.12, my + 0.18, PZ1 + 0.03, 0.07, 0.12, 0.05, C.MARBLE_SH);
         }
-        solid(DOOR_X, (PZ0 + PZ1) / 2, PW, PZ1 - PZ0, 0, { top: my + PH });
+        solid2(DOOR_X, (PZ0 + PZ1) / 2, PW, PZ1 - PZ0, 0, { top: my + PH });
         // the black stone before him
         const top = my + PH;
         // a low slab at the platform's front edge, so the plaque on his seat
         // still shows over it, as in the photograph
-        box(DOOR_X, top, PZ1 - 0.2, 1.7, 0.05, 0.36, 0x141313);
-        box(DOOR_X, top + 0.02, PZ1 - 0.2, 1.6, 0.32, 0.07, 0x161515);
-        sign('samadhi-stone', DOOR_X, top + 0.18, PZ1 - 0.155, 1.48, 0.28, FACE.S);
+        box2(DOOR_X, top, PZ1 - 0.2, 1.7, 0.05, 0.36, 0x141313);
+        box2(DOOR_X, top + 0.02, PZ1 - 0.2, 1.6, 0.32, 0.07, 0x161515);
+        sign2('samadhi-stone', DOOR_X, top + 0.18, PZ1 - 0.155, 1.48, 0.28, FACE.S);
         // the gilded seat, two tiers, the white plaque on its face
         const SZ = 32.4;
-        box(DOOR_X, top, SZ, 1.85, 0.34, 1.35, C.GILT);
-        box(DOOR_X, top + 0.34, SZ, 1.95, 0.06, 1.45, tint(C.GILT, 1.12));
-        box(DOOR_X, top + 0.4, SZ - 0.04, 1.55, 0.24, 1.12, C.GILT);
-        sign('acbsp', DOOR_X, top + 0.52, SZ + 0.53, 1.3, 0.2, FACE.S);        // on the upper tier, over the stone
+        box2(DOOR_X, top, SZ, 1.85, 0.34, 1.35, C.GILT);
+        box2(DOOR_X, top + 0.34, SZ, 1.95, 0.06, 1.45, tint(C.GILT, 1.12));
+        box2(DOOR_X, top + 0.4, SZ - 0.04, 1.55, 0.24, 1.12, C.GILT);
+        sign2('acbsp', DOOR_X, top + 0.52, SZ + 0.53, 1.3, 0.2, FACE.S);        // on the upper tier, over the stone
         const SEAT = top + 0.64;
-        box(DOOR_X, SEAT, SZ - 0.04, 1.3, 0.04, 0.95, 0xe8891f);
+        box2(DOOR_X, SEAT, SZ - 0.04, 1.3, 0.04, 0.95, 0xe8891f);
         // marigolds strewn along the front of the seat
         for (let k = 0; k < 11; k++) {
           const t = -0.8 + k * 0.16;
-          box(DOOR_X + t, top + 0.64, SZ + 0.52 + (k % 2) * 0.05, 0.1, 0.07, 0.1, k % 3 ? 0xf08a1c : 0xf5b72a);
+          box2(DOOR_X + t, top + 0.64, SZ + 0.52 + (k % 2) * 0.05, 0.1, 0.07, 0.1, k % 3 ? 0xf08a1c : 0xf5b72a);
         }
         if (buildSeated && place) {
           /*
@@ -879,7 +967,7 @@ export function buildIskconCampus(o) {
            */
           const t = { id: 'prabhupada', cloth: 0xe8891f, skin: 0xd4a23a, scale: 1.3,
             dhoti: 0xe8891f, tilak: 1, beads: true, shaven: true, shawl: 0xe07a18 };
-          place(buildSeated(t, 'lap', null), DOOR_X, SEAT + 0.04, SZ - 0.05, FACE.S);
+          place2(buildSeated(t, 'lap', null), DOOR_X, SEAT + 0.04, SZ - 0.05, FACE.S);
           // two garlands of marigold, the long one to the knees
           const g = new MeshBuilder();
           const s2 = t.scale;
@@ -890,23 +978,23 @@ export function buildIskconCampus(o) {
               g.box(w * s2 * u, (y0 + drop * u * u) * s2, (z0 + 0.1 * (1 - u * u)) * s2, 0.075, 0.075, 0.06, col);
             }
           }
-          place(g.build(), DOOR_X, SEAT + 0.04, SZ - 0.05, FACE.S);
+          place2(g.build(), DOOR_X, SEAT + 0.04, SZ - 0.05, FACE.S);
         }
         // the canopy: two lotus-vase columns and a round arch with its crest
         const CZ = SZ - 0.1;
         for (const sd of [-1, 1]) {
           const cx = DOOR_X + sd * 1.15;
-          const q2 = p(cx, CZ);
+          const q2 = p2(cx, CZ);
           let y = top;
           const stack = [
             ['box', 0.42, 0.18], ['taper', 0.26, 0.4, 0.2], ['taper', 0.4, 0.24, 0.2], ['box', 0.2, 0.36],
             ['taper', 0.24, 0.44, 0.26], ['taper', 0.44, 0.22, 0.26], ['box', 0.17, 0.2], ['taper', 0.2, 0.46, 0.18], ['box', 0.5, 0.07],
           ];
           for (const st of stack) {
-            if (st[0] === 'box') { b.box(q2[0], y, q2[1], st[1], st[2], st[1], C.MARBLE, rot); y += st[2]; }
+            if (st[0] === 'box') { b.box(q2[0], y, q2[1], st[1], st[2], st[1], C.MARBLE, RR); y += st[2]; }
             else { b.prism(q2[0], y, q2[1], st[1], st[1], st[2], st[2], st[3], C.MARBLE); y += st[3]; }
           }
-          solid(cx, CZ, 0.46, 0.46, 0, { top: y });
+          solid2(cx, CZ, 0.46, 0.46, 0, { top: y });
         }
         const SPR = top + 1.95, R0 = 1.01, R1 = 1.29, AD = 0.32;
         {
@@ -921,46 +1009,46 @@ export function buildIskconCampus(o) {
             lq(P(a0, R1, zf), P(a0, R1, zb), P(a1, R1, zb), P(a1, R1, zf), C.MARBLE);        // over it
           }
           // the scrolled crest, and a knob on it
-          box(DOOR_X, SPR + R1 - 0.06, CZ, 0.56, 0.34, 0.2, C.MARBLE);
-          for (const sd of [-1, 1]) box(DOOR_X + sd * 0.42, SPR + R1 - 0.2, CZ, 0.3, 0.2, 0.18, C.MARBLE, sd * 0.5);
-          box(DOOR_X, SPR + R1 + 0.28, CZ, 0.16, 0.14, 0.16, C.MARBLE_SH);
+          box2(DOOR_X, SPR + R1 - 0.06, CZ, 0.56, 0.34, 0.2, C.MARBLE);
+          for (const sd of [-1, 1]) box2(DOOR_X + sd * 0.42, SPR + R1 - 0.2, CZ, 0.3, 0.2, 0.18, C.MARBLE, sd * 0.5);
+          box2(DOOR_X, SPR + R1 + 0.28, CZ, 0.16, 0.14, 0.16, C.MARBLE_SH);
         }
         // dark stone behind him, and the lamps' glow on it
         {
-          const q2 = p(DOOR_X, RZ0 + 0.02);
-          b.panel(q2[0], my + 2.6, q2[1], 3.2, 3.4, 0x0f0e0f, faceR(FACE.S), 0.01);
-          b.panel(q2[0], my + 3.9, q2[1], 1.4, 0.5, 0xf6e2a8, faceR(FACE.S), 0.02);
-          for (const sd of [-1, 1]) b.panel(q2[0] + Math.cos(rot) * sd * 0.5, my + 4.3, q2[1] + Math.sin(rot) * sd * 0.5, 0.18, 0.18, 0xfff4d0, faceR(FACE.S), 0.03);
+          const q2 = p2(DOOR_X, RZ0 + 0.02);
+          b.panel(q2[0], my + 2.6, q2[1], 3.2, 3.4, 0x0f0e0f, faceR2(FACE.S), 0.01);
+          b.panel(q2[0], my + 3.9, q2[1], 1.4, 0.5, 0xf6e2a8, faceR2(FACE.S), 0.02);
+          for (const sd of [-1, 1]) b.panel(q2[0] + Math.cos(RR) * sd * 0.5, my + 4.3, q2[1] + Math.sin(RR) * sd * 0.5, 0.18, 0.18, 0xfff4d0, faceR2(FACE.S), 0.03);
         }
         // the lions on their pedestals, and the vase columns over them
         for (const sd of [-1, 1]) {
           const lx = DOOR_X + sd * 2.78, lz = 33.55;
-          box(lx, my, lz, 0.84, 1.0, 0.84, C.MARBLE);
-          box(lx, my + 0.92, lz, 0.94, 0.08, 0.94, C.MARBLE_SH);
+          box2(lx, my, lz, 0.84, 1.0, 0.84, C.MARBLE);
+          box2(lx, my + 0.92, lz, 0.94, 0.08, 0.94, C.MARBLE_SH);
           const y = my + 1.0;
-          box(lx, y, lz - 0.12, 0.56, 0.36, 0.6, C.MARBLE);                  // haunches
-          box(lx, y + 0.3, lz + 0.08, 0.46, 0.48, 0.36, C.MARBLE);           // chest
-          box(lx, y + 0.72, lz + 0.14, 0.48, 0.42, 0.38, tint(C.MARBLE, 0.97));   // the mane
-          box(lx, y + 0.78, lz + 0.34, 0.26, 0.24, 0.14, C.MARBLE);          // the face
-          box(lx, y + 0.8, lz + 0.42, 0.14, 0.08, 0.04, C.MARBLE_SH);        // the open jaw
-          for (const k of [-1, 1]) box(lx + k * 0.13, y, lz + 0.26, 0.12, 0.34, 0.14, C.MARBLE);
-          solid(lx, lz, 0.84, 0.84, 0, { top: my + 1.0 });
+          box2(lx, y, lz - 0.12, 0.56, 0.36, 0.6, C.MARBLE);                  // haunches
+          box2(lx, y + 0.3, lz + 0.08, 0.46, 0.48, 0.36, C.MARBLE);           // chest
+          box2(lx, y + 0.72, lz + 0.14, 0.48, 0.42, 0.38, tint(C.MARBLE, 0.97));   // the mane
+          box2(lx, y + 0.78, lz + 0.34, 0.26, 0.24, 0.14, C.MARBLE);          // the face
+          box2(lx, y + 0.8, lz + 0.42, 0.14, 0.08, 0.04, C.MARBLE_SH);        // the open jaw
+          for (const k of [-1, 1]) box2(lx + k * 0.13, y, lz + 0.26, 0.12, 0.34, 0.14, C.MARBLE);
+          solid2(lx, lz, 0.84, 0.84, 0, { top: my + 1.0 });
           // the column behind and over him, to the ceiling
-          const q2 = p(lx, lz - 0.34);
+          const q2 = p2(lx, lz - 0.34);
           let yy = y + 0.36;
           const stack = [['box', 0.46, 0.2], ['taper', 0.3, 0.52, 0.34], ['taper', 0.52, 0.3, 0.3], ['box', 0.26, 0.5],
             ['taper', 0.3, 0.56, 0.4], ['taper', 0.56, 0.28, 0.36], ['box', 0.24, 0.3], ['taper', 0.26, 0.6, 0.3]];
           for (const st of stack) {
             if (yy > CEIL - 0.1) break;
-            if (st[0] === 'box') { b.box(q2[0], yy, q2[1], st[1], st[2], st[1], C.MARBLE, rot); yy += st[2]; }
+            if (st[0] === 'box') { b.box(q2[0], yy, q2[1], st[1], st[2], st[1], C.MARBLE, RR); yy += st[2]; }
             else { b.prism(q2[0], yy, q2[1], st[1], st[1], st[2], st[2], st[3], C.MARBLE); yy += st[3]; }
           }
-          if (yy < CEIL) b.box(q2[0], yy, q2[1], 0.62, CEIL - yy, 0.62, C.MARBLE, rot);
+          if (yy < CEIL) b.box(q2[0], yy, q2[1], 0.62, CEIL - yy, 0.62, C.MARBLE, RR);
         }
         // the bell on its bracket, on the left as you face him
-        box(DOOR_X - 2.3, my + 1.9, 33.7, 0.5, 0.05, 0.05, tint(C.GILT, 0.9));
+        box2(DOOR_X - 2.3, my + 1.9, 33.7, 0.5, 0.05, 0.05, tint(C.GILT, 0.9));
         {
-          const q2 = p(DOOR_X - 2.06, 33.7);
+          const q2 = p2(DOOR_X - 2.06, 33.7);
           b.prism(q2[0], my + 1.55, q2[1], 0.2, 0.2, 0.09, 0.09, 0.3, tint(C.GILT, 0.85));
         }
       }
@@ -969,94 +1057,19 @@ export function buildIskconCampus(o) {
         name: "Srila Prabhupada's Samadhi",
         hindi: 'श्रील प्रभुपाद समाधि मंदिर',
         deity: 'Srila Prabhupada',
-        ...(() => { const c2 = p(DOOR_X, (RZ0 + FZ) / 2); return { x: c2[0], z: c2[1] }; })(),
-        hw: (RX1 - RX0) / 2, hd: (FZ - RZ0) / 2, rot,
+        ...(() => { const c2 = p2(DOOR_X, (RZ0 + FZ) / 2); return { x: c2[0], z: c2[1] }; })(),
+        hw: (RX1 - RX0) / 2, hd: (FZ - RZ0) / 2, rot: RR,
         // the door's glow on the forecourt at the foot of the steps
-        door: p(DOOR_X, FZ + 1.4 + 3 * 0.45 + 0.6),
+        door: p2(DOOR_X, FZ + 1.4 + 3 * 0.45 + 0.6),
         ceil: CEIL - 0.05,
       });
-      sign('samadhi', DOOR_X, CO1 - 0.8, 39.46 + 0.62, 3.6, 0.75, FACE.S);
+      sign2('samadhi', DOOR_X, CO1 - 0.8, 39.46 + 0.62, 3.6, 0.75, FACE.S);
     }
 
-    // "Approach: a DOUBLE CURVING STAIRCASE climbs the front, its balustrade
-    // formed of carved SWAN/GOOSE figures". Two quarter-turn flights, solid
-    // masonry with smooth curved sides, each rising from the forecourt to a
-    // landing beside the ground-floor door, and a balcony across between them
-    // at the first floor — so the door itself stays clear to walk up to.
-    // Where they start and the curve they take are INFERRED; the samadhi
-    // stands 1.7 m off the west fence, which is what bounds them.
+    // the swan staircase up the samadhi's face to the path: see swanFlight
     {
-      const N = 19, R = 3.55, W2 = 1.25, GAP = 2.45;
-      const top = ST2, LZ = 39.46 + 0.62;
-      const rise = (top - yS) / N;
-      for (const sd of [-1, 1]) {
-        // the centre of this flight's quarter circle
-        const cx = DOOR_X + sd * (GAP + R), cz = LZ;
-        const P2 = (am, rr) => [cx - sd * Math.cos(am) * rr, cz + Math.sin(am) * rr];
-        const treadAt = (i) => Math.PI / 2 * (1 - (i + 0.5) / N);    // i = 0 is the bottom, out front
-        const rIn = R - W2 / 2, rOut = R + W2 / 2;
-        // the flight's two curved faces, from the paving up to each tread
-        const SEGS = 38;
-        for (const rr of [rIn, rOut]) {
-          let last = null;
-          for (let k = 0; k <= SEGS; k++) {
-            const am = Math.PI / 2 * (1 - k / SEGS);
-            const tt = yS + Math.min(N, Math.ceil((k / SEGS) * N + 1e-6)) * rise;
-            const q2 = p(...P2(am, rr));
-            const cur = { lo: [q2[0], yS - 0.1, q2[1]], hi: [q2[0], tt, q2[1]] };
-            if (last) {
-              // outer face outward, inner face inward (toward this flight's centre)
-              const outward = (rr === rOut) === (sd > 0);
-              if (outward) b.quad(last.lo, last.hi, cur.hi, cur.lo, C.MARBLE_SH);
-              else b.quad(cur.lo, cur.hi, last.hi, last.lo, C.MARBLE_SH);
-            }
-            last = cur;
-          }
-        }
-        for (let i = 0; i < N; i++) {
-          const am = treadAt(i);
-          const [lx, lz] = P2(am, R);
-          const tt = yS + (i + 1) * rise;
-          const run = R * (Math.PI / 2) / N + 0.06;
-          const tang = Math.atan2(Math.cos(am), sd * Math.sin(am));
-          // each tread a slab on the solid flight; its riser is its front face
-          box(lx, tt - rise - 0.02, lz, run, rise + 0.02, W2, C.MARBLE, tang);
-          /*
-           * STAND-ONLY. A tread here is 0.35 m deep and a body is 0.42 m in
-           * radius, so standing on one you already touch the tread after next,
-           * 0.67 m up — solid, that was a wall four steps from the bottom.
-           * The flight's sides are walled by its balustrade colliders instead.
-           */
-          // each flight its own tag: two flights and the door steps all within
-          // 3.6 m of one another read as ONE flight to anything grouping treads
-          solid(lx, lz, run, W2 + 0.1, tang, { top: tt, tag: sd > 0 ? 'temple-step-e' : 'temple-step-w', standOnly: true });
-          // the swan balustrade, both edges: a row of birds, not turned balusters
-          for (const rr of [rIn - 0.07, rOut + 0.07]) {
-            const [ox, oz] = P2(am, rr);
-            box(ox, tt, oz, run, 0.55, 0.14, C.MARBLE, tang);
-            if (i % 2 === 0) box(ox, tt + 0.55, oz, 0.3, 0.26, 0.16, tint(C.MARBLE, 0.98), tang);
-            solid(ox, oz, run, 0.3, tang, { top: tt + 1.0, tag: 'temple-rail' });
-          }
-        }
-        // the landing this flight arrives on, beside the door
-        // it stops where the top tread begins: any further and its edge stands
-        // across the last two treads as a wall
-        const [lx, lz] = [DOOR_X + sd * (GAP - 0.2 + W2 / 2), LZ - 0.525];
-        box(lx, yS - 0.1, lz, W2 + 0.4, top - yS + 0.1, 0.85, C.MARBLE_SH);
-        solid(lx, lz, W2 + 0.4, 0.85, 0, { top, tag: 'temple-floor', floor: true });
-      }
-      // the balcony across, over the door, which is the first floor's front
-      box(DOOR_X, top - 0.4, LZ - 0.25, GAP * 2 - 0.6, 0.4, 1.4, C.MARBLE);
-      // `over`: a floor with open space under it, which you walk beneath
-      solid(DOOR_X, LZ - 0.25, GAP * 2 - 0.6, 1.4, 0, { top, tag: 'temple-floor', standOnly: true, over: true });
-      // its railing is drawn and NOT collided: collide() treats a collider as
-      // solid from the ground to its top, so a rail 7 m up would have walled
-      // off the ground-floor door underneath it
-      box(DOOR_X, top, LZ + 0.4, GAP * 2 + W2, 1.0, 0.14, C.MARBLE);
-      for (let k = 0; k < 7; k++) {
-        const bx = DOOR_X - (GAP - 0.2) + k * ((GAP - 0.2) * 2 / 6);
-        box(bx, top + 1.0, LZ + 0.4, 0.3, 0.26, 0.16, tint(C.MARBLE, 0.98));
-      }
+      const i = 2;                                   // SA edge 2 -> 3, the diagonal to the arch
+      swanFlight(SA[i + 1], SA[i], outward(SA, i), yS, ST2, 'samadhi-stair');
     }
 
     // the terrace: two open chhatris flanking the shikhara
@@ -1106,6 +1119,8 @@ export function buildIskconCampus(o) {
     cornice(grow(MU, 0.3), yM + 10.5, C.MARBLE);
     parapet(grow(MU, 0.3), yM + 10.8, C.MARBLE);
     edgeWalls(MU, yM + 11.8);
+    // its swan staircase, the samadhi's mirror, up MU edge 1 -> 2
+    swanFlight(MU[1], MU[2], outward(MU, 1), yM, yM + 6.35, 'museum-stair');
     const N = 4, RISE = 1.3 / N, TR = 0.45, LAND = 1.2;
     box(DX, yM - 0.05, DZ + LAND / 2, 3.0, 1.35, LAND, C.MARBLE);
     solid(DX, DZ + LAND / 2, 3.0, LAND, 0, { top: yM + 1.3, tag: 'temple-step', standOnly: true });
@@ -1118,6 +1133,49 @@ export function buildIskconCampus(o) {
     // its doors stand shut for now: the galleries are queued
     box(DX, M1, DZ + 0.12, 2.0, 3.2, 0.1, C.WOOD);
     sign('museum', DX, yM + 5.2, DZ + 0.55, 3.8, 0.75, FACE.S);
+
+    /*
+     * "on right side is a shop": across the little court from Srila
+     * Prabhupada's door, against the museum's north-west face, which is the
+     * face on your right as you walk up to the temple. Books and gifts, as the
+     * campus's own shops are. That it stands against this face is your
+     * account; its size and stock are INFERRED.
+     */
+    {
+      const i = 9, A = MU[i], B = MU[(i + 1) % MU.length];
+      const L = Math.hypot(B[0] - A[0], B[1] - A[1]);
+      const u = edgeDir(A, B), nr = outward(MU, i), ang = Math.atan2(u[1], u[0]);
+      const at = (t, o) => [A[0] + u[0] * t + nr[0] * o, A[1] + u[1] * t + nr[1] * o];
+      const tm = L / 2, SW = 4.2, SD = 2.2, SH = 3.5, O0 = 0.35;
+      const face = Math.atan2(nr[1], nr[0]);
+      const [cx, cz] = at(tm, O0 + SD / 2);
+      const y = pave(cx, cz);
+      box(cx, y - 0.1, cz, SW, SH + 0.1, SD, C.CREAM, ang);
+      box(cx, y + SH - 0.05, cz, SW + 0.3, 0.22, SD + 0.3, C.SALMON, ang);
+      box(cx, y + SH + 0.17, cz, SW + 0.1, 0.4, SD + 0.05, C.CREAM, ang);
+      // the open front: dark within, three shelves of books and brass
+      const [fx, fz] = at(tm, O0 + SD + 0.02);
+      box(fx, y + 0.9, fz, SW - 0.6, 1.9, 0.04, 0x2f2a26, ang);
+      const GOODS = [0xb0283a, 0x2b5f8a, 0xe8c040, 0x2f6f4f, 0xf2ece0, 0x7a4a86, 0xc9a227, 0xc0562f];
+      for (let r2 = 0; r2 < 3; r2++) {
+        const [sx, sz] = at(tm, O0 + SD + 0.05);
+        box(sx, y + 1.05 + r2 * 0.55, sz, SW - 0.7, 0.03, 0.06, 0x8a6a42, ang);
+        for (let k = 0; k < 22; k++) {
+          const [gx, gz] = at(tm - (SW - 0.8) / 2 + 0.08 + k * ((SW - 0.8) / 22), O0 + SD + 0.06);
+          box(gx, y + 1.08 + r2 * 0.55, gz, 0.1, r2 === 1 && k % 4 === 0 ? 0.2 : 0.3, 0.05, GOODS[(k * 5 + r2 * 3) % GOODS.length], ang);
+        }
+      }
+      // the counter across it, and the awning over
+      const [kx, kz] = at(tm, O0 + SD + 0.3);
+      box(kx, y, kz, SW - 0.4, 0.95, 0.5, 0x8a6a42, ang);
+      box(kx, y + 0.95, kz, SW - 0.3, 0.05, 0.56, 0x6a4a2a, ang);
+      const [ax, az] = at(tm, O0 + SD + 0.45);
+      box(ax, y + 2.6, az, SW + 0.2, 0.08, 0.9, C.GREEN, ang);
+      const [gx2, gz2] = at(tm, O0 + SD + 0.06);
+      sign('gift', gx2, y + 2.95, gz2, 2.6, 0.6, face);
+      solid(cx, cz, SW, SD, ang, { top: y + SH + 0.4 });
+      solid(kx, kz, SW - 0.4, 0.5, ang, { top: y + 0.95 });
+    }
   }
 
   // --- the great arch, which is a bridge ---
