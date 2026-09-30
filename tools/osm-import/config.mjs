@@ -212,8 +212,17 @@ export const LANDMARKS = [
     id: 'shahji', match: ['Shahji', 'Shah Ji', 'Lal Babu'],
     name: 'Shahji Mandir', hindi: 'शाहजी मंदिर',
     type: 'temple', deity: 'Chhote Radha Raman', icon: 'temple',
-    build: { kind: 'temple-colonnade', w: 32, d: 40, h: 11, color: '#f4f1e8', accent: '#d8cfba' },
-    rot: Math.PI, radius: 26, district: 'temple-quarter',
+    /*
+     * From docs/research/shahji.md: "Whole white-marble mass, minimum-area
+     * rectangle: 49.4 × 30.5 m, long axis bearing 054°" and "the facade faces
+     * bearing ~144° (SE) onto the court", which in the box frame is -36
+     * degrees (+lz toward the court). `compound` is the marble mass and its
+     * 38 x 38 m forecourt, which the town must keep off. Honey and white
+     * marble, measured; see ShahjiMandir.js.
+     */
+    build: { kind: 'temple-colonnade', w: 49.4, d: 30.5, h: 20, color: '#d8c6a2', accent: '#f0ede6', measured: true },
+    rot: -36 * Math.PI / 180, radius: 26, district: 'temple-quarter',
+    compound: { lx0: -29.2, lx1: 25.7, lz0: -16.25, lz1: 56.25 },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
     fallback: [27.58480, 77.69700],
   },

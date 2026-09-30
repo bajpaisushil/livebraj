@@ -91,11 +91,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
    in docs/research/iskcon-krishna-balaram.md, then photographs and OSM —
    then build, photograph, measure. Next after Start from here ships.
 
-4. **Eight surveyed temples, none built.** Each gets built from its survey
-   AND its checker's corrections (re-paired correctly 2026-09-30 — see the
-   backlog), photographed, and measured against the survey's own numbers.
-   Rangaji · Shahji · Radha Vallabh · Madan Mohan · Radha Raman ·
-   Radha Damodar · Radha Gopinath · Jugal Kishore.
+4. **Eight surveyed temples — Shahji BUILT 2026-09-30, seven to go.** Each
+   gets built from its survey AND its checker's corrections (re-paired
+   correctly 2026-09-30 — see the backlog), photographed, and measured against
+   the survey's own numbers. ~~Shahji~~ · Rangaji · Radha Vallabh · Madan
+   Mohan · Radha Raman · Radha Damodar · Radha Gopinath · Jugal Kishore.
+   Shahji's open questions, queued: the Basanti Kamra at the court's east end
+   (the checker: it may carry a dome — untested); the rooftop statues'
+   individual poses; the heights, which rest on one 1883 phrase.
 5. ~~**The vehicle camera follows the vehicle.**~~ **DONE 2026-09-30.**
    The heading is published every moving frame and the view eases round to
    it after 1.8 s of the look control being left alone (tau 0.7 s). Measured

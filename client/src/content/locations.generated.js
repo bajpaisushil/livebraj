@@ -268,9 +268,10 @@ export const LOCATIONS = [
     "type": "temple",
     "district": "temple-quarter",
     "grounds": null,
+    "compound": { "lx0": -29.2, "lx1": 25.7, "lz0": -16.25, "lz1": 56.25 },
     "pos": [641.81, -534.12],
     "geo": [27.5848, 77.697],
-    "rot": 3.141592653589793,
+    "rot": -0.6283185307179586,
     "radius": 26,
     "icon": "temple",
     "deity": "Chhote Radha Raman",
@@ -282,11 +283,12 @@ export const LOCATIONS = [
     ],
     "build": {
       "kind": "temple-colonnade",
-      "w": 32,
-      "d": 40,
-      "h": 11,
-      "color": "#f4f1e8",
-      "accent": "#d8cfba"
+      "w": 49.4,
+      "d": 30.5,
+      "h": 20,
+      "color": "#d8c6a2",
+      "accent": "#f0ede6",
+      "measured": true
     },
     "osm": null
   },

@@ -14,6 +14,7 @@ import { rngAt } from '../../engine/math/Random.js';
 import { TAU } from '../../engine/math/MathUtils.js';
 import { PEOPLE, buildSeated, buildStanding } from '../npc/Archetypes.js';
 import { buildIskconCampus } from './IskconCampus.js';
+import { buildShahji } from './ShahjiMandir.js';
 import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
 
@@ -7053,48 +7054,45 @@ const BUILDERS = {
    * colonnade, and the twelve spiral columns the town names it for —
    * Tedhe Khambe Wala Mandir, the temple of the crooked pillars.
    */
-  'temple-colonnade': ({ loc, b, ground }) => {
-    const { w, d, h, color, accent } = loc.build;
-    const [x, z] = loc.pos;
-    const rot = loc.rot;
-    const cs = Math.cos(rot), sn = Math.sin(rot);
-    const p2 = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
-
-    b.box(x, ground - 0.5, z, w + 6, 1.2, d + 6, 0xece7db, rot);
-    // Hollow: Shahji's Deity is seen through the colonnade, so there has to be
-    // something behind it to see into. This was a solid box.
-    const shrine = hollowShrine(b, loc, {
-      hx: w * 0.42, hz: d * 0.35, floorY: ground + 0.7, height: h * 0.62, color,
-      openings: [{ c: 0, hw: w * 0.16 }],    // the central bay, behind the columns
-    });
-
-    // the twelve twisted columns, in two rows of six across the front
-    for (let row = 0; row < 2; row++) {
-      for (let i = 0; i < 6; i++) {
-        const lx = (i / 5 - 0.5) * w * 0.78;
-        const lz = d * 0.33 + row * 2.6;
-        const q = p2(lx, lz);
-        // the twist: stacked, progressively rotated segments
-        const SEG = 9, ch = h * 0.55 / SEG;
-        for (let k = 0; k < SEG; k++) {
-          b.box(q[0], ground + 0.7 + k * ch, q[1], 0.42, ch, 0.42,
-            color, rot + k * 0.26);
-        }
-        b.box(q[0], ground + 0.7 + h * 0.55, q[1], 0.6, 0.28, 0.6, accent, rot);
-      }
-    }
-
-    // entablature and the classical pediment, which is the nawabi-palace note
-    const ent = p2(0, d * 0.36);
-    b.box(ent[0], ground + 0.7 + h * 0.57, ent[1], w * 0.9, 0.7, 6.0, color, rot);
-    for (let k = 0; k < 5; k++) {
-      const t = k / 5;
-      b.box(ent[0], ground + 0.7 + h * 0.64 + k * 0.32, ent[1],
-        w * 0.9 * (1 - t * 0.85), 0.32, 5.4 * (1 - t * 0.2), color, rot);
-    }
-    // flat terraced roof, no tower at all
-    b.box(x, ground + 0.7 + h * 0.62, z, w * 0.7, 0.5, d * 0.6, accent, rot);
-    return { altarY: 1.9, ...shrine };
+  /**
+   * Shahji Mandir: the Lucknow palace pavilion of 1860-68, built in
+   * ShahjiMandir.js from its survey and checker. What stood here drew twelve
+   * twisted square-section screws in TWO rows, a stepped triangle for a
+   * pediment and nothing else — the survey's first three do-not-builds.
+   */
+  'temple-colonnade': ({ loc, b, ground, rng, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const signB = new MeshBuilder();
+    const place = (geo, lx, y, lz, faceLocal) => {
+      const q = p(lx, lz);
+      const wa = rot + faceLocal;
+      const yaw = Math.atan2(Math.cos(wa), Math.sin(wa));
+      _kbM.compose(_kbV.set(q[0], y, q[1]), _kbQ.setFromEuler(_kbE.set(0, yaw, 0)), _kbS);
+      b.addGeometry(geo, _kbM);
+      geo.dispose();
+    };
+    const o = { b, signB, loc, ground, terrain, colliders, rng };
+    const r = buildShahji({ ...o, h: {
+      cuspedArch, ribbedDome, tint, buildStanding, PEOPLE, signUV, place,
+      // the generic trades on the town's atlas that a Vrindavan bazaar court has
+      SIGN: { GARLANDS: 0, PRASAD: 3, CLOTH: 5, PUJA: 6, PHOTO: 9, BANGLES: 13 },
+    } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const V = p(0, (r.hall.lz0 + r.hall.lz1) / 2), door = p(0, r.hall.lz1 + 1.5);
+    return {
+      altarY: r.altar.y - ground,
+      colliders,
+      meshes: [{ name: 'ShahjiSigns', builder: signB, x: loc.pos[0], z: loc.pos[1], r: 90, map: signAtlas }],
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.FL,
+        volume: { x: V[0], z: V[1], hw: r.hall.hw, hd: (r.hall.lz1 - r.hall.lz0) / 2, rot, door },
+      },
+    };
   },
 
   /**

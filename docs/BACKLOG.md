@@ -3142,3 +3142,48 @@ arch check now asks that a wall reach an arch's springing, so a parapet below
 a rooftop chhatri is not its wall. Two probes were wrong on the way and said
 so: a kiosk camera placed inside the Samadhi, and a flight "unclimbable"
 because two flights and the door steps shared one tag and read as one.
+
+## 2026-09-30 — Shahji Mandir, built from its survey and checker
+
+The old builder drew the survey's first three do-not-builds: twelve twisted
+square screws in TWO rows, a stepped triangle for a pediment, and nothing on
+the roof. `ShahjiMandir.js` now draws the palace pavilion the survey measured,
+with the checker's corrections winning where they disagree:
+
+- turned to face bearing 144 over its court (-36 degrees in the box frame;
+  it stood at 180), on the measured 49.4 x 30.5 m marble mass;
+- the frontage in its five parts — solid end bay with two black-ringed oval
+  medallions (one white, one honey), a wing of six serpentine columns (pair,
+  three bays, pair), the projecting centre of eight PLAIN honey columns in
+  four coupled pairs, the other wing, the other end bay;
+- the columns as the checker has them: a constant round section swept along
+  a helical axis with a faint spiral seam, one continuous tube (the first
+  draft was a stack of offset discs; photographed and redone), Corinthian
+  caps, scrolled acanthus bases on square plinths;
+- every opening round-headed: three doorways with radiating fanlights
+  (the middle one open to the hall and the Deity), pedimented louvred doors
+  (one green) and shell-headed niches along the wings; black-outlined dados;
+  wrought-iron screens at the verandah's ends; the jali balustrade;
+- the verandah floor's black inlay bands, diagonal chequer border and two
+  flush pietra dura portrait panels;
+- two pierced-oval parapets on the stepped roof, the lower with urns, the
+  upper with fourteen life-size white statues; the broken Baroque pediment
+  with its oval oculus and figures; three kiosks, the flanking two outboard
+  of the pediment as the checker places them; the S-curve sweeps down to a
+  recumbent lion on a scrolled console at each end, with a small figure on a
+  lotus pedestal;
+- the two terrace pavilions SQUARE, not octagonal (the checker), with
+  grey-blue pyramidal roofs, lotus-bud finials, and the AWADH FISH the survey
+  missed, plus a rampant lion;
+- the 38 x 38 m brick court with its oval bed and pillar fountain, the UP
+  Tourism plaque, bazaar stalls down both sides, and the pink sandstone
+  gateway where OSM's lane enters, the lane left open across the court;
+- the whites on the parapets and statues as limewash over honey, not a
+  second marble (the checker's re-measure);
+- a walkable hall behind the open door with the altar under a gilt canopy.
+
+Every height is the survey's working number from Growse's "life-size"
+statues, and says so. Checks: platforms, halls, deities, arches (after giving
+the walls their real tops — the roofline kiosks were being judged against an
+infinitely tall verandah wall), temples (the hall volume on its walls' centre
+lines), steps, interior, nav-smoke.
