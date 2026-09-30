@@ -1,65 +1,126 @@
-# Queue — 2026-09-26
+# Queue — everything asked for, and where it stands
 
-Everything you have asked for, and where it actually stands. "Verified" means a
-check in `tools/checks/` proves it and names the numbers; anything else says so.
+*Rewritten 2026-09-30. Every request from the user goes here the moment it
+arrives, before any work starts on it. The previous version was dated
+2026-09-26 and had drifted; one request ("follow the vehicle as it changes
+lanes") was dropped entirely between then and now, and was only found by
+searching the backlog for it. That is the failure this file exists to stop.*
 
-## DONE — verified by a check
+*"Verified" means a check in `tools/checks/` asserts it. Anything else says so.*
 
-| What you asked | Where it stands | Guarded by |
+---
+
+## NOW — in progress, in this order
+
+1. ~~**Houses: "unable to enter any house like pokemon rpg as it should."**~~
+   **DONE 2026-09-30.** Every doorway had a lila mural painted across it —
+   120 of 120 in a mutation test — and the damp band ran across the
+   threshold, reflected. Guarded by `houses.mjs`. Original notes follow.
+   Measured: walking a test player from the street through the door, using
+   the engine's own movement, gets into **150 of 150** sampled houses. So
+   collision works and the fault is what the player SEES. Prime suspect is
+   mine: the red-oxide skirting and damp band added 2026-09-27 are drawn as a
+   full box round every building's base, straight across every doorway. Also
+   to check: whether enterable doors read as different from painted ones, and
+   whether entering feels like entering (the old queue already said "the view
+   change on entering needs checking").
+2. **Arch orientation, codebase-wide.** Measured: `cuspedArch` given
+   `rot + PI/2` in a wall along the builder's long axis draws the arch
+   PERPENDICULAR to the wall — a fin, not an opening. Prem Mandir's whole
+   colonnade and door, ISKCON's verandahs, and the Banke Bihari top arcade
+   (mine, 2026-09-27) all do it. One audit, many buildings.
+3. **Prem Mandir faces the wrong way.** Entrance and steps on the SOUTH; the
+   checker measures a 35.5 m forecourt and the steps on the EAST, sanctum and
+   shikhara at the WEST end (18.5% from it), building 11 m west of the
+   platform's centre, an eastern bow with two ornamental pools, and the flag
+   on its own mast beside the kalash rather than on it.
+
+## NEXT — queued, in this order
+
+4. **Eight surveyed temples, none built.** Each gets built from its survey
+   AND its checker's corrections (re-paired correctly 2026-09-30 — see the
+   backlog), photographed, and measured against the survey's own numbers.
+   Rangaji · Shahji · Radha Vallabh · Madan Mohan · Radha Raman ·
+   Radha Damodar · Radha Gopinath · Jugal Kishore.
+5. **The vehicle camera follows the vehicle.** *"as the lane changes in
+   vehicle change the view to that like update it to front view of vehicle
+   moving direction."* DROPPED earlier, found 2026-09-30. Today the view
+   points along the direction of travel once, at pull-away, and never again.
+   Wanted: a chase view that keeps turning with the vehicle, and that eases
+   back behind it a few seconds after you stop swinging it yourself.
+6. **3D Deities.** *"try to make deities also real like instead of putting
+   image with backgrounds … a good 3D like deities exact would look good …
+   and real."* Needs research first, per temple: the murti's documented form
+   — pose, stone and colour, height, what is held, how it is dressed — so
+   nothing is invented. See the honest limits below before expecting
+   photoreal.
+7. **Live data.** *"can we have live data like crowd show here from iskcon
+   vrindavan youtube channel or somewhat?"* Feasibility logged 2026-09-30:
+   the official live darshan can be EMBEDDED (allowed); counting people out
+   of the video cannot (terms, backend, offline). A crowd driven by the real
+   calendar — weekday, arti hours, festivals — from published footfall
+   figures needs no network at all.
+8. **"Do proper research online and try to make everything exact."** Not a
+   single task — it is the method for every item above, and it extends to the
+   town: house interiors, bazaar shops, what is actually inside a Braj home.
+9. **The D-pad sits on top of the virtual stick.** Measured at `left:12
+   bottom:152, 150x150`, exactly where a thumb rests; `#touch-layer` receives
+   nothing there. Was waiting on a decision; the user has since said "fix
+   everything yourself", so the call is mine: show one scheme at a time.
+10. **Offline on the web.** No service worker or manifest, so the browser
+    build dies without a network while the APK does not. Would also make the
+    site installable to a home screen.
+11. **Fixed sleeps in the checks** — `chatter`, `cheats`, `dpad-dir` and a
+    dozen probe tools still wait on a clock instead of a condition. This class
+    caused every intermittent failure found so far.
+
+## OPEN — reported, not yet reproduced
+
+- **"Lot of glitches."** No screen or repro yet.
+- **Getting stuck between the ISKCON pillars.** The infinite-height rails are
+  removed (escape distance 8.6 m → 20.9 m), an unstick and "Start from here"
+  exist — but the person who kept getting trapped has not confirmed it is
+  fixed. Every `[player] unstuck from X Z` in the console is a coordinate.
+
+## WAITING ON THE USER — cannot be done from here without guessing
+
+- **Ten road names.** OSM names 41 of 2,146 ways here. The Parikrama feeders,
+  the Loi Bazar approaches, the Keshi Ghat road, the Raman Reti lanes.
+- **Which OSM way is Jagadguru Kripalu Marg?**
+- **Is Chhatikara Crossing the bus stand,** or is it further out on NH 44?
+- **Deity photographs for Gaura-Nitai and Krishna-Balaram** — Commons holds
+  exactly one freely licensed ISKCON Vrindavan altar photograph.
+
+## HONEST LIMITS — said once, plainly, so they are not rediscovered
+
+- **Photoreal 3D Deities cannot be generated procedurally.** Everything in
+  this world is built from boxes in code. A respectful, stylised 3D murti
+  that matches each temple's documented form — pose, stone, colour,
+  ornament — IS buildable, and would sit in the same art style as the rest of
+  the town. Photoreal needs authored, sculpted models: commissioned, or
+  licensed. Downloading someone's scan of a temple's murti is not licensed
+  use, and sacred images carry their own sensitivity on top of copyright.
+- **No Google data.** Rule §5 of the brief, and repeated in DATA-SOURCES.md:
+  OpenStreetMap under ODbL, public datasets, satellite for measurement only.
+- **Photographs are not textures.** They are measured, never traced or baked.
+- **Procedural geometry caps fidelity.** The old queue already raised this:
+  "GTA Vice City quality needs authored art", and the Unity port is a
+  decision still sitting with the user.
+
+## DONE THIS SESSION — with the proof
+
+| Asked for | What it was | Guarded by |
 |---|---|---|
-| "e-rickshaw ... without touching the devotees ... vehicles drive in centres, pedestrians either side" | Both were steering at NavGraph nodes, which sit on the road CENTRELINE, so the crowd walked down the carriageway. People hold a verge for life now. Median clearance vehicle→person **10.8 m → 16.4 m** | `verges.mjs` 4/4 |
-| "entry exit gates are not visible ... i just entered inside through walls" | **All 16 temples** measure solid with a doorway; wall openness 2.1–15.4% | `temples.mjs` 4/4 |
-| "i am able to bypass the walls" | Colliders were indexed by centre in a 24 m grid, so a 57 m wall existed only near its midpoint. **368 of 680 samples stood inside solid stone; now 0** | `walls.mjs` 3/3 |
-| "the deities ... showing in the right wall not in main area" | ISKCON's bays are 14.4 m apart; the code used a hardcoded 3.4 m gap, so the photograph hung on the pier. Builders publish their altars now | `deities.mjs` 7/7 |
-| "real images of deities not yet showing" | Seven temples had no inside at all — the photographs were sealed in masonry. All have sanctums now | `deities.mjs` 7/7 |
-| "unable to climb stairs" / ghats | Treads were laid diagonally (transposed frame). You walk 5.09 m down to the Yamuna and back | `stairs.mjs` 6/6 |
-| "add a volume button ... it keeps blowing bell" | ♪ on the HUD, master + effects + mute. And the CAUSE: a wedged driver honked every 3–9 s forever. Three honks, 42 m range | `overlays.mjs` 7/7, 0 page errors |
-| "jaldi ... should show limit after certain number of clicks" | Chip reads `JALDI · MAX`; typing jaldi again says "Aur tez nahin ho sakta" | `cheats.mjs` 11/11 |
-| "bushes ... some on road which is not good" | 58 of 4,006 stood inside solids. Now 0 of 3,916 | `planting.mjs` 2/2 |
-
-## DONE — built, not yet verified by a check
-
-| What | Why not verified |
-|---|---|
-| **Chaar Dham, Chhatikara** — 141 ft Vaishno Devi, 187 ft trident, four shrines, cave, boundary wall | In **no** OSM data; researched and placed by hand at 27.560892 N, 629 m from Chhatikara Crossing. Wall is in `temples.mjs`; the rest is eyeballed |
-| **Banke Bihari rebuilt** — three-storey tiered arcaded courtyard, jharokhas, jali, chhatris, no bells | The old build was a solid mass under three domes, which the sources explicitly rule out |
-| **The curtain at Banke Bihari** — drawn shut and reopened, two sliding leaves | Boots and finds its leaves; the cycle itself is not asserted |
-| **602 buildings you can walk into** (274 shop, 94 house, 234 hut), up from ~205, with working doors visibly marked | Counted at boot, photographed once |
-| **ISKCON outer hall** — water station, shop row, between darshan and the gate | Built; not photographed |
-| **Tilt steering** — lean the phone at the wheel. Gravity vector, not `gamma` | **Needs a real phone.** Cannot be tested headless |
-| **Default view along the direction of travel** | Was snapping to the PARKED heading, so you pulled away facing sideways |
-| **Spoken lines on the speaker's head**, not the toast rail | `chatter.mjs` 5/6 — see below |
-| **`altars.js`** — sourced Deity table replacing an id regex. Jugal Kishore's altar is empty; Govind Dev is in Jaipur; three temples are single Deities | Three of my own errors found and fixed by auditing it against the research |
-| **71 of 118 real place names** on shopfronts, up from 35 | Atlas 8×8 → 12×12 at the same texture memory |
-
-## LEFT — mine
-
-1. **Krishna lila murals on every building.** Not started. Licensing decided: Pahari/Kangra/Basohli/Mewar miniatures are 18–19C, out of copyright, on Commons with provenance — and better than anything procedural.
-2. **The remaining temples to the Krishna Balaram standard.** Banke Bihari is done, 14 to go. Research for 23 exists with sources.
-3. **A pujari performing arti.** The interiors and murtis exist; the priest does not.
-4. **Pokémon-style interior transition** — rooms and marked doors exist; the view change on entering needs checking.
-5. **`chatter.mjs` 5/6** — one toast survives; I believe it's InteractionSystem correctly announcing the place my test teleports into, but I have not confirmed it.
-6. **Ride ETA honesty** — "1 min" then not arriving. Chhatikara→ISKCON is 5.4 km and the ride caps at 5 min; the ETA arithmetic doesn't match what actually happens.
-7. **47 real names still have no shopfront** within 90 m — they need a standalone frontage at their real coordinates.
-8. Traffic that queues and yields · save off WebView localStorage · narrated story audio · avatar realism.
-
-## BLOCKED ON YOU
-
-1. **Deity photographs for Gaura-Nitai and Krishna-Balaram.** I searched Wikimedia Commons directly: there is exactly **one** freely-licensed ISKCON Vrindavan altar photograph in existence there, and it is the Radha-Shyamasundara already shipped. Needs your images or the temple's permission.
-2. **Which OSM way is Jagadguru Kripalu Marg?**
-3. **Is Chhatikara Crossing the bus stand,** or is it further out on NH 44?
-4. **Ten road names** you can read off a map. OSM names 41 of 2,146 ways here.
-
-## DECISIONS — yours, not mine
-
-1. **Expand the world to 12 km** so Chhatikara sits at its true distance? (18 km² → 144 km².) My view: keep 4.2 km until vehicles are solid, then revisit.
-2. **When do we start the Unity port?** Procedural geometry caps fidelity; "GTA Vice City quality" needs authored art.
-3. **Who reviews the story text?** It shouldn't be signed off by an engineer.
-
-## Map references you supplied
-
-satellites.pro and Apple Maps. Position unchanged: the FACTS on a map — a road's
-name, where a temple stands — are not owned. The tiles and vector data are. So
-they are read for names and positions and nothing is traced from them. Esri
-World Imagery stays the one raster we may trace, because Esri explicitly permits
-OSM contributors to.
+| Curtains 4am open / 9pm shut, every temple, even standing at the altar | Scene-wide `Night:` traversal, per-altar coverage, Braj wall clock. Proved itself at 21:01 IST by shutting while a check watched | `deities` 15/15 |
+| Stuck between the ISKCON pillars | The hall rails had no `h` — infinitely tall walls down both sides | `_cage`, `_wedge` probes |
+| A way out when stuck | Automatic unstick after 1.5 s wedged, plus "Start from here" on any searched place | `map-search` 26/26 — a real rescue from inside masonry |
+| Could not type `m` in map search | A second window keydown listener with no typing guard | `map-search` |
+| Rickshaw only offered eight places | Search the fare dialog by name, Devanagari or deity | `rickshaw` 31/31 |
+| Vanished under Prem Mandir's stairs | The treads were meshes with no colliders | `steps`, `stairs` |
+| Nothing looks real — colour | One flat hex per building; palette data at median S 0.25 against measured 0.50–0.75; a pastel town | `BrajPalette.js`, measured on renders |
+| Nothing looks real — the town | Oxide skirting, damp, roofs with tanks and monkey cages, the wires | photographs |
+| Temples standing in fields | A circular keep-out, then a 0.8 m margin, then a 49 × 55 m plinth — three causes, one symptom | measured 3.3 m off the wall |
+| Banke Bihari, Govind Dev, Jaipur Mandir, Prem Mandir, ISKCON details | From surveys; Govind Dev's onion dome was an interior vault drawn on the outside | photographs |
+| Deploy to the web | Static site on Vercel, root `client`, no build step | booted off a bare `http.server`, 0 errors |
+| Git + auto-deploy | Repo, `.gitignore` (98 MB → 12 MB), pushes deploy | — |
+| Map accuracy | OSM positions within 0.2% of true great-circle distance | measured |

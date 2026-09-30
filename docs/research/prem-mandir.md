@@ -1,6 +1,8 @@
 # prem-mandir — exterior survey
 
-*Researched 2026-09-27 by one agent and independently checked by a second whose brief was to refute it. Confidence labels are the researcher's own: MEASURED / SOURCED / DERIVED / ESTIMATED / UNKNOWN.*
+*Researched 2026-09-27 by one agent and independently checked by a second whose brief was to refute it. Labels are the researcher's own: MEASURED / SOURCED / DERIVED / ESTIMATED / UNKNOWN.*
+
+*Survey and checker are paired by the workflow journal's launch key, not by completion order — see BACKLOG 2026-09-30 for why that matters.*
 
 ## What it is
 

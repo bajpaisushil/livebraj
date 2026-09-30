@@ -629,15 +629,41 @@ class CityFabric {
    */
   _mural(lot, murals) {
     if (!murals || lot.w < 3.4) return;
+    /*
+     * THE MURAL WAS PAINTED OVER THE DOOR.
+     *
+     * "am unable to enter any house like pokemon rpg." Walking a test player
+     * from the street through the door gets into 150 houses of 150 — the
+     * collision was always fine. Photographing a door from where a person
+     * stands showed why nobody tried: the doorway was filled edge to edge by
+     * a lila panel. Putana Uddhar on one, Vastra Haran over a tea stall,
+     * Jhulan on a third. You do not walk into a painting.
+     *
+     * The comment here always said "above head height". It was centred at
+     * 2.05 m and up to 2.9 m square, so it spanned about 0.6-3.5 m — the door
+     * opening is 0.7-3.2 m on the facade's own numbers. The words were right
+     * and the arithmetic never was.
+     *
+     * Every other spot on a street face is a door or a window (facade() gives
+     * each column one or the other on every storey), so the only clear wall
+     * is the band between the ground-floor lintel (top at +2.95 over the
+     * floor line) and the first-floor window sills (+3.1 + 1.5 - 0.575). About
+     * a metre. That is where a painted panel goes, and it is where a deity
+     * tile commonly sits over an Indian doorway anyway. A building too low to
+     * HAVE that band — measured from what its kit actually drew — gets none.
+     */
     const cs = Math.cos(lot.rot), sn = Math.sin(lot.rot);
     const f = lot.d * 0.5 + 0.1;
+    const floor = (lot.y || 0) + 0.7;               // the facade's ground-floor line
+    const lintelTop = floor + 2.95;
+    const nextSill = floor + STOREY + 1.5 - 0.575;
+    const size = Math.min(nextSill - lintelTop - 0.12, 1.05, lot.w * 0.4);
+    if (size < 0.6) return;
+    const cy = (lintelTop + nextSill) / 2;
+    if (!lot.drawnH || (lot.y || 0) + lot.drawnH < cy + size / 2 + 0.1) return;
     // deterministic per lot, and spread across the whole set
     const idx = Math.abs(Math.floor(lot.seed * 7919)) % LILA_COUNT;
-    const w = Math.min(lot.w * 0.52, 2.9);
-    murals.panelUV(
-      lot.x + f * sn, (lot.y || 0) + 2.05, lot.z + f * cs,
-      w, w, lilaUV(idx), lot.rot, 0.05,
-    );
+    murals.panelUV(lot.x + f * sn, cy, lot.z + f * cs, size, size, lilaUV(idx), lot.rot, 0.05);
   }
 
   /* ================================================================
@@ -784,8 +810,26 @@ class CityFabric {
       for (const lot of c.lots) {
         const rng = rngAt(Math.floor(lot.seed * 7919));
         const dw = dwellingFor(lot, rng);
+        /*
+         * HOW TALL DID THIS BUILDING COME OUT?
+         *
+         * `lot.h` was read in two places and set in none, so both fell back to
+         * a guess: the vertical weathering ramp used a flat 8 m for every
+         * building in the town, and the mural had no way to know whether the
+         * wall it was painted on even reached the height it was painted at.
+         * Rather than make every kit report its height, measure it — the kit's
+         * own vertices, from the moment it starts drawing to the moment it
+         * stops, are the truth about what it drew.
+         */
+        const drawn = (mb, from) => {
+          let top = lot.y;
+          for (let i = from + 1; i < mb.pos.length; i += 3) if (mb.pos[i] > top) top = mb.pos[i];
+          return top - lot.y;
+        };
         if (dw) {
+          const m0 = c.walls.pos.length;
           DWELLINGS[dw](lot, c.walls, c.trim, rng);
+          lot.drawnH = drawn(c.walls, m0);
           this._mural(lot, c.murals);
           continue;
         }
@@ -798,12 +842,16 @@ class CityFabric {
          * Set per lot, from that lot's own ground, and cleared afterwards so
          * roads and props are untouched.
          */
-        const lh = Math.max(3, (lot.h || 0) || 8);
+        // Most kits draw exactly storeys x STOREY, so that is the ramp's height
+        // going in; the true height is measured on the way out.
+        const lh = Math.max(3, (lot.storeys || 1) * STOREY);
         c.walls.weather((y) => vMul(y - lot.y, lh));
         c.trim.weather((y) => vMul(y - lot.y, lh));
 
         const kit = KITS[lot.district.kind] || KITS.residential;
+        const m0 = c.walls.pos.length;
         kit({ lot, walls: c.walls, trim: c.trim, signs: c.signs, rng });
+        lot.drawnH = drawn(c.walls, m0);
 
         c.walls.weather(null);
         c.trim.weather(null);
@@ -1095,20 +1143,48 @@ const OXIDE = [0x7d4038, 0x8c4a3a, 0x6e3630, 0x86423a];
 const DAMP = [0x20261f, 0x2c3327, 0x39432f];
 
 function streetLayer(lot, trim, rng) {
-  const { x, y, z, w, d, rot } = lot;
+  const { x, y, z, w, d } = lot;
   if (w < 1.5 || d < 1.5) return;
-
-  // the damp goes on first, so the skirting sits over its lower half
-  if (chance(rng, 0.78)) {
-    const hh = range(rng, 0.6, 1.2);
-    trim.box(x, y + 0.02, z, w + 0.05, hh, d + 0.05,
-      DAMP[Math.floor(rng() * DAMP.length) % DAMP.length], rot);
-  }
-  if (chance(rng, 0.70)) {
-    const hh = range(rng, 0.30, 0.60);
-    trim.box(x, y + 0.01, z, w + 0.09, hh, d + 0.09,
-      OXIDE[Math.floor(rng() * OXIDE.length) % OXIDE.length], rot);
-  }
+  /*
+   * TWO FAULTS HERE, BOTH MINE, BOTH FOUND BY PHOTOGRAPHING A DOOR.
+   *
+   * 1. The frame. This file's own note at `solid` says it plainly: "Solids and
+   *    colliders take `solid`; panels take `rot`" — box() and panel() are
+   *    mirror frames. These bands were drawn with box() and `rot`, so on every
+   *    building not square to the axes they came out REFLECTED: a knee-high
+   *    dark slab and a red one jutting diagonally out of the wall into the
+   *    street, which is exactly what a camera standing at a door saw.
+   *
+   * 2. The door. They were one solid box round the whole base, so the damp
+   *    band ran straight across every doorway. Nobody paints oxide across an
+   *    open door and rain does not splash through one. Four runs now, the
+   *    front split either side of the door.
+   *
+   * Positions use the same lot-frame mapping _addLot uses for its colliders,
+   * so the bands sit exactly on the walls the player collides with.
+   */
+  const cs = Math.cos(lot.rot), sn = Math.sin(lot.rot);
+  const at = (lx, lz) => [x + lx * cs + lz * sn, z - lx * sn + lz * cs];
+  const door = Math.max(lot.doorW || 0, 1.9);
+  const band = (hh, col, grow) => {
+    const hw = w * 0.5 + grow, hd = d * 0.5 + grow, t = 0.05;
+    let q = at(0, -hd);
+    trim.box(q[0], y + 0.01, q[1], w + grow * 2, hh, t, col, lot.solid);
+    q = at(-hw, 0);
+    trim.box(q[0], y + 0.01, q[1], t, hh, d + grow * 2, col, lot.solid);
+    q = at(hw, 0);
+    trim.box(q[0], y + 0.01, q[1], t, hh, d + grow * 2, col, lot.solid);
+    const seg = (w + grow * 2 - door) / 2;
+    if (seg > 0.15) {
+      for (const sgn of [-1, 1]) {
+        q = at(sgn * (door / 2 + seg / 2), hd);
+        trim.box(q[0], y + 0.01, q[1], seg, hh, t, col, lot.solid);
+      }
+    }
+  };
+  // the damp first, so the oxide sits proud of its lower half
+  if (chance(rng, 0.78)) band(range(rng, 0.6, 1.2), DAMP[Math.floor(rng() * DAMP.length) % DAMP.length], 0.02);
+  if (chance(rng, 0.70)) band(range(rng, 0.30, 0.60), OXIDE[Math.floor(rng() * OXIDE.length) % OXIDE.length], 0.04);
 }
 
 /** Roofs carry most of a town's colour from above. */

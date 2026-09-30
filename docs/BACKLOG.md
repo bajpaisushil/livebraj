@@ -2670,3 +2670,145 @@ ALREADY had them, and more thorough ones — 0, 3.0, 3.99, 4.0, 4.5, 9, 15,
 20.99, 21.0, 23.5. Removed mine rather than leave two tests drifting apart.
 Worth a look before adding a check: this file is long enough that the
 duplicate only surfaced as "Identifier 'hours' has already been declared".
+
+## 2026-09-30 — Queued requests
+
+> "go ahead doont stop without all these built"
+
+The standing list, in working order: the eight surveyed temples (Rangaji,
+Shahji, Radha Vallabh, Madan Mohan, Radha Raman, Radha Damodar, Radha
+Gopinath, Jugal Kishore); the D-pad sitting over the virtual stick; offline
+on the web (service worker + manifest); the fixed sleeps still in chatter,
+cheats and dpad-dir. Road names and the Kripalu Marg way are still waiting
+on the user and cannot be done from here without guessing.
+
+> "make sure we are as good as live real ones"
+
+Taken as the acceptance bar for every temple: build from the survey AND the
+independent checker's corrections, photograph it, and measure the render
+against the survey's own numbers before calling it done.
+
+> "can we have live data like crowd show here from iskcon vrindavan youtube
+> channel or somewhat?"
+
+Feasibility, before any code:
+
+- **Counting people out of a YouTube stream is not possible here.** It needs
+  the video frames, which YouTube's terms do not allow downloading or
+  processing, a backend to run vision on them, and a network — while the
+  first constraint in the brief is that the world renders offline.
+- **Embedding the official live darshan IS allowed** — that is what YouTube's
+  embedded player exists for. Standing at the darshan spot could offer "Live
+  darshan from ISKCON Vrindavan" through the privacy-enhanced
+  youtube-nocookie.com player, degrading to a plain message offline. The
+  channel id must be looked up and verified, not guessed.
+- **A crowd that follows the real calendar needs no network at all.** The
+  Supreme Court recited Banke Bihari's footfall on 15 May 2025 as
+  30,000-40,000 a day, 1.5 lakh at weekends and 5 lakh on Janmashtami
+  (docs/research/banke-bihari.md). Day of week, the arti hours and the real
+  festival calendar can drive crowd density honestly, from published figures,
+  with nothing to download.
+
+Queued after the temples unless the user reorders it.
+
+## 2026-09-30 — Eight of ten research files had the wrong fact-checker attached
+
+Found while reading Rangaji's survey before building it: its "Independent
+check" section was about the nave at Harideva and "Radhavallabh Ghera". It was
+Radha Vallabh's checker.
+
+Cause: the filing script paired `surveys[i]` with `verdicts[i]`, assuming both
+lists came back from the workflow in the same order. They complete whenever
+each agent finishes, so they did not:
+
+| batch 1 survey order | batch 1 verdict order |
+|---|---|
+| prem-mandir, radha-vallabh, iskcon, shahji, rangaji | prem-mandir, shahji, rangaji, iskcon, radha-vallabh |
+
+Only prem-mandir lined up in batch 1, only radha-damodar in batch 2. The
+second batch "fixed" the surveys by matching on content — and then paired the
+verdicts by index anyway, so the same fault survived its own supposed fix.
+
+**Fixed from the authority, not by inference.** The workflow journal records a
+`key` on every `started` event alongside its `label` (survey:rangaji,
+verify:rangaji, ...), and the same `key` on the `result`. Joining on that key
+is exact. All ten files rewritten; each now carries a line saying so. Spot
+check: every checker's first correction now names its own temple.
+
+### What the correct checkers changed
+
+- **ISKCON, and it settles last night's argument.** The survey said the main
+  temple is flat-roofed and domeless. The ISKCON checker — which I had not
+  actually read, because Rangaji's was filed in its place — opens with "THE
+  CENTRAL CLAIM IS WRONG: the main temple is NOT domeless." Keeping the three
+  domes was right. It was right on reasoning (direct photographs beat an
+  argument from absence); it is now right on evidence.
+- **Prem Mandir, already built, has two real corrections** — see below.
+
+The lesson generalises past this script: two lists that describe the same
+things are only parallel if something MAKES them parallel. Completion order
+never does.
+
+## 2026-09-30 — "nothing looks real, and I cannot enter any house"
+
+> "yes fix everything nothing looks real and am unable to enter any house like
+> pokemon rpg as it should, we have to make it exact real feel with as much as
+> near live data"
+
+Logged on arrival. Three findings already in hand when it came in:
+
+1. **An arch-orientation bug, measured.** `cuspedArch` spans along
+   (cos R, sin R). Extracted and run in isolation with a 4 m arch at builder
+   rot 0: passing `rot` spans 4.0 m along the long axis and 0.6 m across it;
+   passing `rot + PI/2` spans 0.6 along and 4.0 across. So every call that
+   passes `rot + PI/2` for an arch in a wall running along the builder's long
+   axis draws that arch PERPENDICULAR to its own wall — a fin, not an opening.
+   The ISKCON builder uses `rot` for its doorway and `rot + PI/2` for its
+   verandah, on walls running the same way, so the codebase disagrees with
+   itself. Prem Mandir's entire colonnade and door use the wrong one, and so
+   does the Banke Bihari top arcade written on the 27th, copied from the
+   verandah pattern.
+2. **Prem Mandir faces the wrong way.** Its entrance and broad steps are on
+   the south; the checker puts a 35.5 m forecourt and the steps on the EAST,
+   the sanctum west, the shikhara at 18.5% from the west end. The shikhara was
+   pushed NORTH.
+3. **House entry has never been tested by walking.** interior.mjs puts the
+   player in the middle of a room with `position.set` and asserts the room
+   notices. A house whose doorway is blocked passes that test.
+
+Order: houses first (a functional break the user cannot get past), then the
+arch audit (one fix, many buildings), then Prem Mandir, then the rest.
+
+### The houses: 120 of 120 doorways had a painting across them
+
+Walking a test player from the street through the door got into 150 of 150
+houses — the collision was never the fault. Photographing three doors from
+where a person stands found it at once: every doorway was filled edge to edge
+by a lila mural. Putana Uddhar over a courtyard house, Vastra Haran over a
+tea stall, Jhulan over a hut. You do not walk into a painting.
+
+`_mural`'s comment always said "above head height". It was centred at
+2.05 m and up to 2.9 m square — spanning about 0.6-3.5 m against a door
+opening of 0.7-3.2 m on the facade's own numbers. The words were right and
+the arithmetic never was. It now goes in the only clear band a street face
+has, between the ground-floor lintel and the first-floor sills, and only on
+buildings actually tall enough to have that band.
+
+The same photographs caught two faults of mine from 2026-09-27:
+
+- **The red-oxide skirting and damp band were drawn reflected.** This file's
+  own note says "Solids and colliders take `solid`; panels take `rot`" —
+  box() and panel() are mirror frames — and I handed `rot` to a box. On every
+  building not square to the axes they jutted diagonally into the street as a
+  knee-high dark slab and a red one.
+- **They ran straight across every doorway**, as one solid box round the
+  base. Now four runs, the front split either side of the door.
+
+And a quieter one: **`lot.h` was read in two places and set in none**, so the
+weathering ramp used a flat 8 m for every building in town. Heights are now
+measured from each kit's own vertices as it draws.
+
+**`houses.mjs`**, new in the suite: walks into 120 houses AND casts rays from
+a person's eye at each door opening, failing if a mural is the first thing
+hit. Mutation-tested: restoring the old placement fails it with 120 of 120
+doorways painted over. A check that cannot fail proves nothing.
