@@ -143,7 +143,26 @@ export class InteriorSystem {
         x: lot.x, z: lot.z,
         hw: lot.w * 0.5, hd: lot.d * 0.5,
         rot: lot.rot,
-        cos: Math.cos(-lot.rot), sin: Math.sin(-lot.rot),
+        /*
+         * THE HOUSE'S OWN FRAME, not the temples'.
+         *
+         * _contains builds its local axes from (cos, sin) so that its x axis
+         * lies along (cos R, sin R) where cos = cos(-R) — the box frame. A
+         * house lot is not built in that frame: BuildingGenerator lays its
+         * walls, colliders and door out with lx along (cos rot, -sin rot), the
+         * mirror frame (see `solid` there). So for any house not square to the
+         * axes the "you are inside" rectangle was rotated away from the house
+         * it described.
+         *
+         * Measured over all 721: 154 did not register you 1.2 m in through
+         * the door, and 42 decided you were inside while you still stood 1.2 m
+         * out in the lane — the roof lifting in the street. The threshold is
+         * the one place this has to be exact, because crossing it IS the
+         * Pokemon moment. Feeding the lot's own rotation through unnegated puts
+         * the rectangle back on the walls.
+         */
+        cos: Math.cos(lot.rot), sin: Math.sin(lot.rot),
+        door: lot.doorAt || null,
         anchor: null,
         house: true,
         ceil: lot.ceil !== undefined ? lot.ceil : lot.y + 2.9,

@@ -17,7 +17,23 @@ import { altarFor } from '../../content/altars.js';
 
 import { vMul, correct as correctHex, PT_OCHRE, PT_VERM, W_ALGAE, shade as vShade }
   from './BrajPalette.js';
+/*
+ * AN ARCH RECORDER, for the orientation audit (tools/checks/arches.mjs).
+ *
+ * cuspedArch spans along (cos R, sin R). Measured in isolation: given `rot`
+ * in a wall along a builder's long axis it lies IN the wall; given
+ * `rot + PI/2` it stands PERPENDICULAR to it, a fin. With 77 call sites and
+ * builders in two mirror-image local frames, reading them one by one is how
+ * this went wrong in the first place — so every arch the world actually
+ * builds is recorded, with the landmark that built it, and the check tests
+ * each against the wall it sits in. Off unless `globalThis.__recordArches`
+ * is set before boot; costs nothing in play.
+ */
+let ARCH_LOG = null;
+let ARCH_OWNER = null;
+
 export function buildLandmarks(ctx, terrain) {
+  ARCH_LOG = globalThis.__recordArches ? [] : null;
   const group = new THREE.Group();
   group.name = 'Landmarks';
   const colliders = [];
@@ -92,8 +108,10 @@ export function buildLandmarks(ctx, terrain) {
       color: correctCss(loc.build.color),
       accent: correctCss(loc.build.accent),
     });
+    ARCH_OWNER = loc.id;
     const out = fn({ loc: built ? { ...loc, build: built } : loc,
       b, ground, rng, ctx, terrain });
+    ARCH_OWNER = null;
 
     b.weather(null);   // ground, walls, lanes and crowds stay unweathered
 
@@ -390,6 +408,7 @@ export function buildLandmarks(ctx, terrain) {
     + `${Math.round((b.triangleCount + extraTris) / 1000)}k triangles`
     + (interiorMeshes.length ? ` (${Math.round(extraTris / 1000)}k in ${interiorMeshes.length} culled interior)` : ''));
   // hand the lamps back so TimeOfDay can raise them as the sun goes
+  if (ARCH_LOG) globalThis.__archLog = ARCH_LOG;
   return { group, colliders, anchors, templeLights, interiors, interiorMeshes };
 }
 
@@ -399,6 +418,12 @@ export function buildLandmarks(ctx, terrain) {
 
 /** A cusped (multifoil) arch outline — the defining Braj temple motif. */
 function cuspedArch(b, cx, y0, cz, w, h, depth, rot, color, lobes = 5, shade = 0x241a12) {
+  if (ARCH_LOG) {
+    // the CALL SITE, so a fix can be made line by line rather than blanket
+    const st = (new Error().stack || '').split('\n')[2] || '';
+    const m = st.match(/LandmarkGenerator\.js:(\d+)/);
+    ARCH_LOG.push({ x: cx, z: cz, y: y0, rot, w, h, owner: ARCH_OWNER, line: m ? +m[1] : 0 });
+  }
   const cs = Math.cos(rot), sn = Math.sin(rot);
   const p = (lx, ly) => [cx + lx * cs, ly, cz + lx * sn];
   const pd = (lx, ly, off) => [cx + lx * cs - off * sn, ly, cz + lx * sn + off * cs];
@@ -414,6 +439,17 @@ function cuspedArch(b, cx, y0, cz, w, h, depth, rot, color, lobes = 5, shade = 0
   // verandah is an opening you walk through, not an aperture, and filling it in
   // turns an arcade into a row of blind panels with a wall behind them.
   if (shade !== null) {
+    /*
+     * BOTH FACES. The aperture used to be drawn once, `inset` to one side of
+     * the arch's mid-plane, facing one way. An arch set into a wall has that
+     * wall's solid box through its middle, so whichever side the aperture
+     * landed on was either in front of the wall — and read as an opening —
+     * or inside the box, buried, leaving only a pale rim. Which one you got
+     * depended on which face of the building the arch was on, which is why
+     * Prem Mandir's colonnade showed arches on one face and faint outlines
+     * on the other. Drawn on both faces, the one outside the wall always
+     * shows and the buried one costs a few triangles nobody sees.
+     */
     const inset = depth * 0.45;
     let last = null;
     for (let i = 0; i <= SEG; i++) {
@@ -422,10 +458,13 @@ function cuspedArch(b, cx, y0, cz, w, h, depth, rot, color, lobes = 5, shade = 0
       const ripple = 1 - 0.085 * (1 - Math.cos(a * lobes * 2)) * 0.5;
       const x = -Math.cos(a) * half * ripple;
       const yy = springY + Math.sin(a) * (h - h * 0.52) * ripple;
-      const top = pd(x, yy, -inset);
-      const foot = pd(x, y0, -inset);
-      if (last) b.quad(last.foot, last.top, top, foot, shade);
-      last = { top, foot };
+      const top = pd(x, yy, -inset), foot = pd(x, y0, -inset);
+      const top2 = pd(x, yy, inset), foot2 = pd(x, y0, inset);
+      if (last) {
+        b.quad(last.foot, last.top, top, foot, shade);
+        b.quad(foot2, top2, last.top2, last.foot2, shade);   // reversed winding
+      }
+      last = { top, foot, top2, foot2 };
     }
   }
 
@@ -878,7 +917,7 @@ function jharokha(b, cx, y, cz, wide, rot, color, accent) {
     b.box(q[0], y + 0.16, q[1], 0.14, 1.5, OUT, tint(color, 1.02), rot);  // its jambs
   }
   cuspedArch(b, p0[0], y + 0.16, p0[1], wide * 0.68, 1.25, 0.22,
-    rot + Math.PI / 2, accent, 7, 0x241a12);
+    rot, accent, 7, 0x241a12);
   b.box(p0[0], y + 1.66, p0[1], wide + 0.3, 0.14, OUT + 0.24, accent, rot);   // the canopy
   b.box(p0[0], y + 1.8, p0[1], wide * 0.8, 0.3, OUT * 0.7, tint(color, 1.05), rot);
 }
@@ -1796,7 +1835,7 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
     const y = g0 + 2.55;
     ib.panel(q[0], y, q[1], w + 0.34, 3.5, KB_SALMON, face, 0.02);
     cuspedArch(ib, q[0] + Math.sin(face) * 0.04, y + 1.2, q[1] + Math.cos(face) * 0.04,
-      w + 0.5, 1.5, 0.08, Math.PI / 2 - face, KB_SALMON, 5, null);
+      w + 0.5, 1.5, 0.08, -face, KB_SALMON, 5, null);
     ib.panel(q[0], y, q[1], w, 3.2, 0x3d6b45, face, 0.05);
     ib.panel(q[0], y - 1.25, q[1], w, 0.7, 0x54803f, face, 0.06);          // the ground
     ib.panel(q[0], y + 1.34, q[1], w * 0.9, 0.62, tint(KB_GOLD, 0.85), face, 0.07);
@@ -2778,8 +2817,19 @@ function hollowShrine(b, loc, o) {
     b.box(q[0], FL + 0.6, q[1], hz * 0.14, 3.0, hz * 0.26, 0x3a2a1e, rot);
   }
   const ar = p2(0, gz + hz * 0.12);
-  cuspedArch(b, ar[0], FL + 0.6, ar[1], hx * 0.8, 2.7, 0.55, rot + Math.PI / 2,
-    o.doorMetal || 0xc9a03c, 5);
+  /*
+   * NO APERTURE: this arch FRAMES the Deities, and you look through it.
+   *
+   * cuspedArch's default dark infill is for blind arches. This one took the
+   * default by omission, and it only ever worked because the infill happened
+   * to be drawn on the far side, behind the altar. Once the aperture was drawn
+   * on both faces — so blind arches set into walls stop burying theirs — the
+   * near copy stood 0.2 m in front of the Deities and the sightline check
+   * caught it: "Radha Damodar blocked by LandmarkGeometry at 2.7 m of a 2.9 m
+   * sightline". The comment above already says where the darkness belongs.
+   */
+  cuspedArch(b, ar[0], FL + 0.6, ar[1], hx * 0.8, 2.7, 0.55, rot,
+    o.doorMetal || 0xc9a03c, 5, null);
   if (o.silverDoor) {
     /*
      * "At the rear an embossed silver double-leaved door leads into the
@@ -2991,7 +3041,7 @@ function buildBankeBihari({ loc, b, ground, rng }) {
         const lx = ((i + 0.5) / BAYS - 0.5) * (hw * 2 - 2.4);
         const q = p(lx, hd - T / 2);
         cuspedArch(b, q[0], y + th * 0.34, q[1], PITCH * 0.81, th * 0.6, T * 0.6,
-          rot + Math.PI / 2, tint(tone, 1.06), 20, null);
+          rot, tint(tone, 1.06), 20, null);
       }
       // the lintel the arcade carries
       const lt = p(0, hd - T / 2);
@@ -3072,17 +3122,17 @@ function buildBankeBihari({ loc, b, ground, rng }) {
       // front entirely on the upper storeys, which draw their own above
       if (t === 0 && !(Math.abs(lx) < GATE * 0.6)) {
         const q = p(lx, hd + 0.05);
-        cuspedArch(b, q[0], y + 0.5, q[1], 3.0, th * 0.62, 0.55, rot + Math.PI / 2, BB_MARBLE, 5, BB_SHADE);
+        cuspedArch(b, q[0], y + 0.5, q[1], 3.0, th * 0.62, 0.55, rot, BB_MARBLE, 5, BB_SHADE);
       }
       const r2 = p(lx, -hd - 0.05);
-      cuspedArch(b, r2[0], y + 0.5, r2[1], 3.0, th * 0.62, 0.55, rot + Math.PI / 2, BB_MARBLE, 5, BB_SHADE);
+      cuspedArch(b, r2[0], y + 0.5, r2[1], 3.0, th * 0.62, 0.55, rot, BB_MARBLE, 5, BB_SHADE);
     }
     const sideBays = 8;
     for (let i = 0; i < sideBays; i++) {
       const lz = ((i / (sideBays - 1)) - 0.5) * (hd * 2 - 6);
       for (const sgn of [-1, 1]) {
         const q = p(sgn * (hw + 0.05), lz);
-        cuspedArch(b, q[0], y + 0.5, q[1], 3.0, th * 0.62, 0.55, rot, BB_MARBLE, 5, BB_SHADE);
+        cuspedArch(b, q[0], y + 0.5, q[1], 3.0, th * 0.62, 0.55, rot + Math.PI / 2, BB_MARBLE, 5, BB_SHADE);
       }
     }
 
@@ -3168,7 +3218,7 @@ function buildBankeBihari({ loc, b, ground, rng }) {
       const lx = ((i + 0.5) / 3 - 0.5) * KW;
       const q = p(lx, HD - 5.2 + KD * 0.5);
       cuspedArch(b, q[0], y + KH * 0.4, q[1], KW / 3 * 0.8, KH * 0.5, 0.4,
-        rot + Math.PI / 2, tint(color, 1.07), 20, null);
+        rot, tint(color, 1.07), 20, null);
     }
     // its own jali balustrade
     b.box(k0[0], y, k0[1], KW + 0.6, 0.8, KD + 0.6, tint(BB_JALI, 1.0), rot);
@@ -3265,7 +3315,7 @@ function buildBankeBihari({ loc, b, ground, rng }) {
     colliders.push({ type: 'box', x: q[0], z: q[1], w: segW, d: 1.4, rot });
   }
   const arch = p(0, FRONT);
-  cuspedArch(ib, arch[0], SFL, arch[1], openW, 4.6, 1.2, rot + Math.PI / 2, BB_GOLD, 7, BB_SHADE);
+  cuspedArch(ib, arch[0], SFL, arch[1], openW, 4.6, 1.2, rot, BB_GOLD, 7, BB_SHADE);
   // the dark recess behind Him
   const back = p(0, SZ - SD * 0.36);
   ib.box(back[0], SFL, back[1], 15, 6.0, 1.2, BB_SHADE, rot);
@@ -4990,7 +5040,7 @@ function buildPremMandir({ loc, b, ground, rng }) {
         const t2 = ((i + 0.5) / (n - 1) - 0.5) * (vert ? HD * 1.9 : HW * 1.9);
         const a2 = vert ? p(ax, t2) : p(t2, az);
         cuspedArch(b, a2[0], FL + H * 0.28, a2[1], 2.4, H * 0.32, 0.4,
-          vert ? rot : rot + Math.PI / 2, MARBLE, 7, SHADOW);
+          vert ? rot + Math.PI / 2 : rot, MARBLE, 7, SHADOW);
       }
     }
   }
@@ -5230,7 +5280,7 @@ function buildKatyayani({ loc, b, ground }) {
     dome(b, q[0], ground + 5.0, q[1], 1.9, 2.6, MARBLE);
     b.box(q[0], ground + 7.6, q[1], 0.5, 0.9, 0.5, GOLD, rot);
     const dr = p(lx, lz + 2.8);
-    cuspedArch(b, dr[0], ground + 0.4, dr[1], 1.8, 2.6, 0.4, rot + Math.PI / 2, GOLD, 5, 0x241a12);
+    cuspedArch(b, dr[0], ground + 0.4, dr[1], 1.8, 2.6, 0.4, rot, GOLD, 5, 0x241a12);
     colliders.push({ type: 'box', x: q[0], z: q[1], w: 5.2, d: 5.2, rot });
   }
 
@@ -5473,7 +5523,7 @@ function buildSevaKunj({ loc, b, ground, rng }) {
 
   // the gateway into the corridor, on the entrance face
   { const g = p(0, HD - CORR * 0.5);
-    cuspedArch(b, g[0], ground, g[1], 2.6, 3.0, 0.5, rot + Math.PI / 2, accent, 7, 0x241a12); }
+    cuspedArch(b, g[0], ground, g[1], 2.6, 3.0, 0.5, rot, accent, 7, 0x241a12); }
 
   /* ---- the grove itself, low and twisted, behind the wire ---- */
   for (let i = 0; i < 46; i++) {
@@ -5696,7 +5746,7 @@ const BUILDERS = {
       colliders.push({ type: 'box', x: q[0], z: q[1], w: seg, d: WT, rot });
     }
     { const g = p(0, HD - WT * 0.5);
-      cuspedArch(ib, g[0], ground, g[1], DOOR, 2.6, 0.38, rot + Math.PI / 2, accent, 7, 0x241a12);
+      cuspedArch(ib, g[0], ground, g[1], DOOR, 2.6, 0.38, rot, accent, 7, 0x241a12);
       ib.box(g[0], ground + h, g[1], w + 0.7, 0.24, WT + 0.5, accent, rot); }
     for (const sx of [-1, 1]) {
       const q = p(sx * (HW - WT * 0.5), 0);
@@ -5732,7 +5782,7 @@ const BUILDERS = {
       ib.box(bk[0], FL, bk[1], BW, h * 0.86, BWT, tint(color, 1.02), rot);
       colliders.push({ type: 'box', x: bk[0], z: bk[1], w: BW, d: BWT, rot });
       ib.box(q[0], FL + h * 0.86, q[1], BW + 0.7, 0.24, 4.1, accent, rot);
-      cuspedArch(ib, q[0], FL, q[1] + 1.7, 1.9, h * 0.58, 0.38, rot + Math.PI / 2, accent, 9, 0x241a12);
+      cuspedArch(ib, q[0], FL, q[1] + 1.7, 1.9, h * 0.58, 0.38, rot, accent, 9, 0x241a12);
       // the throne: wide enough for THREE, which is the whole point
       const t2 = p(0, sz2 - 0.5);
       ib.box(t2[0], FL, t2[1], BW * 0.76, 0.85, 0.9, 0xe4d6b4, rot);
@@ -5898,7 +5948,7 @@ const BUILDERS = {
         colliders.push({ type: 'box', x: q[0], z: q[1], w: seg, d: WT, rot });
       }
       const g = p(0, HD - WT * 0.5);
-      cuspedArch(ib, g[0], ground, g[1], DOOR, 3.2, 0.42, rot + Math.PI / 2, accent, 9, 0x241a12);
+      cuspedArch(ib, g[0], ground, g[1], DOOR, 3.2, 0.42, rot, accent, 9, 0x241a12);
       // the carved upper storey, which is the temple proper
       ib.box(g[0], ground + G_H + 0.3, g[1], w, h - G_H - 0.3, WT, tint(color, 1.04), rot);
       const N = 3;
@@ -5906,7 +5956,7 @@ const BUILDERS = {
         const lx = (i / (N - 1) - 0.5) * w * 0.66;
         const c2 = p(lx, HD - WT);
         cuspedArch(ib, c2[0], ground + G_H + 0.9, c2[1], w / (N * 1.9), 2.4, 0.34,
-          rot + Math.PI / 2, accent, 9, null);
+          rot, accent, 9, null);
       }
       ib.box(g[0], ground + h, g[1], w + 1.2, 0.34, WT + 0.8, accent, rot);
     }
@@ -5942,7 +5992,7 @@ const BUILDERS = {
       const q = p(0, az);
       ib.box(q[0], UP, q[1], w - WT * 2, 3.6, 2.4, 0xf2ece0, rot);
       // the white marble arch, filled with the feather fan
-      cuspedArch(ib, q[0], UP, q[1] + 1.2, 5.2, 2.9, 0.4, rot + Math.PI / 2, 0xf6f2e8, 9, null);
+      cuspedArch(ib, q[0], UP, q[1] + 1.2, 5.2, 2.9, 0.4, rot, 0xf6f2e8, 9, null);
       for (let ring = 0; ring < 3; ring++) {
         const rr = 1.5 + ring * 0.7;
         const N2 = 9 + ring * 4;
@@ -6118,7 +6168,19 @@ const BUILDERS = {
     const { w, d, h, color, accent } = loc.build;
     const [x, z] = loc.pos;
     const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
-    const p = (lx, lz) => [x + lx * cs + lz * sn, z - lx * sn + lz * cs];
+    /*
+     * THE BOX FRAME, like every older builder in this file.
+     *
+     * This builder was written with p() in the MIRROR frame — lx along
+     * (cos, -sin) — while every b.box(..., rot) it draws, and every collider
+     * and cuspedArch, works in the BOX frame, lx along (cos, sin). At rot 0
+     * the two agree. At Jaipur Mandir's 15 degrees every part was POSITIONED
+     * along one line and ORIENTED along another, 30 degrees apart, and the
+     * arch audit found 19 of its blind-arcade arches standing across their
+     * own wall. Same class of fault as the town's, where footprints once sat
+     * "a mean 44 degrees off their own street".
+     */
+    const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
     const colliders = [];
     const HW = w * 0.5, HD = d * 0.5;
 
@@ -6162,7 +6224,7 @@ const BUILDERS = {
         for (let i = 0; i < NJ; i++) {
           const lx = (i / (NJ - 1) - 0.5) * w * 0.78;
           const az = side * (rangeD * 0.5);
-          jharokha(b, q[0] + lx * cs2 + az * sn2, y1 + 0.7, q[1] - lx * sn2 + az * cs2,
+          jharokha(b, q[0] + lx * cs2 - az * sn2, y1 + 0.7, q[1] + lx * sn2 + az * cs2,
             2.0, rot + (side > 0 ? 0 : Math.PI), color, accent);
         }
       }
@@ -6175,9 +6237,9 @@ const BUILDERS = {
         const lx = (i / (N - 1) - 0.5) * w * 0.92;
         const c2 = p(lx, side * (HD - rangeD + 0.1));
         cuspedArch(b, c2[0], ground + 0.5, c2[1], w / (N * 1.5), h * 0.3, 0.3,
-          rot + Math.PI / 2, accent, 5, 0x2a1d12);
+          rot, accent, 5, 0x2a1d12);
         cuspedArch(b, c2[0], ground + h * 0.52, c2[1], w / (N * 1.5), h * 0.26, 0.3,
-          rot + Math.PI / 2, accent, 5, 0x2a1d12);
+          rot, accent, 5, 0x2a1d12);
       }
       /*
        * The ROAD range carries the gateway, so it is solid in two pieces with
@@ -6262,7 +6324,7 @@ const BUILDERS = {
         const lx = ((i + 0.5) / BAYS - 0.5) * KW;
         const c2 = p(lx, -KD * 0.5);
         cuspedArch(b, c2[0], ky + 0.4, c2[1], KW / (BAYS * 1.25), 2.2, 0.3,
-          rot + Math.PI / 2, 0xf0e6d2, 7, null);
+          rot, 0xf0e6d2, 7, null);
       }
       b.box(x, ky + 3.4, z, KW + 1.4, 0.34, KD + 1.4, accent, rot);
       chhatri(b, x, ky + 3.74, z, KW * 0.2, 1.9, 0xf0e6d2);
@@ -6284,7 +6346,7 @@ const BUILDERS = {
       cuspedArch(b, g[0], ground, g[1], GATE, h * 0.58, 0.6, rot + Math.PI / 2, accent, 9, 0x241a12);
       b.box(g[0], ground + h * 0.82, g[1], GATE + 4.0, 0.4, 1.8, accent, rot);
       for (const sx of [-1, 1]) chhatri(b, g[0] + sx * (GATE * 0.5 + 1.4) * cs,
-        ground + h * 0.86, g[1] - sx * (GATE * 0.5 + 1.4) * sn, 0.9, 1.8, 0xf0e6d2);
+        ground + h * 0.86, g[1] + sx * (GATE * 0.5 + 1.4) * sn, 0.9, 1.8, 0xf0e6d2);
     }
 
     const jAltar = p(0, -SD * 0.3);
@@ -6411,7 +6473,7 @@ const BUILDERS = {
     { const q = p(0, sz2);
       ib.box(q[0], FL, q[1], 7.0, h * 0.7, 5.0, tint(color, 1.04), rot);
       ib.box(q[0], FL + h * 0.7, q[1], 8.0, 0.3, 6.0, accent, rot);
-      cuspedArch(ib, q[0], FL, q[1] + 2.6, 2.2, h * 0.46, 0.4, rot + Math.PI / 2, accent, 7, 0x241a12);
+      cuspedArch(ib, q[0], FL, q[1] + 2.6, 2.2, h * 0.46, 0.4, rot, accent, 7, 0x241a12);
       colliders.push({ type: 'box', x: q[0], z: q[1], w: 7.0, d: 5.0, rot }); }
 
     const altar = p(0, sz2 - 0.6);
@@ -6483,7 +6545,7 @@ const BUILDERS = {
       // arch in relief, and the white signboard with its blue edge
       const g = p(0, HD - WT * 0.5);
       ib.box(g[0], ground, g[1], DOOR + 1.5, h * 0.92, WT + 0.3, 0xd9b39c, rot);
-      cuspedArch(ib, g[0], ground, g[1], DOOR, h * 0.6, 0.45, rot + Math.PI / 2, 0xc79a82, 9, 0x241a12);
+      cuspedArch(ib, g[0], ground, g[1], DOOR, h * 0.6, 0.45, rot, 0xc79a82, 9, 0x241a12);
       ib.box(g[0], ground + h * 0.62, g[1], DOOR + 0.5, 0.34, WT + 0.4, 0xf2ece0, rot);
       ib.box(g[0], ground + h * 0.92, g[1], DOOR + 1.9, 0.26, WT + 0.5, accent, rot);
       // the yellow-ochre timber doors, which is what everyone photographs
@@ -7463,6 +7525,19 @@ const BUILDERS = {
     const face = (terrain && terrain.ghatFacing && terrain.ghatFacing[loc.id]) || null;
     const rot = face ? face.ang : loc.rot;
     const cs = Math.cos(rot), sn = Math.sin(rot);
+    /*
+     * THE STEPS' FRAME, for everything. TerrainBuilder cuts the flight in the
+     * MIRROR frame — lx along (cos, -sin), lz toward the water along
+     * (sin, cos) — and this facade's positions already followed it. Its boxes,
+     * arches and collider did not: they were handed `rot`, which box(),
+     * cuspedArch and the collider grid all read in the BOX frame, lx along
+     * (cos, sin). At a ghat's own angle the wall was therefore turned 2 x rot
+     * away from the steps it stands behind — 72 degrees at Kaliya Ghat's 36,
+     * 108 at Yugal Ghat's 54 — and the arch audit found every one of Kaliya's
+     * arches standing across its wall. `solid` is the same idea as
+     * BuildingGenerator's field of that name.
+     */
+    const solid = -rot;
 
     // the arcade wall set back from the steps
     const back = -8;
@@ -7473,16 +7548,16 @@ const BUILDERS = {
      * land side is NEGATIVE lz in that same frame, which is what this uses.
      */
     const bx = x + back * sn, bz = z + back * cs;
-    b.box(bx, ground, bz, w, h * 0.55, 6, color, rot);
+    b.box(bx, ground, bz, w, h * 0.55, 6, color, solid);
 
     const n = Math.max(5, Math.round(w / 7));
     for (let i = 0; i < n; i++) {
       const lx = (i / (n - 1) - 0.5) * w * 0.9;
       cuspedArch(b, bx + lx * cs + 3.1 * sn, ground, bz - lx * sn + 3.1 * cs,
-        w / (n * 1.5), h * 0.44, 0.7, rot + Math.PI / 2, accent, 7);
+        w / (n * 1.5), h * 0.44, 0.7, solid, accent, 7);
     }
 
-    b.box(bx, ground + h * 0.55, bz, w + 1.2, 0.5, 7, accent, rot);
+    b.box(bx, ground + h * 0.55, bz, w + 1.2, 0.5, 7, accent, solid);
 
     // chhatris along the parapet and flanking towers
     for (let i = 0; i < 4; i++) {
@@ -7491,7 +7566,7 @@ const BUILDERS = {
     }
     for (const side of [-1, 1]) {
       const lx = side * w * 0.52;
-      b.box(bx + lx * cs, ground, bz - lx * sn, 5, h * 0.82, 6, color, rot);
+      b.box(bx + lx * cs, ground, bz - lx * sn, 5, h * 0.82, 6, color, solid);
       dome(b, bx + lx * cs, ground + h * 0.82, bz - lx * sn, 2.4, 2.2, accent);
     }
     /*
@@ -7502,7 +7577,7 @@ const BUILDERS = {
      * masonry is a wall you bump into before you can see why.
      */
     return { altarY: 1.6, noCollider: true, colliders: [
-      { type: 'box', x: bx, z: bz, w: w * 0.98, d: 5.4, rot },
+      { type: 'box', x: bx, z: bz, w: w * 0.98, d: 5.4, rot: solid },
     ] };
   },
 

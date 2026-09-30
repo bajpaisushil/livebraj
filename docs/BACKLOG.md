@@ -2812,3 +2812,63 @@ measured from each kit's own vertices as it draws.
 a person's eye at each door opening, failing if a mural is the first thing
 hit. Mutation-tested: restoring the old placement fails it with 120 of 120
 doorways painted over. A check that cannot fail proves nothing.
+
+> "make sure all temples, etc. look exactly as they really are do research for
+> that and improve, currently nothing looks real"
+
+Reaffirmation of QUEUE items 2-4 (arch orientation, Prem Mandir, the eight
+surveyed temples), logged as such rather than as a new item.
+
+### 211 arches stood across their own walls
+
+An audit that knows nothing about any builder's conventions: every arch the
+world builds is recorded with its call site (LandmarkGenerator's opt-in
+recorder), matched to the wall collider it sits alongside, and tested for
+parallel. First run: **211 of 254 judged arches — 83% — stood across their
+walls**, over 18 landmarks. Banke Bihari 86 of 89 (mine, 2026-09-27), Prem
+Mandir 38 of 39, Jaipur Mandir 44 of 85, every arch at Kaliya Ghat. Photographed
+at Prem Mandir first: its south colonnade showed piers and thin pale slivers
+between them — an arch seen edge-on — and not one arch shape.
+
+Four causes, one symptom:
+
+1. **`rot + PI/2` copied onto long-axis walls.** cuspedArch spans along
+   (cos R, sin R). Measured in isolation, `rot` lies in a long-axis wall and
+   `rot + PI/2` stands across it. The ISKCON builder used both on walls
+   running the same way, and the wrong one spread. 16 call sites.
+2. **My eight builders of 2026-09-27 were written in the mirror frame** — p()
+   with lx along (cos, -sin) — while drawing every box, arch and collider in
+   the box frame. At rot 0 invisible; at Jaipur Mandir's 15 degrees every
+   part was positioned along one line and oriented along another, 30 degrees
+   apart. Converted Jaipur to the box frame, and put it at the 2 degrees its
+   survey measured off OSM (bearing 92). 15 was never sourced.
+3. **The ghat facades** were drawn in the box frame behind steps TerrainBuilder
+   cuts in the mirror frame. Everything now takes `solid = -rot`, as
+   BuildingGenerator's houses do.
+4. **The audit itself, twice.** Its first cut flagged correct ISKCON bays:
+   once against the perpendicular wall ending at a corner, once against a
+   staircase tread 3 m below the arch. It now judges an arch only against a
+   wall it sits alongside and that actually reaches it. Read by hand, the
+   ISKCON code was right.
+
+Result: **0 across, 0 oblique, 267 judged**, guarded by `arches.mjs`.
+
+Then the aperture. Fixed in orientation, Prem Mandir's arches were faint
+outlines: the dark aperture was drawn once, to one side of the arch's mid-plane,
+and on that face it was inside the wall's solid box. Drawn on both faces now.
+That broke one thing, and the suite caught it — the haveli's SANCTUM arch,
+which frames the Deities and is looked through, had been taking the default
+aperture by omission; its near copy stood 0.2 m in front of Radha Damodar.
+Now `null`, as an opening you look through should be.
+
+Three photographs tell it: slivers; faint outlines; clear multi-lobed arches.
+
+### The threshold, and InteriorSystem's frame
+
+Houses are built in the mirror frame (see `solid`); InteriorSystem read their
+rotation in the box frame. Measured over all 721: **154 did not notice you step
+1.2 m in through the door, and 42 lifted the roof while you stood 1.2 m out in
+the lane.** Crossing the threshold IS the Pokemon moment, so this is the one
+place the rectangle has to be exact. Now 721/721 both ways, in `houses.mjs`.
+
+Full suite: 29/29 after the sanctum fix.

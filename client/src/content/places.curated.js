@@ -86,7 +86,16 @@ const PLACES = [
     type: 'temple',
     district: 'outskirts',
     geo: [27.56720, 77.68190],
-    rot: 15 * DEG,
+    /*
+     * 2 degrees, not 15. The survey measured OSM way 679447890's long axis at
+     * a bearing of 92 degrees — essentially east-west — and the two nested
+     * enclosures around it run the same way. 15 was never sourced.
+     * (Bearing 92 means 2 degrees south of east; in this world +X is east and
+     * +Z south, and the builder's long axis runs along (cos rot, sin rot).)
+     * Which side the gate faces is a separate, still-UNRESOLVED question the
+     * survey flags explicitly; only the axis is measured.
+     */
+    rot: 2 * DEG,
     grounds: 120,
     radius: 60,
     icon: 'temple',

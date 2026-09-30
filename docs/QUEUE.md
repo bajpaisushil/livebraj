@@ -24,7 +24,18 @@ searching the backlog for it. That is the failure this file exists to stop.*
    to check: whether enterable doors read as different from painted ones, and
    whether entering feels like entering (the old queue already said "the view
    change on entering needs checking").
-2. **Arch orientation, codebase-wide.** Measured: `cuspedArch` given
+2. ~~**Arch orientation, codebase-wide.**~~ **DONE 2026-09-30, pending the
+   full suite.** 211 of 254 judged arches stood across their walls; now 0 of
+   267, guarded by `arches.mjs`. Causes: `rot + PI/2` copied onto long-axis
+   walls; my eight builders from 2026-09-27 written in the mirror frame while
+   drawing in the box frame; the ghat facades in the box frame behind steps
+   cut in the mirror frame; Jaipur Mandir at an unsourced 15 degrees (the
+   survey measures 2). Arch apertures now drawn on both faces, so none is
+   buried inside its own wall. Also found on the way: **InteriorSystem read
+   house rotations in the wrong frame** — 154 of 721 houses did not notice you
+   step inside, 42 lifted the roof while you stood in the lane. Now 721/721
+   both ways, guarded by `houses.mjs`. Original notes follow.
+   **Arch orientation, codebase-wide.** Measured: `cuspedArch` given
    `rot + PI/2` in a wall along the builder's long axis draws the arch
    PERPENDICULAR to the wall — a fin, not an opening. Prem Mandir's whole
    colonnade and door, ISKCON's verandahs, and the Banke Bihari top arcade
@@ -73,6 +84,18 @@ searching the backlog for it. That is the failure this file exists to stop.*
 11. **Fixed sleeps in the checks** — `chatter`, `cheats`, `dpad-dir` and a
     dozen probe tools still wait on a clock instead of a condition. This class
     caused every intermittent failure found so far.
+
+12. **The ghats stand in town with no river in sight.** Found photographing
+    Kaliya Ghat for the arch fix. Research first, per ghat, what is actually
+    there today — the Yamuna has moved away from many of Vrindavan's ghats, so
+    "dry ghat facing a floodplain" may be the true picture — then build that.
+13. **Jaipur Mandir's layout.** Its survey places the temple block at the WEST
+    of its enclosures with the open ground EAST, and takes an east entrance as
+    the working assumption (flagged unresolved). Our builder puts the gate in
+    a long south range. Apply the survey's site plan.
+14. **3D Deities research is running** — five groups, each checked by a
+    refuter, building on `altars.js`, which already records each altar's
+    documented form and marks `undocumented: true` rather than guessing.
 
 ## OPEN — reported, not yet reproduced
 

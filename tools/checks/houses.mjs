@@ -49,8 +49,9 @@ const p = await b.newPage({ viewport: { width: 640, height: 400 } });
 const errors = [];
 p.on('pageerror', (e) => errors.push(e.message));
 await p.goto(`http://localhost:${port}/`, { waitUntil: 'networkidle' });
-await p.waitForFunction(() => window.vrindavan?.ctx?.world?.buildings?.interiors?.length,
-  null, { timeout: 220000 });
+// wait for what the check reads: the buildings AND the interior system's volumes
+await p.waitForFunction(() => window.vrindavan?.ctx?.world?.buildings?.interiors?.length
+  && window.vrindavan?.ctx?.interior?.volumes?.length, null, { timeout: 220000 });
 
 const out = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, W = ctx.world, C = ctx.crowd;
@@ -104,7 +105,28 @@ const out = await p.evaluate(async () => {
     }
     if (hit) { paintedOver++; if (bad.length < 3) bad.push({ kind: lot.roomKind, at: [+dx.toFixed(1), +dz.toFixed(1)] }); }
   }
-  return { total: all.length, tested, walked, paintedOver, bad, muralMeshes: murals.length };
+  /*
+   * 3. The THRESHOLD. Crossing the door is the Pokemon moment, so the
+   * "you are inside" rectangle must agree with the house to the metre: in
+   * 1.2 m through the door you are inside, out 1.2 m in the lane you are
+   * not. InteriorSystem read house rotations in the box frame while houses
+   * are built in the mirror frame, and 154 of 721 failed the first half,
+   * 42 the second, before that was fixed.
+   */
+  const sys = ctx.interior;
+  const key = (x, z) => Math.round(x * 10) + ',' + Math.round(z * 10);
+  const vols = new Map(sys.volumes.filter((v) => v.house).map((v) => [key(v.x, v.z), v]));
+  let inOk = 0, outOk = 0, thr = 0;
+  for (const lot of all) {
+    const v = vols.get(key(lot.x, lot.z));
+    if (!v || !lot.doorAt) continue;
+    thr++;
+    const [dx, dz] = lot.doorAt;
+    let nx = dx - lot.x, nz = dz - lot.z; const L = Math.hypot(nx, nz) || 1; nx /= L; nz /= L;
+    if (sys._contains(v, dx - nx * 1.2, dz - nz * 1.2, 1.0)) inOk++;
+    if (!sys._contains(v, dx + nx * 1.2, dz + nz * 1.2, 1.0)) outOk++;
+  }
+  return { total: all.length, tested, walked, paintedOver, bad, muralMeshes: murals.length, thr, inOk, outOk };
 });
 
 check('there are houses to walk into', out.total > 100, `${out.total} enterable interiors`);
@@ -114,6 +136,10 @@ check('there are murals in the town at all (so the next check means something)',
   out.muralMeshes > 0, `${out.muralMeshes} mural meshes`);
 check('no doorway has a painting across it',
   out.paintedOver === 0, out.paintedOver ? `${out.paintedOver} painted over, e.g. ${JSON.stringify(out.bad)}` : `${out.tested} doors clear at eye height`);
+check('one step through the door and the house knows you are inside',
+  out.inOk === out.thr, `${out.inOk}/${out.thr} houses`);
+check('one step back into the lane and it knows you are not',
+  out.outOk === out.thr, `${out.outOk}/${out.thr} houses`);
 check('no page errors', errors.length === 0, errors.slice(0, 2).join(' | '));
 
 console.log('');
