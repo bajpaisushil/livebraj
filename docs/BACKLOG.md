@@ -2924,3 +2924,28 @@ Samvaranas are now stepped bell-roofs, not domes. The park carries `grounds:
 Still queued from the same checker: the Satsang Bhavan is ~87 m across and
 ~187 m from the platform, not the 40 m dome at 79 m drawn here, and an
 87 x 34 m hall north of the musical fountain is missing entirely.
+
+### Five temples had the town's keep-out on the wrong side
+
+Found while working out which way Shahji should face. BuildingGenerator's
+keep-out took a landmark's front as (sin rot, cos rot) — the yaw convention of
+the generic darshan anchor. The landmark builders written in the BOX frame
+put their front along (-sin rot, cos rot): identical at rot 0 or 180, mirror
+images otherwise. Measured, comparing each builder's published altar-to-
+darshan direction with the old front:
+
+| temple | rot | front was off by |
+|---|---|---|
+| Radha Vallabh | 90 | 180 |
+| Radha Raman | 90 | 180 |
+| Jugal Kishore | 270 | 180 |
+| Rangaji | 90 | 180 |
+| Madan Mohan | 45 | 90 |
+
+So at four of them the deep 7 m pad that keeps the town off the approach sat
+behind the building, and the town was free to build up to the entrance.
+
+The front now comes from the building: every builder publishes where the
+Deity is and where a pilgrim stands, landmarks are built before the town, and
+the line between the two is the front whatever frame the builder uses. Same
+idea that finally cracked the ISKCON cage.

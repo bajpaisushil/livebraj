@@ -202,9 +202,31 @@ class CityFabric {
      * campus and Prem Mandir's park are real open ground, and crowding those
      * would be the same mistake in the other direction.
      */
+    const anchors = (ctx.world && ctx.world.anchors) || {};
     this.keepOut = ctx.data.LOCATIONS.map((l) => {
       const half = Math.max(l.build.w, l.build.d) * 0.5;
       if (l.grounds) return { x: l.pos[0], z: l.pos[1], r: l.grounds };
+      /*
+       * WHICH WAY IS THE FRONT? Ask the building.
+       *
+       * This took the front as (sin rot, cos rot) — the yaw convention the
+       * generic darshan anchor uses. But the landmark builders that lay
+       * themselves out in the BOX frame put their front along (-sin rot,
+       * cos rot): the same at rot 0 or 180, mirror images otherwise. So at
+       * Madan Mohan's 45 degrees, Chaar Dham's -97.5 and Rangaji's 90 the deep
+       * front pad — the one that keeps the town off the approach — sat on the
+       * wrong side of the building. Landmarks are built before the town
+       * (WorldService), and every builder publishes where its Deity is and
+       * where a pilgrim stands to see it; the line from one to the other IS
+       * the front, whatever frame the builder was written in.
+       */
+      let fx = Math.sin(l.rot), fz = Math.cos(l.rot);
+      const a = anchors[l.id];
+      if (a && a.altar && a.darshan) {
+        const dx = a.darshan.x - a.altar.x, dz = a.darshan.z - a.altar.z;
+        const L = Math.hypot(dx, dz);
+        if (L > 0.5) { fx = dx / L; fz = dz / L; }
+      }
       return {
         x: l.pos[0], z: l.pos[1],
         /*
@@ -226,7 +248,9 @@ class CityFabric {
         back: l.build.d * 0.5 + 3.0,
         /* The facing the game itself uses: LandmarkGenerator places the
          * darshan anchor along (sin rot, cos rot), so that is the front. */
-        sn: Math.sin(l.rot), cs: Math.cos(l.rot),
+        sn: fx, cs: fz,
+        // kept for the audit in tools/checks: how far this moved the front
+        yawFront: Math.atan2(Math.sin(l.rot), Math.cos(l.rot)),
       };
     });
     /** The same places, as the thing a street wants to lead to. */
