@@ -53,7 +53,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
    backlog), photographed, and measured against the survey's own numbers.
    Rangaji · Shahji · Radha Vallabh · Madan Mohan · Radha Raman ·
    Radha Damodar · Radha Gopinath · Jugal Kishore.
-5. **The vehicle camera follows the vehicle.** *"as the lane changes in
+5. ~~**The vehicle camera follows the vehicle.**~~ **DONE 2026-09-30.**
+   The heading is published every moving frame and the view eases round to
+   it after 1.8 s of the look control being left alone (tau 0.7 s). Measured
+   in GAME time — headless runs the loop at 0.28 updates per frame, which made
+   the first version of the check wait 0.35 s and blame the camera: median lag
+   2.9 degrees, 90th percentile 9.6, look-away respected, released within 4 s
+   of moving. Guarded by `vehcam.mjs`. Original notes follow.
+   **The vehicle camera follows the vehicle.** *"as the lane changes in
    vehicle change the view to that like update it to front view of vehicle
    moving direction."* DROPPED earlier, found 2026-09-30. Today the view
    points along the direction of travel once, at pull-away, and never again.
@@ -96,6 +103,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
 14. **3D Deities research is running** — five groups, each checked by a
     refuter, building on `altars.js`, which already records each altar's
     documented form and marks `undocumented: true` rather than guessing.
+
+15. **E-rickshaws doing 94 km/h.** Seen in the vehicle-camera trace: 26 m/s
+    on a ride from Chhatikara. Ride pacing speeds the vehicle up to arrive
+    inside a time cap. A real e-rickshaw in these lanes does roughly 15-25
+    km/h. Research real speeds per vehicle type and road, then decide how a
+    5 km ride stays bearable without driving through town at highway speed —
+    the honest options are a faster vehicle class on the highway stretch, or
+    a shorter world (the old queue's 12 km question), not a rickshaw at 94.
 
 ## OPEN — reported, not yet reproduced
 

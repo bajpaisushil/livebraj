@@ -58,6 +58,15 @@ const ALIGN_TAU = 2.5;                 // seconds — the long auto-align time c
 const ALIGN_K = 1 / ALIGN_TAU;
 const ALIGN_IDLE = 0.55;               // look must be untouched this long first
 const ALIGN_SPEED_FRAC = 0.4;          // ...and the player above 40% of walk pace
+/*
+ * In a vehicle the view follows the VEHICLE, and more firmly than walking.
+ * A rickshaw changes lane or takes a corner in a second or two; the walking
+ * time constant of 2.5 s would still be catching up with the last turn when
+ * the next one came. The idle delay is longer than walking's, so a glance
+ * out of the side is not snatched back mid-look.
+ */
+const VEH_IDLE = 1.8;                  // seconds the look control must be left alone
+const VEH_TAU = 0.7;                   // seconds — how firmly it comes round
 
 const LOOK_UNIT_RAD = 2.35;            // radians per unit of a normalised drag delta
 const LOOK_PIXEL_RAD = 0.0026;         // radians per pixel, once pixel units are detected
@@ -141,6 +150,8 @@ export class CameraRig {
 
     // look input bookkeeping
     this._lookIdle = 99;
+    /** The heading of the vehicle you are in, while it moves; RickshawSystem sets it. */
+    this.vehicleHeading = null;
     this._lookPixels = false;
 
     // wall avoidance: 0 = fully pulled in, 1 = clear
@@ -584,7 +595,12 @@ export class CameraRig {
 
     // Auto-align: only while walking, and only once the look control has
     // been left alone. 2.5 s time constant, so it never yanks.
-    if (this.mode === 'follow' && this._lookIdle > ALIGN_IDLE) {
+    const inVehicle = this.vehicleHeading !== null && this.vehicleHeading !== undefined;
+    if (this.mode === 'follow' && inVehicle) {
+      if (this._lookIdle > VEH_IDLE) {
+        this.yawTarget = wrapAngle(dampAngle(this.yawTarget, this.vehicleHeading, 1 / VEH_TAU, dt));
+      }
+    } else if (this.mode === 'follow' && this._lookIdle > ALIGN_IDLE) {
       const thr = this.walkSpeed * ALIGN_SPEED_FRAC;
       if (this.speed > thr) {
         const ramp = clamp01((this.speed - thr) / Math.max(0.2, this.walkSpeed - thr));

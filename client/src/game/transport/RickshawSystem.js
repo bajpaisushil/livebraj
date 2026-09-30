@@ -719,10 +719,27 @@ export class RickshawSystem {
    * sensible default and a camera that fights you.
    */
   _aimCameraAtTravel(ctx, car, hold) {
-    if (!hold || !hold.aimCam || !car) return;
-    if (Math.abs(car.vel || 0) < 1.2) return;       // still parked, or crawling
     const rig = ctx.cameraRig;
-    if (rig && rig.yaw !== undefined) { rig.yaw = car.yaw; rig.yawTarget = car.yaw; }
+    if (!rig || !car) return;
+    /*
+     * AND KEEP FOLLOWING IT. (2026-09-30)
+     *
+     * "as the lane changes in vehicle change the view to that like update it
+     * to front view of vehicle moving direction." The rule above was right
+     * for pulling away and wrong for everything after: once fired, nothing
+     * ever turned the view again, so the first corner left you staring at
+     * the side of the road. So the vehicle's heading is published to the rig
+     * every frame it is genuinely moving, and the rig eases round to it —
+     * but only after you have left the look control alone for a moment
+     * (ThirdPersonCamera VEH_IDLE), so looking out of the side is still
+     * yours for as long as you are doing it.
+     *
+     * This request was dropped once, between being made and being queued.
+     */
+    rig.vehicleHeading = Math.abs(car.vel || 0) >= 1.2 ? car.yaw : null;
+    if (!hold || !hold.aimCam) return;
+    if (Math.abs(car.vel || 0) < 1.2) return;       // still parked, or crawling
+    if (rig.yaw !== undefined) { rig.yaw = car.yaw; rig.yawTarget = car.yaw; }
     hold.aimCam = false;
   }
 
@@ -914,6 +931,10 @@ export class RickshawSystem {
    * Frame
    * ================================================================ */
   update(dt, ctx) {
+    // out of the vehicle, however you got out: the rig follows you again
+    if (this.state !== 'riding' && this.state !== 'driving' && ctx.cameraRig) {
+      ctx.cameraRig.vehicleHeading = null;
+    }
     if (this.state === 'boarding') { this._stepBoarding(dt, ctx); return; }
     if (this.state === 'riding') {
       // Holding RUN as a passenger means the same as saying jaldi: the button

@@ -100,11 +100,23 @@ const pace = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, r = ctx.rickshaw;
   r.state='idle'; r.ride=null; r._boarding=null; r.pending=null; r.drive=null;
   ctx.cheats.codes.auto();
-  await new Promise(s=>setTimeout(s,300));
-  let mine=null; for (const sl of ctx.crowd.vehicleInst) for (const a of sl.agents) if (a.personal) mine=a;
+  /*
+   * Wait for YOUR vehicle to exist, not for 300 ms — and then board IT.
+   *
+   * This slept a fixed 300 ms and boarded whichever vehicle was nearest. On
+   * a loaded machine a hired rickshaw from the traffic could be nearer than
+   * yours at that instant, and boarding a hired one opens the fare dialog:
+   * the check then reported "not driving: offered" about a vehicle it never
+   * meant to get into. Same class as every intermittent failure found so far
+   * — a clock and a race standing in for the thing actually being tested.
+   */
+  const findMine = () => { for (const sl of ctx.crowd.vehicleInst) for (const a of sl.agents) if (a.personal) return a; return null; };
+  let mine = null;
+  for (let i = 0; i < 300 && !(mine = findMine()); i++) await new Promise((s) => requestAnimationFrame(() => s()));
   if (!mine) return { ok:false, why:'no personal vehicle' };
   ctx.player.position.set(mine.x-2, ctx.player.position.y, mine.z);
-  r.target = null; r._acc=99; r.update(0.5,ctx);
+  r._acc=99; r.update(0.5,ctx);
+  r.target = mine;                        // yours, whatever else is parked nearby
   if (!r.board()) return { ok:false, why:'could not board' };
   for (let i=0;i<60;i++) r.update(1/30,ctx);
   if (r.state !== 'driving') return { ok:false, why:'not driving: '+r.state };

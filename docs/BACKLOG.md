@@ -2872,3 +2872,38 @@ the lane.** Crossing the threshold IS the Pokemon moment, so this is the one
 place the rectangle has to be exact. Now 721/721 both ways, in `houses.mjs`.
 
 Full suite: 29/29 after the sanctum fix.
+
+### The dropped camera request, done
+
+> "as the lane changes in vehicle change the view to that like update it to
+> front view of vehicle moving direction"
+
+Arrived 2026-09-28 in the same message as the map's `m`-key bug; the bug was
+fixed and this was never queued. Found 2026-09-30 by searching the backlog.
+
+The ride aimed the camera along the direction of travel ONCE, at pull-away,
+and then — by the design of an earlier request — "never again". Now the
+vehicle's heading is published to the rig every moving frame, and the view
+eases round to it once the look control has been left alone for 1.8 s, with a
+0.7 s time constant: firmer than walking's 2.5 s, because a rickshaw takes a
+corner in a second or two.
+
+`vehcam.mjs` rides a real route in the real frame loop. Its first two versions
+blamed the camera for the machine:
+- It waited "7 seconds" — which in headless, where the game loop runs 0.28
+  times per rendered frame at a capped 0.05 s step, was 0.35 s of GAME time
+  against a camera that deliberately waits 1.8 s. Now it hooks the rig and
+  counts the game's own seconds.
+- It checked that a look-away stayed 90 degrees from the car, while the car
+  kept turning underneath. Now it checks the camera did not move.
+
+Result: median lag 2.9 degrees, 90th percentile 9.6, look-away respected,
+view back behind the vehicle within 4 s of moving.
+
+And `driving.mjs` had the same disease: it spawned your vehicle, slept 300 ms,
+and boarded whatever was nearest — a hired rickshaw from traffic, under load,
+which opened the fare dialog. It now waits for your vehicle to exist and boards
+it by name.
+
+Spotted in the camera trace, queued: e-rickshaws doing 26 m/s — 94 km/h —
+because ride pacing speeds them up to arrive inside a time cap.
