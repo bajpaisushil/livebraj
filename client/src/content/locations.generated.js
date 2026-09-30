@@ -663,7 +663,7 @@ export const LOCATIONS = [
     "hindi": "प्रेम मंदिर",
     "type": "temple",
     "district": "raman-reti",
-    "grounds": null,
+    "grounds": 140,
     "pos": [-1823.02, 874.08],
     "geo": [27.572092, 77.672037],
     "rot": 0,
@@ -678,8 +678,8 @@ export const LOCATIONS = [
     ],
     "build": {
       "kind": "temple-marble",
-      "w": 66,
-      "d": 84,
+      "w": 61,
+      "d": 41,
       "h": 38,
       "color": "#f8f6f0",
       "accent": "#eae4d4"

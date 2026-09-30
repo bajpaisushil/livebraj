@@ -2907,3 +2907,20 @@ it by name.
 
 Spotted in the camera trace, queued: e-rickshaws doing 26 m/s — 94 km/h —
 because ride pacing speeds them up to arrive inside a time cap.
+
+### Prem Mandir now faces east
+
+The first rebuild (2026-09-28) put the entrance and flight on the SOUTH and
+pushed the shikhara NORTH — it took the building's short axis as front to
+back. Its checker, which that rebuild never read because another temple's
+checker had been filed in its place, fixes the whole layout from the two OSM
+polygons: aprons W 13.4 / E 35.5 / S 12.9 / N 14.9 m, so the building sits 11 m
+west of the platform's centre; sanctum and shikhara at the WEST end, 18.5% in;
+samvaranas at 50% and 74%, corner turrets at 87%; a bow running 17 m past the
+east edge with two pools in it; the flag on its own mast beside the kalash.
+Samvaranas are now stepped bell-roofs, not domes. The park carries `grounds:
+140` so the town stays out of it, as at Krishna Balaram.
+
+Still queued from the same checker: the Satsang Bhavan is ~87 m across and
+~187 m from the platform, not the 40 m dome at 79 m drawn here, and an
+87 x 34 m hall north of the musical fountain is missing entirely.

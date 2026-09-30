@@ -289,8 +289,14 @@ export const LANDMARKS = [
     id: 'prem-mandir', match: ['Prem Mandir', 'प्रेम मंदिर'],
     name: 'Prem Mandir', hindi: 'प्रेम मंदिर',
     type: 'temple', deity: 'Shri Radha Krishna', icon: 'temple',
-    build: { kind: 'temple-marble', w: 66, d: 84, h: 38, color: '#f8f6f0', accent: '#eae4d4' },
-    rot: 0, radius: 52, district: 'raman-reti',
+    /*
+     * 61 x 41 is the BUILDING (OSM way 673573044); the jagati is 110 x 68 and
+     * the walled park around it roughly 430 x 340 m (checker, z17 imagery),
+     * so the town is kept out by `grounds`, as at Krishna Balaram. Faces EAST:
+     * see buildPremMandir.
+     */
+    build: { kind: 'temple-marble', w: 61, d: 41, h: 38, color: '#f8f6f0', accent: '#eae4d4' },
+    rot: 0, radius: 52, district: 'raman-reti', grounds: 140,
     interactions: ['darshan', 'offer', 'pranam', 'story'],
     fallback: [27.56740, 77.67590],
   },

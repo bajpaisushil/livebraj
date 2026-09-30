@@ -4895,248 +4895,267 @@ function buildRadhaGopinath({ loc, b, ground }) {
  * — the pastimes, carved round the outside, one after another.
  */
 function buildPremMandir({ loc, b, ground, rng }) {
-  const { color, accent } = loc.build;
   const [x, z] = loc.pos;
   const rot = loc.rot;
   const cs = Math.cos(rot), sn = Math.sin(rot);
+  // The box frame: lx along (cos, sin). At rot 0, +lx is EAST and +lz SOUTH.
   const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
   const colliders = [];
-  /*
-   * DO NOT PAINT IT WHITE. The survey is blunt about this being "the whole
-   * game": sampled over 740 x 160 px of facade, mean luminance is 64%, HALF
-   * the building is darker than V71% and a QUARTER darker than V47%, and the
-   * saturation of the lit marble is 9.4%, not zero. #ffffff models only the
-   * brightest 5% of it.
-   *
-   * And the stone itself is not white. The temple's own literature says
-   * Carrara, and ordinary Bianco Carrara is described by its own trade
-   * literature as "white or BLUE-GREY" — only the Statuario grade is
-   * near-white. Some of the grey measured here is the marble, not the shade.
-   *
-   * Measured, overcast monsoon light: ground storey #e5e7e1 (H80 S3 V91),
-   * upper storey #dfddd1 (H51 S6 V87). The vertical ramp does the rest.
-   */
-  const MARBLE = 0xe5e7e1, SHADOW = 0xc9c7bb;
 
   /*
-   * MEASURED off OpenStreetMap (ODbL, satellite traces):
-   *   way 673573044, the building  61.4 m E-W x 40.7 m N-S, 1,748 m²
-   *   way 491803653, the jagati   110.0 x 67.9 m, 7,201 m²
-   * This was 37 x 35 on a 58 x 39 platform — a little over half the real
-   * footprint on a platform barely a third of the real area. The published
-   * "122 ft long, 115 ft wide" that several sites repeat describes a
-   * completely different building and is not used.
+   * PREM MANDIR FACES EAST. Rebuilt 2026-09-30 from docs/research/prem-mandir.md
+   * and — this time — its independent checker, which the first rebuild never
+   * saw because the filing script had attached another temple's checker to
+   * this file.
+   *
+   * The first rebuild put the entrance and the broad flight on the SOUTH and
+   * pushed the shikhara NORTH, because it treated the building's short axis
+   * as front-to-back. The checker, working from the two OSM polygons and a
+   * percentage grid laid over full-resolution photographs, fixes all of it:
+   *   - the long axis is east-west and the forecourt is EAST: aprons W 13.4,
+   *     E 35.5, S 12.9, N 14.9 m, so the building sits 11 m west of the
+   *     platform's centre and 1 m south of it;
+   *   - the sanctum is at the WEST end, and the shikhara over it stands at
+   *     18.5% of the facade from the west; the central samvarana at 50%, the
+   *     secondary roof at 74%, the corner turrets at 87%;
+   *   - heights shikhara : central : secondary = 1.00 : 0.60 : 0.55, the
+   *     parapet at 0.39 of the shikhara;
+   *   - "the white marble terrace continues about 17 m further east" as a
+   *     BOW, with "two uniform dark-teal quadrants … set INTO the eastern bow,
+   *     symmetrically flanking a fine grid-patterned central panel" — pools;
+   *   - "THE FLAG IS NOT ON THE KALASH … a slender metal mast offset to one
+   *     side of the kalash axis, rising from the shikhara shoulder".
+   *
+   * DO NOT PAINT IT WHITE (the survey's words, and confirmed by the checker's
+   * own 777,705-pixel measurement: mean luminance 62%, p50 68%, lit-marble
+   * saturation 9.8%). Measured, overcast: ground storey #e5e7e1, upper
+   * #dfddd1. The vertical ramp does the rest.
    */
-  const HW = 30.7, HD = 20.35;       // 61.4 x 40.7 m body
-  const PW = 55, PD = 34;            // 110 x 68 m jagati
-  const FL = ground + 2.4;           // raised
-  const H = 13.3;                    // MEASURED parapet/roof deck
+  const MARBLE = 0xe5e7e1, UPPER = 0xdfddd1, SHADOW = 0xc9c7bb;
+  const GOLD = 0xc9a03c;
 
-  /* ---- lawns, then the platform, then the forty-foot parikrama ---- */
-  b.box(x, ground - 0.25, z, PW * 2 + 40, 0.4, PD * 2 + 40, 0x6f9050, rot);
-  b.box(x, ground + 0.15, z, PW * 2 + 26, 0.5, PD * 2 + 26, 0xe8e2d2, rot);
-  /*
-   * THE STEPS WERE DRAWN AND NOT COLLIDED.
-   *
-   * Five treads and the platform above them existed as meshes and nothing
-   * else, so `standHeight` had nothing to offer and the body kept the height
-   * of the lawn underneath. You did not climb the staircase; you walked into
-   * it and disappeared inside it. "I get vanished under stairs on walking
-   * instead of stepping up."
-   *
-   * `standOnly`, because a 0.35 m riser is well under STEP_UP (0.52) and is
-   * therefore something you walk UP, not something you bump into. Marking
-   * them solid instead would trade falling through the stairs for a 2.4 m
-   * wall around the whole temple, which is the mistake the ISKCON hall
-   * floor made — see the note on `standOnly` in WorldService.collide.
-   *
-   * Tagged `temple-step` rather than `temple-floor` on purpose: the generic
-   * floor slab added after every builder keys off a `temple-floor` tag to
-   * decide whether the builder owns its own floor, and this is a staircase
-   * outside the building, not the floor of its interior.
-   */
-  /*
-   * A MOULDED EDGE ALL ROUND, AND BROAD STEPS ON ONE SIDE.
-   *
-   * This drew five concentric treads ringing the whole 110 x 68 m jagati,
-   * which is a ziggurat, not a temple platform — and the steps check caught
-   * it: six levels stacked on one centre with a 1.5 m drop and zero
-   * horizontal run, because a concentric ring has no run anywhere except
-   * radially. The survey is specific: "Moulded white marble edge, ornate
-   * metal balustrade. BROAD STEPS ON THE EAST."
-   *
-   * So the jagati is one raised slab with a solid moulded edge you cannot
-   * climb, and a single wide flight up its front. The treads are colliders
-   * as well as meshes this time — they were meshes only, which is why you
-   * walked into the staircase and vanished inside it rather than climbing
-   * it.
-   */
+  const HL = 30.65, HB = 20.3;        // the building: 61.3 x 40.6 m (OSM way 673573044)
+  const PL = 55.1, PB = 34.2;         // the jagati: 110.2 x 68.4 m (OSM way 491803653)
+  const PX = 11.05, PZ = -1.0;        // its centre, relative to the building's
+  const FL = ground + 2.4;            // jagati top; the plaza is at +0.65
+  const H = 13.3;                     // parapet / roof deck over FL, MEASURED
+  const SHIK_X = -HL + 0.185 * HL * 2;  // -19.3: shikhara axis, 18.5% from the west
+  const BOW = 17.0;                   // how far the terrace bows out past the east edge
+  const EAST = PX + PL;               // the platform's straight east edge, in lx
+
+  /* ---- the park, and the red-paved plaza the jagati stands in ---- */
   {
-    const RISE = 0.35, TREAD = 0.62, N = 5;
+    const q = p(PX + 8, PZ);
+    b.box(q[0], ground - 0.25, q[1], PL * 2 + 70, 0.4, PB * 2 + 50, 0x6f9050, rot);
+    // "stands ~1.3-2.0 m above the RED-PAVED plaza" — red in words only; the
+    // hex is INFERRED as a muted brick paving, not measured
+    b.box(q[0], ground + 0.15, q[1], PL * 2 + BOW * 2 + 26, 0.5, PB * 2 + 26, 0x9e6a55, rot);
+  }
 
-    // the moulded edge: solid, so the only way up is the flight
-    b.box(x, ground + 0.65, z, PW * 2, FL - ground - 0.65, PD * 2, SHADOW, rot);
-    b.box(x, FL - 0.1, z, PW * 2 - 0.5, 0.2, PD * 2 - 0.5, MARBLE, rot);
-    colliders.push({
-      type: 'box', x, z, w: PW * 2, d: PD * 2, rot,
-      h: FL - ground, tag: 'temple-floor', standOnly: true,
-    });
+  /* ---- the jagati: a moulded edge you cannot climb, a bow, one broad flight ---- */
+  {
+    const q = p(PX, PZ);
+    b.box(q[0], ground + 0.65, q[1], PL * 2, FL - ground - 0.65, PB * 2, SHADOW, rot);
+    b.box(q[0], FL - 0.1, q[1], PL * 2 - 0.5, 0.2, PB * 2 - 0.5, MARBLE, rot);
+    colliders.push({ type: 'box', x: q[0], z: q[1], w: PL * 2, d: PB * 2, rot,
+      h: FL - ground, tag: 'temple-floor', standOnly: true });
 
-    // and the flight, on the front, wide enough to be the approach it is
-    const SW = Math.min(PW * 0.9, 26);
-    for (let i = 0; i < N; i++) {
-      const lz = PD + (N - i) * TREAD - TREAD * 0.5;
-      const q = p(0, lz);
-      const top = 0.65 + (i + 1) * RISE;
-      b.box(q[0], ground + 0.65 + i * RISE, q[1], SW, RISE, TREAD, MARBLE, rot);
-      colliders.push({
-        type: 'box', x: q[0], z: q[1], w: SW, d: TREAD, rot,
-        h: top, tag: 'temple-step', standOnly: true,
-      });
+    // the bow: strips across the width, each running out as far as the arc.
+    // 28 of them — at 14 the outline read as a staircase from the road.
+    const NS = 28;
+    for (let i = 0; i < NS; i++) {
+      const t0 = (i / NS) * 2 - 1, t1 = ((i + 1) / NS) * 2 - 1, tm = (t0 + t1) / 2;
+      const out = BOW * Math.sqrt(Math.max(0, 1 - tm * tm));
+      if (out < 0.4) continue;
+      const lz = PZ + tm * PB, dz = (t1 - t0) * PB;
+      const c = p(EAST + out / 2, lz);
+      b.box(c[0], ground + 0.65, c[1], out, FL - ground - 0.65, dz + 0.02, SHADOW, rot);
+      b.box(c[0], FL - 0.1, c[1], out - 0.25, 0.2, dz + 0.02, MARBLE, rot);
+      colliders.push({ type: 'box', x: c[0], z: c[1], w: out, d: dz + 0.02, rot,
+        h: FL - ground, tag: 'temple-floor', standOnly: true });
     }
-    // the balustrade either side of the flight, which is what stops you
-    // walking off the cheek of it
-    for (const sx of [-1, 1]) {
-      const q = p(sx * (SW * 0.5 + 0.35), PD + N * TREAD * 0.5);
-      b.box(q[0], ground + 0.65, q[1], 0.5, 1.5, N * TREAD, SHADOW, rot);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: 0.5, d: N * TREAD, rot,
+    // two ornamental pools in the bow, and the grid-paved panel between them.
+    // The teal is INFERRED from satellite tone; the geometry is the checker's.
+    for (const sz of [-1, 1]) {
+      const c = p(EAST + 7.5, PZ + sz * 11.5);
+      b.box(c[0], FL - 0.02, c[1], 11.4, 0.5, 12.4, SHADOW, rot);              // coping
+      b.box(c[0], FL + 0.06, c[1], 10.2, 0.44, 11.2, 0x2f5f63, rot);           // water
+      // a rim you do not step over: you walk round a pool, not across it
+      colliders.push({ type: 'box', x: c[0], z: c[1], w: 11.4, d: 12.4, rot,
+        h: (FL + 1.0) - ground, tag: 'prem-pool' });
+    }
+    {
+      const c = p(EAST + 7.5, PZ);
+      b.box(c[0], FL - 0.06, c[1], 9.0, 0.08, 7.0, 0xdcd8cc, rot);
+      for (let k = -3; k <= 3; k++) {
+        const g1 = p(EAST + 7.5 + k * 1.25, PZ);
+        b.box(g1[0], FL + 0.02, g1[1], 0.06, 0.02, 7.0, SHADOW, rot);
+        const g2 = p(EAST + 7.5, PZ + k * 1.0);
+        b.box(g2[0], FL + 0.02, g2[1], 9.0, 0.02, 0.06, SHADOW, rot);
+      }
+    }
+    // the broad flight, EAST, at the tip of the bow
+    const RISE = 0.35, TREAD = 0.62, N = 5, SW = 16;
+    const tip = EAST + BOW * Math.sqrt(Math.max(0, 1 - (SW / 2 / PB) ** 2)) - 0.3;
+    for (let i = 0; i < N; i++) {
+      const lx = tip + (N - i) * TREAD - TREAD * 0.5;
+      const c = p(lx, PZ);
+      const top = 0.65 + (i + 1) * RISE;
+      b.box(c[0], ground + 0.65 + i * RISE, c[1], TREAD, RISE, SW, MARBLE, rot);
+      colliders.push({ type: 'box', x: c[0], z: c[1], w: TREAD, d: SW, rot,
+        h: top, tag: 'temple-step', standOnly: true });
+    }
+    for (const sz of [-1, 1]) {
+      const c = p(tip + N * TREAD * 0.5, PZ + sz * (SW / 2 + 0.35));
+      b.box(c[0], ground + 0.65, c[1], N * TREAD, 1.5, 0.5, SHADOW, rot);
+      colliders.push({ type: 'box', x: c[0], z: c[1], w: N * TREAD, d: 0.5, rot,
         h: 2.15, tag: 'temple-rail' });
     }
   }
 
-  /* ---- the body, and its 150 carved pillars ---- */
-  /*
-   * WALLS, with a way in. Drawn as one filled box this measured 100% open at
-   * its own wall line — the collider sat half a metre inside the face, so the
-   * wall was nowhere the scan looked, and there was no door at all.
-   */
+  /* ---- the body: walls, with the way in on the EAST face ---- */
+  const WT = 1.0, DOOR = 5.0;
+  const face = (lx, lz, fw, fd, col = MARBLE) => {
+    const q = p(lx, lz);
+    b.box(q[0], FL, q[1], fw, H, fd, col, rot);
+    colliders.push({ type: 'box', x: q[0], z: q[1], w: fw, d: fd + 0.25, rot });
+  };
+  face(0, -HB + WT / 2, HL * 2, WT);                  // north
+  face(0, HB - WT / 2, HL * 2, WT);                   // south
+  face(-HL + WT / 2, 0, WT, HB * 2);                  // west, behind the sanctum
   {
-    const WT = 1.0, DOOR = 5.0;
-    const face = (lx, lz, fw, fd) => {
-      const q = p(lx, lz);
-      b.box(q[0], FL, q[1], fw, H, fd, MARBLE, rot);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: fw, d: fd + 0.25, rot });
-    };
-    face(0, -HD + WT / 2, HW * 2, WT);
-    face(-HW + WT / 2, 0, WT, HD * 2);
-    face(HW - WT / 2, 0, WT, HD * 2);
-    const seg = (HW * 2 - DOOR) / 2;
-    for (const sgn of [-1, 1]) face(sgn * (DOOR / 2 + seg / 2), HD - WT / 2, seg, WT);
-    const g = p(0, HD - WT / 2);
-    cuspedArch(b, g[0], FL, g[1], DOOR, H * 0.62, WT + 0.4, rot + Math.PI / 2, MARBLE, 9, SHADOW);
-    const f0 = p(0, 0);
-    b.box(f0[0], FL - 0.08, f0[1], HW * 2 - WT, 0.14, HD * 2 - WT, 0xefe9dc, rot);
+    const seg = (HB * 2 - DOOR) / 2;                  // east, split round the door
+    for (const sgn of [-1, 1]) face(HL - WT / 2, sgn * (DOOR / 2 + seg / 2), WT, seg);
+    const g = p(HL - WT / 2, 0);
+    // an east-face opening spans along lz: rot + PI/2 (see arches.mjs)
+    cuspedArch(b, g[0], FL, g[1], DOOR, H * 0.62, WT + 0.4, rot + Math.PI / 2, MARBLE, 9, null);
   }
-  for (const [ax, az, n, vert] of [
-    [0, HD, 11, false], [0, -HD, 11, false], [HW, 0, 10, true], [-HW, 0, 10, true],
+  // the upper storey reads a shade warmer than the lower, measured
+  {
+    const q = p(0, 0);
+    b.box(q[0], FL + H * 0.53, q[1], HL * 2 + 0.06, 0.25, HB * 2 + 0.06, SHADOW, rot);   // floor line
+    b.box(q[0], FL - 0.08, q[1], HL * 2 - WT, 0.14, HB * 2 - WT, 0xefe9dc, rot);         // floor
+  }
+  mouldedPlinth(b, x, FL, z, HL * 2 + 0.4, HB * 2 + 0.4, rot, SHADOW, 1.35);
+
+  /* ---- the colonnade: pilasters and cusped arches on all four faces ---- */
+  for (const [ax, az, n, alongZ] of [
+    [0, HB, 11, false], [0, -HB, 11, false], [HL, 0, 8, true], [-HL, 0, 8, true],
   ]) {
     for (let i = 0; i < n; i++) {
-      const t = (i / (n - 1) - 0.5) * (vert ? HD * 1.9 : HW * 1.9);
-      const q = vert ? p(ax, t) : p(t, az);
+      const t = (i / (n - 1) - 0.5) * (alongZ ? HB * 1.9 : HL * 1.9);
+      const q = alongZ ? p(ax, t) : p(t, az);
       b.box(q[0], FL, q[1], 0.7, H * 0.62, 0.7, MARBLE, rot);
       b.box(q[0], FL + H * 0.62, q[1], 1.0, 0.4, 1.0, SHADOW, rot);
-      // cusped arches between them
       if (i < n - 1) {
-        const t2 = ((i + 0.5) / (n - 1) - 0.5) * (vert ? HD * 1.9 : HW * 1.9);
-        const a2 = vert ? p(ax, t2) : p(t2, az);
+        const t2 = ((i + 0.5) / (n - 1) - 0.5) * (alongZ ? HB * 1.9 : HL * 1.9);
+        // keep the east face's door bay clear of a blind arch
+        if (alongZ && ax > 0 && Math.abs(t2) < DOOR * 0.75) continue;
+        const a2 = alongZ ? p(ax, t2) : p(t2, az);
         cuspedArch(b, a2[0], FL + H * 0.28, a2[1], 2.4, H * 0.32, 0.4,
-          vert ? rot + Math.PI / 2 : rot, MARBLE, 7, SHADOW);
+          alongZ ? rot + Math.PI / 2 : rot, MARBLE, 7, SHADOW);
       }
     }
   }
 
-  /* ---- the 84 lila panels, round the outer walls ---- */
+  /* ---- the 84 lila panels ---- */
   /*
-   * Eighty-four is the published figure and it is exact, so eighty-four are
-   * drawn: twenty-two on each long side and twenty on each short one. They use
-   * the same atlas the town's house murals do, because they are the same
-   * pastimes.
+   * "80 panels = 48 ground + 32 first floor" (sourced), and the checker
+   * confirms "polychrome painted narrative scenes … recessed behind plain
+   * white marble frames". 22 on each long face, 20 on each short one — the
+   * east face skips the door bay.
    */
   const lilaB = new MeshBuilder();
   {
     const PANEL = 1.55, Y = FL + H * 0.66;
     const runs = [
-      [0, HD + 0.14, 22, false, rot + Math.PI / 2],
-      [0, -HD - 0.14, 22, false, rot + Math.PI / 2],
-      [HW + 0.14, 0, 20, true, rot],
-      [-HW - 0.14, 0, 20, true, rot],
+      [0, HB + 0.14, 22, false, rot + Math.PI / 2],
+      [0, -HB - 0.14, 22, false, rot + Math.PI / 2],
+      [HL + 0.14, 0, 20, true, rot],
+      [-HL - 0.14, 0, 20, true, rot],
     ];
     let n84 = 0;
-    for (const [ax, az, n, vert, ang] of runs) {
+    for (const [ax, az, n, alongZ, ang] of runs) {
       for (let i = 0; i < n; i++) {
-        const t = (i / (n - 1) - 0.5) * (vert ? HD * 1.86 : HW * 1.86);
-        const q = vert ? p(ax, t) : p(t, az);
+        const t = (i / (n - 1) - 0.5) * (alongZ ? HB * 1.86 : HL * 1.86);
+        if (alongZ && ax > 0 && Math.abs(t) < DOOR * 0.7) { n84++; continue; }
+        const q = alongZ ? p(ax, t) : p(t, az);
         lilaB.panelUV(q[0], Y, q[1], PANEL, PANEL, lilaUV(n84), ang, 0.04);
         n84++;
       }
     }
   }
 
-  /* ---- nine domes, seventeen kalashas ---- */
-  b.box(x, FL + H, z, HW * 2 + 1.6, 1.1, HD * 2 + 1.6, SHADOW, rot);
+  /* ---- the roof: one shikhara at the WEST, samvaranas along the axis ---- */
+  b.box(x, FL + H, z, HL * 2 + 1.6, 1.1, HB * 2 + 1.6, SHADOW, rot);
+  // the shikhara: 21.5 m above the parapet on a base about 13.4 m wide,
+  // to the top of its kalash at 34.8 m (photogrammetry pinned to the 38.1 m flag)
+  {
+    const q = p(SHIK_X, 0);
+    shikhara(b, q[0], FL + H, q[1], 6.7, 21.5, UPPER);
+  }
   /*
-   * THE CENTRE IS NOT A DOME.
-   *
-   * "ONE tall curvilinear NAGARA SHIKHARA of the SHEKHARI type — a latina
-   * spire with clustered subsidiary half-spires (urushringas) banked in 3-4
-   * tiers up each face and corner. It is NOT a dome, NOT an onion, NOT a
-   * smooth cone." What flanks it are SAMVARANA bell-roofs, which is what the
-   * nine "domes" of the published count actually are.
-   *
-   * Photogrammetry, scale pinned to the sourced 38.1 m flag height:
-   *   parapet 13.3 m, secondary spire 19.1, central samvarana 21.5,
-   *   main shikhara to the top of its gold kalash 34.8 m (about 114 ft),
-   *   flag-mast tip 38.1 m.
-   * So the shikhara rises 21.5 m above the parapet on a base about 13.4 m
-   * wide, and the whole masonry summit was being drawn at 13 m — a third of
-   * its height, and the wrong shape.
-   *
-   * AND IT IS NOT CENTRAL — measured on two independent photographs. The
-   * offset below is modest and approximate; the survey establishes the fact
-   * but not the exact displacement.
+   * A samvarana is not a dome: "many stacked horizontal courses of small
+   * ribbed bell elements rising to a small crowning pavilion". Courses, then
+   * a low gadrooned bell, then a kalash.
+   */
+  let kalasha = 1;                                   // the shikhara's own
+  const samvarana = (lx, lz, baseW, rise) => {
+    const q = p(lx, lz);
+    const C = 5;
+    let y = FL + H + 1.1;
+    for (let i = 0; i < C; i++) {
+      const k = 1 - (i / C) * 0.55;
+      const ch = rise * 0.12;
+      b.box(q[0], y, q[1], baseW * k, ch, baseW * k, i % 2 ? UPPER : SHADOW, rot);
+      b.box(q[0], y + ch, q[1], baseW * k + 0.3, 0.12, baseW * k + 0.3, MARBLE, rot);
+      y += ch + 0.12;
+    }
+    const bell = rise - (y - (FL + H + 1.1)) - 0.9;
+    ribbedDome(b, q[0], y, q[1], baseW * 0.24, Math.max(0.8, bell), UPPER, SHADOW, 24);
+    b.box(q[0], y + Math.max(0.8, bell), q[1], baseW * 0.07 + 0.25, 0.9, baseW * 0.07 + 0.25, GOLD, rot);
+    kalasha++;
+  };
+  // MEASURED along the axis: central 50% (apex 21.5 m), secondary 74% (19.1 m),
+  // corner turrets 87%
+  samvarana(0, 0, 11.0, 21.5 - H - 1.1);
+  samvarana(-HL + 0.74 * HL * 2, 0, 8.0, 19.1 - H - 1.1);
+  for (const sz of [-1, 1]) samvarana(-HL + 0.87 * HL * 2, sz * HB * 0.72, 3.4, 3.6);
+  // INFERRED, to reach the sourced "9 domes": a pair flanking the centre and a
+  // pair flanking the secondary roof. Their positions are not measured.
+  for (const sz of [-1, 1]) samvarana(0, sz * HB * 0.62, 4.0, 4.4);
+  for (const sz of [-1, 1]) samvarana(-HL + 0.74 * HL * 2, sz * HB * 0.55, 3.6, 3.8);
+  // "17 golden-coloured kalash" in all: the rest stand along the parapet
+  for (let i = kalasha; i < 17; i++) {
+    const a2 = ((i - kalasha) / (17 - kalasha)) * Math.PI * 2;
+    const q = p(Math.cos(a2) * HL * 0.9, Math.sin(a2) * HB * 0.9);
+    b.box(q[0], FL + H + 1.1, q[1], 0.7, 1.7, 0.7, GOLD, rot);
+  }
+  // the flag on its OWN mast, beside the kalash, from the shikhara's shoulder
+  // to 38.1 m, and saffron
+  {
+    const q = p(SHIK_X, 4.2);
+    b.box(q[0], FL + H + 11.5, q[1], 0.22, 38.1 - H - 11.5, 0.22, 0x8a8a86, rot);
+    const f = p(SHIK_X, 5.6);
+    b.box(f[0], FL + 35.4, f[1], 0.1, 1.4, 2.6, 0xe8891f, rot);
+  }
+
+  /* ---- the Satsang Bhavan's dome, west, where it was ---- */
+  /*
+   * Kept at its earlier position and size. The checker measures it at about
+   * 87 m across, ~187 m from the platform centre — both larger and further
+   * than this. Queued rather than moved: at that size it needs its own
+   * keep-out and its own survey before it goes into a town.
    */
   {
-    const q = p(0, -HD * 0.16);
-    shikhara(b, q[0], FL + H, q[1], 6.7, 21.5, MARBLE);
-  }
-  const domes = [
-    [-HW * 0.58, HD * 0.55, 3.4, 6.2], [HW * 0.58, HD * 0.55, 3.4, 6.2],
-    [-HW * 0.58, -HD * 0.55, 3.4, 6.2], [HW * 0.58, -HD * 0.55, 3.4, 6.2],
-    [0, HD * 0.62, 3.0, 5.4], [0, -HD * 0.62, 3.0, 5.4],
-    [-HW * 0.62, 0, 3.0, 5.4], [HW * 0.62, 0, 3.0, 5.4],
-  ];
-  let kalasha = 0;
-  for (const [lx, lz, r, hh] of domes) {
-    const q = p(lx, lz);
-    // the curvilinear shoulder each dome sits on
-    for (let i = 0; i < 4; i++) {
-      const k = 1 - i * 0.12;
-      b.box(q[0], FL + H + 1.1 + i * 0.8, q[1], r * 2.2 * k, 0.8, r * 2.2 * k, i % 2 ? MARBLE : SHADOW, rot);
-    }
-    ribbedDome(b, q[0], FL + H + 4.3, q[1], r, hh, MARBLE, SHADOW, 16);
-    b.box(q[0], FL + H + 4.3 + hh, q[1], r * 0.42, 1.3, r * 0.42, 0xc9a03c, rot);
-    kalasha++;
-  }
-  // seventeen in all: the other eight stand along the parapet
-  for (let i = kalasha; i < 17; i++) {
-    const a2 = ((i - kalasha) / 8) * Math.PI * 2;
-    const q = p(Math.cos(a2) * HW * 0.85, Math.sin(a2) * HD * 0.85);
-    b.box(q[0], FL + H + 1.1, q[1], 0.8, 1.9, 0.8, 0xc9a03c, rot);
-  }
-  // and the flag, which takes it to 125 ft
-  b.box(x, FL + H + 4.3 + 13.0 + 1.3, z, 0.3, 6.5, 0.3, 0xc9a03c, rot);
-  b.box(x, FL + H + 4.3 + 13.0 + 5.6, z, 2.4, 1.4, 0.12, 0xc0562f, rot);
-
-  /* ---- the Satsang Hall beside it: pillar-less, dome-shaped ---- */
-  {
-    const q = p(-PW - 24, 0);
+    const q = p(PX - PL - 24, PZ);
     b.box(q[0], ground + 0.2, q[1], 42, 1.0, 38, 0xe4ded0, rot);
     ribbedDome(b, q[0], ground + 1.2, q[1], 20, 13.5, MARBLE, SHADOW, 20);
     colliders.push({ type: 'box', x: q[0], z: q[1], w: 40, d: 36, rot });
   }
 
-  /* ---- gardens and fountains, which is most of the 55 acres ---- */
-  for (const [fx, fz] of [[0, PD + 17], [0, -PD - 17], [PW + 16, 0]]) {
+  /* ---- fountains in the park, north, south and out beyond the east flight ---- */
+  for (const [fx, fz] of [[PX, PZ + PB + 17], [PX, PZ - PB - 17], [EAST + BOW + 20, PZ]]) {
     const q = p(fx, fz);
     b.box(q[0], ground + 0.2, q[1], 9, 0.7, 9, MARBLE, rot);
     b.box(q[0], ground + 0.9, q[1], 6.4, 0.3, 6.4, 0x4f8898, rot);
@@ -5145,40 +5164,24 @@ function buildPremMandir({ loc, b, ground, rng }) {
     colliders.push({ type: 'circle', x: q[0], z: q[1], r: 4.5 });
   }
 
-  const darsh = p(0, HD * 0.55);
+  /* ---- where the Deities are, and where you stand to see them ---- */
+  // the ground-floor sanctum is under the shikhara at the WEST end, so you
+  // stand east of it and look west
+  const altar = p(SHIK_X, 0);
+  const darsh = p(SHIK_X + 9.5, 0);
   return {
     altarY: 2.6,
     colliders,
-    // the 84 panels, on the atlas they belong to
-    mesh: { name: 'PremMandirLilas', builder: lilaB, x, z, r: Math.max(HW, HD) + 4, map: lilaAtlas },
+    mesh: { name: 'PremMandirLilas', builder: lilaB, x, z, r: Math.max(HL, HB) + 4, map: lilaAtlas },
     interior: {
-      altar: [p(0, -HD * 0.5)[0], FL + 1.4, p(0, -HD * 0.5)[1]],
+      altar: [altar[0], FL + 1.4, altar[1]],
       darshan: [darsh[0], darsh[1]],
-      facing: rot + Math.PI,
+      facing: Math.atan2(altar[0] - darsh[0], altar[1] - darsh[1]),
       floor: FL,
-      volume: { x, z, hw: HW, hd: HD, rot, door: p(0, HD + 1.5) },
+      volume: { x, z, hw: HL, hd: HB, rot, door: p(HL + 1.5, 0) },
     },
   };
 }
-
-/* ================================================================
- * Katyayani Peeth — the Uma Shakti Peeth
- * ================================================================ */
-
-/**
- * "The gold lions on the steps against a white marble front with black
- * pillars; the pillars inscribed with verses to the goddess; and the fact that
- * it is a full Shakti Peeth — one of the 51."
- *
- * The material contrast is the documented and defining fact: WHITE MARBLE
- * building with BLACK STONE pillars. Around a vast courtyard stand FIVE
- * sampradaya shrines — Shakta, Shaiva, Vaishnava, Ganapatya and Saura, which
- * is Katyayani, Shiva, Lakshmi-Narayan, Ganesh and Surya.
- *
- * The tower is NOT reliably documented — "sources describe the building and
- * its pillars but never name a shikhara or dome ... treat it as unverified" —
- * so the shikhara here is modest and plain rather than asserted.
- */
 function buildKatyayani({ loc, b, ground }) {
   const { color, accent } = loc.build;
   const [x, z] = loc.pos;
