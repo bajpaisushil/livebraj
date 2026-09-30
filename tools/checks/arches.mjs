@@ -77,7 +77,13 @@ const out = await p.evaluate(() => {
        * against a tread, two correct bays came back "across". Anything whose
        * top is below the arch's springing is a step, a kerb or a plinth.
        */
-      if (c.top !== undefined && c.top < a.y + 0.5) continue;
+      /*
+       * ...and reach its SPRINGING, where the curve begins (cuspedArch puts it
+       * at 0.52 of the height). The chhatris on Prabhupada's samadhi stand on
+       * its roof terrace, 0.7 m below the top of the parapet beside them —
+       * a parapet the arch rises clear of, judged as its wall at 45 degrees.
+       */
+      if (c.top !== undefined && c.top < a.y + Math.max(0.5, 0.52 * (a.h || 0))) continue;
       const long = Math.max(c.hw, c.hd), thin = Math.min(c.hw, c.hd);
       if (long * 2 < 1.6 || long < thin * 2.5) continue;
       const cr = Math.cos(c.rot), sr = Math.sin(c.rot);

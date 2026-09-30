@@ -13,6 +13,8 @@ import { lilaUV, lilaAtlas } from './LilaArt.js';
 import { rngAt } from '../../engine/math/Random.js';
 import { TAU } from '../../engine/math/MathUtils.js';
 import { PEOPLE, buildSeated, buildStanding } from '../npc/Archetypes.js';
+import { buildIskconCampus } from './IskconCampus.js';
+import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
 
 import { vMul, correct as correctHex, PT_OCHRE, PT_VERM, W_ALGAE, shade as vShade }
@@ -326,6 +328,8 @@ export function buildLandmarks(ctx, terrain) {
     }
     if (out && out.colliders) colliders.push(...out.colliders);
     if (out && out.mesh && !out.mesh.builder.isEmpty) extra.push(out.mesh);
+    // a builder may hand back more than one: a textured atlas needs its own
+    if (out && out.meshes) for (const m of out.meshes) if (!m.builder.isEmpty) extra.push(m);
     // moving parts: the same path into the scene, but named so they can be
     // found again and given an `open` direction to slide along
     if (out && out.curtain) {
@@ -439,8 +443,9 @@ function cuspedArch(b, cx, y0, cz, w, h, depth, rot, color, lobes = 5, shade = 0
   if (ARCH_LOG) {
     // the CALL SITE, so a fix can be made line by line rather than blanket
     const st = (new Error().stack || '').split('\n')[2] || '';
-    const m = st.match(/LandmarkGenerator\.js:(\d+)/);
-    ARCH_LOG.push({ x: cx, z: cz, y: y0, rot, w, h, owner: ARCH_OWNER, line: m ? +m[1] : 0 });
+    const m = st.match(/(\w+)\.js:(\d+)/);
+    ARCH_LOG.push({ x: cx, z: cz, y: y0, rot, w, h, owner: ARCH_OWNER,
+      line: m ? (m[1] === 'LandmarkGenerator' ? +m[2] : m[1] + ':' + m[2]) : 0 });
   }
   const cs = Math.cos(rot), sn = Math.sin(rot);
   const p = (lx, ly) => [cx + lx * cs, ly, cz + lx * sn];
@@ -992,9 +997,17 @@ function shikhara(b, cx, y0, cz, r, h, color, sides = 12) {
     }
     if (prevRing) {
       const shade = new THREE.Color(color).multiplyScalar(0.92 + t * 0.14).getHex();
+      /*
+       * OUTWARD. These quads were wound (bottom, next bottom, next top, top),
+       * which faces the INSIDE of the ring — and the landmark mesh is single-
+       * sided, so from outside every spire and dome showed the inner faces of
+       * its far half, lit from the wrong side. Measured on Prem Mandir's
+       * shikhara: 254 faces pointing in, 2 out. (bottom, top, next top, next
+       * bottom) faces out.
+       */
       for (let s = 0; s < sides; s++) {
         const n = (s + 1) % sides;
-        b.quad(prevRing[s], prevRing[n], ring[n], ring[s], shade);
+        b.quad(prevRing[s], ring[s], ring[n], prevRing[n], shade);
       }
     }
     prevRing = ring;
@@ -1029,9 +1042,10 @@ function dome(b, cx, y, cz, r, h, color, sides = 12) {
       ring.push([cx + Math.cos(ang) * rr, yy, cz + Math.sin(ang) * rr]);
     }
     if (prev) {
+      // outward: see shikhara()
       for (let s = 0; s < sides; s++) {
         const n = (s + 1) % sides;
-        b.quad(prev[s], prev[n], ring[n], ring[s], color);
+        b.quad(prev[s], ring[s], ring[n], prev[n], color);
       }
     }
     prev = ring;
@@ -1444,9 +1458,10 @@ function ribbedDome(b, cx, y0, cz, r, h, color, rib, sides = 16) {
       ring.push([cx + Math.cos(ang) * rr, yy, cz + Math.sin(ang) * rr]);
     }
     if (prev) {
+      // outward: see shikhara()
       for (let s = 0; s < sides; s++) {
         const n = (s + 1) % sides;
-        b.quad(prev[s], prev[n], ring[n], ring[s], s % 2 ? rib : color);
+        b.quad(prev[s], ring[s], ring[n], prev[n], s % 2 ? rib : color);
       }
     }
     prev = ring;
@@ -2319,365 +2334,34 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
     }
   }
 
-  /* ---------------- the forecourt: the samadhi and the museum ---------------- */
-
-  /**
-   * The samadhi is a SEPARATE BUILDING and it is not in the courtyard. It
-   * stands in the entrance forecourt on the road side, with the museum beside
-   * it; OSM puts its centroid about 20 m from the temple's and its footprint at
-   * about 16 x 21 m. Back to Godhead reported the design in September 1980 —
-   * "the central spire will reach seventy feet into the sky" — and the
-   * dedication in November 1983. It is carved white Rajasthani marble with a
-   * tall curvilinear spire quite unlike the temple's bulbous domes, flanked by
-   * chhatris, approached under a monumental arch, and the forecourt in front of
-   * it is the same black and white diagonal chequer.
-   *
-   * It is modelled because it is the first thing you see arriving, and because
-   * every "white marble temple" description of this place is describing it and
-   * not the mandir.
+  /* ---------------- the campus ---------------- */
+  /*
+   * Everything outside the temple block — the fence and both gates with their
+   * guards, the arcaded approach, the Samadhi with Srila Prabhupada in it, the
+   * Museum, the great arch that bridges them, the kiosks, the market, the
+   * offices and halls, the building site, and the road with its peepal and
+   * garland sellers — is laid out from OpenStreetMap's own outlines in
+   * IskconCampus.js. What stood here before was sized "to hold what is
+   * listed, and labelled an estimate", before the survey existed: a 150 x 176
+   * m wall against the real 124 x 132, the goshala INSIDE it (the survey:
+   * "DO NOT put the goshala inside the compound"), the Gurukula on the wrong
+   * side and no arch at all.
    */
-  {
-    const SZ = 27;
-    /*
-     * OFF THE GATE AXIS.
-     *
-     * This was at lx = 0 — dead on the centreline of the main gate — and its
-     * block is 13 m wide against a 9 m opening, so standing in the road you saw
-     * a flat white wall filling the gateway and no temple at all. Reported as
-     * "iskcon main gate is showing no gate open but a wall", and that is
-     * exactly what it was: the samadhi, seen end-on through the arch.
-     *
-     * The comment above this already said where it belongs — "in the entrance
-     * forecourt ON THE ROAD SIDE, with the museum beside it" — and the museum
-     * is at +13.5. So the samadhi goes to the other side, the axis from the
-     * gate to the temple door is clear, and you see the mandir when you walk
-     * in, with the samadhi on your right as you do.
-     */
-    const SX = -13.5;
-    const s0 = p(SX, SZ);
-    b.box(s0[0], g0 - 0.3, s0[1], 18, 0.9, 22, KB_WHITE_MARBLE, rot);
-    b.box(s0[0], g0 + 0.6, s0[1], 13, 7.2, 15, KB_WHITE_MARBLE, rot);
-    for (const sx of [-1, 1]) {
-      const a0 = p(SX + sx * 4.2, SZ - 7.6);
-      cuspedArch(b, a0[0], g0 + 0.6, a0[1], 3.2, 4.2, 0.7, rot, KB_WHITE_MARBLE, 7, null);
-    }
-    const d0 = p(SX, SZ - 7.6);
-    cuspedArch(b, d0[0], g0 + 0.6, d0[1], 4.0, 5.0, 0.8, rot, KB_WHITE_MARBLE, 7);
-    b.box(s0[0], g0 + 7.8, s0[1], 14, 0.7, 16, KB_WHITE_MARBLE, rot);
-    /*
-     * The cornice does not run straight. Per the 2026 survey it is "a chain of
-     * shallow downward-curving ogee/cyma sweeps, one per bay", which it calls
-     * the single most distinctive line on the whole site and the easiest to
-     * miss — and we had missed it, drawing a flat slab.
-     */
-    bangaldarEave(b, s0[0], g0 + 7.95, s0[1], 14.6, 16.6, rot, KB_WHITE_MARBLE, 5, 0.46);
-    // seventy feet, which is the one published height on the whole site
-    shikhara(b, s0[0], g0 + 8.5, s0[1], 3.1, 12.8, KB_WHITE_MARBLE, 12);
-    for (const sx of [-1, 1]) {
-      for (const sz of [-1, 1]) {
-        const c = p(SX + sx * 5.2, SZ + sz * 6.2);
-        chhatri(b, c[0], g0 + 8.5, c[1], 1.7, 2.4, KB_WHITE_MARBLE);
-      }
-    }
-    // its own approach arch, kept inside the compound wall at D = 39
-    const g1 = p(SX, SZ + 9.5);
-    for (const sx of [-1, 1]) {
-      const c = p(SX + sx * 5.4, SZ + 9.5);
-      b.box(c[0], g0, c[1], 3.0, 7.6, 3.0, KB_WHITE_MARBLE, rot);
-      chhatri(b, c[0], g0 + 7.6, c[1], 1.5, 2.0, KB_WHITE_MARBLE);
-    }
-    cuspedArch(b, g1[0], g0 + 3.6, g1[1], 8.2, 5.4, 1.4, rot, KB_WHITE_MARBLE, 5, null);
-    b.box(g1[0], g0 + 8.2, g1[1], 12.8, 1.1, 1.5, KB_WHITE_MARBLE, rot);
-    chhatri(b, g1[0], g0 + 9.3, g1[1], 1.3, 1.6, KB_WHITE_MARBLE);
-
-    // the museum, beside it — two storeys, cream, and emphatically not a
-    // second samadhi: it holds the Radha-Krishna and Vrinda Devi deities and
-    // Srila Prabhupada's rooms, and nothing about it is a shrine
-    const m0 = p(13.5, SZ - 3);
-    b.box(m0[0], g0 - 0.2, m0[1], 20, 0.7, 22, 0xe4dcc8, rot);
-    b.box(m0[0], g0 + 0.5, m0[1], 17, 6.4, 19, KB_IVORY, rot);
-    b.box(m0[0], g0 + 6.9, m0[1], 17.6, 0.45, 19.6, KB_SALMON, rot);
-    b.box(m0[0], g0 + 7.35, m0[1], 16.4, 0.7, 18.4, KB_IVORY, rot);
-    for (let i = -2; i <= 2; i++) {
-      const w0 = p(13.5 + i * 3.4, SZ - 3 - 9.6);
-      cuspedArch(b, w0[0], g0 + 1.2, w0[1], 2.2, 3.4, 0.5, rot, KB_SALMON, 5);
-    }
-    for (const sx of [-1, 1]) {
-      const c = p(13.5 + sx * 6.4, SZ - 3);
-      chhatri(b, c[0], g0 + 8.05, c[1], 1.4, 1.8, KB_IVORY);
-    }
-  }
-
-  /**
-   * The walled plot, with two gates — and a wall you cannot walk through.
-   *
-   * This was drawn and never made SOLID: five box meshes and not one collider,
-   * so the compound wall was a painting of a wall. A ring scan round the plot
-   * came back 360.5 degrees clear at every radius. You could stroll in over any
-   * part of the boundary, which is why the gate did not read as a gate — there
-   * was nothing anywhere else to stop you, so an opening meant nothing.
-   *
-   * Two gates, because the campus has two: the MAIN gate on the road side, wide
-   * and flanked by piers, which is the one every arriving pilgrim walks through
-   * off Bhaktivedanta Swami Marg; and a smaller BACK gate on the far side for
-   * the residential end of the campus. A compound with one way in is a compound
-   * you can be trapped in.
-   *
-   * Every segment now pushes its own collider. The lesson generalises and is
-   * worth stating for the temples still to be built: a wall that is drawn and
-   * not collided is worse than no wall, because it tells the player a boundary
-   * exists and then does not honour it.
-   */
-  {
-    /*
-     * THE CAMPUS, not the temple block.
-     *
-     * This was `build.w/2 + 6` — a 66 x 78 m compound — and you said it plainly:
-     * "iskcon vrindavan does not look as it is really as it's really big and
-     * it's showing only this much." It was showing only the mandir and the
-     * samadhi, because there was no room for anything else.
-     *
-     * The research lists what the walled campus actually holds: the samadhi
-     * mandir and museum, a Gurukula, a guest house, Govinda's restaurant, a
-     * goshala, book stalls, a bakery, Prabhupada's rear quarters and a Tulsi
-     * garden used for parikrama. None of that fits in 66 x 78 m, so the wall
-     * goes out to 150 x 176 and the buildings go in.
-     *
-     * It deliberately does NOT publish a footprint as fact — the research says
-     * "do not publish a footprint figure as fact" because none is documented —
-     * so this is sized to hold what is listed, and labelled an estimate.
-     */
-    const W = 75, D = 88;
-    const WALL_H = 2.8, WALL_T = 0.5;
-    const MAIN_HALF = 4.5;      // the road-side gate is 9 m across
-    // 6.8 m clear. It was 5.2, which measured only 3.0 m of walkable width once the
-// piers were accounted for — too tight for the gate the goshala lane uses.
-const BACK_HALF = 3.4;      // the back gate is narrower, as it is in life
-
-    const seg = (lx0, lz0, lx1, lz1) => {
-      const A = p(lx0, lz0), B = p(lx1, lz1);
-      const len = Math.hypot(B[0] - A[0], B[1] - A[1]);
-      if (len < 0.3) return;
-      const ang = Math.atan2(B[1] - A[1], B[0] - A[0]);
-      const mx = (A[0] + B[0]) * 0.5, mz = (A[1] + B[1]) * 0.5;
-      b.box(mx, g0, mz, len, WALL_H, WALL_T, 0xe4dcc8, ang);
-      // and the thing that makes it a wall rather than a picture of one
-      colliders.push({ type: 'box', x: mx, z: mz, w: len, d: WALL_T + 0.35, rot: ang });
-    };
-
-    // back wall, split for the back gate
-    seg(-W, -D, -BACK_HALF, -D);
-    seg(BACK_HALF, -D, W, -D);
-    // the two long sides
-    seg(-W, -D, -W, D);
-    seg(W, -D, W, D);
-    // front wall, split for the main gate
-    /* ---------------- the campus is PAVED, not grassed ---------------- */
-    /*
-     * "ISKCON floor is completely white inside i saw but here's it's garden
-     * like." It was: enlarging the wall to 150 x 176 m left the new ground as
-     * bare terrain, which is grass, so the campus read as a lawn with
-     * buildings on it instead of a paved precinct you walk across.
-     *
-     * Laid stone throughout, with the planting confined to where it belongs —
-     * the Tulsi ring and the beds along the wall.
-     */
-    {
-      const pq = p(0, 0);
-      b.box(pq[0], g0 - 0.12, pq[1], W * 2 - 1.5, 0.22, D * 2 - 1.5, 0xe0dac9, rot);
-      // the paths worn lighter, running gate to temple and gate to gate
-      b.box(pq[0], g0 + 0.11, pq[1], 9, 0.05, D * 2 - 3, 0xeae4d4, rot);
-      b.box(pq[0], g0 + 0.11, pq[1], W * 2 - 3, 0.05, 7, 0xeae4d4, rot);
-      // a band of planting against the wall, which is where it is
-      for (const sgn of [-1, 1]) {
-        const g2 = p(sgn * (W - 5), 0);
-        b.box(g2[0], g0 + 0.05, g2[1], 6, 0.2, D * 2 - 14, 0x6f9050, rot);
-      }
-    }
-
-    /* ---------------- what else is inside the wall ---------------- */
-    /*
-     * The research lists the campus contents and they were all missing: "a
-     * Gurukula, a guest house, Govinda's restaurant, a goshala, book stalls, a
-     * bakery, Prabhupada's rear quarters and a Tulsi garden used for
-     * parikrama". Without them the walled campus was two buildings and a lot
-     * of grass, which is why it read small.
-     *
-     * One caveat the research is explicit about and which is honoured here by
-     * keeping these plain: "many of the original 1975 buildings, including the
-     * Gurukula complex, have been declared structurally unsafe and a new
-     * Krishna Balaram Cultural Centre has been under construction ... The
-     * campus you model will differ depending on the year you pick." So these
-     * are the ordinary 1975 ranges, not the new centre.
-     */
-    {
-      const block = (lx, lz, bw, bd, storeys, col, roofCol) => {
-        const q = p(lx, lz);
-        const hh = storeys * 3.4;
-        b.box(q[0], g0 - 0.25, q[1], bw + 1.6, 0.5, bd + 1.6, 0xd8cfb8, rot);
-        b.box(q[0], g0 + 0.25, q[1], bw, hh, bd, col, rot);
-        b.box(q[0], g0 + 0.25 + hh, q[1], bw + 1.0, 0.5, bd + 1.0, roofCol || KB_SALMON, rot);
-        // a verandah arcade along the long face, which every one of these has
-        const n = Math.max(3, Math.round(bw / 3.4));
-        for (let i = 0; i < n; i++) {
-          const t = (i / (n - 1) - 0.5) * (bw - 2.2);
-          const a2 = p(lx + t, lz + bd * 0.5 + 0.1);
-          cuspedArch(b, a2[0], g0 + 0.25, a2[1], 2.0, 2.8, 0.4, rot + Math.PI / 2, KB_IVORY, 5, 0x241a12);
-          if (storeys > 1) {
-            b.box(a2[0], g0 + 3.9, a2[1], 1.5, 1.3, 0.2, 0x2f3b3a, rot);   // upper windows
-          }
-        }
-        colliders.push({ type: 'box', x: q[0], z: q[1], w: bw, d: bd, rot });
-        return q;
-      };
-
-      // the Gurukula, along the west side
-      block(-W + 17, -14, 26, 30, 2, KB_IVORY);
-      // the guest house, two storeys, along the east
-      block(W - 17, -10, 24, 34, 2, KB_IVORY);
-      // Govinda's, by the gate where it is
-      block(W - 19, D - 30, 20, 18, 1, KB_IVORY);
-      // the bakery beside it, small
-      block(W - 19, D - 50, 12, 12, 1, tint(KB_IVORY, 0.97));
-
-      // the goshala, at the back by its own gate: open sheds and a yard
-      {
-        const yq = p(-W + 24, -D + 26);
-        b.box(yq[0], g0 - 0.2, yq[1], 40, 0.4, 34, 0xc0b092, rot);
-        for (const oz of [-9, 9]) {
-          const q = p(-W + 24, -D + 26 + oz);
-          b.box(q[0], g0 + 0.2, q[1], 34, 0.4, 7.5, 0xb8a684, rot);       // the standing
-          for (let i = 0; i < 9; i++) {                                    // posts
-            const c2 = p(-W + 24 - 15 + i * 3.75, -D + 26 + oz);
-            b.box(c2[0], g0 + 0.6, c2[1], 0.35, 3.0, 0.35, 0x8a6a42, rot);
-            colliders.push({ type: 'circle', x: c2[0], z: c2[1], r: 0.3 });
-          }
-          b.box(q[0], g0 + 3.6, q[1], 35, 0.4, 8.5, KB_SALMON, rot);       // the roof
-        }
-      }
-
-      // the book stalls, a row inside the main gate
-      for (let i = 0; i < 4; i++) {
-        const q = p(-W + 12 + i * 6.2, D - 22);
-        b.box(q[0], g0, q[1], 5.2, 3.0, 4.0, KB_IVORY, rot);
-        b.box(q[0], g0 + 3.0, q[1], 5.8, 0.35, 4.6, KB_SALMON, rot);
-        const aw = p(-W + 12 + i * 6.2, D - 22 + 2.6);
-        b.box(aw[0], g0 + 2.5, aw[1], 5.6, 0.16, 1.8, [0xc0562f, 0x2f6f4f, 0xb8902e, 0x2b5f8a][i], rot);
-        colliders.push({ type: 'box', x: q[0], z: q[1], w: 5.2, d: 4.0, rot });
-      }
-
-      /*
-       * The Tulsi garden, "used for parikrama" — so it is a ring you can walk
-       * round, not a bed you look at. Tulsi in pots on a low kerb, with the
-       * path left clear.
-       */
-      {
-        const cx2 = W - 40, cz2 = -D + 34;
-        const gq = p(cx2, cz2);
-        b.box(gq[0], g0 - 0.15, gq[1], 26, 0.3, 26, 0xc9bda2, rot);
-        b.box(gq[0], g0 + 0.15, gq[1], 13, 0.25, 13, 0x6f9050, rot);
-        for (let i = 0; i < 16; i++) {
-          const a2 = (i / 16) * Math.PI * 2;
-          const q = p(cx2 + Math.cos(a2) * 7.5, cz2 + Math.sin(a2) * 7.5);
-          b.box(q[0], g0 + 0.4, q[1], 0.75, 0.6, 0.75, 0xc0562f, rot);     // the pot
-          b.box(q[0], g0 + 1.0, q[1], 0.5, 0.9, 0.5, 0x3f7a42, rot);       // tulsi
-          b.box(q[0], g0 + 1.7, q[1], 0.32, 0.4, 0.32, 0x4f8a4a, rot);
-        }
-      }
-
-      // Prabhupada's rear quarters, behind the temple
-      block(-18, -D + 52, 16, 13, 1, KB_IVORY);
-    }
-
-    /* ---------------- the outer hall, between gate and temple ------------ */
-    /*
-     * You come out of darshan and there is a covered hall before the gate,
-     * with the drinking-water station and a row of shops. It is where everyone
-     * actually stands — waiting, filling bottles, buying garlands — and it was
-     * simply missing: the build had the court, the altars, the samadhi and the
-     * gates and then open ground.
-     *
-     * It sits in the forecourt, along the side, so it does not block the line
-     * from the gate to the temple door. Its colliders are the pier feet and
-     * the counters, so you walk down it rather than into it.
-     */
-    {
-      const FZ = (HL + D) * 0.5;               // halfway from the temple to the gate
-      const HALLW = 26, HALLD = 7.0;
-      const hx = -W + 3.5 + HALLW * 0.5;       // along the left-hand side
-      const base = p(hx, FZ);
-      // the floor, a step up out of the dust
-      b.box(base[0], g0, base[1], HALLW + 1.2, 0.34, HALLD + 1.2, 0xe0d7c2, rot);
-      // piers and the roof they carry
-      const PIERS = 9;
-      for (let i2 = 0; i2 < PIERS; i2++) {
-        for (const sz of [-1, 1]) {
-          const lx = hx + (i2 / (PIERS - 1) - 0.5) * (HALLW - 1.6);
-          const q = p(lx, FZ + sz * (HALLD * 0.5 - 0.7));
-          b.box(q[0], g0 + 0.34, q[1], 0.5, 3.5, 0.5, 0xeee7d8, rot);
-          b.box(q[0], g0 + 3.84, q[1], 0.75, 0.3, 0.75, 0xd8c9a8, rot);
-          colliders.push({ type: 'circle', x: q[0], z: q[1], r: 0.38 });
-        }
-      }
-      b.box(base[0], g0 + 4.14, base[1], HALLW + 1.6, 0.42, HALLD + 1.6, 0xc0562f, rot);
-      b.box(base[0], g0 + 4.56, base[1], HALLW + 0.8, 0.22, HALLD + 0.8, 0xe4dcc8, rot);
-
-      // the shop row along the back of it
-      const SHOPS = 5;
-      for (let i2 = 0; i2 < SHOPS; i2++) {
-        const lx = hx + (i2 / (SHOPS - 1) - 0.5) * (HALLW - 5.2);
-        const q = p(lx, FZ - HALLD * 0.5 - 1.5);
-        b.box(q[0], g0 + 0.34, q[1], 4.1, 3.3, 2.6, 0xe8dfc9, rot);          // the stall
-        b.box(q[0], g0 + 2.15, q[1], 4.5, 0.18, 3.4, [0xc0562f, 0x2f6f4f, 0xb0882e, 0x7a4a86, 0x2b5f8a][i2], rot);  // awning
-        const ctr = p(lx, FZ - HALLD * 0.5 + 0.2);
-        b.box(ctr[0], g0 + 0.34, ctr[1], 3.6, 0.95, 0.7, 0x8a6a42, rot);      // counter
-        colliders.push({ type: 'box', x: q[0], z: q[1], w: 4.1, d: 2.6, rot });
-        colliders.push({ type: 'box', x: ctr[0], z: ctr[1], w: 3.6, d: 0.7, rot });
-      }
-
-      // the water station: a tank on its stand, and a trough of taps
-      {
-        const q = p(hx + HALLW * 0.5 - 2.4, FZ + HALLD * 0.5 - 1.2);
-        b.box(q[0], g0 + 0.34, q[1], 2.6, 2.5, 1.5, 0xdad3c2, rot);          // stand
-        b.box(q[0], g0 + 2.84, q[1], 2.9, 1.9, 1.9, 0x2b6f8a, rot);          // the tank
-        b.box(q[0], g0 + 4.74, q[1], 1.1, 0.24, 1.1, 0xb9bcc0, rot);         // its lid
-        const tr = p(hx + HALLW * 0.5 - 2.4, FZ + HALLD * 0.5 - 2.6);
-        b.box(tr[0], g0 + 0.34, tr[1], 3.0, 0.85, 0.75, 0xcfc6b2, rot);      // trough
-        for (let k = -1; k <= 1; k++) {
-          const t2 = p(hx + HALLW * 0.5 - 2.4 + k * 0.85, FZ + HALLD * 0.5 - 2.2);
-          b.box(t2[0], g0 + 1.19, t2[1], 0.11, 0.42, 0.11, 0xb9902e, rot);   // taps
-          b.box(t2[0], g0 + 1.55, t2[1], 0.11, 0.1, 0.34, 0xb9902e, rot);
-        }
-        colliders.push({ type: 'box', x: q[0], z: q[1], w: 2.6, d: 1.5, rot });
-        colliders.push({ type: 'box', x: tr[0], z: tr[1], w: 3.0, d: 0.75, rot });
-      }
-    }
-
-    seg(-W, D, -MAIN_HALF, D);
-    seg(MAIN_HALF, D, W, D);
-
-    // the main gate: tall piers with a painted lintel, facing the road
-    for (const sx of [-1, 1]) {
-      const g2 = p(sx * MAIN_HALF, D);
-      b.box(g2[0], g0, g2[1], 1.3, 5.2, 1.3, KB_IVORY, rot);
-      b.box(g2[0], g0 + 5.2, g2[1], 1.7, 0.5, 1.7, KB_SALMON, rot);
-      colliders.push({ type: 'circle', x: g2[0], z: g2[1], r: 0.75 });
-    }
-    // the lintel across the main gate, which is what makes it read as a gateway
-    {
-      const lin = p(0, D);
-      b.box(lin[0], g0 + 5.2, lin[1], MAIN_HALF * 2 + 1.3, 0.55, 1.1, KB_SALMON, rot);
-      b.box(lin[0], g0 + 5.75, lin[1], MAIN_HALF * 2 + 0.6, 0.35, 0.8, KB_IVORY, rot);
-    }
-
-    // the back gate: lower piers, no lintel — a service entrance, not a facade
-    for (const sx of [-1, 1]) {
-      const g3 = p(sx * BACK_HALF, -D);
-      b.box(g3[0], g0, g3[1], 1.0, 3.6, 1.0, KB_IVORY, rot);
-      b.box(g3[0], g0 + 3.6, g3[1], 1.3, 0.4, 1.3, KB_SALMON, rot);
-      colliders.push({ type: 'circle', x: g3[0], z: g3[1], r: 0.6 });
-    }
-  }
+  const signB = new MeshBuilder();
+  const place = (geo, lx, y, lz, faceLocal) => {
+    const q = p(lx, lz);
+    const wa = rot + faceLocal;
+    // an archetype faces +z at yaw 0, i.e. (sin yaw, cos yaw)
+    const yaw = Math.atan2(Math.cos(wa), Math.sin(wa));
+    _kbM.compose(_kbV.set(q[0], y, q[1]), _kbQ.setFromEuler(_kbE.set(0, yaw, 0)), _kbS);
+    b.addGeometry(geo, _kbM);
+    geo.dispose();
+  };
+  const campus = buildIskconCampus({
+    b, signB, p, rot, ground, terrain, colliders, rng, signUV,
+    roadDistance: terrain && terrain.roadDistance ? (qx, qz) => terrain.roadDistance(qx, qz) : null,
+    helpers: { cuspedArch, shikhara, ribbedDome, tint, buildSeated, buildStanding, PEOPLE, place },
+  });
 
   /* ---------------- what the rest of the game needs back ---------------- */
 
@@ -2749,6 +2433,8 @@ const BACK_HALF = 3.4;      // the back gate is narrower, as it is in life
   return {
     colliders,
     mesh: { name: 'IskconInterior', builder: ib, x, z, r: KB_LEN },
+    // the campus's painted boards, on the town's sign atlas
+    meshes: [{ name: 'IskconSigns', builder: signB, x, z, r: 140, map: signAtlas }],
     interior: {
       altar: [altarW[0], HALL_FLOOR + 1.35, altarW[1]],
       darshan: [darshanW[0], darshanW[1]],
@@ -2774,7 +2460,8 @@ const BACK_HALF = 3.4;      // the back gate is narrower, as it is in life
        */
       volume: {
         x, z, hw: HW, hd: HL, rot, open: true, door: p(0, HL + 0.9),
-        compound: { hw: 75, hd: 88, mainHalf: 4.5, backHalf: 3.4 },
+        // the fence's line and both gates, from OSM, in this builder's frame
+        compound: campus,
       },
       // where each altar actually is, in world coordinates. `side` matches the
       // `side` on each entry in content/deities.js.

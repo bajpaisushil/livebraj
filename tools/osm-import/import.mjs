@@ -309,7 +309,13 @@ for (const lm of LANDMARKS) {
     hit = poiIndex.find((p) => p.name.toLowerCase().includes(n));
     if (hit) break;
   }
-  const [lat, lon] = hit ? [hit.lat, hit.lon] : lm.fallback;
+  /*
+   * `at` is a SURVEYED position and wins over the name match. A name match
+   * finds whatever OSM object carries the name — for Krishna Balaram that is
+   * the whole fenced compound's pin, 29 m from the temple, and every building
+   * the builder lays out around its origin landed 29 m off with it.
+   */
+  const [lat, lon] = lm.at ? lm.at : hit ? [hit.lat, hit.lon] : lm.fallback;
   if (hit) matched++; else fellBack++;
 
   const pos = toWorld(lat, lon);

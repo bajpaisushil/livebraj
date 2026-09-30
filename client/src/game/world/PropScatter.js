@@ -239,7 +239,7 @@ function trunk(b, h, r, color, rng) {
 function blob(b, cx, cy, cz, r, h, color, rng, jitter) {
   const SIDES = 6, RINGS = 3;
   const c = new THREE.Color(color);
-  let prev = null;
+  let prev = null, first = null;
   for (let i = 0; i <= RINGS; i++) {
     const t = i / RINGS;
     const rr = Math.sin(t * Math.PI) * r + r * 0.18;
@@ -255,10 +255,25 @@ function blob(b, cx, cy, cz, r, h, color, rng, jitter) {
         const n = (s + 1) % SIDES;
         // darker underside, lighter crown: cheap fake ambient occlusion
         const shade = c.clone().multiplyScalar(0.72 + t * 0.5).getHex();
-        b.quad(prev[s], prev[n], ring[n], ring[s], shade);
+        /*
+         * OUTWARD. Trees are drawn single-sided and these were wound to face
+         * the inside of the ring, so every canopy in town showed the inner
+         * wall of its far side, lit backwards — the flat, dark look.
+         */
+        b.quad(prev[s], ring[s], ring[n], prev[n], shade);
       }
     }
+    if (i === 0) first = ring;
     prev = ring;
+  }
+  // and closed at both ends, which it never needed while it was inside out:
+  // from under a tree you would now look straight up through the hole
+  const lo = c.clone().multiplyScalar(0.72).getHex(), hi = c.clone().multiplyScalar(1.22).getHex();
+  const yb = first[0][1] - h * 0.12, yt = prev[0][1] + h * 0.12;
+  for (let s = 0; s < SIDES; s++) {
+    const n = (s + 1) % SIDES;
+    b.tri(first[s][0], first[s][1], first[s][2], first[n][0], first[n][1], first[n][2], cx, yb, cz, lo);
+    b.tri(prev[n][0], prev[n][1], prev[n][2], prev[s][0], prev[s][1], prev[s][2], cx, yt, cz, hi);
   }
 }
 
@@ -330,7 +345,24 @@ function dome(b, cx, cy, cz, r, h, under, crown, sides, rings, rng, wobble) {
   }
 }
 
+/**
+ * Inside a landmark's walled compound? Such a campus is paved and planted by
+ * its own builder — Krishna Balaram's is marble from fence to fence — so the
+ * scatter's grass, bushes and imported trees stay out of it. The compound is
+ * a rectangle in the landmark's box frame (see LandmarkGenerator).
+ */
+function compoundTest(ctx) {
+  const list = ctx.data.LOCATIONS.filter((l) => l.compound).map((l) => ({
+    x: l.pos[0], z: l.pos[1], cs: Math.cos(l.rot), sn: Math.sin(l.rot), c: l.compound }));
+  return (x, z) => list.some((k) => {
+    const dx = x - k.x, dz = z - k.z;
+    const lx = dx * k.cs + dz * k.sn, lz = -dx * k.sn + dz * k.cs;
+    return lx > k.c.lx0 && lx < k.c.lx1 && lz > k.c.lz0 && lz < k.c.lz1;
+  });
+}
+
 function buildTrees(ctx, terrain, group) {
+  const inCompound = compoundTest(ctx);
   const detail = ctx.quality.treeDetail;
   const keep = detail >= 2 ? 1.0 : detail === 1 ? 0.75 : 0.45;
   // An InstancedMesh culls as one object, so a single mesh holding every peepal
@@ -383,6 +415,7 @@ function buildTrees(ctx, terrain, group) {
 
   for (let i = 0; i < ctx.data.TREES.length; i++) {
     const t = ctx.data.TREES[i];
+    if (inCompound(t.pos[0], t.pos[1])) continue;
     if ((i % 100) / 100 >= keep) continue;
     if (indoors(t.pos[0], t.pos[1])) continue;
     if (inTheWay(t.pos[0], t.pos[1])) { onRoad++; continue; }
@@ -590,12 +623,13 @@ function buildGroundCover(ctx, terrain, group) {
   const keepOut = ctx.data.LOCATIONS.map((l) => ({
     x: l.pos[0], z: l.pos[1], r: Math.max(l.build.w, l.build.d) * 0.55,
   }));
+  const inCompound = compoundTest(ctx);
   const blocked = (x, z) => {
     for (const k of keepOut) {
       const dx = x - k.x, dz = z - k.z;
       if (dx * dx + dz * dz < k.r * k.r) return true;
     }
-    return false;
+    return inCompound(x, z);
   };
 
   const tuftChunks = new Map();
@@ -844,6 +878,29 @@ function plantVerges(ctx, terrain, rng, plant, density) {
   }
 
   for (const l of ctx.data.LOCATIONS) {
+    // A walled compound gets its planting along the outside of its fence: a
+    // ring round the pin would run straight through the campus.
+    if (l.compound) {
+      const c = l.compound, cs = Math.cos(l.rot), sn = Math.sin(l.rot);
+      const P2 = (lx, lz) => [l.pos[0] + lx * cs - lz * sn, l.pos[1] + lx * sn + lz * cs];
+      const per = 2 * ((c.lx1 - c.lx0) + (c.lz1 - c.lz0));
+      const n = Math.max(6, Math.round(PLANTING.templeRing * thin * per / 120));
+      for (let i = 0; i < n; i++) {
+        if (chance(rng, PLANTING.templeRingGaps)) continue;
+        let t = ((i + range(rng, -0.2, 0.2)) / n) * per;
+        const off = range(rng, PLANTING.templeRingMargin[0], PLANTING.templeRingMargin[1]) * 0.5;
+        let lx, lz;
+        const W2 = c.lx1 - c.lx0, D2 = c.lz1 - c.lz0;
+        if (t < W2) { lx = c.lx0 + t; lz = c.lz0 - off; }
+        else if ((t -= W2) < D2) { lx = c.lx1 + off; lz = c.lz0 + t; }
+        else if ((t -= D2) < W2) { lx = c.lx1 - t; lz = c.lz1 + off; }
+        else { t -= W2; lx = c.lx0 - off; lz = c.lz1 - t; }
+        const [px, pz] = P2(lx, lz);
+        if (terrain.roadDistance(px, pz) < 5) continue;
+        if (plant(px, pz, range(rng, 0.9, 1.3), PLANTED_KINDS)) ring++;
+      }
+      continue;
+    }
     // Outside the compound wall where there is one, outside the footprint
     // otherwise — this is the same radius the scatter treats as keep-out, so
     // the ring sits just beyond it and never inside the courtyard.

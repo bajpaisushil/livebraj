@@ -9,8 +9,10 @@
 
 import * as THREE from 'three';
 
-export const SIGN_COLS = 12;
-export const SIGN_ROWS = 12;
+// Thirteen by thirteen since Krishna Balaram's campus got its own boards:
+// 16 generic + 20 campus + 126 real = 162 of 169 cells, at 157 px a cell.
+export const SIGN_COLS = 13;
+export const SIGN_ROWS = 13;
 
 /**
  * A hundred and forty-four boards on one 2048px atlas: the eighteen generic
@@ -50,6 +52,41 @@ const BOARDS = [
   ['#3a3a42', '#f0f0f0', 'साइकिल मरम्मत', 'CYCLE REPAIR'],
   ['#c8452a', '#fff4dc', 'धर्मशाला', 'DHARAMSHALA'],
 ];
+
+/**
+ * Sri Sri Krishna-Balaram Mandir's own boards: the names on its official
+ * campus signboard and in its arcade (docs/research/iskcon-krishna-balaram.md,
+ * "WHAT IS IN THE COMPOUND"), and OSM's names for its buildings. They sit
+ * straight after the generic trades, so `campusSign(key)` is a fixed slot.
+ */
+export const CAMPUS_BOARDS = [
+  { key: 'mandir', bg: '#8a2f24', fg: '#f8e4b0', name: 'Sri Sri Krishna Balaram Mandir', deva: 'श्री श्री कृष्ण-बलराम मंदिर' },
+  { key: 'samadhi', bg: '#f2ede1', fg: '#6a4a2a', name: "Srila Prabhupada's Samadhi", deva: 'श्रील प्रभुपाद समाधि' },
+  { key: 'museum', bg: '#f2ede1', fg: '#6a4a2a', name: "Srila Prabhupada's Museum", deva: 'श्रील प्रभुपाद संग्रहालय' },
+  { key: 'house', bg: '#c8452a', fg: '#fff0d0', name: "Srila Prabhupada's House", deva: 'श्रील प्रभुपाद निवास' },
+  { key: 'guest', bg: '#2b3a6a', fg: '#f2ece0', name: 'Krishna Balarama Guesthouse', deva: 'अतिथि गृह' },
+  { key: 'govindas', bg: '#1d4f3f', fg: '#f5e8c8', name: "Govinda's Restaurant", deva: 'गोविन्दाज़' },
+  { key: 'gift', bg: '#c8452a', fg: '#fff0d0', name: 'Gift Shop', deva: 'उपहार' },
+  { key: 'books', bg: '#2b3a6a', fg: '#f2ece0', name: 'Book Stall', deva: 'पुस्तक भंडार' },
+  { key: 'mahaprasad', bg: '#8a2f24', fg: '#f8e4b0', name: 'Mahaprasad', deva: 'महाप्रसाद' },
+  { key: 'market', bg: '#8a5a2a', fg: '#fdf0d8', name: 'Market Place', deva: 'बाज़ार' },
+  { key: 'atm', bg: '#1d3f6a', fg: '#eef4ff', name: 'ATM', deva: 'एटीएम' },
+  { key: 'post', bg: '#c8452a', fg: '#fff4dc', name: 'Post Office', deva: 'डाकघर' },
+  { key: 'welcome', bg: '#3f6d74', fg: '#f6f2e8', name: 'Welcome Centre', deva: 'स्वागत केंद्र' },
+  { key: 'internet', bg: '#3a3a42', fg: '#f0f0f0', name: 'Internet Access', deva: 'इंटरनेट' },
+  { key: 'matchless', bg: '#7a4a86', fg: '#f8e8f0', name: 'Matchless Gifts', deva: 'मैचलेस गिफ्ट्स' },
+  { key: 'bhisma', bg: '#5a7a2a', fg: '#f4f8e0', name: 'Bhisma Office', deva: 'भीष्म कार्यालय' },
+  { key: 'vtv', bg: '#2f5d5a', fg: '#f2ece0', name: 'Vrindavan.tv', deva: 'वृंदावन टीवी' },
+  { key: 'bbt', bg: '#1d4f3f', fg: '#f5e8c8', name: 'BBT Book Display', deva: 'बीबीटी पुस्तकें' },
+  { key: 'security', bg: '#3a3a42', fg: '#f0f0f0', name: 'Security Office', deva: 'सुरक्षा कार्यालय' },
+  { key: 'prasadam', bg: '#a8563c', fg: '#fff0d8', name: 'Krishna Prasadam Hall', deva: 'प्रसादम हॉल' },
+];
+
+/** Atlas slot of one of Krishna Balaram's boards, or -1. */
+export function campusSign(key) {
+  const i = CAMPUS_BOARDS.findIndex((b) => b.key === key);
+  return i < 0 ? -1 : BOARDS.length + i;
+}
 
 /** Palettes the real boards cycle through, so a street is not one colour. */
 const REAL_PALETTE = [
@@ -132,13 +169,13 @@ export function setRealSigns(pois, roads = [], locations = []) {
 
 /** The POI a real board belongs to, for placing it at the right address. */
 export function realSignFor(index) {
-  const b = realBoards[index - BOARDS.length];
+  const b = realBoards[index - BOARDS.length - CAMPUS_BOARDS.length];
   return b ? b.poi : null;
 }
 
 /** Atlas slot for the nth real board, or -1 when there is none. */
 export function realSignSlot(n) {
-  return n >= 0 && n < realBoards.length ? BOARDS.length + n : -1;
+  return n >= 0 && n < realBoards.length ? BOARDS.length + CAMPUS_BOARDS.length + n : -1;
 }
 
 export function realSignCount() { return realBoards.length; }
@@ -185,9 +222,46 @@ export function signAtlas(ctx) {
       g.globalAlpha = 1;
     });
 
-    /* the real shopfronts, after the generic trades */
+    /* Krishna Balaram's boards, then the real shopfronts */
+    const fitted = (b, i, sub, subFont) => {
+      if (i >= SIGN_COLS * SIGN_ROWS) return;
+      const cx = (i % SIGN_COLS) * cell;
+      const cy = Math.floor(i / SIGN_COLS) * cell;
+      g.fillStyle = b.bg;
+      g.fillRect(cx, cy, cell, cell);
+      g.strokeStyle = b.fg;
+      g.globalAlpha = 0.55; g.lineWidth = Math.max(2, cell * 0.0156);
+      const inB = cell * 0.027;
+      g.strokeRect(cx + inB, cy + inB, cell - inB * 2, cell - inB * 2);
+      g.globalAlpha = 1;
+      g.textAlign = 'center';
+      g.fillStyle = b.fg;
+      const words = b.name.split(/\s+/);
+      const lines = words.length > 2
+        ? [words.slice(0, Math.ceil(words.length / 2)).join(' '),
+           words.slice(Math.ceil(words.length / 2)).join(' ')]
+        : [b.name];
+      let size = Math.round(cell * (lines.length > 1 ? 0.15 : 0.19));
+      for (;;) {
+        g.font = `600 ${size}px Jost, system-ui, sans-serif`;
+        const widest = Math.max(...lines.map((l) => g.measureText(l).width));
+        if (widest <= cell * 0.82 || size <= cell * 0.055) break;
+        size -= 1;
+      }
+      const top = cy + cell * (lines.length > 1 ? 0.33 : 0.42);
+      lines.forEach((l, k) => g.fillText(l, cx + cell / 2, top + k * size * 1.12));
+      g.globalAlpha = 0.86;
+      g.font = subFont;
+      g.fillText(sub, cx + cell / 2, cy + cell * 0.72, cell * 0.86);
+      g.globalAlpha = 0.7;
+      g.fillRect(cx + cell * 0.26, cy + cell * 0.78, cell * 0.48, Math.max(1, cell * 0.009));
+      g.globalAlpha = 1;
+    };
+    CAMPUS_BOARDS.forEach((b, n) => fitted(b, BOARDS.length + n, b.deva,
+      `600 ${Math.round(cell * 0.1)}px "Tiro Devanagari Hindi", serif`));
+
     realBoards.forEach((b, n) => {
-      const i = BOARDS.length + n;
+      const i = BOARDS.length + CAMPUS_BOARDS.length + n;
       if (i >= SIGN_COLS * SIGN_ROWS) return;
       const cx = (i % SIGN_COLS) * cell;
       const cy = Math.floor(i / SIGN_COLS) * cell;
@@ -237,7 +311,7 @@ export function signAtlas(ctx) {
 
 /** UV rect for a given board, for a quad's four corners. */
 export function signUV(index) {
-  const total = BOARDS.length + realBoards.length;
+  const total = BOARDS.length + CAMPUS_BOARDS.length + realBoards.length;
   const i = ((index % total) + total) % total;
   const u = (i % SIGN_COLS) / SIGN_COLS;
   const v = 1 - (Math.floor(i / SIGN_COLS) + 1) / SIGN_ROWS;

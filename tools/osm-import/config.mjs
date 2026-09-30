@@ -240,17 +240,23 @@ export const LANDMARKS = [
     name: 'Shri Krishna Balaram Mandir', hindi: 'श्री कृष्ण बलराम मंदिर',
     type: 'temple', deity: 'Shri Krishna and Balaram', icon: 'temple',
     build: { kind: 'temple-modern', w: 54, d: 66, h: 21, color: '#f2ece0', accent: '#d8c9a8' },
-    // The walled campus, not the temple block. Measured off the OSM polygon
-    // for the complex: about 123 x 132 m. Inside it are the samadhi, the
-    // gardens, the guest house and the goshala — not the shophouses the
-    // building generator otherwise fills every gap with, which is what you got
-    // stuck in walking up to the temple.
-    // The wall now stands at 75 x 88 m, because the campus holds the Gurukula,
-    // the guest house, Govinda's, the goshala, the book stalls, the bakery and
-    // the Tulsi garden as well as the mandir and the samadhi. The keep-out has
-    // to clear the wall or the town builds through it.
-    grounds: 100,
-    rot: Math.PI * 0.5, radius: 40, district: 'raman-reti',
+    /*
+     * PLACED AND TURNED FROM THE SURVEY (docs/research/iskcon-krishna-balaram.md
+     * and OSM, Overpass 2026-09-30). It was on the compound's pin, 29 m off,
+     * and turned 90 degrees so its gate faced a lane to the west. In life the
+     * gate is on Bhaktivedanta Swami Marg to the SOUTH, and every core
+     * building shares one grid, long axes 347.7/167.7. So: the TEMPLE BLOCK's
+     * own centre (way 334202009), turned -12.3 degrees, which puts the
+     * builder's +lz toward the road.
+     *
+     * `compound` is the fenced campus (way 334202001) in that frame, relative
+     * to the temple: the temple sits near its WEST edge, so a circle round it
+     * — the old `grounds: 100` — cleared the town far across the west lane
+     * and not far enough to the east.
+     */
+    at: [27.5723243, 77.6773845],
+    rot: -12.3 * Math.PI / 180, radius: 40, district: 'raman-reti',
+    compound: { lx0: -19.9, lx1: 103.6, lz0: -76.3, lz1: 55.3 },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
     fallback: [27.57253, 77.67757],
   },

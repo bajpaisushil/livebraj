@@ -3058,3 +3058,87 @@ tuning it away:
   meets nothing. It now also drives the car straight at a real house from
   10 m: collision on, it stops at 0.8 m; collision off, it ends 3.16 m inside
   and the check fails.
+
+## 2026-09-30 — Krishna Balaram, rebuilt on OpenStreetMap
+
+"still iskcon does not look at all how it actually is? there are lot of shops
+there with back and front gates with guards in real with outer corridors
+having srila prabhupada deity on some place and museum as well?"
+
+**It was in the wrong place, facing the wrong way.** `rot` was hand-set to 90
+degrees and the position came from a name match that found the fenced
+compound's pin, 29 m from the temple. The survey is plain: the gate is on
+Bhaktivedanta Swami Marg to the SOUTH, and every core building shares one grid,
+long axes 347.7/167.7. Projected into the builder's frame at -12.3 degrees,
+the OSM centres of the Samadhi, the Museum and Prabhupada's House landed
+within 2-4 m of where the builder already drew them — so the LOCAL layout was
+right all along and only the placement was wrong: 102 degrees and 29 m. The
+importer now takes a surveyed `at: [lat, lon]` that wins over a name match.
+
+**The campus is OSM's.** Overpass (2026-09-30) returned the fence (way
+334202001, 17 nodes) and 28 building outlines, all turned into the builder's
+frame and built in the new `IskconCampus.js`:
+
+- the fence as a cream wall, and TWO gates cut in it: the main gate on the
+  road, on the axis through the great arch (the fence has a vertex beside it),
+  and a west-lane gate ("a green metal gate") in the one stretch of the west
+  fence with nothing built against it — that placement is INFERRED;
+- the survey's gatehouse: cream piers, pink-outlined arches, a framed painting
+  of the two brothers on each, two domed chhatris with pink finials, the tall
+  cusped portal, studded wooden doors and black iron gates standing open, and
+  the mandir's name over it in English and Devanagari;
+- GUARDS at both gates, with a booth each: from your report, not the survey;
+  their navy-and-blue uniform, cap and lathi are INFERRED;
+- the outer arcaded approach — freestanding cream arcades, "CHALICE/GOBLET-
+  SHAPED PLANTERS" on short piers, the orthogonal chequer, murals in pink-
+  outlined frames on the wall either side of the gate;
+- the Samadhi (way 334202000) and the Museum (way 334201999) on their real
+  chamfered outlines, white marble: elephant frieze on the plinth, cusped bays
+  with fish-scale jali, the dipping bangaldar cornice with lotus-bud drops, a
+  jali parapet with vase finials; on the Samadhi two octagonal chhatris with
+  gadrooned domes flanking a shikhara whose kalash is the sourced 70 ft, with
+  four urushringas and a saffron flag; a double curving staircase with swan
+  balustrades up to a first-floor balcony (its curve INFERRED);
+- SRILA PRABHUPADA, seated in saffron on his vyasasana between two carved
+  lions, in a shrine chamber you look into through the Samadhi's door ("the
+  Prabhupada murti with flanking carved lions under it", the checker, from the
+  interior photograph);
+- the great arch as a bridge: the 5.5 m gap between the two outlines, a
+  semicircle to a ~9.6 m crown with the checker's "APPLIED fringe of pendant
+  cusps", a balustraded deck and a small chhatri riding it;
+- the six kiosks along the west fence, each with its name board (Welcome
+  Centre, Internet Access, Matchless Gifts, Bhisma Office, Vrindavan.tv, BBT
+  Book Display) — OSM puts them 2.7 m off the temple's west wall, so they make
+  a corridor of shopfronts;
+- the Market Place, ATM and Post Office strip (opening south: INFERRED), with
+  Gift Shop, Book Stall and Mahaprasad boards; Prabhupada's House behind the
+  temple; the Deity kitchen and the security office; the guesthouse with
+  Govinda's (its corner INFERRED); the bakery, ashram and preaching office;
+  the offices, halls, kitchens, BBT office and the octagonal Tulasi House;
+- the Gurukula block as the building site the 2024 imagery shows — hoarding,
+  bare earth, spoil, an RCC frame and a tower crane;
+- the road: the big peepal beside the gate with its red-and-white threads and
+  two sadhus at its foot, placed by the road's own distance so it is never in
+  the carriageway, and garland sellers at low tables against the wall;
+- the whole campus paved in marble, 2 m tiles at the ground's own height.
+
+Gone, because the survey says so: the goshala inside the wall ("DO NOT put
+the goshala inside the compound" — it is 8 acres on Parikrama Marg), the
+Gurukula on the wrong side, the 150 x 176 m wall. The town keeps off a
+`compound` rectangle now, not a circle round the pin, and the planting ring
+and the scatter's grass and trees respect it too.
+
+**Every dome, spire and canopy in the world was inside out.** Measuring why the
+Samadhi's spire looked flat: shikhara(), dome(), ribbedDome() and the trees'
+blob() wound their ring quads facing inward, on single-sided meshes, so you
+saw the inside of the far half lit backwards. Prem Mandir's shikhara: 254
+faces inward, 2 outward; after the fix 254 outward. The Satsang Bhavan's dome,
+a grey smear before, now reads as a ribbed dome.
+
+Checks: gates.mjs reads the declared fence and gates (8/8); platforms.mjs
+found and forced fixes to the Samadhi's stairs (a tread shorter than a body's
+radius makes a solid flight a wall four steps up) and its door landings; the
+arch check now asks that a wall reach an arch's springing, so a parapet below
+a rooftop chhatri is not its wall. Two probes were wrong on the way and said
+so: a kiosk camera placed inside the Samadhi, and a flight "unclimbable"
+because two flights and the door steps shared one tag and read as one.

@@ -64,7 +64,24 @@ searching the backlog for it. That is the failure this file exists to stop.*
 
 ## NEXT — queued, in this order
 
-0. **ISKCON Krishna Balaram does not look like the real one.** *"still iskcon
+0. ~~**ISKCON Krishna Balaram does not look like the real one.**~~ **BUILT
+   2026-09-30** — see the backlog entry of that date. The site was turned
+   102 degrees wrong and pinned 29 m off; it now sits on the temple's own OSM
+   centre on the site grid, and the whole campus is laid on OSM's outlines:
+   (a) shops — the Market Place strip, ATM and Post Office on the south edge,
+   the six kiosks along the west fence; (b) the FRONT gate on Bhaktivedanta
+   Swami Marg (the survey's cream gatehouse) and the BACK gate on the west
+   lane, both with guards and a booth; (c) the outer arcaded approach, and the
+   kiosk corridor along the temple's west wall; (d) Srila Prabhupada seated in
+   his Samadhi Mandir between carved lions, seen through its door; (e) the
+   Museum; and the great arch-bridge between them. Still to come, INFERRED
+   where built and queued here: the Samadhi and Museum interiors as rooms you
+   walk into; the arcade signage inside the temple court (GIFT SHOP, BOOK
+   STALL, MAHAPRASAD, Govinda's); the temple block's true 35.3 m length (it is
+   32); the guards' uniforms (unsourced); the west gate's exact place; where
+   Govinda's really is; the MVT guesthouse outside the north fence.
+   Original request:
+   **ISKCON Krishna Balaram does not look like the real one.** *"still iskcon
    does not look at all how it actually is? there are lot of shops there with
    back and front gates with guards in real with outer corridors having srila
    prabhupada deity on some place and museum as well?"* (2026-09-30). Wanted,
@@ -141,6 +158,12 @@ searching the backlog for it. That is the failure this file exists to stop.*
     summer) — jets and light, with its music; the Satsang Bhavan at its true
     ~87 m and ~187 m; the 87 x 34 m hall north of the fountain; the parterre
     beds. The avenue's line and the fountain's centre are INFERRED.
+18. **Every dome, spire and tree was drawn inside out — FIXED 2026-09-30.**
+    Found building ISKCON: shikhara(), dome(), ribbedDome() and the tree
+    canopy blob() wound their ring quads to face INWARD, and those meshes are
+    single-sided, so from outside you saw the inner faces of the far half, lit
+    from the wrong side. Measured on Prem Mandir's shikhara: 254 faces in, 2
+    out; now 254 out. Canopies are now capped top and bottom.
 17. **The crowd stands on the terrain, never on a floor.** Every CrowdSystem
     and GatheringSystem agent takes `groundHeight`. Harmless today only
     because they are kept out of landmark footprints; on Prem Mandir's paving

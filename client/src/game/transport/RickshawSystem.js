@@ -1129,6 +1129,10 @@ export class RickshawSystem {
       }
     }
     if (loc.grounds) reach = Math.max(reach, loc.grounds * 0.5);
+    if (loc.compound) {
+      const c = loc.compound;
+      reach = Math.max(reach, Math.max(-c.lx0, c.lx1, -c.lz0, c.lz1) * 0.5);
+    }
 
     /*
      * If the nearest drivable node is ALREADY outside, that is the answer.

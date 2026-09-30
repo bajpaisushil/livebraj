@@ -205,6 +205,17 @@ class CityFabric {
     const anchors = (ctx.world && ctx.world.anchors) || {};
     this.keepOut = ctx.data.LOCATIONS.map((l) => {
       const half = Math.max(l.build.w, l.build.d) * 0.5;
+      /*
+       * A walled COMPOUND is a rectangle in the landmark's own box frame, not
+       * a circle round its pin. Krishna Balaram's temple stands 20 m from the
+       * west fence of a 124 x 132 m campus, so any circle that cleared the
+       * campus also cleared the hotels across the west lane.
+       */
+      if (l.compound) {
+        const c = l.compound;
+        return { x: l.pos[0], z: l.pos[1], box: true, cs: Math.cos(l.rot), sn: Math.sin(l.rot),
+          lx0: c.lx0, lx1: c.lx1, lz0: c.lz0, lz1: c.lz1 };
+      }
       if (l.grounds) return { x: l.pos[0], z: l.pos[1], r: l.grounds };
       /*
        * WHICH WAY IS THE FRONT? Ask the building.
@@ -478,7 +489,14 @@ class CityFabric {
 
     const r = Math.hypot(w, d) * 0.5;
     for (const k of this.keepOut) {
-      if (k.r !== undefined) {                  // a real walled compound
+      if (k.box) {                              // a walled compound, in its own frame
+        const dx = x - k.x, dz = z - k.z;
+        const lx = dx * k.cs + dz * k.sn, lz = -dx * k.sn + dz * k.cs;
+        const pad = r * 0.5 + 1.0;
+        if (lx > k.lx0 - pad && lx < k.lx1 + pad && lz > k.lz0 - pad && lz < k.lz1 + pad) return false;
+        continue;
+      }
+      if (k.r !== undefined) {                  // open grounds, a circle
         if (dist(x, z, k.x, k.z) < k.r + r * 0.5) return false;
         continue;
       }

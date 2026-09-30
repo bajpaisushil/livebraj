@@ -172,7 +172,7 @@ export class WorldService {
         const rot = c.rot || 0;
         // `soft` marks a backstop floor, consulted only when nothing real is
         // underfoot — see standHeight. It has to be carried here or it is lost.
-        const norm = { type: 'box', x: c.x, z: c.z, hw, hd, rot, cos: Math.cos(-rot), sin: Math.sin(-rot), r: Math.hypot(hw, hd), tag: c.tag, standOnly: !!c.standOnly, soft: !!c.soft, floor: !!c.floor };
+        const norm = { type: 'box', x: c.x, z: c.z, hw, hd, rot, cos: Math.cos(-rot), sin: Math.sin(-rot), r: Math.hypot(hw, hd), tag: c.tag, standOnly: !!c.standOnly, soft: !!c.soft, floor: !!c.floor, over: !!c.over };
         // `top`, when given, is an absolute height and wins: LandmarkGenerator
         // pins it from the builder's own ground, because `h` added to the
         // terrain under the collider drifts wherever the ground slopes.
@@ -182,7 +182,7 @@ export class WorldService {
         this._index(norm);
         if (norm.top !== undefined) this.standables.push(norm);
       } else {
-        const norm = { type: 'circle', x: c.x, z: c.z, r: c.r || 0.5, tag: c.tag, standOnly: !!c.standOnly, soft: !!c.soft, floor: !!c.floor };
+        const norm = { type: 'circle', x: c.x, z: c.z, r: c.r || 0.5, tag: c.tag, standOnly: !!c.standOnly, soft: !!c.soft, floor: !!c.floor, over: !!c.over };
         if (c.top != null) norm.top = c.top;
         else if (c.h != null) norm.top = this.groundHeight(c.x, c.z) + c.h;
         this.colliders.push(norm);

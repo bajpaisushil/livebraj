@@ -42,47 +42,49 @@ const r = await p.evaluate(async () => {
    */
   const vol = (w.landmarks && w.landmarks.interiors && w.landmarks.interiors[loc.id]) || null;
   const comp = (vol && vol.compound) || null;
-  const W = comp ? comp.hw : loc.build.w*0.5 + 6;
-  const D = comp ? comp.hd : loc.build.d*0.5 + 6;
+  /*
+   * THE FENCE IS WHERE OSM SAYS, AND SO ARE THE GATES.
+   *
+   * This read a symmetric rectangle, `hw` x `hd`, with a gate at (0, +D) and
+   * one at (0, -D) — which was the builder's own guess at a campus nobody had
+   * surveyed. The campus is now laid on OSM way 334202001: an 18-node outline
+   * with the temple near its WEST edge, the main gate on Bhaktivedanta Swami
+   * Marg and the second on the west lane. So the builder declares the line
+   * and each gate — where it is, which way is along it (u) and which way is
+   * in (v) — and every sample below is taken from that declaration.
+   */
+  if (!comp || !comp.outline || !comp.gates) return { ok: false, why: 'the builder declares no compound' };
+  const G = Object.fromEntries(comp.gates.map((g) => [g.id, g]));
+  const main = G.main, back = G.west;
+  const out = { ok: true, outlineNodes: comp.outline.length };
+  const at = (g, a, v) => P(g.at[0] + g.u[0] * a + g.v[0] * v, g.at[1] + g.u[1] * a + g.v[1] * v);
 
-  const out = { wallAt: { W: Math.round(W), D: Math.round(D) } };
-
-  // is the wall solid where it should be?
-  const solidAt = (lx, lz) => !w.isClear(...(() => { const q = P(lx, lz); return [q[0], q[1], 0.5]; })());
-  out.wallSolid = { front: solidAt(20, D), back: solidAt(20, -D), left: solidAt(-W, 0), right: solidAt(W, 0) };
+  // is the wall solid where it should be? the middle of the four long runs,
+  // well away from either gate
+  const O = comp.outline;
+  const mid = (i, j) => P((O[i][0] + O[j][0]) / 2, (O[i][1] + O[j][1]) / 2);
+  const solidAt = (q) => !w.isClear(q[0], q[1], 0.5);
+  out.wallSolid = { west: solidAt(mid(0, 1)), south: solidAt(mid(12, 13)), east: solidAt(mid(14, 15)), north: solidAt(mid(15, 16)) };
 
   // are the two gate openings actually open?
-  const openAt = (lx, lz) => { const q = P(lx, lz); return w.isClear(q[0], q[1], 0.5); };
-  out.mainGateOpen = openAt(0, D);
-  out.backGateOpen = openAt(0, -D);
+  const openAt = (q) => w.isClear(q[0], q[1], 0.5);
+  out.mainGateOpen = openAt(at(main, 0, 0));
+  out.backGateOpen = openAt(at(back, 0, 0));
 
-  // walk in through each gate
-  const walkThrough = (lz, label) => {
-    // Start just outside the gate, not 1.35 x the wall distance: at 53 m behind
-    // ISKCON there are buildings, and once the wall fix made long colliders
-    // solid everywhere the walk was spawning INSIDE one and reporting a blocked
-    // gate. A start point that is not clear is a broken test, not a failure, so
-    // it is checked rather than assumed.
-    const outside = P(0, lz * 1.16), inside = P(0, 0);
+  // walk in through each gate, from outside it, toward the temple
+  const walkThrough = (g, label) => {
+    const outside = at(g, 0, -6), inside = P(0, 0);
     out['start_' + label] = w.isClear(outside[0], outside[1], 0.42);
     ctx.player.position.set(outside[0], w.groundHeight(outside[0], outside[1]), outside[1]);
     const head = Math.atan2(inside[0]-outside[0], inside[1]-outside[1]);
     ctx.player.setYaw && ctx.player.setYaw(head);
     // Body-relative "up" means AWAY FROM THE CAMERA, resolved from the rig and
-    // then latched — `setYaw` moves the avatar's body and not its heading. So
-    // both walks used to set off in the same world direction: the front one
-    // went in, the back one went out, and the back gate was blamed for it.
-    // Point the rig, then re-latch by releasing the stick and pressing again.
+    // then latched — `setYaw` moves the avatar's body and not its heading.
     if (ctx.cameraRig) { ctx.cameraRig.yaw = head; ctx.cameraRig.yawTarget = head; }
     ctx.input.walk = 0; ctx.input.strafe = 0; ctx.input.bodyRelative = true;
     ctx.player.update(1/30, ctx);
     ctx.input.walk = 1; ctx.input.move.y = 1;
-    /*
-     * Walk far enough to arrive. 1400 steps of 1/30 s is about 70 m at walking
-     * pace, which was ample for a 39 m compound and is not for an 88 m one —
-     * both traces descended steadily and simply stopped short. Scale it to the
-     * distance, with half again for going round things.
-     */
+    // far enough to arrive, with half again for going round things
     let best = 1e9; const trace = [];
     const steps = Math.ceil((Math.hypot(outside[0]-cx, outside[1]-cz) / 1.5) * 30 * 1.6);
     for (let i=0;i<steps;i++){
@@ -95,72 +97,67 @@ const r = await p.evaluate(async () => {
     return Math.round(best);
   };
   // how wide is each gate really, measured rather than assumed?
-  const span = (lz) => {
+  const span = (g) => {
     let lo = 0, hi = 0;
-    for (let t = 0; t < 30; t += 0.25) { const q = P(t, lz); if (!w.isClear(q[0], q[1], 0.42)) break; hi = t; }
-    for (let t = 0; t > -30; t -= 0.25) { const q = P(t, lz); if (!w.isClear(q[0], q[1], 0.42)) break; lo = t; }
+    for (let t = 0; t < 12; t += 0.25) { const q = at(g, t, 0); if (!w.isClear(q[0], q[1], 0.42)) break; hi = t; }
+    for (let t = 0; t > -12; t -= 0.25) { const q = at(g, t, 0); if (!w.isClear(q[0], q[1], 0.42)) break; lo = t; }
     return [+lo.toFixed(2), +hi.toFixed(2)];
   };
-  out.mainSpan = span(D);
-  out.backSpan = span(-D);
-  // and a lane straight through the back gate, to find what stops him
+  out.mainSpan = span(main);
+  out.backSpan = span(back);
   out.backLane = [];
-  for (let t = -1.5; t <= 1.5; t += 0.25) {
-    const q = P(0, -D * t);
-    out.backLane.push([+( -D * t).toFixed(1), w.isClear(q[0], q[1], 0.42) ? 1 : 0]);
+  for (let t = -6; t <= 6; t += 1) {
+    const q = at(back, 0, t);
+    out.backLane.push([t, w.isClear(q[0], q[1], 0.42) ? 1 : 0]);
   }
   /*
    * CAN YOU SEE THROUGH IT.
    *
-   * This file proved you could WALK through the gate and never that you could
-   * SEE through it, and those are different questions: Srila Prabhupada's
-   * samadhi stood dead on the gate axis, 13 m of white marble across a 9 m
-   * opening, so the gateway read as a blank wall while remaining perfectly
-   * walkable. "Iskcon main gate is showing no gate open but a wall."
+   * Walking through a gate and seeing through it are different questions:
+   * Srila Prabhupada's samadhi once stood dead on the gate axis, and the
+   * gateway read as a blank wall while remaining perfectly walkable. The test
+   * is the GATEWAY, not the view beyond it — the west gate really does look
+   * at the end of Prabhupada's House, 8 m in — so the ray runs from 7 m out
+   * to `past` metres in, at the heights an eye is at.
    */
-  const sight = (lz, label) => {
-    /*
-     * The test is the GATEWAY, not the view beyond it. Seeing the temple's own
-     * mass through the back gate at 3.6 m is correct — that is the thing you
-     * came to see. So the ray stops 9 m past the gate line, and only at the
-     * heights a person's eye is actually at.
-     */
-    const from = P(0, lz * 1.28), to = P(0, lz - Math.sign(lz) * 9);
+  const sight = (g, label, past) => {
+    const from = at(g, 0, -7), to = at(g, 0, past);
     const gy = w.groundHeight(from[0], from[1]);
     const dir = new THREE.Vector3(to[0] - from[0], 0, to[1] - from[1]).normalize();
-    const span = Math.hypot(to[0] - from[0], to[1] - from[1]);
+    const len = Math.hypot(to[0] - from[0], to[1] - from[1]);
     let worst = null;
     for (const h of [0.8, 1.6, 2.4]) {
-      const ray = new THREE.Raycaster(new THREE.Vector3(from[0], gy + h, from[1]), dir, 0.05, span);
+      const ray = new THREE.Raycaster(new THREE.Vector3(from[0], gy + h, from[1]), dir, 0.05, len);
       const hit = ray.intersectObjects(ctx.scene.children, true).filter((x) => x.object.visible)[0];
       if (hit) worst = { h, o: hit.object.name || hit.object.type, d: +hit.distance.toFixed(1) };
     }
     out['sight_' + label] = worst;
     return !worst;
   };
-  out.seeMain = sight(D, 'main');
-  out.seeBack = sight(-D, 'back');
+  out.seeMain = sight(main, 'main', 9);
+  out.seeBack = sight(back, 'back', 5);
 
-  out.throughMain = walkThrough(D, 'main');
-  out.throughBack = walkThrough(-D, 'back');
+  out.throughMain = walkThrough(main, 'main');
+  out.throughBack = walkThrough(back, 'back');
   return out;
 });
 
-console.log('  wall at W/D:', JSON.stringify(r.wallAt), ' main gate span:', JSON.stringify(r.mainSpan), ' back gate span:', JSON.stringify(r.backSpan));
-console.log('  back lane (local z, clear?):', JSON.stringify(r.backLane));
+if (!r.ok) { check('the builder declares its compound wall and gates', false, r.why); }
+console.log('  outline nodes:', r.outlineNodes, ' main gate span:', JSON.stringify(r.mainSpan), ' west gate span:', JSON.stringify(r.backSpan));
+console.log('  west gate lane (m inward, clear?):', JSON.stringify(r.backLane));
 check('the wall is solid on all four sides',
-  r.wallSolid.front && r.wallSolid.back && r.wallSolid.left && r.wallSolid.right,
+  r.wallSolid && r.wallSolid.west && r.wallSolid.south && r.wallSolid.east && r.wallSolid.north,
   JSON.stringify(r.wallSolid));
 check('the main gate is open', r.mainGateOpen, String(r.mainGateOpen));
-check('the back gate is open', r.backGateOpen, String(r.backGateOpen));
+check('the west (back) gate is open', r.backGateOpen, String(r.backGateOpen));
 check('you can walk in through the main gate', r.throughMain < 28, `reached ${r.throughMain} m from the temple`);
 check('you can SEE through the main gate, not just walk through it', r.seeMain,
   r.seeMain ? 'clear at every height' : `blocked by ${JSON.stringify(r.sight_main)}`);
-check('you can see through the back gate', r.seeBack,
+check('you can see through the west (back) gate', r.seeBack,
   r.seeBack ? 'clear at every height' : `blocked by ${JSON.stringify(r.sight_back)}`);
 check('both walks start on clear ground', r.start_main && r.start_back,
   `main ${r.start_main}, back ${r.start_back}`);
-check('you can walk in through the back gate', r.throughBack < 32,
+check('you can walk in through the west (back) gate', r.throughBack < 32,
   `reached ${r.throughBack} m from the temple; trace ${JSON.stringify(r.trace_back)} vs main ${JSON.stringify(r.trace_main)}`);
 
 console.log('');

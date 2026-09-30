@@ -120,8 +120,11 @@ const out = await p.evaluate(() => {
           if (tick(st, tx, tz) < 0.1) break;
           const [lx, lz] = toL(c, st.x, st.z);
           const inside = Math.min(c.hw - Math.abs(lx), c.hd - Math.abs(lz));
+          // excused: a storey with headroom inside a room, or a builder's
+          // declared `over` — a balcony or landing with open space beneath
+          const headroom = c.top - W.groundHeight(st.x, st.z) >= HEADROOM;
           if (inside > 0.5 && st.feet < c.top - 0.6
-            && !(c.top - W.groundHeight(st.x, st.z) >= HEADROOM && aRoom(st.x, st.z))) {
+            && !(headroom && (aRoom(st.x, st.z) || c.over))) {
             worst = Math.max(worst, inside);
           }
         }
