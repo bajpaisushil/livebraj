@@ -77,13 +77,82 @@ const solid = await p.evaluate(async () => {
   if (!r.drive) return { ok:false, why:'not driving' };
   const car = r.drive.car;
   let n=0, blocked=0;
+  // a failure has to say WHAT was driven into, or the next person guesses
+  const hits = [];
+  /*
+   * THROUGH, not AGAINST. Held on full throttle for 30 s, the car sometimes
+   * reaches a house and stops dead with its nose on the wall — and after
+   * SQUEEZE_AFTER it collides at SQUEEZE_R = 0.6 m so it can edge through a
+   * gali. Probed at the 0.8 m cruising radius, a car parked against a wall
+   * read as "inside something", and whether it failed depended on where the
+   * steering tests had left it (2.7-3.7% on some runs, 0% on others). Inside
+   * is closer than the smallest radius the car is ever allowed: 0.55 m.
+   */
+  const PROBE = 0.55;
   ctx.input.walk = 1; ctx.input.move.y = 1;
-  for (let i=0;i<900;i++) { r.update(1/30,ctx); if (i%3===0){ n++; if(!ctx.world.isClear(car.x,car.z,0.8)) blocked++; } }
+  for (let i=0;i<900;i++) {
+    r.update(1/30,ctx);
+    if (i%3===0){
+      n++;
+      if(!ctx.world.isClear(car.x,car.z,PROBE)) {
+        blocked++;
+        if (hits.length < 3) {
+          const near = (ctx.world.grid.query(car.x, car.z, 7) || [])
+            .filter((c) => !c.standOnly && !c.floor && ctx.world._overlaps(c, car.x, car.z, PROBE));
+          hits.push({ at: [+car.x.toFixed(1), +car.z.toFixed(1)], vel: +(car.vel || 0).toFixed(1),
+            what: near.map((c) => (c.tag || c.type) + (c.type === 'box' ? ` ${(c.hw*2).toFixed(1)}x${(c.hd*2).toFixed(1)}` : ` r${c.r.toFixed(1)}`)).slice(0, 3) });
+        }
+      }
+    }
+  }
   ctx.input.walk = 0; ctx.input.move.y = 0;
-  return { ok:true, n, blocked, pct:+(blocked/Math.max(1,n)*100).toFixed(1) };
+  return { ok:true, n, blocked, hits, pct:+(blocked/Math.max(1,n)*100).toFixed(1) };
 });
+/*
+ * AND DRIVEN AT ONE. The run above goes wherever the road takes it, and with
+ * the vehicle's collision switched off entirely it still passed — it had
+ * simply met nothing. So: put the car 10 m from the face of a real house,
+ * pointing at it, full throttle for 8 s, and watch how close its centre gets
+ * to the wall. Stopped at its radius is right; closer is through.
+ */
+const ram = await p.evaluate(() => {
+  const ctx = window.vrindavan.ctx, r = ctx.rickshaw, w = ctx.world;
+  if (!r.drive) return { ok:false, why:'not driving' };
+  const car = r.drive.car;
+  const houses = w.colliders.filter((c) => c.type === 'box' && !c.tag && !c.standOnly && !c.floor
+    && c.top === undefined && Math.min(c.hw, c.hd) > 2.5 && Math.max(c.hw, c.hd) < 12);
+  let best = null, bd = 1e9;
+  for (const c of houses) {
+    const d = Math.hypot(c.x - car.x, c.z - car.z);
+    if (d > 20 && d < bd) {
+      // its +lz face, and 10 m of clear road in front of it
+      const nx = -c.sin, nz = c.cos;               // local lz in world (see _overlaps)
+      const sx = c.x + nx * (c.hd + 10), sz = c.z + nz * (c.hd + 10);
+      if (w.isClear(sx, sz, 1.2)) { bd = d; best = { c, nx, nz, sx, sz }; }
+    }
+  }
+  if (!best) return { ok:false, why:'no house with clear road in front of it' };
+  const { c, nx, nz, sx, sz } = best;
+  car.x = sx; car.z = sz; car.vel = 0; car.stuck = 0;
+  car.yaw = Math.atan2(-nx, -nz);
+  // signed distance from the car's centre to the box: negative is inside it
+  const gap = () => {
+    const dx = car.x - c.x, dz = car.z - c.z;
+    const lx = dx * c.cos - dz * c.sin, lz = dx * c.sin + dz * c.cos;
+    const ox = Math.abs(lx) - c.hw, oz = Math.abs(lz) - c.hd;
+    return ox > 0 || oz > 0 ? Math.hypot(Math.max(ox, 0), Math.max(oz, 0)) : Math.max(ox, oz);
+  };
+  let closest = gap();
+  const start = closest;
+  ctx.input.walk = 1; ctx.input.move.y = 1;
+  for (let i = 0; i < 240; i++) { r.update(1/30, ctx); closest = Math.min(closest, gap()); }
+  ctx.input.walk = 0; ctx.input.move.y = 0;
+  return { ok:true, start:+start.toFixed(2), closest:+closest.toFixed(2), end:+gap().toFixed(2) };
+});
+check('driven straight at a house, it stops at the wall', ram.ok && ram.start > 8 && ram.closest >= 0.5,
+  ram.ok ? `started ${ram.start} m from the wall, got to ${ram.closest} m, ended ${ram.end} m` : ram.why);
 check('driving does not go through solids', solid.ok && Number(solid.pct) < 3,
-  solid.ok ? `${solid.pct}% of ${solid.n} samples inside something` : solid.why);
+  solid.ok ? `${solid.pct}% of ${solid.n} samples inside something${solid.hits.length ? ': ' + JSON.stringify(solid.hits) : ''}` : solid.why);
 
 /* hand back */
 const back = await p.evaluate(async () => {

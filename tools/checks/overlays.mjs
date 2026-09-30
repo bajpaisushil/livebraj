@@ -25,7 +25,8 @@ const server = http.createServer((q, r) => {
   r.writeHead(200, { 'content-type': T[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(r);
 });
-await new Promise((r) => server.listen(8795, r));
+await new Promise((r) => server.listen(0, r));
+const PORT = server.address().port;   // the OS's choice: fixed ports collided under all.mjs -j
 
 const results = [];
 const check = (name, pass, detail) => {
@@ -37,7 +38,7 @@ const b = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-un
 const p = await b.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true });
 const errors = [];
 p.on('pageerror', (e) => errors.push(e.message));
-await p.goto('http://localhost:8795/', { waitUntil: 'networkidle' });
+await p.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
 await p.waitForFunction(() => window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.player, null, { timeout: 60000 });
 await p.evaluate(() => window.vrindavan.ctx.ui.show('world'));
 await p.waitForTimeout(700);

@@ -2949,3 +2949,112 @@ The front now comes from the building: every builder publishes where the
 Deity is and where a pilgrim stands, landmarks are built before the town, and
 the line between the two is the front whatever frame the builder uses. Same
 idea that finally cracked the ISKCON cage.
+
+## 2026-09-30 — "vanished under stairs" at Prem Mandir was never fixed
+
+Walked with the player's own movement (step, `collide`, `standHeight`), from
+the plaza east of the broad flight: the feet stayed at -0.17 m and the body
+went 34.2 m under the jagati. Three faults, stacked:
+
+1. **The plaza had no floor.** It was drawn 0.65 m over the park, so the feet
+   stayed on the terrain and the flight's first tread came out 1.0 m over
+   them, twice a step. Nobody could get onto the stairs at all.
+2. **The jagati was `standOnly`.** `collide()` never blocks on those and
+   `standHeight()` will not lift you more than a step onto one, so from the
+   ground the moulded side of a 2.4 m platform was not there.
+3. **The kursi buried you.** `mouldedPlinth` draws full-footprint boxes, and
+   Prem Mandir's 1.35 m kursi covered the whole building with the floor left
+   at its foot: standing inside, the avatar was in marble to the chest.
+
+And one engine fault under all of it: a collider's `h` was added to the
+terrain at the collider's own centre, while every builder states its heights
+from its own `ground` at loc.pos. On sloping ground every surface away from
+loc.pos drifted — the jagati read 0.18 m under its own marble. LandmarkGenerator
+now pins `top = ground + h` for every landmark collider, and WorldService takes
+an absolute `top` when it is given.
+
+**Rebuilt from the survey's own words:** the plaza is at grade ("the campus
+ground plane is RED SANDSTONE paving"), laid at the highest ground under it
+(0.37 m of fall measured across the site, so the low kerb is still a step), in
+the measured #ab8a82 with white marble diamond-lattice bands; the jagati
+1.75 m above it ("~1.3-2.0 m above the red-paved plaza", five risers of 0.35);
+the temple floor on its kursi ("a further 1.2-1.6 m", four risers at the east
+door). Jagati and kursi are SOLID with a top, and a new `floor: true` keeps
+them ground to `isClear`, which places people and things. The chrome
+balustrade runs round the edge, strip by strip, leaving the broad flight open.
+
+**The three park fountains were invented.** The survey has ONE, the musical
+fountain, "~64 m NORTH of the platform's north edge", a vesica 116 x 70 m with a
+49 x 30 m elliptical basin and a 32 x 19 m pool. Built as true ellipses; its
+rim is solid in 64 chords that stay within 5 cm of the drawn curve. The 64 m
+is taken to its centre and its line to the platform's centre — both inferred.
+The south processional avenue (22 m wide, ~70 m) is laid; its line is inferred.
+
+**`platforms.mjs`, new.** Walks into every raised floor in the world from open
+ground at 20 points round its sides, and onto every flight from its own
+landing. First run: Prem Mandir 34 m, Krishna Balaram's hall floor beside its
+flight (0.92 m, into the marble to the knee), and Ashta Sakhi's stair climbing
+up UNDER its upstairs slab — from the tenth riser a head through the floor.
+Krishna Balaram's hall floor is now solid-with-a-top (you still step down off
+it between the pillars, as asked); Ashta Sakhi has a stairwell with rails. A
+storey ceiling is excused only where it has headroom AND the spot is inside a
+declared room. The check's own first two cuts were wrong, both found by
+reading their failures: flights must be approached from their landing, not the
+terrain; and the interior volumes must exist before it runs.
+
+## 2026-09-30 — deity research: four of five, one checked
+
+Workflow wf_7ae47b98-f89 stopped at the organisation's monthly spend limit.
+Surveys back: Banke Bihari/Radha Raman/Radha Vallabh; Radha Damodar/Madan
+Mohan/Gopinath; Govind Dev/Shahji/Radha Shyamsundar; Rangaji/Katyayani/
+Gopishwar. Missing: the ISKCON + Prem Mandir survey and three checkers. Filed
+by journal key in `docs/research/deities/`. The one checker that ran says the
+Govind Dev survey merged two separate shrines into one altar — which is why
+nothing gets built from an unchecked group.
+
+## 2026-09-30 — "start from here not working in map"
+
+Reported from the deployed site. Queued before anything else. The check
+(`map-search`, 26/26, including a rescue from inside masonry) says it works,
+so the check is not doing what the person is doing. Reproduce the person's
+way first: search, tap the result, tap the button, on a touch screen.
+
+Second report, same afternoon: "still 'start from here' does not work? are you
+even noting down what i am saying in this session". Logged. The live site has
+nothing from today until a push. Reproduced on a Pixel 5 viewport with real
+taps: on foot it works; in a rickshaw it does not, three ways stacked —
+(1) the ride's window key listener ate typed letters (the d in "Radha Raman"
+took the wheel, an s stops the ride), so the search found nothing; (2) the
+ride held the player to its seat every frame, undoing any placement; (3) under
+investigation: with those fixed, the button still could not be tapped mid-ride.
+
+## 2026-09-30 — "still iskcon does not look at all how it actually is"
+
+"there are lot of shops there with back and front gates with guards in real
+with outer corridors having srila prabhupada deity on some place and museum as
+well?" Queued as QUEUE item 0, ahead of the eight temples: shops, front and
+back gates with guards, the outer corridors, Prabhupada's murti in its real
+place, the museum. Research first.
+
+## 2026-09-30 — three checks that were passing for the wrong reason
+
+Found while landing the platform fix, each by reading a failure rather than
+tuning it away:
+
+- **halls.mjs** read every cell's feet from the TERRAIN, so it could never
+  climb onto a raised floor, and it "reached" Prem Mandir's altar only by
+  walking through the side of the jagati — the very fault platforms.mjs was
+  written for. It now carries the feet step to step as the player does
+  (best-first, keyed on level), and a cell may be standable at two heights
+  (Ashta Sakhi's shops and the floor over them). Its one-way-door test was
+  re-derived to follow real steps; mutation-tested with a planted 0.53 m
+  down-only ledge (24 one-way steps found).
+- **walls.mjs** treats floors as not-walls; the new solid-but-ground
+  `floor: true` platforms join the stand-only ones there.
+- **driving.mjs** sampled the car at 0.8 m while a stuck car legitimately
+  squeezes to 0.6 m, so a car parked with its nose on a house read as
+  "through a solid" — 2.7-3.7% on some runs, 0% on others. Worse: with the
+  vehicle's collision switched OFF it still passed, because its drive usually
+  meets nothing. It now also drives the car straight at a real house from
+  10 m: collision on, it stops at 0.8 m; collision off, it ends 3.16 m inside
+  and the check fails.

@@ -26,7 +26,8 @@ const server = http.createServer((q, r) => {
   r.writeHead(200, { 'content-type': T[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(r);
 });
-await new Promise((r) => server.listen(8797, r));
+await new Promise((r) => server.listen(0, r));
+const PORT = server.address().port;   // the OS's choice: fixed ports collided under all.mjs -j
 
 const results = [];
 const errors = [];
@@ -41,7 +42,7 @@ p.on('console', (m) => { const t = m.text(); if (m.type() === 'error' && !/navig
 p.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
 
 const boot = async () => {
-  await p.goto('http://localhost:8797/', { waitUntil: 'networkidle' });
+  await p.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
   await p.waitForFunction(() => window.vrindavan?.ctx?.gatherings && window.vrindavan?.ctx?.player
     && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.world?._ready, null, { timeout: 90000 });
   await p.evaluate(() => window.vrindavan.ctx.ui.show('world'));

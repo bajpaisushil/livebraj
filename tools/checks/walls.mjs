@@ -39,7 +39,10 @@ const r = await p.evaluate(() => {
    * legitimately clear to `isClear`, which treats a floor as ground. 17 of 680
    * samples "stood inside solid geometry" that was in fact a courtyard.
    */
-  const long = w.colliders.filter(c => c.type === 'box' && c.hw * 2 > 18 && !c.standOnly);
+  // `floor` too: a raised platform built solid (Prem Mandir's jagati) is
+  // ground to isClear by design; whether it can be walked INTO from beside it
+  // is platforms.mjs's question, asked with the player's own movement
+  const long = w.colliders.filter(c => c.type === 'box' && c.hw * 2 > 18 && !c.standOnly && !c.floor);
   const boxes = long.slice().sort((a, b) => b.hw - a.hw).slice(0, 40);
   const out = { nLong: long.length, longest: boxes.length ? +(boxes[0].hw * 2).toFixed(1) : 0,
                 tested: 0, holes: [] };

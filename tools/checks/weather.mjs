@@ -26,7 +26,8 @@ const server = http.createServer((q, r) => {
   r.writeHead(200, { 'content-type': T[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(r);
 });
-await new Promise((r) => server.listen(8797, r));
+await new Promise((r) => server.listen(0, r));
+const PORT = server.address().port;   // the OS's choice: fixed ports collided under all.mjs -j
 
 const results = [];
 const check = (name, pass, detail) => {
@@ -89,7 +90,7 @@ await p.route('**/api.open-meteo.com/**', async (route) => {
   });
 });
 
-await p.goto('http://localhost:8797/', { waitUntil: 'domcontentloaded' });
+await p.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
 
 const make = () => p.evaluate(async () => {
   const { LiveConditions } = await import('/src/game/world/LiveConditions.js');

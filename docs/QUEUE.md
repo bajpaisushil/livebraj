@@ -40,13 +40,39 @@ searching the backlog for it. That is the failure this file exists to stop.*
    PERPENDICULAR to the wall — a fin, not an opening. Prem Mandir's whole
    colonnade and door, ISKCON's verandahs, and the Banke Bihari top arcade
    (mine, 2026-09-27) all do it. One audit, many buildings.
-3. **Prem Mandir faces the wrong way.** Entrance and steps on the SOUTH; the
+3. ~~**Prem Mandir faces the wrong way.**~~ **DONE 2026-09-30** (faces east;
+   see the backlog). Then RE-FOUND the same day: **"vanished under stairs on
+   walking instead of stepping up" was never fixed.** Walked with the
+   player's own movement, the body went 34 m under the jagati from the east:
+   the plaza was drawn 0.65 m up with no floor, so the first tread stood 1.0 m
+   over the feet, and the jagati's sides were stand-only and stopped nothing.
+   Also inside: the 1.35 m kursi was a SOLID block under the whole building
+   with the floor left at its foot — chest-deep in marble. **FIXED 2026-09-30:**
+   plaza at grade in the measured #ab8a82 with its diamond lattice, jagati and
+   kursi solid-with-a-top, a door flight up the kursi, the chrome balustrade,
+   the real musical fountain north (the three invented ones removed), the
+   south avenue. Guarded by the new `platforms.mjs`, which walks into every
+   raised floor in the world and onto every flight from its landing. It found
+   the same fault at Krishna Balaram (hall floor, beside the flight) and a
+   stair climbing up under Ashta Sakhi's upstairs slab (head through the
+   floor); both fixed. Original notes follow.
+   **Prem Mandir faces the wrong way.** Entrance and steps on the SOUTH; the
    checker measures a 35.5 m forecourt and the steps on the EAST, sanctum and
    shikhara at the WEST end (18.5% from it), building 11 m west of the
    platform's centre, an eastern bow with two ornamental pools, and the flag
    on its own mast beside the kalash rather than on it.
 
 ## NEXT — queued, in this order
+
+0. **ISKCON Krishna Balaram does not look like the real one.** *"still iskcon
+   does not look at all how it actually is? there are lot of shops there with
+   back and front gates with guards in real with outer corridors having srila
+   prabhupada deity on some place and museum as well?"* (2026-09-30). Wanted,
+   point by point: (a) the row of shops; (b) a FRONT gate and a BACK gate,
+   each with guards; (c) the outer corridors; (d) Srila Prabhupada's murti
+   where it really stands; (e) the museum. Research each first — the survey
+   in docs/research/iskcon-krishna-balaram.md, then photographs and OSM —
+   then build, photograph, measure. Next after Start from here ships.
 
 4. **Eight surveyed temples, none built.** Each gets built from its survey
    AND its checker's corrections (re-paired correctly 2026-09-30 — see the
@@ -100,9 +126,27 @@ searching the backlog for it. That is the failure this file exists to stop.*
     of its enclosures with the open ground EAST, and takes an east entrance as
     the working assumption (flagged unresolved). Our builder puts the gate in
     a long south range. Apply the survey's site plan.
-14. **3D Deities research is running** — five groups, each checked by a
-    refuter, building on `altars.js`, which already records each altar's
-    documented form and marks `undocumented: true` rather than guessing.
+14. **3D Deities research — PARTLY DONE, the rest blocked on the spend
+    limit.** 2026-09-30: four of five surveys came back (87 murti entries,
+    filed in `docs/research/deities/`); the ISKCON + Prem Mandir survey and
+    three of the four checkers stopped when the organisation hit its monthly
+    spend limit. Only Govind Dev / Shahji / Radha Shyamsundar is checked —
+    and its checker says the survey MERGED two separate Govind Dev shrines
+    into one altar. Re-run the missing five agents when the limit resets
+    (the workflow resumes from cache: run wf_7ae47b98-f89). Build murtis only
+    from the checked group until then.
+16. **Prem Mandir's setting, still to come.** The south gate (ornate marble,
+    cusped arch, peacocks, gold gates, neon at night — partly paint, per the
+    checker); the musical fountain's show (19:00-19:30 winter, 19:30-20:00
+    summer) — jets and light, with its music; the Satsang Bhavan at its true
+    ~87 m and ~187 m; the 87 x 34 m hall north of the fountain; the parterre
+    beds. The avenue's line and the fountain's centre are INFERRED.
+17. **The crowd stands on the terrain, never on a floor.** Every CrowdSystem
+    and GatheringSystem agent takes `groundHeight`. Harmless today only
+    because they are kept out of landmark footprints; on Prem Mandir's paving
+    they would stand 17 cm into it. Needs a grid-indexed `standHeight` —
+    the player's version walks every standable in the world per call, which
+    is fine once a frame and far too slow for a crowd.
 
 15. **E-rickshaws doing 94 km/h.** Seen in the vehicle-camera trace: 26 m/s
     on a ride from Chhatikara. Ride pacing speeds the vehicle up to arrive
@@ -113,6 +157,20 @@ searching the backlog for it. That is the failure this file exists to stop.*
     a shorter world (the old queue's 12 km question), not a rickshaw at 94.
 
 ## OPEN — reported, not yet reproduced
+
+- ~~**"start from here not working in map"**~~ and ~~**"still 'start from
+  here' does not work?"**~~ **FIXED 2026-09-30, shipped in the push that
+  follows this entry.** On foot it worked; in a rickshaw it failed three ways
+  at once, all invisible to `map-search`, which called `placeAt()` and never
+  touched the button: (1) the ride's window key listener ate the search box —
+  the d in "Radha Raman" TOOK THE WHEEL, any s stopped the ride, and the box
+  read "Raha Raman" and found nothing; (2) the ride bar stayed up over the map
+  and sat exactly on the button; (3) a ride holds you to its seat every frame,
+  so the move was undone at once. Now: ride keys ignore text fields and act
+  only in the world; the ride bar is world-only; the button calls a new
+  `RickshawSystem.leave()` first. Guarded by the new `starthere.mjs` — real
+  taps on a Pixel 5 viewport, on foot and mid-ride, 8/8 — mutation-tested:
+  each of the three fixes removed makes it fail.
 
 - **"Lot of glitches."** No screen or repro yet.
 - **Getting stuck between the ISKCON pillars.** The infinite-height rails are
@@ -154,7 +212,7 @@ searching the backlog for it. That is the failure this file exists to stop.*
 | A way out when stuck | Automatic unstick after 1.5 s wedged, plus "Start from here" on any searched place | `map-search` 26/26 — a real rescue from inside masonry |
 | Could not type `m` in map search | A second window keydown listener with no typing guard | `map-search` |
 | Rickshaw only offered eight places | Search the fare dialog by name, Devanagari or deity | `rickshaw` 31/31 |
-| Vanished under Prem Mandir's stairs | The treads were meshes with no colliders | `steps`, `stairs` |
+| Vanished under Prem Mandir's stairs | First pass: the treads had no colliders. **That was not the whole of it** — re-found 2026-09-30: a floorless plaza made the first tread a 1.0 m step, the jagati's sides stopped nothing, and the kursi buried you inside the temple. Now solid platforms with tops, at grade, walked end to end | `platforms` 5/5 (new), `steps`, `stairs` |
 | Nothing looks real — colour | One flat hex per building; palette data at median S 0.25 against measured 0.50–0.75; a pastel town | `BrajPalette.js`, measured on renders |
 | Nothing looks real — the town | Oxide skirting, damp, roofs with tanks and monkey cages, the wires | photographs |
 | Temples standing in fields | A circular keep-out, then a 0.8 m margin, then a 49 × 55 m plinth — three causes, one symptom | measured 3.3 m off the wall |
@@ -162,3 +220,5 @@ searching the backlog for it. That is the failure this file exists to stop.*
 | Deploy to the web | Static site on Vercel, root `client`, no build step | booted off a bare `http.server`, 0 errors |
 | Git + auto-deploy | Repo, `.gitignore` (98 MB → 12 MB), pushes deploy | — |
 | Map accuracy | OSM positions within 0.2% of true great-circle distance | measured |
+| "Start from here" failing mid-ride | Keys typed in the search drove the rickshaw; ride bar over the button; ride re-seated you | `starthere` 8/8, mutation-tested |
+| Walked under Prem Mandir; into ISKCON's hall floor; head through Ashta Sakhi's floor | Stand-only platforms in the open, a floorless plaza, a solid kursi with the floor at its foot, a stair under a slab | `platforms` 5/5 (new), `halls` 6/6 (now carries the feet) |

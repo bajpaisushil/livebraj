@@ -51,6 +51,7 @@ export function buildLandmarks(ctx, terrain) {
     const fn = BUILDERS[kind] || BUILDERS['temple-small'];
     const ground = terrain.sampleHeight(loc.pos[0], loc.pos[1]);
     const rng = rngAt(loc.id);
+    const c0 = colliders.length;       // this landmark's colliders start here
 
     /*
      * Weather every wall this builder draws, from its own ground up.
@@ -343,6 +344,23 @@ export function buildLandmarks(ctx, terrain) {
       );
       lights.push(l);
       templeLights.push(l);
+    }
+
+    /*
+     * A HEIGHT IS FROM THIS BUILDER'S GROUND, NOT THE TERRAIN UNDER THE
+     * COLLIDER.
+     *
+     * Every builder draws from one `ground`, sampled at loc.pos, and states
+     * its heights against it — `h: FL - ground`. WorldService added `h` to
+     * the terrain at the collider's OWN centre instead, so any surface away
+     * from loc.pos on sloping ground came out wherever the slope put it.
+     * Measured at Prem Mandir: the jagati 0.18 m under its own marble, the
+     * broad flight's treads the same. Pinned here, every landmark surface is
+     * exactly as high as it is drawn.
+     */
+    for (let i = c0; i < colliders.length; i++) {
+      const c = colliders[i];
+      if (c && c.h != null && c.top == null) c.top = ground + c.h;
     }
   }
 
@@ -1937,10 +1955,21 @@ function buildKrishnaBalaram({ loc, b, ground, rng, terrain }) {
      * `WorldService.standHeight` reads, and `tag` keeps it out of the props'
      * own queries.
      */
+    /*
+     * SOLID FROM THE COURT, a floor from the hall.
+     *
+     * The flight spans the altar bays, not the hall's whole width, and this
+     * was `standOnly` — so beside the flight, from the court, you walked
+     * straight into the 0.78 m floor at court height and stood in the marble
+     * to the knee (platforms.mjs, two sides). Solid with a top blocks you
+     * from below and lets you walk on it, and still lets you step DOWN off
+     * its edge between the pillars, which is what "in between pillars also
+     * it should work" asked for. No infinite side rail: that was the cage.
+     */
     stepTops.push({
       type: 'box', x: q[0], z: q[1],
       w: KB_WID - WT * 2, d: HL + HALL_Z, rot,
-      top: HALL_FLOOR, tag: 'temple-floor', standOnly: true,
+      top: HALL_FLOOR, tag: 'temple-floor', floor: true,
     });
 
     /*
@@ -2674,7 +2703,7 @@ const BACK_HALF = 3.4;      // the back gate is narrower, as it is in life
       // marble into a wall across the top of the flight for anyone whose feet
       // were more than a step below it — see WorldService.collide.
       colliders.push({ type: 'box', x: t.x, z: t.z, w: t.w, d: t.d, rot: t.rot,
-        h: t.top - gy, tag: t.tag, standOnly: t.standOnly });
+        h: t.top - gy, tag: t.tag, standOnly: t.standOnly, floor: t.floor });
     }
     /*
      * THE SIDE RAILS ARE GONE, AND THEY WERE THE CAGE.
@@ -4894,7 +4923,7 @@ function buildRadhaGopinath({ loc, b, ground }) {
  * paints for the town's walls, which is the same thing the real building does
  * — the pastimes, carved round the outside, one after another.
  */
-function buildPremMandir({ loc, b, ground, rng }) {
+function buildPremMandir({ loc, b, ground, rng, terrain }) {
   const [x, z] = loc.pos;
   const rot = loc.rot;
   const cs = Math.cos(rot), sn = Math.sin(rot);
@@ -4937,42 +4966,142 @@ function buildPremMandir({ loc, b, ground, rng }) {
   const HL = 30.65, HB = 20.3;        // the building: 61.3 x 40.6 m (OSM way 673573044)
   const PL = 55.1, PB = 34.2;         // the jagati: 110.2 x 68.4 m (OSM way 491803653)
   const PX = 11.05, PZ = -1.0;        // its centre, relative to the building's
-  const FL = ground + 2.4;            // jagati top; the plaza is at +0.65
-  const H = 13.3;                     // parapet / roof deck over FL, MEASURED
-  const SHIK_X = -HL + 0.185 * HL * 2;  // -19.3: shikhara axis, 18.5% from the west
   const BOW = 17.0;                   // how far the terrace bows out past the east edge
   const EAST = PX + PL;               // the platform's straight east edge, in lx
+  const PAVE = 0xab8a82;              // "red sandstone plaza paving #ab8a82", MEASURED
 
-  /* ---- the park, and the red-paved plaza the jagati stands in ---- */
+  /** The highest terrain under a rectangle, so nothing drawn flat is buried at one end. */
+  const highest = (cx, cz, w, d, n = 12) => {
+    let hi = -Infinity;
+    if (terrain && terrain.sampleHeight) {
+      for (let i = 0; i <= n; i++) {
+        for (let j = 0; j <= n; j++) {
+          const q = p(cx + (i / n - 0.5) * w, cz + (j / n - 0.5) * d);
+          const h = terrain.sampleHeight(q[0], q[1]);
+          if (h > hi) hi = h;
+        }
+      }
+    }
+    return hi === -Infinity ? ground : hi;
+  };
+
+  /*
+   * THREE LEVELS, AND EVERY ONE OF THEM IS A FLOOR YOU STAND ON.
+   *
+   * "i get vanished under stairs on walking instead of stepping up". The
+   * first rebuild drew a plaza 0.65 m above the park and never made it a
+   * floor, so the feet stayed on the terrain and the broad flight's first
+   * tread came out a full metre over them — too tall to take. With nothing
+   * to climb, the body walked on at ground level straight into the jagati,
+   * whose sides were stand-only and stopped nothing. Walked with the
+   * player's own movement: 34 m under the marble from the east. And the
+   * 1.35 m kursi was a solid block under the whole building with the floor
+   * left at its foot, so inside you stood sunk to the chest.
+   *
+   *   PLZ  the plaza: "the campus ground plane is RED SANDSTONE paving" — at
+   *        grade, laid at the highest ground under it (0.37 m of fall
+   *        across this site, measured), so the low kerb is still a step
+   *   FL   the jagati: "~1.3-2.0 m above the red-paved plaza (ESTIMATED from
+   *        6-12 visible risers)" — 1.75, five risers of 0.35
+   *   FLI  the temple floor: "temple plinth a further 1.2-1.6 m" (ESTIMATED)
+   *        — 1.35, four risers at the east door. The measured 13.3 m parapet
+   *        stays measured from the jagati, where the survey took it.
+   */
+  const PAVE_X = PX + 8, PAVE_W = PL * 2 + BOW * 2 + 26, PAVE_D = PB * 2 + 26;
+  const PLZ = highest(PAVE_X, PZ, PAVE_W, PAVE_D, 16) + 0.05;
+  const FL = PLZ + 1.75;              // jagati top
+  const KURSI = 1.35;
+  const FLI = FL + KURSI + 0.01;      // the floor inside, a hair over the kursi's top course
+  const H = 13.3;                     // parapet / roof deck over FL, MEASURED
+  const SHIK_X = -HL + 0.185 * HL * 2;  // -19.3: shikhara axis, 18.5% from the west
+
+  /* ---- the plaza: red sandstone at grade, in a diamond lattice ---- */
   {
-    const q = p(PX + 8, PZ);
-    b.box(q[0], ground - 0.25, q[1], PL * 2 + 70, 0.4, PB * 2 + 50, 0x6f9050, rot);
-    // "stands ~1.3-2.0 m above the RED-PAVED plaza" — red in words only; the
-    // hex is INFERRED as a muted brick paving, not measured
-    b.box(q[0], ground + 0.15, q[1], PL * 2 + BOW * 2 + 26, 0.5, PB * 2 + 26, 0x9e6a55, rot);
+    const q = p(PAVE_X, PZ);
+    b.box(q[0], PLZ - 0.6, q[1], PAVE_W, 0.6, PAVE_D, PAVE, rot);
+    colliders.push({ type: 'box', x: q[0], z: q[1], w: PAVE_W, d: PAVE_D, rot,
+      top: PLZ, tag: 'prem-plaza', standOnly: true });
+    /*
+     * "laid in a bold diamond-lattice pattern with white marble cross-bands".
+     * The pitch is not measured; 6 m reads as bold at the scale of the
+     * building. Each band is clipped to the paving rectangle in the plaza's
+     * own frame: u - v = c for one diagonal, u + v = c for the other.
+     */
+    const A = PAVE_W / 2, B = PAVE_D / 2, PITCH = 6.0;
+    for (const sgn of [1, -1]) {
+      for (let c = -(A + B) + PITCH / 2; c < A + B; c += PITCH) {
+        // points (u, sgn * (u - c)) inside |u| <= A, |v| <= B
+        const lo = Math.max(-A, c - B), hi = Math.min(A, c + B);
+        if (hi - lo < 0.5) continue;
+        const um = (lo + hi) / 2, vm = sgn * (um - c);
+        const m = p(PAVE_X + um, PZ + vm);
+        b.box(m[0], PLZ - 0.01, m[1], (hi - lo) * Math.SQRT2, 0.02, 0.32, 0xe8e4da,
+          rot + sgn * Math.PI / 4);
+      }
+    }
+  }
+  /* ---- the processional avenue from the south gate ---- */
+  {
+    // "a ~22 m wide red-paved processional avenue run ~70 m from the
+    // platform to the main gate on the road" — its line across the platform
+    // is not measured; on the platform's centre is the INFERRED choice. The
+    // gate itself is queued: it has its own survey to come.
+    const from = PZ + PAVE_D / 2 - 0.5, to = PZ + PB + 70;
+    const q = p(PX, (from + to) / 2);
+    const AG = highest(PX, (from + to) / 2, 22, to - from, 8) + 0.05;
+    const top = Math.min(AG, PLZ);
+    b.box(q[0], top - 0.6, q[1], 22, 0.6, to - from, PAVE, rot);
+    colliders.push({ type: 'box', x: q[0], z: q[1], w: 22, d: to - from, rot,
+      top, tag: 'prem-plaza', standOnly: true });
   }
 
-  /* ---- the jagati: a moulded edge you cannot climb, a bow, one broad flight ---- */
+  /* ---- the jagati: a moulded edge you cannot walk into, a bow, one broad flight ---- */
   {
     const q = p(PX, PZ);
-    b.box(q[0], ground + 0.65, q[1], PL * 2, FL - ground - 0.65, PB * 2, SHADOW, rot);
-    b.box(q[0], FL - 0.1, q[1], PL * 2 - 0.5, 0.2, PB * 2 - 0.5, MARBLE, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: PL * 2, d: PB * 2, rot,
-      h: FL - ground, tag: 'temple-floor', standOnly: true });
+    b.box(q[0], PLZ - 0.05, q[1], PL * 2, FL - 0.1 - (PLZ - 0.05), PB * 2, SHADOW, rot);
+    b.box(q[0], FL - 0.1, q[1], PL * 2 - 0.5, 0.1, PB * 2 - 0.5, MARBLE, rot);
+    // the moulded edge: an apron at the paving and a cornice under the marble
+    b.box(q[0], PLZ, q[1], PL * 2 + 0.3, 0.3, PB * 2 + 0.3, tint(SHADOW, 0.92), rot);
+    b.box(q[0], FL - 0.34, q[1], PL * 2 + 0.36, 0.24, PB * 2 + 0.36, MARBLE, rot);
+    /*
+     * SOLID, with a top. collide() lets you through a box only when its top
+     * is within a step of your feet, so from the paving this is a wall and
+     * from the marble it is the floor. `standOnly` here was the whole fault.
+     * `floor` keeps it ground to isClear, which places people and things;
+     * the tag stays 'temple-floor' so the blanket slab knows it is not needed.
+     */
+    colliders.push({ type: 'box', x: q[0], z: q[1], w: PL * 2 + 0.36, d: PB * 2 + 0.36, rot,
+      top: FL, tag: 'temple-floor', floor: true });
+
+    // the broad flight's numbers first: the bow stops where it begins
+    const N = 5, RISE = (FL - PLZ) / N, TREAD = 0.62, SW = 16;
+    const outAt = (t) => BOW * Math.sqrt(Math.max(0, 1 - t * t));
+    const tip = EAST + outAt(SW / 2 / PB) - 0.3;
 
     // the bow: strips across the width, each running out as far as the arc.
     // 28 of them — at 14 the outline read as a staircase from the road.
     const NS = 28;
+    const strips = [];
     for (let i = 0; i < NS; i++) {
-      const t0 = (i / NS) * 2 - 1, t1 = ((i + 1) / NS) * 2 - 1, tm = (t0 + t1) / 2;
-      const out = BOW * Math.sqrt(Math.max(0, 1 - tm * tm));
-      if (out < 0.4) continue;
-      const lz = PZ + tm * PB, dz = (t1 - t0) * PB;
+      const t0 = (i / NS) * 2 - 1, t1 = ((i + 1) / NS) * 2 - 1;
+      const z0 = PZ + t0 * PB, z1 = PZ + t1 * PB, lz = (z0 + z1) / 2, dz = z1 - z0;
+      // In front of the flight a strip ends at the top tread, so the marble
+      // does not cover the treads or stand across them as a wall.
+      const flight = z1 > PZ - SW / 2 && z0 < PZ + SW / 2;
+      const out = flight ? tip - EAST : outAt((t0 + t1) / 2);
+      strips.push({ z0, z1, out, flight });
       const c = p(EAST + out / 2, lz);
-      b.box(c[0], ground + 0.65, c[1], out, FL - ground - 0.65, dz + 0.02, SHADOW, rot);
-      b.box(c[0], FL - 0.1, c[1], out - 0.25, 0.2, dz + 0.02, MARBLE, rot);
-      colliders.push({ type: 'box', x: c[0], z: c[1], w: out, d: dz + 0.02, rot,
-        h: FL - ground, tag: 'temple-floor', standOnly: true });
+      b.box(c[0], PLZ - 0.05, c[1], out, FL - 0.1 - (PLZ - 0.05), dz + 0.02, SHADOW, rot);
+      b.box(c[0], FL - 0.1, c[1], out - (flight ? 0 : 0.25), 0.1, dz + 0.02, MARBLE, rot);
+      const reach = flight ? out : out + 0.27;
+      if (!flight) {
+        const ce = p(EAST + out + 0.09, lz);
+        b.box(ce[0], FL - 0.34, ce[1], 0.36, 0.24, dz + 0.02, MARBLE, rot);
+        b.box(ce[0], PLZ, ce[1], 0.3, 0.3, dz + 0.02, tint(SHADOW, 0.92), rot);
+      }
+      const cc = p(EAST + reach / 2, lz);
+      colliders.push({ type: 'box', x: cc[0], z: cc[1], w: reach, d: dz + 0.02, rot,
+        top: FL, tag: 'temple-floor', floor: true });
     }
     // two ornamental pools in the bow, and the grid-paved panel between them.
     // The teal is INFERRED from satellite tone; the geometry is the checker's.
@@ -4982,7 +5111,7 @@ function buildPremMandir({ loc, b, ground, rng }) {
       b.box(c[0], FL + 0.06, c[1], 10.2, 0.44, 11.2, 0x2f5f63, rot);           // water
       // a rim you do not step over: you walk round a pool, not across it
       colliders.push({ type: 'box', x: c[0], z: c[1], w: 11.4, d: 12.4, rot,
-        h: (FL + 1.0) - ground, tag: 'prem-pool' });
+        top: FL + 1.0, tag: 'prem-pool' });
     }
     {
       const c = p(EAST + 7.5, PZ);
@@ -4994,22 +5123,74 @@ function buildPremMandir({ loc, b, ground, rng }) {
         b.box(g2[0], FL + 0.02, g2[1], 9.0, 0.02, 0.06, SHADOW, rot);
       }
     }
-    // the broad flight, EAST, at the tip of the bow
-    const RISE = 0.35, TREAD = 0.62, N = 5, SW = 16;
-    const tip = EAST + BOW * Math.sqrt(Math.max(0, 1 - (SW / 2 / PB) ** 2)) - 0.3;
+    // the broad flight, EAST, at the tip of the bow, from the paving to the marble
     for (let i = 0; i < N; i++) {
       const lx = tip + (N - i) * TREAD - TREAD * 0.5;
       const c = p(lx, PZ);
-      const top = 0.65 + (i + 1) * RISE;
-      b.box(c[0], ground + 0.65 + i * RISE, c[1], TREAD, RISE, SW, MARBLE, rot);
+      const top = PLZ + (i + 1) * RISE;
+      b.box(c[0], PLZ - 0.05 + i * RISE, c[1], TREAD, RISE + 0.05, SW, MARBLE, rot);
       colliders.push({ type: 'box', x: c[0], z: c[1], w: TREAD, d: SW, rot,
-        h: top, tag: 'temple-step', standOnly: true });
+        top, tag: 'temple-step', standOnly: true });
     }
+    // its cheeks, which rise with it: nobody steps off the side of a flight
     for (const sz of [-1, 1]) {
       const c = p(tip + N * TREAD * 0.5, PZ + sz * (SW / 2 + 0.35));
-      b.box(c[0], ground + 0.65, c[1], N * TREAD, 1.5, 0.5, SHADOW, rot);
+      b.box(c[0], PLZ - 0.05, c[1], N * TREAD, FL + 0.9 - (PLZ - 0.05), 0.5, SHADOW, rot);
       colliders.push({ type: 'box', x: c[0], z: c[1], w: N * TREAD, d: 0.5, rot,
-        h: 2.15, tag: 'temple-rail' });
+        top: FL + 0.9, tag: 'temple-rail' });
+    }
+
+    /*
+     * "Moulded white marble edge, ornate metal balustrade", and "stainless/
+     * chrome ornamental railings, which read as bright specular lines in
+     * every photograph". Round the whole edge but the flight, so the only
+     * way off the marble is the way you came up. It follows the edge as
+     * drawn, strip by strip: a smooth curve would cut across the stepped
+     * outline and leave rail hanging over the paving at the ends of the bow.
+     */
+    const RAIL = 0xd7dbde;
+    const rail = (ax, az, bx, bz) => {
+      const L = Math.hypot(bx - ax, bz - az);
+      if (L < 0.15) return;
+      const ang = rot + Math.atan2(bz - az, bx - ax);
+      const m = p((ax + bx) / 2, (az + bz) / 2);
+      b.box(m[0], FL + 0.92, m[1], L + 0.06, 0.07, 0.09, RAIL, ang);
+      b.box(m[0], FL + 0.16, m[1], L + 0.06, 0.05, 0.06, RAIL, ang);
+      const n = Math.max(1, Math.round(L / 1.6));
+      for (let k = 0; k <= n; k++) {
+        const t = k / n;
+        const g = p(ax + (bx - ax) * t, az + (bz - az) * t);
+        b.box(g[0], FL, g[1], 0.07, 0.95, 0.07, RAIL, ang);
+      }
+      colliders.push({ type: 'box', x: m[0], z: m[1], w: L + 0.1, d: 0.3, rot: ang,
+        top: FL + 1.0, tag: 'temple-rail' });
+    };
+    const IN = 0.35;                                  // set back from the edge
+    const W0 = PX - PL + IN, N0 = PZ - PB + IN, S0 = PZ + PB - IN;
+    const gapLo = PZ - SW / 2 - 0.1, gapHi = PZ + SW / 2 + 0.1;
+    const alongZ = (ax, z0, z1) => {                  // a run along lz, minus the flight
+      const lo = Math.min(z0, z1), hi = Math.max(z0, z1);
+      if (hi <= gapLo || lo >= gapHi) { rail(ax, lo, ax, hi); return; }
+      if (lo < gapLo) rail(ax, lo, ax, gapLo);
+      if (hi > gapHi) rail(ax, gapHi, ax, hi);
+    };
+    rail(W0, N0, EAST + strips[0].out - IN, N0);
+    rail(W0, S0, EAST + strips[NS - 1].out - IN, S0);
+    rail(W0, N0, W0, S0);
+    // where strip i-1's run meets strip i's: an edge offset inward turns
+    // into the strip that sticks out further
+    const zb = [N0];
+    for (let i = 1; i < NS; i++) {
+      const a0 = strips[i - 1].out, a1 = strips[i].out, z = strips[i].z0;
+      zb.push(Math.abs(a1 - a0) < 0.01 ? z : z + (a1 > a0 ? IN : -IN));
+    }
+    zb.push(S0);
+    for (let i = 0; i < NS; i++) {
+      alongZ(EAST + strips[i].out - IN, zb[i], zb[i + 1]);
+      if (i > 0 && (zb[i] < gapLo || zb[i] > gapHi)) {
+        const a0 = strips[i - 1].out, a1 = strips[i].out;
+        if (Math.abs(a1 - a0) > 0.01) rail(EAST + Math.min(a0, a1) - IN, zb[i], EAST + Math.max(a0, a1) - IN, zb[i]);
+      }
     }
   }
 
@@ -5028,15 +5209,40 @@ function buildPremMandir({ loc, b, ground, rng }) {
     for (const sgn of [-1, 1]) face(HL - WT / 2, sgn * (DOOR / 2 + seg / 2), WT, seg);
     const g = p(HL - WT / 2, 0);
     // an east-face opening spans along lz: rot + PI/2 (see arches.mjs)
-    cuspedArch(b, g[0], FL, g[1], DOOR, H * 0.62, WT + 0.4, rot + Math.PI / 2, MARBLE, 9, null);
+    cuspedArch(b, g[0], FLI, g[1], DOOR, H * 0.62 - KURSI, WT + 0.4, rot + Math.PI / 2, MARBLE, 9, null);
   }
   // the upper storey reads a shade warmer than the lower, measured
   {
     const q = p(0, 0);
     b.box(q[0], FL + H * 0.53, q[1], HL * 2 + 0.06, 0.25, HB * 2 + 0.06, SHADOW, rot);   // floor line
-    b.box(q[0], FL - 0.08, q[1], HL * 2 - WT, 0.14, HB * 2 - WT, 0xefe9dc, rot);         // floor
+    b.box(q[0], FLI - 0.12, q[1], HL * 2 - WT, 0.12, HB * 2 - WT, 0xefe9dc, rot);        // floor
   }
-  mouldedPlinth(b, x, FL, z, HL * 2 + 0.4, HB * 2 + 0.4, rot, SHADOW, 1.35);
+  /*
+   * The kursi, 1.35 m of mouldings, is a SOLID with the temple floor on top
+   * of it — drawn as one before, but the floor was left at its foot. Its
+   * widest course runs 0.16 m proud of the 0.2 m apron, so the collider is
+   * the whole drawn outline.
+   */
+  mouldedPlinth(b, x, FL, z, HL * 2 + 0.4, HB * 2 + 0.4, rot, SHADOW, KURSI);
+  colliders.push({ type: 'box', x, z, w: HL * 2 + 0.72, d: HB * 2 + 0.72, rot,
+    top: FLI, tag: 'temple-floor', floor: true });
+  // and the way up it, at the east door: four risers, with cheeks
+  {
+    const N = 4, RISE = (FLI - FL) / N, TREAD = 0.5, SW = DOOR + 1.2;
+    const x0 = HL + 0.36;
+    for (let i = 0; i < N; i++) {
+      const c = p(x0 + (N - i) * TREAD - TREAD * 0.5, 0);
+      b.box(c[0], FL - 0.05 + i * RISE, c[1], TREAD, RISE + 0.05, SW, MARBLE, rot);
+      colliders.push({ type: 'box', x: c[0], z: c[1], w: TREAD, d: SW, rot,
+        top: FL + (i + 1) * RISE, tag: 'temple-step', standOnly: true });
+    }
+    for (const sz of [-1, 1]) {
+      const c = p(x0 + N * TREAD * 0.5, sz * (SW / 2 + 0.3));
+      b.box(c[0], FL - 0.05, c[1], N * TREAD, FLI + 0.8 - FL, 0.45, SHADOW, rot);
+      colliders.push({ type: 'box', x: c[0], z: c[1], w: N * TREAD, d: 0.45, rot,
+        top: FLI + 0.8, tag: 'temple-rail' });
+    }
+  }
 
   /* ---- the colonnade: pilasters and cusped arches on all four faces ---- */
   for (const [ax, az, n, alongZ] of [
@@ -5045,7 +5251,7 @@ function buildPremMandir({ loc, b, ground, rng }) {
     for (let i = 0; i < n; i++) {
       const t = (i / (n - 1) - 0.5) * (alongZ ? HB * 1.9 : HL * 1.9);
       const q = alongZ ? p(ax, t) : p(t, az);
-      b.box(q[0], FL, q[1], 0.7, H * 0.62, 0.7, MARBLE, rot);
+      b.box(q[0], FLI, q[1], 0.7, H * 0.62 - KURSI, 0.7, MARBLE, rot);
       b.box(q[0], FL + H * 0.62, q[1], 1.0, 0.4, 1.0, SHADOW, rot);
       if (i < n - 1) {
         const t2 = ((i + 0.5) / (n - 1) - 0.5) * (alongZ ? HB * 1.9 : HL * 1.9);
@@ -5154,14 +5360,72 @@ function buildPremMandir({ loc, b, ground, rng }) {
     colliders.push({ type: 'box', x: q[0], z: q[1], w: 40, d: 36, rot });
   }
 
-  /* ---- fountains in the park, north, south and out beyond the east flight ---- */
-  for (const [fx, fz] of [[PX, PZ + PB + 17], [PX, PZ - PB - 17], [EAST + BOW + 20, PZ]]) {
-    const q = p(fx, fz);
-    b.box(q[0], ground + 0.2, q[1], 9, 0.7, 9, MARBLE, rot);
-    b.box(q[0], ground + 0.9, q[1], 6.4, 0.3, 6.4, 0x4f8898, rot);
-    b.box(q[0], ground + 1.2, q[1], 1.0, 2.2, 1.0, MARBLE, rot);
-    b.box(q[0], ground + 3.4, q[1], 2.6, 0.4, 2.6, MARBLE, rot);
-    colliders.push({ type: 'circle', x: q[0], z: q[1], r: 4.5 });
+  /* ---- the musical fountain, north ---- */
+  /*
+   * There is ONE fountain, and it is not where the three before this stood
+   * (north, south and east of the platform, 17-20 m out — none of them in
+   * the survey). "THE MUSICAL FOUNTAIN. MEASURED, ~64 m NORTH of the
+   * platform's north edge. It is an OVAL/vesica, not a circle: outer
+   * ornamental oval ~116 x 70 m, with pointed triangular terminations east
+   * and west; white elliptical basin ~49 x 30 m; inner rectangular pool
+   * ~32 x 19 m." The 64 m is taken to its centre and its east-west line to
+   * the platform's centre: both INFERRED. The show, 19:00-19:30 in winter
+   * and 19:30-20:00 in summer, is queued.
+   */
+  {
+    const FX = PX, FZ = PZ - PB - 64;
+    const VL = 58, VW = 35;
+    // a vesica is two arcs; with half-length VL and half-width VW their
+    // centres sit `ev` either side of the long axis
+    const ev = (VL * VL - VW * VW) / (2 * VW), Rv = ev + VW;
+    const halfW = (u) => Math.max(0, Math.sqrt(Math.max(0, Rv * Rv - u * u)) - ev);
+    const FG = highest(FX, FZ, VL * 2, VW * 2, 10) + 0.05;
+    const NV = 58;
+    for (let i = 0; i < NV; i++) {
+      const u0 = (i / NV) * 2 * VL - VL, u1 = ((i + 1) / NV) * 2 * VL - VL;
+      const hw = halfW((u0 + u1) / 2);
+      if (hw < 0.3) continue;
+      const c = p(FX + (u0 + u1) / 2, FZ);
+      b.box(c[0], FG - 0.6, c[1], u1 - u0 + 0.02, 0.6, hw * 2, PAVE, rot);
+      colliders.push({ type: 'box', x: c[0], z: c[1], w: u1 - u0 + 0.02, d: hw * 2, rot,
+        top: FG, tag: 'prem-plaza', standOnly: true });
+    }
+    // the white elliptical basin: a rim you walk round, water inside it,
+    // and the rectangular pool in the middle. Drawn as true ellipses; its
+    // collider is strips, all inside the drawn rim.
+    const BA = 24.5, BB = 15.0, RIM = 1.0, NE = 64;
+    const ell = (ra, rb, th, y) => { const q = p(FX + ra * Math.cos(th), FZ + rb * Math.sin(th)); return [q[0], y, q[1]]; };
+    const WATER = FG + 0.42, RTOP = FG + 0.62;
+    const ctr = p(FX, FZ);
+    for (let k = 0; k < NE; k++) {
+      const t0 = (k / NE) * Math.PI * 2, t1 = t0 - (Math.PI * 2) / NE;   // top faces wind this way
+      // water
+      const w0 = ell(BA - RIM, BB - RIM, t0, WATER), w1 = ell(BA - RIM, BB - RIM, t1, WATER);
+      b.tri(ctr[0], WATER, ctr[1], w0[0], w0[1], w0[2], w1[0], w1[1], w1[2], 0x2f5f63);
+      // the rim's top, its outer face down to the paving, its inner face down to the water
+      const o0 = ell(BA, BB, t0, RTOP), o1 = ell(BA, BB, t1, RTOP);
+      const i0 = ell(BA - RIM, BB - RIM, t0, RTOP), i1 = ell(BA - RIM, BB - RIM, t1, RTOP);
+      b.quad(o0, o1, i1, i0, MARBLE);
+      const ob0 = ell(BA, BB, t0, FG - 0.05), ob1 = ell(BA, BB, t1, FG - 0.05);
+      b.quad(ob1, o1, o0, ob0, SHADOW);
+      const ib0 = ell(BA - RIM, BB - RIM, t0, WATER), ib1 = ell(BA - RIM, BB - RIM, t1, WATER);
+      b.quad(ib0, i0, i1, ib1, SHADOW);
+    }
+    {
+      b.box(ctr[0], WATER - 0.02, ctr[1], 32.8, 0.08, 19.8, MARBLE, rot);  // the inner pool's coping
+      b.box(ctr[0], WATER - 0.01, ctr[1], 32.0, 0.08, 19.0, 0x264f55, rot); // and its deeper water
+    }
+    // Solid round the rim, in chords along its centre line: 64 of them keep
+    // within 5 cm of the drawn curve. The rim is higher than a step, so the
+    // water inside needs no collider of its own.
+    for (let k = 0; k < NE; k++) {
+      const t0 = (k / NE) * Math.PI * 2, t1 = ((k + 1) / NE) * Math.PI * 2;
+      const a0 = [FX + (BA - RIM / 2) * Math.cos(t0), FZ + (BB - RIM / 2) * Math.sin(t0)];
+      const a1 = [FX + (BA - RIM / 2) * Math.cos(t1), FZ + (BB - RIM / 2) * Math.sin(t1)];
+      const m = p((a0[0] + a1[0]) / 2, (a0[1] + a1[1]) / 2);
+      colliders.push({ type: 'box', x: m[0], z: m[1], w: Math.hypot(a1[0] - a0[0], a1[1] - a0[1]) + 0.1,
+        d: RIM, rot: rot + Math.atan2(a1[1] - a0[1], a1[0] - a0[0]), top: RTOP, tag: 'prem-fountain' });
+    }
   }
 
   /* ---- where the Deities are, and where you stand to see them ---- */
@@ -5170,14 +5434,14 @@ function buildPremMandir({ loc, b, ground, rng }) {
   const altar = p(SHIK_X, 0);
   const darsh = p(SHIK_X + 9.5, 0);
   return {
-    altarY: 2.6,
+    altarY: FLI + 1.4 - ground,
     colliders,
     mesh: { name: 'PremMandirLilas', builder: lilaB, x, z, r: Math.max(HL, HB) + 4, map: lilaAtlas },
     interior: {
-      altar: [altar[0], FL + 1.4, altar[1]],
+      altar: [altar[0], FLI + 1.4, altar[1]],
       darshan: [darsh[0], darsh[1]],
       facing: Math.atan2(altar[0] - darsh[0], altar[1] - darsh[1]),
-      floor: FL,
+      floor: FLI,
       volume: { x, z, hw: HL, hd: HB, rot, door: p(HL + 1.5, 0) },
     },
   };
@@ -5982,11 +6246,33 @@ const BUILDERS = {
         colliders.push({ type: 'box', x: q[0], z: q[1], w: 2.0, d: TREAD, rot,
           h: (FL + (i + 1) * RISE) - ground, tag: 'temple-step' });
       }
-      // the upstairs floor, which is where darshan happens
-      const q = p(0, -1.0);
-      ib.box(q[0], UP - 0.16, q[1], w - WT * 2, 0.22, d - WT * 2 - 5.0, 0xe8e2d2, rot);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: w - WT * 2, d: d - WT * 2 - 5.0,
-        rot, h: UP - ground, tag: 'temple-floor', standOnly: true });
+      /*
+       * The upstairs floor, which is where darshan happens — WITH A STAIRWELL.
+       *
+       * It was one slab over the whole plan, and the stair climbs up under
+       * it: from the tenth riser on, a person's head was through the marble
+       * above (platforms.mjs found it as a walk-in under the floor). So the
+       * floor stops round the opening the stair comes up through, and the
+       * opening has a rail down both sides.
+       */
+      const IW = w - WT * 2, F0 = -(HD - WT), F1 = F0 + (d - WT * 2 - 5.0);
+      const topTread = HD - WT - 1.0 - (RISERS - 1) * TREAD - TREAD * 0.5;
+      const WELL = 1.15;                                // half-width of the opening
+      const slab = (lx0, lx1, lz0, lz1) => {
+        const q = p((lx0 + lx1) / 2, (lz0 + lz1) / 2);
+        ib.box(q[0], UP - 0.16, q[1], lx1 - lx0, 0.22, lz1 - lz0, 0xe8e2d2, rot);
+        colliders.push({ type: 'box', x: q[0], z: q[1], w: lx1 - lx0, d: lz1 - lz0,
+          rot, h: UP - ground, tag: 'temple-floor', standOnly: true });
+      };
+      slab(-IW / 2, IW / 2, F0, topTread);             // behind the opening, full width
+      slab(-IW / 2, -WELL, topTread, F1);               // and either side of it
+      slab(WELL, IW / 2, topTread, F1);
+      for (const sx of [-1, 1]) {
+        const q = p(sx * (WELL + 0.08), (topTread + F1) / 2);
+        ib.box(q[0], UP, q[1], 0.08, 0.95, F1 - topTread, 0x8a6a3a, rot);
+        colliders.push({ type: 'box', x: q[0], z: q[1], w: 0.16, d: F1 - topTread, rot,
+          h: UP + 1.0 - ground, tag: 'temple-rail' });
+      }
     }
 
     /* ---- the peacock-feather altar, ten figures in a stepped arc ---- */

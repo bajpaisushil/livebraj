@@ -70,7 +70,7 @@ const out = await p.evaluate(() => {
     // the nearest LONG, THIN box collider — a wall, not a pier or a floor
     let best = null, bestD = 1.2;
     for (const c of (W.grid.query(a.x, a.z, 8) || [])) {
-      if (c.type !== 'box' || c.standOnly) continue;
+      if (c.type !== 'box' || c.standOnly || c.floor) continue;
       /*
        * A wall must actually REACH the arch. The Krishna Balaram arcade stands
        * at 4 m and the staircase treads under it top out at 1.1-1.3 m; judged

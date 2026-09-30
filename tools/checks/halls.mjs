@@ -65,23 +65,36 @@ const r = await p.evaluate(() => {
       const sx = door ? door[0] : a.darshan.x + ox;
       const sz = door ? door[1] : a.darshan.z + oz;
       const pt = { x: sx, y: 0, z: sz };
-      let feet = w.standHeight(pt.x, pt.z, w.groundHeight(pt.x, pt.z));
+      /*
+       * The pilgrim at the door stands on whatever is there — a tread, a
+       * plinth — not on the terrain under it. Asked from the terrain, Prem
+       * Mandir's door (on the kursi's steps, 3 m up) put the start INSIDE the
+       * jagati, and the old fill only ever got anywhere by walking through
+       * the platform at ground level: the very fault platforms.mjs exists for.
+       */
+      let feet = w.standHeight(pt.x, pt.z, a.floor !== undefined ? a.floor : seat.y);
       let worstFall = 0, worstClimb = 0;
       const span = Math.hypot(sx - seat.x, sz - seat.z);
       /*
-       * REACHABILITY, not a straight line.
+       * REACHABILITY, not a straight line — and WITH THE FEET.
        *
        * Walking door-to-altar in a straight line is too crude for a plan with
        * anything in it: Rangaji's altar is 75 m from its door through two
-       * colonnades, and a pilgrim walks ROUND things. A straight-line walk
-       * called four temples unreachable that a person could stroll into.
+       * colonnades, and a pilgrim walks ROUND things.
        *
-       * So flood-fill the floor from the door on a half-metre grid and see
-       * whether the altar is in the same connected space. `isClear` treats
-       * floors as ground and walls as walls, which is exactly the question.
+       * So search the floor from the door on a half-metre grid, carrying the
+       * height of the feet from cell to cell exactly as the player does:
+       * collide(p, 0.4, feet), then standHeight(p, feet). A cell is a place
+       * AT A HEIGHT — under a floor and on it are different places — so the
+       * visited set is keyed on the level too. The first version took every
+       * cell's feet from the terrain, which cannot climb onto a raised floor
+       * at all and only "reached" Prem Mandir's altar through the side of the
+       * platform. Best-first toward the target, because the jagati alone is
+       * 30,000 cells.
        */
-      const CELL = 0.5, LIMIT = 24000;
-      const key = (i, j) => i + ',' + j;
+      const CELL = 0.5, LIMIT = 40000;
+      const lvl = (f) => Math.round(f * 4);
+      const key = (i, j, f) => i + ',' + j + ',' + lvl(f);
       const i0 = Math.round(sx / CELL), j0 = Math.round(sz / CELL);
       /*
        * Target where a DEVOTEE STANDS, not the altar itself.
@@ -93,15 +106,34 @@ const r = await p.evaluate(() => {
        * whole point. Two metres out is darshan distance.
        */
       const tx = seat.x + Math.sin(yaw) * 2.2, tz = seat.z + Math.cos(yaw) * 2.2;
-      const ti = Math.round(tx / CELL), tj = Math.round(tz / CELL);
-      const seen = new Set([key(i0, j0)]);
-      const q2 = [[i0, j0]];
+      // a binary heap on distance to the target
+      const heap = [];
+      const push = (n) => {
+        heap.push(n); let c = heap.length - 1;
+        while (c > 0) { const pa = (c - 1) >> 1; if (heap[pa].d <= heap[c].d) break; [heap[pa], heap[c]] = [heap[c], heap[pa]]; c = pa; }
+      };
+      const pop = () => {
+        const top = heap[0], last = heap.pop();
+        if (heap.length) {
+          heap[0] = last; let c = 0;
+          for (;;) {
+            const l = c * 2 + 1, r2 = l + 1; let m = c;
+            if (l < heap.length && heap[l].d < heap[m].d) m = l;
+            if (r2 < heap.length && heap[r2].d < heap[m].d) m = r2;
+            if (m === c) break; [heap[m], heap[c]] = [heap[c], heap[m]]; c = m;
+          }
+        }
+        return top;
+      };
+      const dist = (i, j) => Math.hypot(i * CELL - tx, j * CELL - tz);
+      const seen = new Set([key(i0, j0, feet)]);
+      push({ i: i0, j: j0, f: feet, d: dist(i0, j0) });
       let reached = false, visited = 0;
       let near = Infinity, nearAt = null;
-      while (q2.length && visited < LIMIT) {
-        const [i, j] = q2.shift();
+      while (heap.length && visited < LIMIT) {
+        const { i, j, f } = pop();
         visited++;
-        const dd = Math.hypot(i * CELL - tx, j * CELL - tz);
+        const dd = dist(i, j);
         if (dd < near) { near = dd; nearAt = [+(i * CELL).toFixed(1), +(j * CELL).toFixed(1)]; }
         /*
          * Within 4 m of the Deities is darshan. The altar line stops you about
@@ -111,25 +143,16 @@ const r = await p.evaluate(() => {
         if (dd <= 4.0) { reached = true; break; }
         for (const [di, dj] of [[1,0],[-1,0],[0,1],[0,-1]]) {
           const ni = i + di, nj = j + dj;
-          const k = key(ni, nj);
-          if (seen.has(k)) continue;
           // stay in the temple's own neighbourhood
           if (Math.hypot(ni * CELL - tx, nj * CELL - tz) > span + 22) continue;
-          /*
-           * Use the PLAYER's own collision, not `isClear`.
-           *
-           * `isClear` asks "is there room to put something down", and a step
-           * tread is something. So the fill could not climb the altar flight
-           * at Krishna Balaram and stopped dead at the bottom of it, 5 m short.
-           * `collide` knows that a tread within a stride is walked ONTO, which
-           * is the question a pilgrim's feet actually ask.
-           */
           const px = ni * CELL, pz = nj * CELL;
-          const fy = w.standHeight(px, pz, w.groundHeight(px, pz));
           const probe = { x: px, y: 0, z: pz };
-          w.collide(probe, 0.4, fy);
+          w.collide(probe, 0.4, f);
           if (Math.hypot(probe.x - px, probe.z - pz) > 0.05) continue;
-          seen.add(k); q2.push([ni, nj]);
+          const nf = w.standHeight(px, pz, f);
+          const k = key(ni, nj, nf);
+          if (seen.has(k)) continue;
+          seen.add(k); push({ i: ni, j: nj, f: nf, d: dist(ni, nj) });
         }
       }
       const closest = reached ? 0 : +near.toFixed(1);
@@ -204,12 +227,35 @@ const pockets = await p.evaluate(() => {
     const at = (ix, iz) => [vol.x + ix * STEP, vol.z + iz * STEP];
 
     // every cell of this temple a body could stand in
-    const stand = new Set();
+    const floorY = a.floor !== undefined ? a.floor : a.altar.y;
+    /*
+     * The heights a body can STAND at in a cell, by the player's own rule:
+     * the surface standHeight gives, asked from the altar floor and from the
+     * ground, kept where collide does not push the body away at that height.
+     * A cell can have two — Ashta Sakhi's shops and the darshan floor over
+     * them — and a cell at the foot of a solid ledge has none at the ledge's
+     * height. `isClear` alone counts every floor as ground from any height,
+     * which read Krishna Balaram's hall-floor edge as twelve one-way doors.
+     */
+    const heightsAt = (x, z) => {
+      const hs = [];
+      for (const from of [floorY, w.groundHeight(x, z)]) {
+        const f = w.standHeight(x, z, from);
+        if (hs.some((g) => Math.abs(g - f) < 0.05)) continue;
+        const q0 = { x, y: 0, z };
+        w.collide(q0, 0.42, f);
+        if (Math.hypot(q0.x - x, q0.z - z) <= 0.12) hs.push(f);
+      }
+      return hs;
+    };
+    const stand = new Map();
     for (let ix = -N; ix <= N; ix++) {
       for (let iz = -N; iz <= N; iz++) {
         const [x, z] = at(ix, iz);
         if (!inside(x, z)) continue;
-        if (w.isClear(x, z, 0.42)) stand.add(key(ix, iz));
+        if (!w.isClear(x, z, 0.42)) continue;
+        const hs = heightsAt(x, z);
+        if (hs.length) stand.set(key(ix, iz), hs);
       }
     }
     if (stand.size < 12) continue;              // nothing to say about a solid block
@@ -238,29 +284,40 @@ const pockets = await p.evaluate(() => {
      * step back was not. That is what a step-up limit does — you walk down off
      * a ledge you cannot climb, or onto a floor whose edge you cannot recross.
      *
-     * So the check is now exactly that: for every pair of neighbouring cells a
-     * body can stand in, is the step possible in BOTH directions? Every fault
-     * tonight was one of these. Frame-free, seed-free, and it does not care
-     * about garden.
+     * So: from every height a body can stand at in a cell, try the step to
+     * each neighbour. If it goes, the step BACK is tried from where it landed.
+     * If it does not go, it is one-way only if some body standing in the
+     * neighbour can step the other way AND arrive at this same level — under
+     * a floor and on it are different places.
      */
     const oneWay = [];
-    for (const k of stand) {
+    for (const [k, hsHere] of stand) {
       const [ix, iz] = k.split(',').map(Number);
       const here = at(ix, iz);
-      const hf = w.standHeight(here[0], here[1], a.floor !== undefined ? a.floor : a.altar.y);
-      for (const [ox, oz] of [[1, 0], [0, 1]]) {         // each pair once
-        const kk = key(ix + ox, iz + oz);
-        if (!stand.has(kk)) continue;
+      for (const [ox, oz] of [[1, 0], [0, 1], [-1, 0], [0, -1]]) {
+        const hsThere = stand.get(key(ix + ox, iz + oz));
+        if (!hsThere) continue;
         const there = at(ix + ox, iz + oz);
-        const tf = w.standHeight(there[0], there[1], hf);
-        const out1 = canStep(here, there, hf);
-        const back = canStep(there, here, tf);
-        if ((out1 === null) !== (back === null)) {
-          oneWay.push({
-            at: there.map((n) => +n.toFixed(0)),
-            drop: +(tf - hf).toFixed(2),
-            way: out1 === null ? 'in only' : 'out only',
-          });
+        for (const hf of hsHere) {
+          const out1 = canStep(here, there, hf);
+          let back = null;
+          if (out1 !== null) {
+            // the way back may land you on a kerb within a step of where you
+            // began, which is still home: only an impossible step is a trap
+            back = canStep(there, here, out1);
+          } else {
+            for (const tf of hsThere) {
+              const r2 = canStep(there, here, tf);
+              if (r2 !== null && Math.abs(r2 - hf) < 0.3) { back = r2; break; }
+            }
+          }
+          if ((out1 === null) !== (back === null)) {
+            oneWay.push({
+              at: there.map((n) => +n.toFixed(0)),
+              drop: +((out1 !== null ? out1 : hsThere[0]) - hf).toFixed(2),
+              way: out1 === null ? 'in only' : 'out only',
+            });
+          }
         }
       }
     }
