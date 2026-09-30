@@ -15,6 +15,7 @@ import { TAU } from '../../engine/math/MathUtils.js';
 import { PEOPLE, buildSeated, buildStanding } from '../npc/Archetypes.js';
 import { buildIskconCampus } from './IskconCampus.js';
 import { buildShahji } from './ShahjiMandir.js';
+import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
 
@@ -7198,7 +7199,30 @@ const BUILDERS = {
 
   /** Rangaji: a tall South Indian gopuram, the eastern skyline marker. */
   /** Rangaji — the only Dravidian temple in Braj, and built to Growse's figures. */
-  'temple-gopuram': (args) => buildRangaji(args),
+  /**
+   * Sri Rangji Mandir at full size — the 236 x 135 m temple-city, its five
+   * rings, gopurams, north-Indian gatehouse, tank, garden and forecourt — in
+   * RangajiMandir.js. The half-size builder below it is no longer used.
+   */
+  'temple-gopuram': ({ loc, b, ground, rng, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const r = buildRangajiCity({ b, loc, ground, terrain, colliders, rng, h: { cuspedArch, ribbedDome, tint } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const V = p(r.hall.lx, r.hall.lz), door = p(r.hall.door[0], r.hall.door[1]);
+    return {
+      altarY: r.altar.y - ground,
+      colliders,
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.hall.floor,
+        volume: { x: V[0], z: V[1], hw: r.hall.hw, hd: r.hall.hd, rot, door },
+      },
+    };
+  },
 
   'temple-gopuram-plain': ({ loc, b, ground }) => {
     const { w, d, h, color, accent } = loc.build;

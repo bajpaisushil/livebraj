@@ -239,8 +239,16 @@ export const LANDMARKS = [
     id: 'rangaji', match: ['रंगनाथ', 'Ranganath', 'Rangaji'],
     name: 'Shri Rangaji Mandir', hindi: 'श्री रंगनाथ मंदिर',
     type: 'temple', deity: 'Shri Ranganath Ji', icon: 'temple',
-    build: { kind: 'temple-gopuram', w: 70, d: 110, h: 28, color: '#e4d8c0', accent: '#c05a33' },
-    rot: Math.PI * 0.5, radius: 46, district: 'temple-quarter',
+    /*
+     * At full size now (docs/research/rangaji.md): Growse's outer walls,
+     * "773 feet in length by 440 in breadth" = 236 x 135 m, the long axis on
+     * OSM's 89.3 bearing with the principal gate WEST (+lz in the box frame),
+     * and a compound that takes in the walls and the west forecourt. It was
+     * built at half this size to fit the town already there.
+     */
+    build: { kind: 'temple-gopuram', w: 135, d: 236, h: 35, color: '#ae8a54', accent: '#ddd3be', measured: true },
+    rot: 89.3 * Math.PI / 180, radius: 46, district: 'temple-quarter',
+    compound: { lx0: -68.5, lx1: 68.5, lz0: -120, lz1: 170 },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
     fallback: [27.57530, 77.69160],
   },

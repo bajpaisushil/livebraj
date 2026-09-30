@@ -3187,3 +3187,42 @@ statues, and says so. Checks: platforms, halls, deities, arches (after giving
 the walls their real tops — the roofline kiosks were being judged against an
 infinitely tall verandah wall), temples (the hall volume on its walls' centre
 lines), steps, interior, nav-smoke.
+
+## 2026-09-30 — Sri Rangji Mandir at full size
+
+It was built at half size — "Growse's enclosure, halved ... rather than
+forced to 236 x 134 and pushed through the neighbours". `RangajiMandir.js`
+builds it at Growse's 773 x 440 ft on OSM's 89.3 bearing, the principal gate
+west, with a compound keep-out that clears the town from the walls and the
+west forecourt:
+
+- five rings of buff sandstone, the nest pushed 31 m west as the satellite
+  measures it (the inner rings are ±3 m readings and say so), cloisters of
+  square piers on 0.9 m plinths with yali brackets and red inscription bands,
+  the inner court's shafts red-and-white striped (the checker; which court is
+  INFERRED);
+- the seven-tala west gopuram (~35 m, ESTIMATED — and NOT the 38.1 m of
+  Pushkar's Rangji, which the checker warns will leak in) and the five-tala
+  east one, each a plain battered stone base with a heavy yali-corbelled
+  cornice under ivory talas with kuta and sala friezes, one grille window a
+  tala, leaning corner figures, mould streaks, one small Vaishnava emblem, and
+  the oblong horn-ended barrel-vaulted sala crest with seven gold pot-kalashas,
+  flag and lightning conductor; painted elephants at the west steps; two small
+  three-tala gates with five kalashas and painted surrounds on the axis (the
+  checker: not the survey's symmetrical pairs);
+- the 28.35 m north-Indian gatehouse astride the west wall: the great cusped
+  arch with its studded doors, chhajjas on 42 serpentine brackets, the 3 + 5 +
+  3 gallery, the five-arch crowning pavilion, and ONE bangaldar roof with
+  corner finials — the checker's correction of the survey's "ribbed dome";
+- the sanctum mandapa with its polychrome shrine parapet and the small
+  vimana with its horseshoe-arched apsidal gable, "emphatically NOT a tall
+  tower"; the gilded, ring-collared 18.3 m flagstaff with two guy wires in the
+  inner court; the square shrine with a white ribbed dome and a big Hanuman;
+- the tank court with green algal water, maroon step band, stepped ghats,
+  two chhatri kiosks and a cusped arcade — on a raised terrace, because the
+  12 m terrain cannot hold a sunken pit (queued); the garden; the turquoise
+  pool on the axis; the east gate;
+- the west forecourt with the rath shed, stalls, trees, a bus and cars.
+
+Checks all green first time (arches, platforms, halls, deities, steps,
+stairs, temples, nav-smoke, walls, houses, interior, gates).

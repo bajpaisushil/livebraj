@@ -91,11 +91,16 @@ searching the backlog for it. That is the failure this file exists to stop.*
    in docs/research/iskcon-krishna-balaram.md, then photographs and OSM —
    then build, photograph, measure. Next after Start from here ships.
 
-4. **Eight surveyed temples — Shahji BUILT 2026-09-30, seven to go.** Each
+4. **Eight surveyed temples — Shahji and Rangaji BUILT 2026-09-30, six to go.** Each
    gets built from its survey AND its checker's corrections (re-paired
    correctly 2026-09-30 — see the backlog), photographed, and measured against
-   the survey's own numbers. ~~Shahji~~ · Rangaji · Radha Vallabh · Madan
+   the survey's own numbers. ~~Shahji~~ · ~~Rangaji~~ · Radha Vallabh · Madan
    Mohan · Radha Raman · Radha Damodar · Radha Gopinath · Jugal Kishore.
+   Rangaji's open items, queued: the tank is on a raised terrace because the
+   terrain cannot yet hold a sunken pit (see 19); the Sheesh Mahal, the rath
+   in its shed, and the Brahmotsav garden 558 m south (OSM way 99427181) are
+   not built; the gopuram count beyond the two principal ones is unresolved;
+   the blue range by the tank is not given the temple's fabric.
    Shahji's open questions, queued: the Basanti Kamra at the court's east end
    (the checker: it may carry a dome — untested); the rooftop statues'
    individual poses; the heights, which rest on one 1883 phrase.
@@ -161,6 +166,11 @@ searching the backlog for it. That is the failure this file exists to stop.*
     summer) — jets and light, with its music; the Satsang Bhavan at its true
     ~87 m and ~187 m; the 87 x 34 m hall north of the fountain; the parterre
     beds. The avenue's line and the fountain's centre are INFERRED.
+19. **Holes in the terrain for sunken things.** The height field is 12 m to
+    a cell and the ground mesh 22 m to a quad, so nothing can be sunk below
+    grade: Rangaji's tank had to go on a terrace. Wanted: a location declares
+    a basin, the ground mesh drops the quads it covers, and the builder draws
+    the exact complement — the same will serve every kund in Braj.
 18. **Every dome, spire and tree was drawn inside out — FIXED 2026-09-30.**
     Found building ISKCON: shikhara(), dome(), ribbedDome() and the tree
     canopy blob() wound their ring quads to face INWARD, and those meshes are

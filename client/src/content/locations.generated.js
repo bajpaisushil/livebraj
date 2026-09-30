@@ -552,9 +552,10 @@ export const LOCATIONS = [
     "type": "temple",
     "district": "temple-quarter",
     "grounds": null,
+    "compound": { "lx0": -68.5, "lx1": 68.5, "lz0": -120, "lz1": 170 },
     "pos": [1212, -261.24],
     "geo": [27.582338, 77.702775],
-    "rot": 1.5707963267948966,
+    "rot": 1.5585790891540153,
     "radius": 46,
     "icon": "temple",
     "deity": "Shri Ranganath Ji",
@@ -566,11 +567,12 @@ export const LOCATIONS = [
     ],
     "build": {
       "kind": "temple-gopuram",
-      "w": 70,
-      "d": 110,
-      "h": 28,
-      "color": "#e4d8c0",
-      "accent": "#c05a33"
+      "w": 135,
+      "d": 236,
+      "h": 35,
+      "color": "#ae8a54",
+      "accent": "#ddd3be",
+      "measured": true
     },
     "osm": "श्री रंगनाथ मंदिर"
   },
