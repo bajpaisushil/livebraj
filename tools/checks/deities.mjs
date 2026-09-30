@@ -42,6 +42,26 @@ const r = await p.evaluate(async () => {
   const THREE = await import('three');
   const out = { panels: [], manifest: [], occluded: [], sides: [] };
 
+  /*
+   * ASK THIS QUESTION DURING DARSHAN HOURS.
+   *
+   * "Nothing stands between the devotee and the Deity" is only true while the
+   * temple is open. After 21:00 Braj time a curtain stands between them on
+   * purpose, and this check has no business calling that a fault — it ran at
+   * 21:01 IST and reported Night:radha-damodar as an obstruction, which is
+   * the night veil doing exactly its job.
+   *
+   * So the clock is pinned to the middle of the afternoon for the sightline
+   * probe and put back afterwards. A check that passes by day and fails by
+   * night is not testing the thing it names.
+   */
+  const _liveWas = ctx.live && ctx.live.vrindavanTime
+    ? ctx.live.vrindavanTime.bind(ctx.live) : null;
+  const _settingWas = ctx.state.settings.liveTime;
+  if (ctx.live) ctx.live.vrindavanTime = () => ({ decimal: 13, hour: 13, minute: 0, label: '13:00' });
+  ctx.state.settings.liveTime = true;
+  if (ctx.curtains && ctx.curtains._applyNight) ctx.curtains._applyNight(ctx);
+
   for (const [id, entry] of Object.entries(DEITIES || {})) {
     for (const a of entry.altars || []) {
       out.manifest.push({ id, name: a.name, side: a.side || 0, hasFile: !!a.file });
@@ -113,6 +133,11 @@ const r = await p.evaluate(async () => {
       }
     }
   }
+  // the sightline probe is done; give the town its own clock back
+  if (_liveWas && ctx.live) ctx.live.vrindavanTime = _liveWas;
+  ctx.state.settings.liveTime = _settingWas;
+  if (ctx.curtains && ctx.curtains._applyNight) ctx.curtains._applyNight(ctx);
+
   /*
    * You must not be able to walk into the Deities, and EVERY altar must be
    * veiled at night — not just the temple's middle one.

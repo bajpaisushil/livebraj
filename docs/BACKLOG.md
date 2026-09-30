@@ -2629,3 +2629,44 @@ position change" assertion and fail the person holding the phone. 26/26.
 What is still missing is a reason for (1) and (2) to be needed at all. Every
 `[player] unstuck from X Z` in the console is a geometry bug with a
 coordinate attached, and nobody has yet read one back.
+
+## 2026-09-29 — The curtains proved themselves by breaking a test
+
+> "i hope in every temple it's added like cron such that at 4am curtains auto
+> open and 9pm auto close even if user is in front of deities?"
+
+Yes, and it demonstrated it without being asked. The suite failed with
+`Night:radha-damodar` blocking the sightline to the Deity. The clock said
+**21:01 IST**. The temples had shut one minute earlier, on their own, while a
+check happened to be looking at one.
+
+So the product was right and the CHECK was wrong. "Nothing stands between the
+devotee and the Deity" is only true during darshan hours; after 21:00 a
+curtain stands between them on purpose. That probe now pins the clock to
+13:00 and restores it afterwards. A check that passes by day and fails by
+night is not testing the thing it names — the same class as the fixed sleeps
+found earlier, where a test depended on ambient state it never controlled.
+
+### How the coverage is actually guaranteed
+
+Not by a list of temples, which would rot. `Curtain` traverses the WHOLE
+SCENE for meshes named `Night:`, so a temple is covered the moment its
+builder emits one. And `deities` asserts `unveiled === 0` across every
+location with an altar, counting per-ALTAR rather than per-temple — which is
+how "curtains only cover the centre deities in iskcon" was caught before.
+
+It re-checks once a second, every frame, and applies on change with no
+proximity condition anywhere in it. That is what makes it a clock and not a
+trigger.
+
+It reads Vrindavan's wall clock through LiveConditions, not the device's, so
+a pilgrim opening this abroad still finds the temples open when they are open
+in Braj.
+
+### One thing I nearly did badly
+
+I wrote a fresh set of hour-boundary assertions before noticing deities.mjs
+ALREADY had them, and more thorough ones — 0, 3.0, 3.99, 4.0, 4.5, 9, 15,
+20.99, 21.0, 23.5. Removed mine rather than leave two tests drifting apart.
+Worth a look before adding a check: this file is long enough that the
+duplicate only surfaced as "Identifier 'hours' has already been declared".
