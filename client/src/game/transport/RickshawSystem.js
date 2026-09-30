@@ -418,7 +418,21 @@ export class RickshawSystem {
        * falls back to the plan; after that `r.mps` is what the ride is really
        * doing and the countdown converges on the truth instead of running out.
        */
-      const rate = r.mps && r.t > 1.5 ? r.mps : base * m;
+      /*
+       * ...weighted by how much of the journey the measurement has seen.
+       *
+       * Twenty seconds into the Chhatikara run he has covered six per cent of
+       * 5.5 km, most of it the crawl out of the crossing, and quoting that as
+       * the whole ride promised five minutes for a journey that took three and
+       * a bit — rickshaw.mjs's "countdown is not a work of fiction", which then
+       * passed or failed on where the traffic happened to stand. What he has
+       * done describes the rest of the ride in proportion to how much of it is
+       * behind him; until then the pace he is actually being driven at (the
+       * agreed pace, jaldi and any catching up) is the better evidence.
+       */
+      const planned = Math.min(RIDE_CEILING, base * m * (r.catchup || 1));
+      const seen = r.total > 0 ? Math.min(1, (r.metres / r.total) * 2.5) : 1;
+      const rate = r.mps && r.t > 1.5 ? seen * r.mps + (1 - seen) * planned : base * m;
       /*
        * Never quote longer than the promise. `RIDE_MAX_S` is enforced — the
        * driver finds more pace when the measurement says he will overrun — so

@@ -163,9 +163,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
 10. **Offline on the web.** No service worker or manifest, so the browser
     build dies without a network while the APK does not. Would also make the
     site installable to a home screen.
-11. **Fixed sleeps in the checks** — `chatter`, `cheats`, `dpad-dir` and a
-    dozen probe tools still wait on a clock instead of a condition. This class
-    caused every intermittent failure found so far.
+11. **Fixed sleeps in the checks** — `chatter`, `dpad-dir`, `traffic` (its
+    "vehicles rarely end up in the same place" runs 45 s of wall clock and
+    fails under a parallel suite, passes alone) and a dozen probe tools still
+    wait on a clock instead of a condition. This class caused every
+    intermittent failure found so far. **`cheats` done 2026-09-30:** its jaldi
+    and map-open rides now run Chhatikara to ISKCON in fixed steps over
+    20-second stretches, and the rath test moves passing traffic on before
+    asking what it is offered (5/5 alone, green in parallel).
 
 12. **The ghats stand in town with no river in sight.** Found photographing
     Kaliya Ghat for the arch fix. Research first, per ghat, what is actually

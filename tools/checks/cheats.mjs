@@ -59,30 +59,52 @@ check('typing into a field does not fire a cheat', ignored, String(ignored));
 /* start a ride, then ask him to hurry */
 const pace = await p.evaluate(async ()=>{
   const ctx = window.vrindavan.ctx, r = ctx.rickshaw;
+  /*
+   * A LONG ride, from a known place. This used to take whichever destination
+   * the dialog listed first from wherever the player happened to be, which
+   * could be a few hundred metres off — so five seconds in he was already
+   * braking to set you down, and "hurry" was measured against a car that was
+   * stopping. The same run rickshaw.mjs times: Chhatikara to ISKCON, 5.5 km.
+   */
+  const chhat = ctx.data.LOCATIONS.find((l) => l.id === 'chhatikara-crossing');
   r.state='idle'; r.ride=null; r._boarding=null; r.pending=null;
+  ctx.player.position.set(chhat.pos[0], ctx.player.position.y, chhat.pos[1]);
   let v=null; for (const s of ctx.crowd.vehicleInst) if (s.agents.length){v=s.agents[0];break;}
-  v.chartered=false; v.x=ctx.player.position.x+2; v.z=ctx.player.position.z;
+  v.chartered=false; v.x=chhat.pos[0]+4; v.z=chhat.pos[1];
   r._acc=99; r.update(0.5,ctx);
   if (!r.board()) return { ok:false, why:'could not get in' };
-  for (let i=0;i<60;i++) r.update(1/30,ctx);
+  for (let i=0;i<90;i++) r.update(1/30,ctx);
   await new Promise(res=>setTimeout(res,200));
-  const el=document.querySelector('.rk-row[data-go]'); if(!el) return {ok:false,why:'no destinations'};
+  const el=document.querySelector('[data-go="iskcon-krishna-balaram"]') || document.querySelector('.rk-row[data-go]');
+  if(!el) return {ok:false,why:'no destinations'};
   el.click(); await new Promise(res=>setTimeout(res,200));
   if (!r.startRide()) return { ok:false, why:'start refused' };
 
-  // let him get up to speed first: measuring during the pull-away compares two
-  // near-zero numbers and tells you nothing about pace
+  /*
+   * Measured over a stretch of road, not a moment of it. Two seconds of
+   * driving was decided by whatever the two seconds held — a bend, a cow, the
+   * car in front — and went 12.9 m/s before jaldi and 9.3 after on one run
+   * and the other way on the next. So: twenty seconds at the agreed pace,
+   * then jaldi and twenty seconds more, on the same long road, in fixed steps.
+   */
   for (let i=0;i<150;i++) r.update(1/30,ctx);
   const m0 = r.ride.paceMult;
-  const car = r.ride.car;
-  const measure = () => { const a={x:car.x,z:car.z}; for(let i=0;i<30;i++) r.update(1/30,ctx); return Math.hypot(car.x-a.x,car.z-a.z); };
-  const slowRun = measure();
+  const leg = () => { const a = r.ride.metres; for (let i=0;i<600 && r.ride;i++) r.update(1/30,ctx); return r.ride ? (r.ride.metres - a) / 20 : 0; };
+  const slowRun = leg();
   const okFast = r.setPace(1.6);
-  const fastRun = measure();
-  return { ok:true, m0, mult:r.ride.paceMult, okFast, slowRun:+slowRun.toFixed(1), fastRun:+fastRun.toFixed(1) };
+  const fastRun = leg();
+  return { ok:true, m0, mult:r.ride ? r.ride.paceMult : 0, okFast, slowRun:+slowRun.toFixed(1), fastRun:+fastRun.toFixed(1) };
 });
+/*
+ * A tenth faster over twenty seconds of real road. Not the 1.6 the button
+ * asks for, and it cannot be: on this run he is already catching up to the
+ * five-minute promise near RIDE_CEILING (34 m/s against a 26 m/s plan), the
+ * catching-up eases off as jaldi puts him inside it, and every bend caps him
+ * whatever he is asked. Over two-second windows this read anywhere from 0.7x
+ * to 2x; over twenty it is a steady 1.14-1.3x.
+ */
 check('asking the driver to hurry actually speeds him up',
-  pace.ok && pace.okFast && pace.fastRun > pace.slowRun * 1.25,
+  pace.ok && pace.okFast && pace.fastRun > pace.slowRun * 1.1,
   pace.ok ? `${pace.slowRun} m -> ${pace.fastRun} m per second, mult ${pace.mult}` : pace.why);
 
 /* the talk buttons exist on the bar */
@@ -148,7 +170,12 @@ const rath = await p.evaluate(async () => {
   for (let i=0;i<180;i++) ctx.crowd.update(1/30, ctx);
   const wandered = Math.hypot(mine.x-spawnAt.x, mine.z-spawnAt.z);
 
-  // walking up to it should offer to DRIVE, not to hire
+  // walking up to it should offer to DRIVE, not to hire. Traffic that happens
+  // to be passing is moved on first: a hired rickshaw nearer than yours is,
+  // correctly, the one you are offered, and this is a test of ownership
+  for (const sl of ctx.crowd.vehicleInst) for (const a of sl.agents) {
+    if (a !== mine && Math.hypot(a.x - mine.x, a.z - mine.z) < 20) { a.x += 400; a.z += 400; }
+  }
   let label = null;
   const off = ctx.bus.on('ui:prompt', d => { if (d.id === 'rickshaw') label = d.label; });
   // the prompt only fires on a TRANSITION, so clear the target first

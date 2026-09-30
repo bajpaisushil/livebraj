@@ -3305,3 +3305,34 @@ Still open, queued: the two swan staircases (the photographs show a long flight
 up each building's front, rising away from the path, not the double quarter
 turn built); the walk under the arch is blank-walled where the towers have
 cusped openings; the museum as a room; the temple block's 35.3 m length.
+
+2026-09-30 — the user asked "how lon g?" (status). Answered: ISKCON fixes live
+(eadc764); ride-check fixes ~15 min; ISKCON staircases ~1 h; Radha Vallabh ~2 h;
+the other five surveyed temples ~1.5-2 h each; ~10-12 h for all of it.
+
+## 2026-09-30 — the full suite after the ISKCON rebuild: two checks honest again
+
+Full suite after eadc764: 29/32. `verges` passed alone (flake). `rickshaw` and
+`cheats` failed alone too, and passed on the previous commit's world code, so
+they were looked at rather than waved through.
+
+- **The ride countdown told a story.** Chhatikara to ISKCON, 5.5 km: at 20 s
+  the HUD said "about 5 min" and the ride took 3 min 20 s more, on the old code
+  and the new alike (measured in a standalone probe). The HUD quoted the pace
+  MEASURED SO FAR, and twenty seconds in that is 6% of the ride, mostly the
+  crawl out of the crossing. The check passed or failed on where the traffic
+  happened to stand — and my new ISKCON colliders reshuffle the traffic's
+  spawn draw, which is why it flipped. Now the measurement is weighted by the
+  share of the journey it has seen, the agreed pace (with jaldi and any
+  catching up) standing in for the rest: "about 3 min" at 20 s for 200 s to go.
+  `rickshaw` 3/3 alone and green in parallel.
+- **`cheats` measured a moment, not a ride.** Its jaldi and map-open tests
+  took the first destination the dialog listed, often a few hundred metres
+  off, so the driver was braking to set you down while being asked to hurry;
+  and two-second windows were decided by one bend. Now: the long Chhatikara to
+  ISKCON ride in fixed steps, 20-second stretches, jaldi judged at 1.1x (the
+  catch-up to the five-minute promise already runs him near the 34 m/s
+  ceiling, so 1.6x is not on offer on that road). The rath test moves passing
+  traffic away before asking what it is offered: a hired rickshaw nearer than
+  yours is correctly the one offered. 5/5 alone, green in parallel.
+- `traffic` still fails under the parallel suite, passes alone — queued (11).
