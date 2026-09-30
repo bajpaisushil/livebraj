@@ -316,6 +316,23 @@ export class RickshawSystem {
       // outlived the system.
       this._keys = (e) => {
         if (e.repeat) return;
+        /*
+         * NEVER WHILE SOMEONE IS TYPING, and only in the world.
+         *
+         * This listener sits on window, so it heard every key typed into the
+         * map's search box. Searching "Radha Raman" mid-ride took the wheel at
+         * the d; any name with an s in it — Shahji, Seva Kunj, ISKCON —
+         * stopped the ride; and with the d swallowed the search read "Raha
+         * Raman", found nothing, and "Start from here" had nothing to start
+         * from. The same fault UISystem's `m` had, in a listener that never
+         * got the guard. The ride bar these keys drive is only on screen in
+         * the world, so they only act there.
+         */
+        const t = e.target;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT'
+          || t.isContentEditable)) return;
+        const ui = this.ctx && this.ctx.ui;
+        if (ui && ui.screen && ui.screen !== 'world') return;
         const k = e.key.toLowerCase();
         if (k === 'g' && this.state === 'waiting') { e.preventDefault(); this.startRide(); }
         else if (k === 'd' && (this.state === 'waiting' || this.state === 'riding')) {
@@ -885,6 +902,39 @@ export class RickshawSystem {
     ctx.bus.emit('ui:toast', { title: 'Yahin rok dijiye', sub: 'The driver pulls over.' });
     ctx.bus.emit('sfx', { name: 'rickshawbell' });
     this._finish(true);
+    return true;
+  }
+
+  /**
+   * Out of whatever this is, at once and without ceremony.
+   *
+   * "Start from here" moves you across town, and a ride held on to you
+   * through it: riding or driving, the vehicle sits you back on its seat every
+   * frame, so the placement was undone before it was ever drawn and the
+   * button looked as if it did nothing. This lets go of the vehicle, the fare
+   * dialog, the ride bar, the controls and the camera from any beat — walking
+   * over, bargaining, waiting, riding or at the wheel — so the caller can put
+   * you somewhere else. It says nothing: the caller says where you are.
+   */
+  leave() {
+    const ctx = this.ctx;
+    if (this.state === 'idle') return false;
+    if (this.state === 'riding' || this.state === 'driving') {
+      if (this.ride) this.ride.stopping = true;
+      this._finish(true);
+      return true;
+    }
+    // boarding, offered or waiting: nothing has moved yet
+    if (this.dialog) this.dialog.style.display = 'none';
+    const car = (this._boarding && this._boarding.car) || this.target;
+    if (car) car.chartered = false;
+    this._boarding = null;
+    this.pending = null;
+    this.state = 'idle';
+    this._hideRideHud();
+    this._freeze(ctx, false);
+    if (ctx.player.cancelAction) ctx.player.cancelAction();
+    if (ctx.input) ctx.input.setEnabled(true);
     return true;
   }
 

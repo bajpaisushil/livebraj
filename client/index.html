@@ -336,6 +336,8 @@ input[type=range]{ flex:0 0 132px; accent-color:var(--sindoor); height:22px; }
   max-width:520px; margin:0 auto; display:none; pointer-events:none; z-index:15;
 }
 #ride-hud.show{ display:block; animation:fadeUp .3s var(--ease); }
+/* the ride bar is part of the world view: over the map it covered "Start from here" */
+body:not([data-screen="world"]) #ride-hud{ display:none !important; }
 #ride-hud .rh-card{
   padding:13px 15px 12px; border-radius:var(--r-lg); background:var(--glass);
   border:1px solid rgba(43,29,20,.12); box-shadow:0 10px 34px rgba(43,29,20,.22);

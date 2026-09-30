@@ -798,6 +798,13 @@ export class MapSystem {
      */
     this.sel.querySelector('[data-here]').addEventListener('click', () => {
       const ctx = this.ctx;
+      /*
+       * Out of any vehicle FIRST. A ride holds you to its seat every frame,
+       * so a placement made mid-ride was undone on the next one — "start from
+       * here not working in map". Same for a pranam or a seated action.
+       */
+      if (ctx.rickshaw && ctx.rickshaw.leave) ctx.rickshaw.leave();
+      if (ctx.player && ctx.player.cancelAction) ctx.player.cancelAction();
       const a = ctx.world && ctx.world.anchors && ctx.world.anchors[loc.id];
       const tx = a && a.darshan ? a.darshan.x : loc.pos[0];
       const tz = a && a.darshan ? a.darshan.z : loc.pos[1];

@@ -418,6 +418,13 @@ export class UI {
       if (el) el.classList.toggle('show', s === name);
     }
     this.el.hud.classList.toggle('show', name === 'world');
+    /*
+     * The screen, on the page, for anything that belongs to the world view
+     * but lives outside #hud. The ride bar is one: it stayed up over the map
+     * mid-ride and sat exactly on "Start from here", so the tap landed on the
+     * ride bar and the button could not be pressed at all.
+     */
+    document.body.dataset.screen = name;
     if (this.el['touch-layer']) this.el['touch-layer'].classList.toggle('on', name === 'world');
     if (this.el.dpad) this.el.dpad.classList.toggle('on', name === 'world');
     this.closeCard();
