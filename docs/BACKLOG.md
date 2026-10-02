@@ -3422,3 +3422,14 @@ temple.
   street door turned onto the lane (123 degrees). nav-smoke: reachable.
 - InteriorSystem: a builder's room may be a `hall` (entered as a temple is, no
   roof cut) and `quiet` (no bell where there is no murti).
+
+## 2026-10-02 — "keep going improving rest that are left"
+
+Sent four times with interruptions. Read as: carry on with what is queued —
+the five surveyed temples still to build (Madan Mohan, Radha Raman, Radha
+Damodar, Radha Gopinath, Jugal Kishore), then the rest of the queue. Run as a
+workflow: each temple measured off OSM and imagery, built in its own
+worktree, adversarially reviewed against its survey and checker, then
+integrated and checked here one at a time. First, the checks were made safe
+to run side by side: 25 of them bound fixed ports and two copies of one
+collided; they now take any free port (two `halls` runs at once, both 6/6).

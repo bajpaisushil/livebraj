@@ -12,7 +12,8 @@ const T = { '.html':'text/html; charset=utf-8','.js':'text/javascript; charset=u
 const server = http.createServer((q,r)=>{const u=decodeURIComponent(q.url.split('?')[0]);const f=path.join(ROOT,u==='/'?'index.html':u);
  if(!f.startsWith(ROOT)||!fs.existsSync(f)||fs.statSync(f).isDirectory()){r.writeHead(404);r.end();return;}
  r.writeHead(200,{'content-type':T[path.extname(f)]||'application/octet-stream'});fs.createReadStream(f).pipe(r);});
-await new Promise(r=>server.listen(8799,r));
+await new Promise(r=>server.listen(0, r));
+const __PORT = server.address().port;   // any free port, so parallel runs never collide
 
 const res = []; const errors = [];
 const check=(n,pass,d)=>{res.push(pass);console.log(`  ${pass?'PASS':'FAIL'}  ${n}${d?'  — '+d:''}`);};
@@ -21,7 +22,7 @@ const b = await chromium.launch({ args:['--use-angle=swiftshader','--enable-unsa
 const p = await b.newPage({ viewport:{width:390,height:844}, hasTouch:true });
 p.on('pageerror', e=>errors.push(e.message));
 p.on('console', m=>{const t=m.text(); if(m.type()==='error' && !/vibrate/.test(t)) errors.push(t);});
-await p.goto('http://localhost:8799/',{waitUntil:'networkidle'});
+await p.goto(`http://localhost:${__PORT}/`,{waitUntil:'networkidle'});
 await p.waitForFunction(()=>window.vrindavan?.ctx?.rickshaw && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.cameraRig,null,{timeout:90000});
 await p.evaluate(()=>window.vrindavan.ctx.ui.show('world'));
 await p.waitForTimeout(800);

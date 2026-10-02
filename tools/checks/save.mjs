@@ -22,7 +22,8 @@ const server = http.createServer((q, r) => {
   r.writeHead(200, { 'content-type': T[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(r);
 });
-await new Promise((r) => server.listen(8793, r));
+await new Promise((r) => server.listen(0, r));
+const __PORT = server.address().port;   // any free port, so parallel runs never collide
 
 const results = [];
 const errors = [];
@@ -42,7 +43,7 @@ p.on('console', (m) => {
 p.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
 
 const boot = async () => {
-  await p.goto('http://localhost:8793/', { waitUntil: 'networkidle' });
+  await p.goto(`http://localhost:${__PORT}/`, { waitUntil: 'networkidle' });
   await p.waitForFunction(() => window.vrindavan?.ctx?.player && window.vrindavan?.ctx?.ui, null, { timeout: 60000 });
   await p.evaluate(() => window.vrindavan.ctx.ui.show('world'));
   await p.waitForTimeout(700);

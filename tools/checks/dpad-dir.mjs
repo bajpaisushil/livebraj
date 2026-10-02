@@ -20,14 +20,15 @@ const server = http.createServer((q, r) => {
   r.writeHead(200, { 'content-type': T[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(r);
 });
-await new Promise((r) => server.listen(8790, r));
+await new Promise((r) => server.listen(0, r));
+const __PORT = server.address().port;   // any free port, so parallel runs never collide
 
 const b = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const p = await b.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
 const cdp = await p.context().newCDPSession(p);
 const errs = [];
 p.on('pageerror', (e) => errs.push(e.message));
-await p.goto('http://localhost:8790/', { waitUntil: 'networkidle' });
+await p.goto(`http://localhost:${__PORT}/`, { waitUntil: 'networkidle' });
 await p.waitForFunction(() => window.vrindavan?.ctx?.player && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.cameraRig, null, { timeout: 60000 });
 await p.evaluate(() => window.vrindavan.ctx.ui.show('world'));
 await p.waitForTimeout(600);

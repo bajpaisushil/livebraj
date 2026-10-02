@@ -3,7 +3,7 @@
  * loc.pos, turned by loc.rot), so the views survive the site being moved or
  * turned. Heights are over the terrain under the eye / the target.
  *
- *   OUT=dir node tools/checks/_siteshots.mjs <locId> <views.json> [name ...]
+ *   OUT=dir [BASE_URL=http://localhost:8091/] node tools/checks/_siteshots.mjs <locId> <views.json> [name ...]
  *
  * views.json: [[name, [lx, h, lz], [lx, h, lz], {clip?: roomId}], ...]
  */
@@ -16,7 +16,8 @@ const p = await b.newPage({ viewport: { width: 720, height: 480 } });
 const errors = [];
 p.on('pageerror', (e) => errors.push(String(e)));
 p.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
-await p.goto('http://localhost:8080/', { waitUntil: 'networkidle' });
+// BASE_URL lets a worktree point this at its own dev server
+await p.goto(process.env.BASE_URL || 'http://localhost:8080/', { waitUntil: 'networkidle' });
 await p.waitForFunction(() => window.vrindavan?.ctx?.world && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.interior, null, { timeout: 220000 });
 await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx;

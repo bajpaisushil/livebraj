@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../client');
-const PORT = 8796;
+/* port: see __PORT */
 const T = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.woff2': 'font/woff2' };
 const server = http.createServer((q, r) => {
@@ -37,7 +37,8 @@ const server = http.createServer((q, r) => {
   r.writeHead(200, { 'content-type': T[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(r);
 });
-await new Promise((r) => server.listen(PORT, r));
+await new Promise((r) => server.listen(0, r));
+const __PORT = server.address().port;   // any free port, so parallel runs never collide
 
 const results = [];
 const errors = [];
@@ -53,7 +54,7 @@ const page = await browser.newPage({ viewport: { width: 390, height: 844 }, devi
 page.setDefaultTimeout(180000);
 page.on('console', (m) => { const t = m.text(); if (m.type() === 'error' && !/navigator\.vibrate/.test(t)) errors.push(t); });
 page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
-await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
+await page.goto(`http://localhost:${__PORT}/`, { waitUntil: 'networkidle' });
 await page.waitForFunction(() => window.vrindavan?.ctx?.player && window.vrindavan?.ctx?.interior
   && window.vrindavan?.ctx?.world?._ready && window.vrindavan?.ctx?.ui, null, { timeout: 180000 });
 await page.evaluate(() => window.vrindavan.ctx.ui.show('world'));

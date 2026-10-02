@@ -43,7 +43,8 @@ const server = http.createServer((q, r) => {
   r.writeHead(200, { 'content-type': T[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(r);
 });
-await new Promise((r) => server.listen(8845, r));
+await new Promise((r) => server.listen(0, r));
+const __PORT = server.address().port;   // any free port, so parallel runs never collide
 
 const results = [];
 const check = (n, pass, d) => { results.push(pass); console.log(`  ${pass ? 'PASS' : 'FAIL'}  ${n}${d ? '  — ' + d : ''}`); };
@@ -51,7 +52,7 @@ const errors = [];
 const b = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const p = await b.newPage({ viewport: { width: 400, height: 300 } });
 p.on('pageerror', (e) => errors.push(String(e).slice(0, 160)));
-await p.goto('http://localhost:8845/', { waitUntil: 'networkidle' });
+await p.goto(`http://localhost:${__PORT}/`, { waitUntil: 'networkidle' });
 await p.waitForFunction(() => window.vrindavan?.ctx?.player && window.vrindavan?.ctx?.ui, null, { timeout: 200000 });
 await p.evaluate(() => window.vrindavan.ctx.ui.show('world'));
 await p.waitForTimeout(900);

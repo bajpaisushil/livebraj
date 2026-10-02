@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../client');
-const PORT = 8787;
+/* port: see __PORT */
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript',
   '.css': 'text/css', '.json': 'application/json', '.png': 'image/png',
@@ -30,8 +30,9 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(file).pipe(res);
 });
 
-await new Promise((r) => server.listen(PORT, r));
-console.log(`serving ${ROOT} on :${PORT}\n`);
+await new Promise((r) => server.listen(0, r));
+const __PORT = server.address().port;   // any free port, so parallel runs never collide
+console.log(`serving ${ROOT} on :${__PORT}\n`);
 
 const browser = await chromium.launch({
   args: [
@@ -69,7 +70,7 @@ page.on('requestfailed', (r) => {
 
 console.log('booting…');
 const t0 = Date.now();
-await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'load', timeout: 60000 });
+await page.goto(`http://localhost:${__PORT}/`, { waitUntil: 'load', timeout: 60000 });
 
 // wait for the world to finish building
 let state = null;

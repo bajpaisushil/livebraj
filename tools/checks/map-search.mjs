@@ -17,11 +17,12 @@ const server = http.createServer((req, res) => {
   res.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(res);
 });
-await new Promise((r) => server.listen(8789, r));
+await new Promise((r) => server.listen(0, r));
+const __PORT = server.address().port;   // any free port, so parallel runs never collide
 
 
-const PORT = 8789;
-const URL = `http://localhost:${PORT}/`;
+/* port: see __PORT */
+const URL = `http://localhost:${__PORT}/`;
 const errors = [];
 const results = [];
 function check(name, pass, detail) {
