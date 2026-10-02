@@ -53,6 +53,19 @@ for (const [name, eye, look, opts = {}] of VIEWS) {
     cam.fov = opts.fov || 62; cam.near = 0.1; cam.far = 4000; cam.updateProjectionMatrix();
     cam.position.set(ex, g + eye[1], ez);
     cam.lookAt(tx, gt + look[1], tz);
+    /*
+     * The sun goes where the view is, as TimeOfDay.update puts it over the
+     * player in play. The clock is frozen here, so it stayed parked over the
+     * player's start, kilometres off, and every photograph this took was lit
+     * by the sky alone: Radha Raman's sunlit frontispiece measured V29 here
+     * and V46 with the sun brought over it.
+     */
+    if (ctx.time && ctx.time.sun) {
+      const d = ctx.time.sunDir;
+      ctx.time.sun.target.position.set(tx, 0, tz);
+      ctx.time.sun.target.updateMatrixWorld();
+      ctx.time.sun.position.set(tx + d.x * 160, d.y * 160 + 20, tz + d.z * 160);
+    }
     ctx.camera = cam;
     ctx.renderer.render(ctx.scene, cam);
   }, { locId, eye, look, opts });

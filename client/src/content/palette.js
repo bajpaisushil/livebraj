@@ -69,7 +69,18 @@ export const TIME_OF_DAY = {
   },
   day: {
     label: 'Day', hindi: 'दिन',
-    sun: { azimuth: 2.9, elevation: 1.05, color: '#fffaf0', intensity: 2.9 },
+    /*
+     * The sun is SOUTH of the zenith. TimeOfDay points it along (sin az, ., cos
+     * az) with world z running SOUTH, so azimuth 0 is due south, PI/2 east,
+     * PI north. This was 2.9 — bearing 14 degrees, NORTH-north-east, 60 degrees
+     * up — and at Vrindavan's 27.6 N the midday sun is always due south: every
+     * south face in the world stood in its own shadow at noon, which is how
+     * Radha Raman's frontispiece measured half the brightness of its
+     * photographs at the right hue. 0.25 is south-south-east, late morning;
+     * morning (1.92, east-north-east) and evening (4.6, west) already ran the
+     * right way round.
+     */
+    sun: { azimuth: 0.25, elevation: 1.05, color: '#fffaf0', intensity: 2.9 },
     ambient: { sky: '#bfe0f8', ground: '#c9b391', intensity: 1.35 },
     fog: '#dceef8', fogScale: 0.7,
     skyTop: '#2f8ae0', skyMid: '#8ec8f2', skyLow: '#e0f0ea',

@@ -3484,7 +3484,10 @@ written, so Madan Mohan was measured and built here, solo.
 - **The importer now carries `compound`** into locations.generated.js. It never
   did: Radha Vallabh's keep-out (and Madan Mohan's) had been added to the
   generated file by hand and a re-import would have dropped them.
-- **Found: the day sun is in the north** — queued as its own item (QUEUE 4).
+- **Found: the day sun is in the north**, and fixed the same day (QUEUE 4) —
+  together with the photograph tool, which had parked the sun kilometres off
+  and so measured every facade in sky light only. The V29 I first recorded
+  for Radha Raman was mostly the tool; in sun it is V46.
 - **Checks.** New `ghera.mjs` walks in from the Parikrama Marg through both
   gates and courts, up the steps, through the 1.1 m door and the vestibule's
   four steps to the darshan point, tries the platform, and walks out: 9/9.

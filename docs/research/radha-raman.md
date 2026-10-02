@@ -264,12 +264,16 @@ curve); two low cream gadrooned saucer domes behind, their crowns level with
 the gable's apex; four gilt finials to 10.0-10.2 m; the flagstaff to 10.5 m
 with its dark pennant. The CCTV camera and the horn are bolted on (2023).
 
-**Measured against the photographs:** sampled off the render, the frontispiece
-is H31 S36 against the survey's midpoint H30 S37; the neighbour S13 against
-S17 and the gallery S17 against S20 — the hues and saturations hold, and the
-neighbour reads paler and greyer than the temple, as the survey insists. Value
-is about half (V29-37 against V60-79) because the game's day sun is in the
-NORTH (queued: see QUEUE), which leaves every south face in its own shadow.
+**Measured against the photographs:** sampled off the render in sun, the
+frontispiece is H31 S39 V46 against the survey's midpoint H30 S37 V66; the
+gallery S21 V58 against S20 V72; the blank west wall S30 V53 against S27 V79;
+the neighbour S19 V57 against S17 V76 — the hues and saturations hold, the
+neighbour reads paler and greyer than the temple as the survey insists, and
+value runs about a quarter low everywhere, which is the renderer's exposure
+and not this building. The first reading was V29-37 and was wrong for two
+reasons, both fixed: the game's day sun stood in the NORTH, so every south
+face was in its own shadow at noon; and the photograph tool froze the sun
+over the player's start, kilometres off, so it lit nothing it photographed.
 
 **Inside**: the vestibule, then the four steps up (Case's "small flight of four
 steps", taken straight rather than to the right); the court of black and white

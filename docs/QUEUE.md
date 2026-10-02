@@ -145,14 +145,16 @@ searching the backlog for it. That is the failure this file exists to stop.*
    Radha Raman's open items (2026-10-02), queued: the appearance-place shrine
    and Gopala Bhatta's samadhi (sources disagree where); the inner steps' turn
    to the right; the porticos' real colours; the ghera's real plan.
-   **Found while measuring it, queued as its own item: the day sun is in the
-   NORTH.** `palette.js` day: azimuth 2.9 rad with world z south puts the sun
-   at bearing ~14 degrees, 60 degrees up; at 27.6 N the midday sun is always
-   due south. Every south face in the game stands in its own shadow at
-   midday — Radha Raman's frontispiece measures V29-37 against the
-   photographs' V60-79 at the right hue and saturation. Turning it is one
-   number, but it relights the whole world, so it gets photographed across
-   the temples first.
+   ~~**Found while measuring it: the day sun is in the NORTH.**~~ **FIXED
+   2026-10-02.** `palette.js` day: azimuth 2.9 rad with world z south put the
+   sun at bearing ~14 degrees, 60 degrees up; at 27.6 N the midday sun is
+   always due south, so every south face stood in its own shadow at noon. It
+   is 0.25 now (south-south-east, late morning). And the photograph tool
+   (`_siteshots`) froze the sun over the player's start, kilometres away, so
+   every site photograph had been lit by the sky alone; it carries the sun
+   over the view now. Radha Raman's frontispiece: V29 before, V46 after, at
+   the survey's hue and saturation; what remains is a quarter-low exposure
+   across the renderer, not one building.
    Madan Mohan's open items (2026-10-02), queued: the trees in the court north
    of the sanctum; what stands south of the stair below the red building; the
    east approach Growse built in 1875; the choir, sanctum and gateway passage
