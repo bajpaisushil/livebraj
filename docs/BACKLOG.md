@@ -3517,3 +3517,22 @@ written, so Madan Mohan was measured and built here, solo.
   sets him down at the nearest clear spot — here THROUGH the hall's wall into
   the passage beyond, at its ground level. Harmless, surprising; noted for
   whoever next works on Player.js.
+
+## 2026-10-02 — Jugal Kishor at Kesi Ghat; "continue"
+
+- "continue" (with CheatCodes.js open in the editor — the other session's
+  file, not touched). Read as the standing mandate.
+- **Built** in `JugalKishoreMandir.js` (kind `temple-jugal-kishore`) to the
+  1910 ASI plan and the survey's measured sikhara profile with the checker's
+  corrections, placed by an imagery edge scan 6 m from the OSM node. Details:
+  docs/research/jugal-kishore.md, "Built". The old `buildJugalKishore` is
+  removed; `temple-redstone` has no special cases left.
+- **A temple can be closed.** A builder's interior may say `closed: true`; the
+  anchor carries it; `halls` and `temples` leave closed temples out instead of
+  demanding a way in that the place does not have. Jugal Kishor is the only
+  one: ASI opens it each morning to clean, then locks it.
+- **New check `kesi.mjs`** (5/5): up the axial flight to the locked door where
+  darshan is kept, stopped by the door, kept off the plinth from the side.
+- **Fixed on the way:** the sikhara's string courses were true circles at the
+  octagon's corner radius, which stood 0.6 m off its flat faces — floating
+  hoops, seen as dark arcs from below. They follow the tower's own section now.

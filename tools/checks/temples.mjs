@@ -46,6 +46,9 @@ const r = await p.evaluate(() => {
     if (loc.type !== 'temple') continue;
     const [cx, cz] = loc.pos;
     const anchor = w.anchorFor(loc.id);
+    // a temple its builder declares shut has no doorway to find: Jugal Kishor
+    // is locked but for a morning's cleaning. kesi.mjs walks what is true of it
+    if (anchor && anchor.closed) continue;
     // "enterable" here means the world gave it an inside to reach
     const enterable = !!(w.interiors && w.interiors[loc.id])
       || !!(anchor && anchor.floor !== undefined && anchor.altar);

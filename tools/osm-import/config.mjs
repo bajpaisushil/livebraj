@@ -214,10 +214,19 @@ export const LANDMARKS = [
     id: 'jugal-kishore', match: ['Югалы Кишора', 'Jugal Kishore'],
     name: 'Shri Jugal Kishore Mandir', hindi: 'श्री युगल किशोर मंदिर',
     type: 'temple', deity: 'Shri Jugal Kishore', icon: 'temple',
-    build: { kind: 'temple-redstone', w: 26, d: 32, h: 16, color: '#a35540', accent: '#82402e' },
-    rot: Math.PI * 1.5, radius: 22, district: 'ghat-front',
+    /*
+     * At the centre of its masonry as ESRI imagery finds it (an edge scan:
+     * faces at world z -765.4 and -775.9, the 9.5 m octagon on its plinth),
+     * 6 m from OSM node 7288063975. Frame +lx NORTH, +lz EAST, the front.
+     * Build: the 1910 ASI plan's 18.1 m of masonry with its plinth, steps
+     * and platform; the amalaka's top ~23 m up. Measured colours.
+     */
+    at: [27.5869345, 77.6987033],
+    build: { kind: 'temple-jugal-kishore', w: 11, d: 24, h: 24, color: '#6e4140', accent: '#553436', measured: true },
+    rot: -Math.PI * 0.5, radius: 22, district: 'ghat-front',
+    compound: { lx0: -6.2, lx1: 7.6, lz0: -10.4, lz1: 15.4, ring: false },
     interactions: ['darshan', 'pranam', 'story'],
-    fallback: [27.58698, 77.69869],
+    fallback: [27.5869345, 77.6987033],
   },
   {
     id: 'radha-damodar', match: ['Radha Damodara', 'Radha Damodar'],

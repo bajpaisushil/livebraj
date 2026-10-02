@@ -445,9 +445,10 @@ export const LOCATIONS = [
     "type": "temple",
     "district": "ghat-front",
     "grounds": null,
-    "pos": [808.7, -775.49],
-    "geo": [27.586978, 77.69869],
-    "rot": 4.71238898038469,
+    "compound": { "lx0": -6.2, "lx1": 7.6, "lz0": -10.4, "lz1": 15.4, "ring": false },
+    "pos": [810.0, -770.65],
+    "geo": [27.586934, 77.698703],
+    "rot": -1.5707963267948966,
     "radius": 22,
     "icon": "temple",
     "deity": "Shri Jugal Kishore",
@@ -457,12 +458,13 @@ export const LOCATIONS = [
       "story"
     ],
     "build": {
-      "kind": "temple-redstone",
-      "w": 26,
-      "d": 32,
-      "h": 16,
-      "color": "#a35540",
-      "accent": "#82402e"
+      "kind": "temple-jugal-kishore",
+      "w": 11,
+      "d": 24,
+      "h": 24,
+      "color": "#6e4140",
+      "accent": "#553436",
+      "measured": true
     },
     "osm": "Храм Югалы Кишора"
   },

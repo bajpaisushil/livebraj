@@ -19,6 +19,7 @@ import { buildRadhaVallabhMandir } from './RadhaVallabhMandir.js';
 import { buildMadanMohanMandir } from './MadanMohanMandir.js';
 import { buildRadhaRamanMandir } from './RadhaRamanMandir.js';
 import { buildRadhaDamodarMandir } from './RadhaDamodarMandir.js';
+import { buildJugalKishoreMandir } from './JugalKishoreMandir.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
@@ -168,6 +169,9 @@ export function buildLandmarks(ctx, terrain) {
       // a builder that authors several altars says where they are; DeityImages
       // must not be left to work it out from a constant
       if (inner.altars) anchors[loc.id].altars = inner.altars;
+      // a temple that is shut — Jugal Kishor, locked by the ASI but for a
+      // morning's cleaning: darshan is kept at its door, and nobody goes in
+      if (inner.closed) anchors[loc.id].closed = true;
       if (inner.volume) interiors[loc.id] = inner.volume;
       if (out.rooms) rooms.push(...out.rooms.map((r) => ({ ...r, owner: loc.id })));
     } else if (ENTERABLE.has(kind)) {
@@ -3910,157 +3914,6 @@ function buildRangaji({ loc, b, ground, rng }) {
 
 
 /* ================================================================
- * Shri Jugal Kishore Mandir, above Kesi Ghat
- * ================================================================ */
-
-/**
- * A shell, and it should look like one.
- *
- * "A red sandstone shell standing directly above Kesi Ghat with its whole nave
- * gone — you walk up to a tall, roofless-fronted, square sanctum block with a
- * curvilinear tower." Growse measured the choir at 25 FEET SQUARE, slightly
- * larger than the 20 ft choirs of Madan Mohan and Gopinath, and the nave that
- * once preceded it is COMPLETELY DESTROYED, so the standing footprint is
- * essentially that one 7.6 m square block on its plinth.
- *
- * Two details you cannot miss, and both are documented:
- *   - small doorways on BOTH NORTH AND SOUTH as well as the usual east end,
- *     each under a projecting hood carried on EIGHT CLOSELY-SET BRACKETS
- *     CARVED AS ELEPHANTS. Unique in this group.
- *   - a HOLLOW tower. Growse cleared "an accumulation of pigeons' dung more
- *     than four feet deep" from the UPPER ROOM OF THE TOWER, so there is a
- *     real chamber inside the spire above the sanctum.
- *
- * "Daylight now floods a space that was designed to be dark." The nave is
- * marked only by its plinth line, and nothing is roofed over it.
- *
- * And the altar is EMPTY — the Deity is worshipped at Panna. That is handled
- * in `content/altars.js`, not here, but it is why this is a monument and not a
- * temple, and why no gilding is invented for it.
- */
-function buildJugalKishore({ loc, b, ground }) {
-  const { color, accent } = loc.build;
-  const [x, z] = loc.pos;
-  const rot = loc.rot;
-  const cs = Math.cos(rot), sn = Math.sin(rot);
-  const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
-  const colliders = [];
-
-  const CH = 3.8;               // half of Growse's 25 ft
-  const WALL = 1.05;
-  const FL = ground + 1.0;
-  const H = 9.2;                // "a single TALL stone chamber"
-
-  // the plinth, and the line of the lost nave marked on it and nothing more
-  b.box(x, ground - 0.4, z, 26, 1.4, 15, 0xbfae8e, rot);
-  {
-    const nq = p(0, CH + 7.5);
-    b.box(nq[0], ground + 1.0, nq[1], 8.5, 0.5, 14, 0xa8967a, rot);   // the nave's plinth
-    for (const sgn of [-1, 1]) {                                       // stumps of its walls
-      const q = p(sgn * 4.0, CH + 7.5);
-      b.box(q[0], ground + 1.5, q[1], 0.9, 1.3, 14, tint(color, 0.94), rot);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: 0.9, d: 14, rot });
-    }
-  }
-
-  /* ---- the choir block: 25 ft square, three doorways ---- */
-  const DOOR = 2.0;
-  const face = (lx, lz, fw, fd) => {
-    const q = p(lx, lz);
-    b.box(q[0], FL, q[1], fw, H, fd, color, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: fw, d: fd + 0.2, rot });
-  };
-  // west end, closed
-  face(0, -CH + WALL / 2, CH * 2, WALL);
-  // east, north and south each split around a doorway
-  for (const [lx, lz, horiz] of [[0, CH - WALL / 2, true], [-CH + WALL / 2, 0, false], [CH - WALL / 2, 0, false]]) {
-    const seg = (CH * 2 - DOOR) / 2;
-    for (const sgn of [-1, 1]) {
-      if (horiz) face(sgn * (DOOR / 2 + seg / 2), lz, seg, WALL);
-      else face(lx, sgn * (DOOR / 2 + seg / 2), WALL, seg);
-    }
-  }
-  // the floor of the chamber
-  {
-    const q = p(0, 0);
-    b.box(q[0], FL - 0.1, q[1], CH * 2, 0.14, CH * 2, 0xc9bda2, rot);
-  }
-
-  /*
-   * The elephant brackets: eight closely set under a projecting hood, over the
-   * north and south doorways. This is the thing you cannot miss, so it is
-   * drawn small but deliberately — a row of stubby heads, then the hood.
-   */
-  for (const sgn of [-1, 1]) {
-    for (let i = 0; i < 8; i++) {
-      const t = (i / 7 - 0.5) * 2.9;
-      const q = p(sgn * (CH + 0.18), t);
-      b.box(q[0], FL + 2.5, q[1], 0.42, 0.34, 0.26, accent, rot);      // the head
-      b.box(q[0] , FL + 2.36, q[1], 0.5, 0.16, 0.14, tint(accent, 0.9), rot);  // its trunk
-    }
-    const h = p(sgn * (CH + 0.5), 0);
-    b.box(h[0], FL + 2.84, h[1], 1.0, 0.34, 3.6, accent, rot);          // the hood
-  }
-  // and the tracery fanlight over the choir arch at the east end
-  {
-    const q = p(0, CH - WALL / 2);
-    cuspedArch(b, q[0], FL, q[1], DOOR + 0.6, 4.2, WALL + 0.3, rot + Math.PI / 2, accent, 7, 0x241a12);
-    for (let i = 0; i < 5; i++) {
-      const t = (i / 4 - 0.5) * 1.7;
-      const f2 = p(t, CH + 0.1);
-      b.box(f2[0], FL + 4.2, f2[1], 0.16, 0.9 - Math.abs(t) * 0.35, 0.16, accent, rot);
-    }
-  }
-
-  /* ---- the tower: curvilinear, and HOLLOW, with a room inside it ---- */
-  b.box(x, FL + H, z, CH * 2 + 0.9, 0.7, CH * 2 + 0.9, accent, rot);
-  {
-    let ty = FL + H + 0.7, y2 = 0;
-    const TH = 13.5, N = 14;
-    for (let i = 0; i < N; i++) {
-      const t = i / N;
-      const rr = CH * 0.95 * (1 - Math.pow(t, 1.55) * 0.84);
-      const seg = TH / N;
-      // hollow: four faces rather than a filled box, so the upper chamber is
-      // a chamber and not a solid mass with a story attached
-      const wallT = Math.max(0.35, rr * 0.3);
-      for (const [ox, oz, fw, fd] of [
-        [0, rr - wallT / 2, rr * 2, wallT], [0, -rr + wallT / 2, rr * 2, wallT],
-        [rr - wallT / 2, 0, wallT, rr * 2], [-rr + wallT / 2, 0, wallT, rr * 2],
-      ]) {
-        const q = p(ox, oz);
-        b.box(q[0], ty + y2, q[1], fw, seg, fd, i % 2 ? color : tint(color, 1.05), rot);
-      }
-      y2 += seg;
-    }
-    // the amalaka and finial; no gilding, because none is documented
-    b.box(x, ty + y2, z, 2.2, 0.55, 2.2, accent, rot);
-    b.box(x, ty + y2 + 0.55, z, 1.3, 0.9, 1.3, color, rot);
-    b.box(x, ty + y2 + 1.45, z, 0.5, 0.7, 0.5, accent, rot);
-  }
-
-  const darsh = p(0, CH + 3.2);
-  return {
-    altarY: 2.0,
-    colliders,
-    interior: {
-      altar: [p(0, -CH * 0.35)[0], FL + 1.2, p(0, -CH * 0.35)[1]],
-      darshan: [darsh[0], darsh[1]],
-      facing: rot + Math.PI,
-      floor: FL,
-      volume: { x, z, hw: CH, hd: CH, rot, door: p(0, CH + 1.2) },
-    },
-  };
-}
-
-
-/* ================================================================
- * Shri Radha Vallabh Mandir — the old temple
- * ================================================================ */
-
-
-
-/* ================================================================
  * Shri Radha Gopinath Mandir
  * ================================================================ */
 
@@ -6724,13 +6577,34 @@ const BUILDERS = {
   /** Chaar Dham, Chhatikara — the 2025 complex at the highway junction. */
   'temple-chaardham': (args) => buildChaarDham(args),
 
+  /** The shared red-sandstone mass. (Madan Mohan and Jugal Kishore have kinds of their own now.) */
+  'temple-redstone': (args) => BUILDERS['temple-redstone-plain'](args),
+
   /**
-   * Jugal Kishore gets its own builder; anything else of this kind keeps the
-   * shared red-sandstone mass. (Madan Mohan has a kind of its own now.)
+   * Jugal Kishor at Kesi Ghat: the flat-roofed ardha-mandap with its great
+   * arch, and the round-angled shrine under its near-conical sikhara and flat
+   * amalaka, to the 1910 ASI plan and the survey's measured profile — in
+   * JugalKishoreMandir.js. Empty and locked: darshan is kept at the door.
    */
-  'temple-redstone': (args) => (args.loc.id === 'jugal-kishore'
-    ? buildJugalKishore(args)
-    : BUILDERS['temple-redstone-plain'](args)),
+  'temple-jugal-kishore': ({ loc, b, ground, rng, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const r = buildJugalKishoreMandir({ b, loc, ground, terrain, colliders, rng, h: { cuspedArch, tint, buildDeities } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    return {
+      altarY: r.altar.y - ground,
+      colliders,
+      // no volume: the building is locked, and nobody walks into it
+      interior: {
+        closed: true,
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.FL,
+      },
+    };
+  },
 
   /**
    * Madan Mohan: the ruined temple on Dwadashaditya Tila with its two unequal

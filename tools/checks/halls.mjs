@@ -45,6 +45,7 @@ const r = await p.evaluate(() => {
     if (loc.type !== 'temple') continue;
     const a = w.anchorFor(loc.id);
     if (!a || !a.altar || !a.darshan) continue;
+    if (a.closed) continue;            // shut by its builder: nobody walks to or from its altar (kesi.mjs)
 
     const seats = (a.altars && a.altars.length) ? a.altars : [a.altar];
     const yaw = Math.atan2(a.darshan.x - a.altar.x, a.darshan.z - a.altar.z);
@@ -371,6 +372,7 @@ const back = await p.evaluate(() => {
     if (loc.type !== 'temple') continue;
     const a = w.anchorFor(loc.id);
     if (!a || !a.altar || !a.darshan) continue;
+    if (a.closed) continue;            // shut by its builder: nobody walks to or from its altar (kesi.mjs)
     // the way out is altar -> darshan, taken from the anchors so no sign can
     // be got wrong
     const ux = a.darshan.x - a.altar.x, uz = a.darshan.z - a.altar.z;

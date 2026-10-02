@@ -231,3 +231,50 @@ Confidence: High on the documentary and architectural findings: I read Growse's 
 - Brajdiscovery, 'Jugal Kishor Temple' — records several distinct Jugal Kishor deities in Vrindavan and notes 'There is a second Jugal Kishorji whose temple lies on a hillock near Keshi Ghat'. https://en.brajdiscovery.org/index.php?title=Jugal_Kishor_Temple
 - Braj Ras (brajrasik.org), 'Shri Yugal Kishor Temple, Vrindavan' — the OTHER, living temple: 'located near the Jugal Ghat, on the way from the Parikrama Marg to the Shri Radhavallabh Temple', Nimbarka tradition. Cited only to keep the two apart. https://www.brajrasik.org/articles/6036ad74dabd580008d7bfe0/shri-yugal-kishor-temple-vrindavan
 - District Panna (MP) government, 'Jugal Kishore Ji Temple' — built by Raja Hindupat Singh, 1758–78; the deity said by legend to have come from Brindavana via Orchha. https://panna.nic.in/en/tourist-place/jugal-kishore-ji-temple/
+
+## Built — 2026-10-02 (JugalKishoreMandir.js)
+
+What was here before: Growse's loose 25 ft cube with a tower on a guessed
+profile, walk-in, turned the right way but 6 m off.
+
+**Where.** An edge scan of ESRI z19 imagery (measurement only) finds the
+building's south and north faces at world z -765.4 and -775.9 — 10.5 m, the
+plan's 9.5 m octagon on its plinth — on an east-west axis, its masonry to
+x ~819 and its steps to ~823. The origin is the centre of that masonry, 6 m
+south-east of OSM node 7288063975. Frame: +lx north, +lz east, the front.
+
+**Built to the 1910 ASI plan** (Fergusson & Burgess p.158): the ardha-mandap
+17 ft 6 in square inside with 5 ft 9 in walls, flat-roofed behind a plain
+parapet, nothing on it; the shrine octagon 9.5 m across the flats with its
+angles cut back into rolls so it reads round; 18.1 m of masonry; the 2.6 m
+platform stub where the porch was, with the checker's central flight of five
+risers on the axis and a smaller one on the north flank; a stepped plinth.
+
+**The sikhara**, the survey's profile with the checker's corrections: a
+straight drum to 4 m over the mandap roof with two projecting rings (not
+battered); three string courses; a fast shoulder to the neck; a bold ring,
+the plain neck, three thin roll mouldings, then the flat gadrooned amalaka —
+3.7 m across, 0.8 m deep, 26 ribs — a small ribbed ring and a low smooth cap,
+and nothing above it. Putlog holes over the faces. About 23 m to the top.
+
+**The east front:** the doorway in its rosette-studded architrave, shut (the
+doors slide; they are locked), the checker's projecting hood with a saw-tooth
+fringe, a blind arcade of seven over the lintel, two blind niches each side
+at the checker's ~0.75 x 1.75 m; the great arch of voussoirs, near-semicircular
+with a faint point, its head a fan of pierced tracery dark behind, the group of
+Krishna lifting the hill above it, four disc rosettes, the small finial; and
+the facing lost round the arch's head as both nineteenth-century photographs
+show it (whether ASI has refaced it is unknown). North and south: the small
+doors under hoods on eight elephant brackets each, shut, and the framed panels.
+Colour: the checker's H 0-5, S ~40, V ~40.
+
+**Closed.** "One staff member opens it each morning for cleaning and then
+locks it again." So there is no walk-in interior: darshan is kept on the
+platform at the door, the empty altar (altars.js: its lamps, tended) sealed
+behind it. The builder marks the interior `closed`; `halls` and `temples`
+leave closed temples out, and `kesi.mjs` walks what is true of this one: up
+the flight to the door, stopped by it, kept off the plinth from the side.
+
+**Not built, queued:** the closets in the mandap's side walls, the stair in
+the shrine wall to the room inside the sikhara, the bats; the kunjs between
+the temple and the river are the riverfront's, not this builder's.
