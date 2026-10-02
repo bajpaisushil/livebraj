@@ -264,3 +264,82 @@ Confidence: Medium-high. Every Growse quotation was checked character-by-charact
 - The Gaudiya Treasures of Bengal, 'Radha Madan Mohan Temple, Vrindavan' — bhajan kutir adjacent; Sanatana Goswami's samadhi in a small garden adjacent to the temple; replicas worshipped at the New Madan Mohan temple; originals at Karauli. https://thegaudiyatreasuresofbengal.com/2023/04/12/radha-madan-mohan-temple-vrindavan/
 - Wikipedia, 'List of Monuments of National Importance in Agra circle' / Wikidata Q4500833 — ASI monument number N-UP-A197, 'Temple of Madan Mohan, Brindaban', Mathura district. https://www.wikidata.org/wiki/Q4500833
 - srimandir.com, 'Jaipur Temple Vrindavan' and Vrindavan Today, 'Jaipur Mandir: Radha Madhav Mandir' — the 1917 temple of Sawai Madho Singh II at Kishor Pura dedicated to Shri Radha Madhav; the building srimandir wrongly equates with Radha Madan Mohan. https://www.srimandir.com/articles/temple/jaipur-temple-vrindavan and https://vrindavantoday.in/featured/radha-madhav-mandir-jaipur-mandir/
+
+## Built — 2026-10-02 (MadanMohanMandir.js)
+
+What was here before: a 29.5 m spine of nave, choir and sanctum on flat
+ground, turned 45 degrees, at the precinct's centroid — no mound, no gateway,
+no second temple, the towers' characters right but nothing round them.
+
+**Where and which way.** The origin is the centroid of OSM way 334671983 (the
+precinct), and the box frame is turned so +lz is EAST and +lx NORTH. Every
+outline is OSM's: the precinct (19 nodes), the temple (way 334671987, 88
+nodes: nave lx 1.75-9.95 x lz 8.3-25.66, sanctum octagon centred (5.85, -2.1)
+r 4.35, chapel octagon (-3.55, -2.15) r 4.3), the gateway tower (671678177,
+11.8 x 12.2 m with its street porch and court-side recess), Sanatana Goswami's
+bhajan kutir (334671984), his samadhi (334671985) and the second kutir
+(768143156). ESRI z19 imagery (measurement only) puts the bastion block on the
+NW lobe and the approach stair on the west face south of it, running due east
+up a grass slope to the court at lx -6.5.
+
+**The mound is geometry**, since the terrain is flat alluvium: the precinct's
+own outline walled in battered brick (a 0.9 m batter to court height, banded
+lifts, three string courses, rows of small square holes, a vented parapet);
+the NW bastion block standing 2.3 m over the court with polygonal bastions at
+its two west angles (2006, 2023); a grass slope with two salmon curbs between
+the block and the stair, railed at its foot; the stair in two flights with a
+landing between coped parapets; the ASI's blue board and its maroon "Madan
+Mohan Temple" board at the foot (2023); a ledge 2.9 m below the court outside
+the nave's east door — Growse's "drop of some 9 or 10 feet" — with the door
+railed, so it cannot be walked out of.
+
+**Heights, measured against the survey's towers.** With the chapel tower at
+22 m and the sanctum tower at 14.5 m (the survey's photogrammetry), the 2006
+approach photograph is fitted with its camera on the Parikrama Marg — the
+place that puts both tower tops and the fence's foot where the photograph has
+them (the camera position is fitted, not known). Against that fit the court's west wall
+and the block's parapet came out 2.4 m and 3.0 m too high at a court of
+11.5 m; the 2023 photograph from the stair's foot gives 1.9 m and 2.6 m. So
+the court is 9.5 m over the lane and the block 2.3 m over the court. These are
+still estimates tied to the towers' own (+-20 per cent), and say so.
+
+**The temple.** The nave is a roofless shell of salvaged courses capped with
+ragged brick (Growse p.252), 1.7 m walls, three square-headed openings a side
+clustered east (the plate: 3.6 / 1.2 / 1.7 / 1.8 / 1.9 / 1.4 / 5.7), a cusped
+niche over each lintel as relief only, two steps up to each. The choir is a
+roofed stump with a barred arch from the nave. The sanctum tower is a plain
+banded octagon with flat angle ribs, an egg profile and a blunt top with
+nothing on it, one small high opening. The chapel tower is panelled over every
+face — three columns of sunk squares per face, rosettes down the middle,
+lozenges either side — with bead-string colonnettes, four bud-corbel
+mouldings, a neck, a 24-lobed crown overhanging it and a small cap; its single
+east door is barred under the inscription niche, three steps up.
+
+**The gateway**: a banded block, a cornice of 64 pendant brackets, seven
+receding courses with corner kutas, a short ridge; the court side a deep
+barred arch, the street porch shut.
+
+**The new temple** is built across the lane where Growse's plate draws it,
+south-east of the gateway — its POSITION is the plate carried onto the
+imagery's lane-side range, and its FORM (a plain two-storey haveli, an arched
+doorway, three jharokhas, a hall, a gilt cusped screen before the sanctum) is
+INFERRED. The altar group is the three of altars.js. This is the place's
+interior: darshan, the bell, the night veil. The old nave is a `hall` room,
+`quiet`, entered from its side openings.
+
+**The compound** is the mound, and `also` (new) adds the west approach to the
+Parikrama Marg, the samadhi, the lane along the south side out to the street
+(r99427157), the new temple and the second kutir — so the town presses up to
+the walls on the north, east and south as the survey says, and the lane stays
+open to walk.
+
+**Epoch 2024-25**: the court in red sandstone slabs (ASI, c. 2024) except the
+south strip, a garden of planted beds in the imagery; the towers in the
+survey's 2006-23 colours, before the 2025-26 cleaning and without the 2026
+scaffold. The red-painted building at the stair's head (2023, 2026; absent in
+2006) is included.
+
+**Not built, queued:** the trees in the court north of the sanctum (imagery);
+whatever stands south of the stair below the red building (the imagery's pale
+roofs); the east approach Growse built in 1875; the walk-in choir and
+sanctum; the gateway's passage.

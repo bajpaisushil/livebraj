@@ -213,8 +213,11 @@ class CityFabric {
        */
       if (l.compound) {
         const c = l.compound;
+        // `also`: further rectangles in the same frame, for a place whose
+        // parts stand apart with the town between them (Madan Mohan's mound,
+        // its new temple across the street, Sanatana Goswami's samadhi)
         return { x: l.pos[0], z: l.pos[1], box: true, cs: Math.cos(l.rot), sn: Math.sin(l.rot),
-          lx0: c.lx0, lx1: c.lx1, lz0: c.lz0, lz1: c.lz1 };
+          rects: [c, ...(c.also || [])] };
       }
       if (l.grounds) return { x: l.pos[0], z: l.pos[1], r: l.grounds };
       /*
@@ -493,7 +496,9 @@ class CityFabric {
         const dx = x - k.x, dz = z - k.z;
         const lx = dx * k.cs + dz * k.sn, lz = -dx * k.sn + dz * k.cs;
         const pad = r * 0.5 + 1.0;
-        if (lx > k.lx0 - pad && lx < k.lx1 + pad && lz > k.lz0 - pad && lz < k.lz1 + pad) return false;
+        for (const q of k.rects) {
+          if (lx > q.lx0 - pad && lx < q.lx1 + pad && lz > q.lz0 - pad && lz < q.lz1 + pad) return false;
+        }
         continue;
       }
       if (k.r !== undefined) {                  // open grounds, a circle

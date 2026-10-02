@@ -145,10 +145,30 @@ export const LANDMARKS = [
     id: 'madan-mohan', match: ['мадан мохан', 'Madan Mohan', 'मदन मोहन'],
     name: 'Shri Madan Mohan Mandir', hindi: 'श्री मदन मोहन मंदिर',
     type: 'temple', deity: 'Shri Madan Mohan', icon: 'temple',
-    build: { kind: 'temple-redstone', w: 28, d: 34, h: 15, color: '#a1523a', accent: '#7d3d2b' },
-    rot: Math.PI * 0.25, radius: 30, district: 'ghat-front',
+    /*
+     * On its mound now (docs/research/madan-mohan.md). The origin is the
+     * centroid of OSM way 334671983, the precinct, and the frame turns +lz
+     * EAST, along the temple's axis. Build: the precinct, 62 x 57 m, and the
+     * chapel tower's crown 34 m over the lane; the colours are measured.
+     * The compound is the mound; `also` adds its west approach (stair, grass,
+     * the lawn to the Parikrama Marg), Sanatana Goswami's samadhi, the lane
+     * along the south side, the new temple across it and the second kutir.
+     */
+    at: [27.580253, 77.68761],
+    build: { kind: 'temple-madan-mohan', w: 62, d: 57, h: 34, color: '#8a4a34', accent: '#75413b', measured: true },
+    rot: -Math.PI * 0.5, radius: 34, district: 'ghat-front',
+    compound: {
+      lx0: -31.4, lx1: 31.4, lz0: -31.0, lz1: 29.4, ring: false,
+      also: [
+        { lx0: -17.0, lx1: 31.4, lz0: -64.0, lz1: -29.0 },
+        { lx0: -30.5, lx1: -17.0, lz0: -50.0, lz1: -40.6 },
+        { lx0: -35.6, lx1: -30.9, lz0: -50.0, lz1: 40.0 },
+        { lx0: -45.6, lx1: -35.2, lz0: 8.4, lz1: 21.6 },
+        { lx0: -43.6, lx1: -35.2, lz0: -35.6, lz1: -27.7 },
+      ],
+    },
     interactions: ['darshan', 'pranam', 'story'],
-    fallback: [27.58790, 77.69540],
+    fallback: [27.580253, 77.68761],
   },
   {
     id: 'govind-dev', match: ['Govind Dev', 'Govinda Dev'],

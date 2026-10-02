@@ -16,6 +16,7 @@ import { PEOPLE, buildSeated, buildStanding } from '../npc/Archetypes.js';
 import { buildIskconCampus } from './IskconCampus.js';
 import { buildShahji } from './ShahjiMandir.js';
 import { buildRadhaVallabhMandir } from './RadhaVallabhMandir.js';
+import { buildMadanMohanMandir } from './MadanMohanMandir.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
@@ -3668,272 +3669,6 @@ function buildGovindDev({ loc, b, ground }) {
 
 
 /* ================================================================
- * Shri Radha Madan Mohan Mandir, on the bluff
- * ================================================================ */
-
-/**
- * "THE SILHOUETTE ON THE BLUFF, seen from the river or from Kali-dah Ghat
- * below — a red stone temple standing clear on a cliff above the Yamuna, with
- * the gateway's pyramid and two curvilinear spires stacked against the sky."
- * The research calls it the one you see from a distance rather than stumble
- * into, so the silhouette is what this builds for.
- *
- * It is NOT a squat block. Growse's figures make it a long narrow spine:
- * nave 57 ft, choir 20 ft square, sanctuary 20 ft square — about 29.5 m end to
- * end and only 6 to 8 m wide — with the tower-crowned chapel bulging off the
- * SOUTH flank. Slender, axial, nave to choir to sanctum in a line.
- *
- * THREE THINGS ARE BROKEN, and each is documented:
- *   - the nave's vaulted roof has ENTIRELY DISAPPEARED, so the nave stands
- *     open to the sky and is bright where it was once dark;
- *   - the choir tower has had its upper part destroyed and is a stump;
- *   - only the sacrarium tower is whole — a PLAIN OCTAGON of curvilinear
- *     outline tapering to the summit, an eight-sided sugarloaf, unornamented.
- *     No finial is documented, so none is invented.
- *
- * THE BRICK. The nave was rebuilt reusing old stone and "where the old stone
- * ran short they used brick", so the nave is visibly patchwork while choir,
- * sanctum and chapel are coherent stone. The brick reads duller, smaller and
- * browner-pink, and it is drawn that way.
- *
- * THE CHAPEL is the decorated element — "the whole of its exterior surface
- * being covered with sculptured panels" — against a main body that is
- * restrained and massive.
- */
-const MM_RED = 0xa8563c;
-const MM_BRICK = 0xa0705e;
-const MM_SHADE = 0x7a3c28;
-
-function buildMadanMohan({ loc, b, ground, rng }) {
-  const { color, accent } = loc.build;
-  const [x, z] = loc.pos;
-  const rot = loc.rot;
-  const cs = Math.cos(rot), sn = Math.sin(rot);
-
-  const HW = 4.0;             // "only about 6-8 m wide"
-  const NAVE = 17.4;          // 57 ft
-  const BAY = 6.1;            // 20 ft, choir and sanctum alike
-  /*
-   * The spine is measured from the SANCTUM at 0, because that is how Growse
-   * gives it — sanctum, then choir, then a 57 ft nave. But the landmark's
-   * position is the middle of the temple, not its back wall, so the whole
-   * spine is shifted half its length to sit centred on its bluff. Without this
-   * it ran off one end of the platform and left the other half bare.
-   */
-  const SPINE = BAY * 2 + NAVE;
-  const Z0 = -SPINE * 0.5;
-  const p = (lx, lz) => [x + lx * cs - (lz + Z0) * sn, z + lx * sn + (lz + Z0) * cs];
-  const colliders = [];
-  const WALL = 1.1;
-  const NAVE_H = 6.7;         // "low, about 22 ft"
-  const BAY_H = 8.4;
-
-  // the bluff it stands clear on
-  b.box(x, ground - 2.2, z, 46, 4.4, 26, 0xb8a486, rot);
-  b.box(x, ground + 2.2, z, 40, 0.7, 21, 0xc4b092, rot);
-  const FL = ground + 2.9;
-
-  /* ---------------- the spine: nave -> choir -> sanctum ---------------- */
-  /*
-   * The nave begins where the CHOIR ends, not where the sanctum does. With
-   * `BAY + NAVE/2` the nave sat on top of the choir for six metres of its
-   * length — two bays of the spine occupying the same ground.
-   */
-  const NZ = BAY * 2 + NAVE * 0.5;            // nave centre, past sanctum AND choir
-  const face = (lx, lz, fw, fd, hh, col) => {
-    const q = p(lx, lz);
-    b.box(q[0], FL, q[1], fw, hh, fd, col, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: fw, d: fd + 0.2, rot });
-  };
-
-  // THE NAVE: three openings a side, a square door at the east end, and NO ROOF
-  for (const sgn of [-1, 1]) {
-    // the wall between the three openings, in four piers
-    const span = NAVE, op = 2.6, n = 3;
-    const pier = (span - op * n) / (n + 1);
-    for (let i = 0; i <= n; i++) {
-      const lz = NZ - span / 2 + pier / 2 + i * (pier + op);
-      // patchwork: brick where the old stone ran short
-      face(sgn * (HW - WALL / 2), lz, WALL, pier, NAVE_H, i % 2 ? MM_BRICK : color);
-    }
-    // the lintel band over the openings, which is stone throughout
-    const q = p(sgn * (HW - WALL / 2), NZ);
-    b.box(q[0], FL + NAVE_H, q[1], WALL + 0.4, 0.6, NAVE, accent, rot);
-  }
-  // the east end: a square door, because this body is trabeate and restrained
-  {
-    const seg = (HW * 2 - 2.4) / 2;
-    for (const sgn of [-1, 1]) face(sgn * (2.4 / 2 + seg / 2), NZ + NAVE / 2, seg, WALL, NAVE_H, color);
-    const q = p(0, NZ + NAVE / 2);
-    b.box(q[0], FL + 3.4, q[1], 3.2, 0.7, WALL + 0.5, accent, rot);
-    b.box(q[0], FL + NAVE_H, q[1], HW * 2 + 0.6, 0.6, WALL + 0.5, accent, rot);
-  }
-  // the floor. Deliberately NO vault above it: "the nave's vaulted roof has
-  // entirely disappeared", so the nave is open to the sky and bright.
-  {
-    const q = p(0, NZ);
-    b.box(q[0], FL - 0.12, q[1], HW * 2, 0.16, NAVE, 0xc9bda2, rot);
-  }
-
-  /* ---- the choir and the sanctum: 20 ft squares, coherent stone ---- */
-  /**
-   * One 20 ft bay. `backDoor` is the width of the opening in its far wall.
-   *
-   * Every bay used to get a SOLID wall the full width of the spine across its
-   * low end. That is right for the sanctum, whose far end is the back of the
-   * temple — and wrong for the choir, whose far end faces the SANCTUM. So a
-   * solid wall stood between the choir and the Deities, and the sanctum was
-   * sealed: measured, 688 of its 865 standable cells were cut off from the
-   * rest of the building, and walking out from the altar got 0.9 m before
-   * stopping against it.
-   *
-   * A sanctum opens into its choir through an arch. That is what a temple of
-   * this plan IS — Growse's own description has the spine running sanctum,
-   * choir, nave, one into the next.
-   */
-  const bay = (lz, hh, backDoor = 0) => {
-    for (const sgn of [-1, 1]) face(sgn * (HW - WALL / 2), lz, WALL, BAY, hh, color);
-    const bz = lz - BAY / 2 + WALL / 2;
-    if (backDoor > 0) {
-      const seg = (HW * 2 - backDoor) / 2;
-      for (const sgn of [-1, 1]) face(sgn * (backDoor / 2 + seg / 2), bz, seg, WALL, hh, color);
-      // the arch over the opening, carried on the two piers
-      const aq = p(0, bz);
-      b.box(aq[0], FL + hh * 0.62, aq[1], backDoor + 0.8, 0.55, WALL + 0.3, accent, rot);
-      b.box(aq[0], FL + hh * 0.62 + 0.55, aq[1], HW * 2, hh * 0.38 - 0.55, WALL, color, rot);
-    } else {
-      face(0, bz, HW * 2, WALL, hh, color);
-    }
-    const q = p(0, lz);
-    b.box(q[0], FL + hh, q[1], HW * 2 + 0.8, 0.7, BAY + 0.8, accent, rot);
-    return q;
-  };
-  // the choir opens back into the sanctum; the sanctum's own far wall does not
-  const choir = bay(BAY * 1.5, BAY_H, 2.6);
-  const sanct = bay(BAY * 0.5, BAY_H);
-  // the arch between them, and into the nave
-  for (const lz of [BAY, BAY * 2]) {
-    const q = p(0, lz);
-    cuspedArch(b, q[0], FL, q[1], 3.2, 4.4, WALL + 0.3, rot + Math.PI / 2, accent, 3, 0x241a12);
-  }
-
-  /* ---- the towers: one whole, one a stump ---- */
-  /*
-   * "The tower over the SACRARIUM is a PLAIN OCTAGON of curvilinear outline
-   * tapering towards the summit — an eight-sided sugarloaf, unornamented."
-   */
-  {
-    let ry = FL + BAY_H + 0.7, r = HW * 0.92, y2 = 0;
-    const H = 11.5, N = 12;
-    for (let i = 0; i < N; i++) {
-      const t = i / N;
-      // curvilinear: the sides bow outward before drawing in to the summit
-      const rr = r * (1 - Math.pow(t, 1.6) * 0.82);
-      const seg = H / N;
-      b.box(sanct[0], ry + y2, sanct[1], rr * 2, seg, rr * 2, i % 2 ? color : tint(color, 1.05), rot + Math.PI / 8);
-      b.box(sanct[0], ry + y2, sanct[1], rr * 1.86, seg, rr * 1.86, i % 2 ? color : tint(color, 1.05), rot);
-      y2 += seg;
-    }
-    b.box(sanct[0], ry + y2, sanct[1], 1.3, 0.5, 1.3, MM_SHADE, rot);
-  }
-  // the choir tower, its upper part destroyed: a stump that stops flat
-  {
-    let ry = FL + BAY_H + 0.7, y2 = 0;
-    for (let i = 0; i < 4; i++) {
-      const rr = HW * 0.9 * (1 - i * 0.09);
-      b.box(choir[0], ry + y2, choir[1], rr * 2, 1.1, rr * 2, i % 2 ? color : tint(color, 1.04), rot);
-      y2 += 1.1;
-    }
-    b.box(choir[0], ry + y2, choir[1], HW * 1.5, 0.5, HW * 1.5, 0x8a7060, rot);   // broken off
-  }
-
-  /* ---- the south chapel: the one decorated thing here ---- */
-  {
-    const CX = HW + 3.2, CZ = BAY * 1.2;
-    const q = p(CX, CZ);
-    b.box(q[0], FL, q[1], 6.4, 6.0, 7.2, color, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: 6.4, d: 7.2, rot });
-    // "the whole of its exterior surface being covered with sculptured panels"
-    for (let i = 0; i < 4; i++) {
-      for (let k = -1; k <= 1; k++) {
-        const s2 = p(CX + 3.3, CZ + k * 2.1);
-        b.box(s2[0], FL + 0.7 + i * 1.3, s2[1], 0.22, 1.0, 1.6, i % 2 ? accent : MM_SHADE, rot);
-      }
-    }
-    // its single east door, carrying the raised Sanskrit inscription
-    const dr = p(CX, CZ + 3.7);
-    b.box(dr[0], FL, dr[1], 1.4, 2.6, 0.24, 0x3f2a1e, rot);
-    b.box(dr[0], FL + 2.7, dr[1], 2.6, 0.5, 0.3, accent, rot);
-    // and its own tower
-    let ty = FL + 6.0, y3 = 0;
-    for (let i = 0; i < 7; i++) {
-      const rr = 2.5 * (1 - Math.pow(i / 7, 1.5) * 0.76);
-      b.box(q[0], ty + y3, q[1], rr * 2, 0.95, rr * 2, i % 2 ? color : tint(color, 1.05), rot);
-      y3 += 0.95;
-    }
-  }
-
-  /* ---- the gateway, whose pyramid is part of the skyline ---- */
-  {
-    const g = p(0, NZ + NAVE / 2 + 7.5);
-    for (const sgn of [-1, 1]) {
-      const q = p(sgn * 3.2, NZ + NAVE / 2 + 7.5);
-      b.box(q[0], FL - 0.6, q[1], 2.4, 5.4, 2.4, color, rot);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: 2.4, d: 2.4, rot });
-    }
-    b.box(g[0], FL + 4.8, g[1], 8.8, 0.9, 2.8, accent, rot);
-    let py = FL + 5.7, y4 = 0;
-    for (let i = 0; i < 5; i++) {
-      const k = 1 - i * 0.17;
-      b.box(g[0], py + y4, g[1], 7.2 * k, 0.8, 2.6 * k, i % 2 ? color : accent, rot);
-      y4 += 0.8;
-    }
-  }
-
-  /* ---- the red stone ghat, running down to the water ---- */
-  {
-    for (let i = 0; i < 9; i++) {
-      const q = p(-HW - 9 - i * 1.15, NZ * 0.3);
-      b.box(q[0], FL - 0.3 - i * 0.52, q[1], 1.15, 0.52, 13, i % 2 ? MM_RED : MM_SHADE, rot);
-    }
-  }
-
-  /*
-   * Where a pilgrim STANDS, which has to be somewhere a body fits.
-   *
-   * This was `p(0, BAY * 1.15)` — local z 7.0, which is inside the CHOIR, and
-   * `world.isClear` says so: solid. Everything that reads this anchor was
-   * therefore aiming at a point in the masonry. The walk-out check starts
-   * 1.9 m from the altar heading toward it and got 0.9 m before stopping,
-   * which is the paradox I could not resolve by reading the geometry — the
-   * walker was not walking out at all, it was walking into the choir wall.
-   *
-   * The spine runs sanctum (z 3.05) -> choir (z 9.15) -> nave (z 12.2 to
-   * 29.6). Darshan is taken from the NAVE, looking back down it to the
-   * sanctum, which is both where there is floor and where anyone actually
-   * stands in a temple of this plan.
-   */
-  const darsh = p(0, BAY * 2 + 2.2);
-  return {
-    altarY: 2.2,
-    colliders,
-    interior: {
-      altar: [sanct[0], FL + 1.35, sanct[1]],
-      darshan: [darsh[0], darsh[1]],
-      facing: rot + Math.PI,
-      floor: FL,
-      // the spine runs 0 to BAY*2 + NAVE, so its middle is half of that
-      volume: {
-        x: p(0, (BAY * 2 + NAVE) * 0.5)[0], z: p(0, (BAY * 2 + NAVE) * 0.5)[1],
-        hw: HW, hd: (NAVE + BAY * 2) * 0.5, rot,
-        door: p(0, NZ + NAVE / 2 + 1.5),
-      },
-    },
-  };
-}
-
-
-/* ================================================================
  * Shri Rangaji Mandir, Goda Vihar
  * ================================================================ */
 
@@ -7096,14 +6831,46 @@ const BUILDERS = {
   'temple-chaardham': (args) => buildChaarDham(args),
 
   /**
-   * Madan Mohan and Jugal Kishore. Madan Mohan is documented in detail and gets
-   * its own builder; the other keeps the shared red-sandstone mass.
+   * Jugal Kishore gets its own builder; anything else of this kind keeps the
+   * shared red-sandstone mass. (Madan Mohan has a kind of its own now.)
    */
-  'temple-redstone': (args) => (args.loc.id === 'madan-mohan'
-    ? buildMadanMohan(args)
-    : args.loc.id === 'jugal-kishore'
-      ? buildJugalKishore(args)
-      : BUILDERS['temple-redstone-plain'](args)),
+  'temple-redstone': (args) => (args.loc.id === 'jugal-kishore'
+    ? buildJugalKishore(args)
+    : BUILDERS['temple-redstone-plain'](args)),
+
+  /**
+   * Madan Mohan: the ruined temple on Dwadashaditya Tila with its two unequal
+   * towers — the plain one over the sanctum, the panelled and crowned one over
+   * the chapel — the mound and its stair, the gateway, and the new temple
+   * across the street where the deities are worshipped. Built in
+   * MadanMohanMandir.js from its survey and checker; what stood here was a
+   * spine of nave and towers on flat ground, turned 45 degrees.
+   */
+  'temple-madan-mohan': ({ loc, b, ground, rng, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const signB = new MeshBuilder();
+    const r = buildMadanMohanMandir({ b, signB, loc, ground, terrain, colliders, rng, h: {
+      cuspedArch, tint, signUV, buildDeities,
+    } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const H = r.hall;
+    const V = p((H.lx0 + H.lx1) / 2, (H.lz0 + H.lz1) / 2);
+    return {
+      altarY: r.altar.y - ground,
+      colliders,
+      meshes: [{ name: 'MadanMohanSigns', builder: signB, x: loc.pos[0], z: loc.pos[1], r: 80, map: signAtlas }],
+      rooms: r.rooms,
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.FL,
+        volume: { x: V[0], z: V[1], hw: (H.lx1 - H.lx0) / 2, hd: (H.lz1 - H.lz0) / 2, rot, door: p(H.door[0], H.door[1]) },
+      },
+    };
+  },
 
   'temple-redstone-plain': ({ loc, b, ground }) => {
     const { w, d, h, color, accent } = loc.build;

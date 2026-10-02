@@ -357,7 +357,7 @@ function compoundTest(ctx) {
   return (x, z) => list.some((k) => {
     const dx = x - k.x, dz = z - k.z;
     const lx = dx * k.cs + dz * k.sn, lz = -dx * k.sn + dz * k.cs;
-    return lx > k.c.lx0 && lx < k.c.lx1 && lz > k.c.lz0 && lz < k.c.lz1;
+    return [k.c, ...(k.c.also || [])].some((q) => lx > q.lx0 && lx < q.lx1 && lz > q.lz0 && lz < q.lz1);
   });
 }
 

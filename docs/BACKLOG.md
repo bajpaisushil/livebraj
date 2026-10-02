@@ -3433,3 +3433,36 @@ worktree, adversarially reviewed against its survey and checker, then
 integrated and checked here one at a time. First, the checks were made safe
 to run side by side: 25 of them bound fixed ports and two copies of one
 collided; they now take any free port (two `halls` runs at once, both 6/6).
+
+## 2026-10-02 — Madan Mohan on its mound ("continue ?")
+
+"continue ?" — read as the same mandate: carry on with the surveyed temples.
+The workflow's measuring agents had all hit the session limit with nothing
+written, so Madan Mohan was measured and built here, solo.
+
+- **Built** in `MadanMohanMandir.js` (kind `temple-madan-mohan`), on OSM's
+  outlines in a frame turned +lz east: the precinct walled as a 9.5 m tila
+  (the terrain is flat alluvium, so the mound is geometry), the NW bastion
+  block with its two polygonal bastions, the grass slope with its curbs, the
+  west stair in two flights, the ASI's boards at its foot; the roofless nave
+  with its three east-clustered openings a side and a ledge 2.9 m down outside
+  its railed east door; the barred choir stump; the plain egg sanctum tower,
+  nothing on top; the panelled chapel tower with its 24-lobed crown; the
+  gateway's stepped pyramid; Sanatana Goswami's kutir, samadhi and second
+  kutir; and the new temple across the lane where the deities are worshipped,
+  which is the place's darshan. Details: docs/research/madan-mohan.md, "Built".
+- **Measured against the photographs, and corrected.** Fitted to the 2006 and
+  2023 approach photographs with the survey's tower heights, a court of 11.5 m
+  put the west wall and the bastion block 2-3 m too high in both; it is 9.5 m,
+  the block 2.3 m over it.
+- **`compound.also`** (BuildingGenerator, PropScatter): extra keep-out
+  rectangles in the same frame, so a place whose parts stand apart with the
+  town between them keeps its lane and its outbuildings clear.
+- **New check `tila.mjs`** walks a player up the stair, across the court, into
+  the nave and to its railed east door, back out, down, along the lane and
+  into the new temple to the altar line: 11/11. Mutation: a 0.4 m gap at the
+  stair head drops him to the lane and fails 7 of them. Two things it taught:
+  the court's datum is the highest ground under the precinct, not the
+  centroid's; and pressed against a rail long enough, the player's own
+  unsticking sets him back in the room, so a walk is judged by how far it got.
+- The old `buildMadanMohan` (a spine at 45 degrees) is removed.

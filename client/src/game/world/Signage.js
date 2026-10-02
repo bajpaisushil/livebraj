@@ -97,6 +97,9 @@ export const CAMPUS_BOARDS = [
   // the two other temples Entwistle puts inside the Radhavallabh Ghera
   { key: 'anandi', bg: '#f2ede1', fg: '#7a2a1a', name: 'Anandi Bai ka Mandir', deva: 'आनन्दी बाई का मन्दिर' },
   { key: 'calcutta', bg: '#f2ede1', fg: '#7a2a1a', name: 'Calcuttawala Mandir', deva: 'कलकत्ते वाला मन्दिर' },
+  // Madan Mohan: the ASI's maroon notice board at the foot of the stair, the
+  // tower pictured on it ("Radha Madan Mohan Temple (36399)")
+  { key: 'mm-asi', bg: '#6b1f2a', fg: '#f2e6d0', name: 'Madan Mohan Temple', deva: 'मदन मोहन मंदिर' },
 ];
 
 /** Atlas slot of one of Krishna Balaram's boards, or -1. */

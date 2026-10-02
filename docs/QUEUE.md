@@ -134,11 +134,16 @@ searching the backlog for it. That is the failure this file exists to stop.*
    in docs/research/iskcon-krishna-balaram.md, then photographs and OSM —
    then build, photograph, measure. Next after Start from here ships.
 
-4. **Eight surveyed temples — Shahji, Rangaji and Radha Vallabh BUILT 2026-09-30, five to go.** Each
+4. **Eight surveyed temples — Shahji, Rangaji, Radha Vallabh and Madan Mohan BUILT, four to go.** Each
    gets built from its survey AND its checker's corrections (re-paired
    correctly 2026-09-30 — see the backlog), photographed, and measured against
-   the survey's own numbers. ~~Shahji~~ · ~~Rangaji~~ · Radha Vallabh · Madan
-   Mohan · Radha Raman · Radha Damodar · Radha Gopinath · Jugal Kishore.
+   the survey's own numbers. ~~Shahji~~ · ~~Rangaji~~ · ~~Radha Vallabh~~ ·
+   ~~Madan Mohan~~ · Radha Raman · Radha Damodar · Radha Gopinath · Jugal Kishore.
+   Madan Mohan's open items (2026-10-02), queued: the trees in the court north
+   of the sanctum; what stands south of the stair below the red building; the
+   east approach Growse built in 1875; the choir, sanctum and gateway passage
+   to walk into; the new temple's real plan (its place is Growse's plate on
+   the imagery, its form inferred).
    Rangaji's open items, queued: the tank is on a raised terrace because the
    terrain cannot yet hold a sunken pit (see 19); the Sheesh Mahal, the rath
    in its shed, and the Brahmotsav garden 558 m south (OSM way 99427181) are

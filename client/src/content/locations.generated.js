@@ -96,10 +96,11 @@ export const LOCATIONS = [
     "type": "temple",
     "district": "ghat-front",
     "grounds": null,
+    "compound": { "lx0": -31.4, "lx1": 31.4, "lz0": -31, "lz1": 29.4, "ring": false, "also": [{ "lx0": -17, "lx1": 31.4, "lz0": -64, "lz1": -29 }, { "lx0": -30.5, "lx1": -17, "lz0": -50, "lz1": -40.6 }, { "lx0": -35.6, "lx1": -30.9, "lz0": -50, "lz1": 40 }, { "lx0": -45.6, "lx1": -35.2, "lz0": 8.4, "lz1": 21.6 }, { "lx0": -43.6, "lx1": -35.2, "lz0": -35.6, "lz1": -27.7 }] },
     "pos": [-285.37, -30.2],
     "geo": [27.580253, 77.68761],
-    "rot": 0.7853981633974483,
-    "radius": 30,
+    "rot": -1.5707963267948966,
+    "radius": 34,
     "icon": "temple",
     "deity": "Shri Madan Mohan",
     "interactions": [
@@ -108,14 +109,15 @@ export const LOCATIONS = [
       "story"
     ],
     "build": {
-      "kind": "temple-redstone",
-      "w": 28,
-      "d": 34,
-      "h": 15,
-      "color": "#a1523a",
-      "accent": "#7d3d2b"
+      "kind": "temple-madan-mohan",
+      "w": 62,
+      "d": 57,
+      "h": 34,
+      "color": "#8a4a34",
+      "accent": "#75413b",
+      "measured": true
     },
-    "osm": "मदन मोहन मंदिर"
+    "osm": null
   },
   {
     "id": "seva-kunj",
