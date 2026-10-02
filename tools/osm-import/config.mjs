@@ -118,10 +118,19 @@ export const LANDMARKS = [
     id: 'radha-raman', match: ['Radha Raman', 'Radha-Ramana', 'Radha Ramana'],
     name: 'Shri Radha Raman Mandir', hindi: 'श्री राधा रमण मंदिर',
     type: 'temple', deity: 'Shri Radha Raman', icon: 'temple',
-    build: { kind: 'temple-haveli', w: 26, d: 30, h: 12, color: '#d9c7a4', accent: '#a8563c', arches: 3 },
-    rot: Math.PI * 0.5, radius: 24, district: 'temple-quarter',
+    /*
+     * On the checker's true area centroid of OSM way 335527344 (the survey's
+     * point was the west wall, 7.4 m off), in a frame with +lx EAST and +lz
+     * SOUTH: the door is on the south and the deity faces east. Build: the
+     * temple and its ghera, 27 x 33 m; nothing over 10.5 m. The compound is the
+     * ghera, from the Parikrama Marg's kerb to the houses round both courts.
+     */
+    at: [27.585379, 77.698725],
+    build: { kind: 'temple-radha-raman', w: 27, d: 33, h: 11, color: '#a98a6b', accent: '#7e6350', measured: true },
+    rot: 0, radius: 24, district: 'temple-quarter',
+    compound: { lx0: -12.4, lx1: 14.8, lz0: -14.0, lz1: 19.0, ring: false },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
-    fallback: [27.58548, 77.69901],
+    fallback: [27.585379, 77.698725],
   },
   {
     id: 'radha-gopinath', match: ['Radha Gopinath', 'Gopinath Mandir'],

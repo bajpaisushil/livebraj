@@ -235,3 +235,65 @@ Confidence: HIGH on the architecture and on source verification — I did not ta
 - Vrindavan Today, 'The marvelous history and rituals of Shri Radharaman temple', https://vrindavantoday.in/the-marvelous-history-and-rituals-of-shri-radharaman-temple/ (reproduces Case's description) and 'Eternal flames of Shri Radharaman's temple kitchen', https://vrindavantoday.in/eternal-flames-of-shri-radharamans-temple-kitchen/ — cow-dung cakes as fuel, fire banked after ratri mangal, 'No match box has ever been used in the entire temple premises'.
 - Srimandir (Hindi), https://www.srimandir.com/articles/temple/radha-raman-mandir-vrindavan — 'मंदिर का वर्तमान ढांचा 1826 में लखनऊ निवासी शाह बिहारी लालजी द्वारा निर्मित करवाया गया था'; also the erroneous 'यह विशाल मंदिर नदी किनारे स्थित है'. Bharatdiscovery (Hindi), https://bharatdiscovery.org/india/राधारमण_जी_मन्दिर_वृन्दावन — samadhi and appearance place placed to the south (दक्षिण). Brajrasik, https://www.brajrasik.org/articles/5ab512be9f7ab760360f9c07/shri-radharaman-temple-vrindavan — dissenting dates (deity Samvat 1591, temple Samvat 1645).
 - Tarapada Mukherji and Irfan Habib, 'Akbar and the Temples of Mathura and Its Environs', Proceedings of the Indian History Congress 48 (1987): 234–50 — Akbar land grant of 1598 to 'Radharawan' (cited via Case, endnote 6, p. 159; I did not read the original).
+
+## Built — 2026-10-02 (RadhaRamanMandir.js)
+
+What was here before: the shared haveli (Radha Damodar and Radha Shyamsundar
+come through it too) with a walled ring drawn round it on a guess, turned 90
+degrees.
+
+**Where and which way.** On the checker's true area centroid of OSM way
+335527344, in a frame with +lx EAST and +lz SOUTH (rot 0): the door is on the
+south, the deity faces east. The block is the way's own 14.7 x 15.3 m, its
+south edge split at the node into the blank west 5.71 m and the carved east
+8.93 m.
+
+**The facade**, as the survey and checker give it: the blank west part to
+8.3 m with the checker's carved two-band cornice (string course, a frieze of
+blind cusped arcading, small pointed dentils, merlons), soot streaks from the
+cornice down, the 2023 red vinyl banner and a yellow notice; the frontispiece
+— a solid ground storey (the great 9-foil arch to 4.1 m with the painted
+board in its tympanum, the 1.1 x 2.0 m door with carved jambs, the niche over
+the lintel and the two small standing figures, the studded leaves open; the
+two blind 7-foil niches on carved dados with small panels over), the chhajja
+at 5.8-6.0 m on nine consoles, the gallery of five ~9-foil arches 1 + 3 + 1
+with jali in their lower 0.87 m and colonnettes, the centre three forward on
+the chhajja under the curved gable (5 m span, apex 9.3 m, ends turning down
+past the springing, a two-band archivolt, twelve blind niches following the
+curve); two low cream gadrooned saucer domes behind, their crowns level with
+the gable's apex; four gilt finials to 10.0-10.2 m; the flagstaff to 10.5 m
+with its dark pennant. The CCTV camera and the horn are bolted on (2023).
+
+**Measured against the photographs:** sampled off the render, the frontispiece
+is H31 S36 against the survey's midpoint H30 S37; the neighbour S13 against
+S17 and the gallery S17 against S20 — the hues and saturations hold, and the
+neighbour reads paler and greyer than the temple, as the survey insists. Value
+is about half (V29-37 against V60-79) because the game's day sun is in the
+NORTH (queued: see QUEUE), which leaves every south face in its own shadow.
+
+**Inside**: the vestibule, then the four steps up (Case's "small flight of four
+steps", taken straight rather than to the right); the court of black and white
+marble in a chequer with a coarser border; three porticos of three arches,
+pink and green (Case: "recently painted a slightly surprising bright pink and
+green"; the hexes INFERRED); on the west the antechamber platform 1.37 m high
+behind three unpainted sandstone cusped arches, the silver double door open,
+the small sanctum behind with the deity facing east and Radha's crown on His
+left; the sliding tin roof, half drawn; cables across the court. The open
+court is 6.3 x 9.1 m and the floor with its porticos 9.5 x 12.35 m: Case's
+35 ft does not fit the OSM envelope with porticos round it, and the survey
+says trust the envelope.
+
+**The ghera** — INFERRED in plan, the sources' sequence laid on OSM's spur: the
+outer gateway on the Parikrama Marg's kerb, its heavy leaves open by day; a
+narrow first court between Goswami houses; the second massive gateway at the
+temple's south-west corner; the second court in marble before the whole south
+wall, where the photographs are taken from, with the steel-railed steps and
+the hand pump; the pale modern house to the east (taller than the temple), the
+houses round both courts, and behind the temple the two "very plain" old
+buildings with a narrow passage between them. Nothing of it shows from the
+lane but a gateway and blank walls.
+
+**Not built, queued:** the appearance-place shrine with its tree and red
+sandstone archway, and Gopala Bhatta's samadhi (OSM, Case and Bharatdiscovery
+disagree on where they are); the steps' turn to the right; the inner porticos'
+real colours; any upper floor inside.

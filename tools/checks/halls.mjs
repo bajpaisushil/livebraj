@@ -378,8 +378,27 @@ const back = await p.evaluate(() => {
     if (m < 0.5) continue;
     const dx = ux / m, dz = uz / m;
     const seats = (a.altars && a.altars.length) ? a.altars : [a.altar];
+    /*
+     * Start where a pilgrim can actually stand nearest the altar, 1.9 m out
+     * unless that is not floor. At Radha Raman 1.9 m is on top of the
+     * antechamber platform, 1.37 m up, whose stairs were removed under the
+     * Temple Entry Act (Case p.82): nobody stands there to walk out from, and
+     * starting there measured a temple you can walk out of as sealed. Where
+     * 1.9 m is floor — every other temple — this changes nothing.
+     */
+    const fl = a.floor !== undefined ? a.floor : null;
+    const startAt = (seat) => {
+      for (let d = 1.9; d <= 5.0; d += 0.1) {
+        const q = { x: seat.x + dx * d, z: seat.z + dz * d };
+        const h = w.standHeight(q.x, q.z, fl !== null ? fl : seat.y);
+        const c = w.collide({ x: q.x, z: q.z }, 0.42, h);
+        if ((fl === null || Math.abs(h - fl) < 0.3) && Math.hypot(c.x - q.x, c.z - q.z) < 0.01) return d;
+      }
+      return 1.9;
+    };
     seats.forEach((seat, si) => {
-      const pt = { x: seat.x + dx * 1.9, y: 0, z: seat.z + dz * 1.9 };
+      const d0 = startAt(seat);
+      const pt = { x: seat.x + dx * d0, y: 0, z: seat.z + dz * d0 };
       const s0 = { x: pt.x, z: pt.z };
       let feet = w.standHeight(pt.x, pt.z, a.floor !== undefined ? a.floor : seat.y);
       for (let k = 0; k < 220; k++) {

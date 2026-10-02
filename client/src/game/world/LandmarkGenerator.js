@@ -17,6 +17,7 @@ import { buildIskconCampus } from './IskconCampus.js';
 import { buildShahji } from './ShahjiMandir.js';
 import { buildRadhaVallabhMandir } from './RadhaVallabhMandir.js';
 import { buildMadanMohanMandir } from './MadanMohanMandir.js';
+import { buildRadhaRamanMandir } from './RadhaRamanMandir.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
@@ -6329,24 +6330,11 @@ const BUILDERS = {
     for (let i = 0; i < arches; i++) {
       openings.push({ c: (i / (arches - 1) - 0.5) * w * 0.62, hw: archHW });
     }
-    /*
-     * Radharaman Ghera. The research is specific to this one temple, so the
-     * detail is too — the other two havelis keep the plain plan.
-     *
-     * "A walled compound called Radharaman Ghera, entered from the street; TWO
-     * successive enclosed courtyards, the first lined with the houses of the
-     * Goswami families, the second holding the temple." Behind it, by a narrow
-     * passage, the original late-16th-century building and a larger one beside
-     * it, both very plain, used as the Deity's kitchen, dining room and
-     * bedroom — where "a fire has been kept burning in a TEN-FOOT-LONG fire pit
-     * since Gopala Bhatta's time; all the deity's food is cooked from it."
-     */
-    const ghera = loc.id === 'radha-raman';
+    // (Radha Raman and its ghera have a builder of their own: RadhaRamanMandir.js)
     const damodar = loc.id === 'radha-damodar';
     const shyam = loc.id === 'radha-shyamsundar';
     const shrine = hollowShrine(b, loc, {
       hx: w * 0.41, hz: d * 0.33, floorY: FL, height: h * 0.72, color, openings,
-      silverDoor: ghera, doorMetal: ghera ? 0xd8dade : undefined,
     });
     /*
      * A BRACKETED EAVE AND A PARAPET, where there was a plain accent slab.
@@ -6508,46 +6496,6 @@ const BUILDERS = {
       for (let i = 0; i < 6; i++) {
         const q = p2((i / 5 - 0.5) * w * 0.62, d * 0.33 + 0.26);
         b.box(q[0], ground + 1.5, q[1], 0.75, 0.5, 0.07, 0xb9a888, rot);
-      }
-    }
-
-    if (ghera) {
-      /* ---- the second courtyard, between the houses and the temple ---- */
-      const IW = w * 0.5 + 3.4, ID = d * 0.5 + 3.4, IT = 0.7, IH = 4.2;
-      const iwall = (lx, lz, lw, ld) => {
-        const q = p2(lx, lz);
-        b.box(q[0], ground, q[1], lw, IH, ld, 0xd6c8ab, rot);
-        b.box(q[0], ground + IH, q[1], lw + 0.4, 0.28, ld + 0.4, 0xc2ad8c, rot);
-        shrine.colliders.push({ type: 'box', x: q[0], z: q[1], w: lw, d: ld + 0.3, rot });
-      };
-      const IGAP = 3.4;
-      iwall(0, -ID, IW * 2, IT);
-      iwall(-IW, 0, IT, ID * 2);
-      iwall(IW, 0, IT, ID * 2);
-      const iseg = (IW * 2 - IGAP) / 2;
-      for (const sgn of [-1, 1]) iwall(sgn * (IGAP / 2 + iseg / 2), ID, iseg, IT);
-      const ig = p2(0, ID);
-      cuspedArch(b, ig[0], ground, ig[1], IGAP, 3.8, IT + 0.4, rot + Math.PI / 2, accent, 5, 0x241a12);
-
-      /* ---- behind the temple: the old buildings, and the fire pit ---- */
-      const BZ = -d * 0.5 - 5.5;
-      for (const [ox, bw, bd] of [[-4.5, 7.5, 8.0], [4.8, 9.0, 8.0]]) {
-        const q = p2(ox, BZ);
-        b.box(q[0], ground, q[1], bw, 4.0, bd, 0xd2c3a4, rot);      // "both very plain"
-        b.box(q[0], ground + 4.0, q[1], bw + 0.6, 0.4, bd + 0.6, 0xb8a684, rot);
-        const dr = p2(ox, BZ + bd * 0.5);
-        b.box(dr[0], ground, dr[1], 1.3, 2.3, 0.2, 0x3f2a1e, rot);
-        shrine.colliders.push({ type: 'box', x: q[0], z: q[1], w: bw, d: bd, rot });
-      }
-      {
-        const q = p2(-4.5, BZ);
-        b.box(q[0], ground + 0.02, q[1], 3.05, 0.34, 1.1, 0x6a5240, rot);   // ten feet
-        b.box(q[0], ground + 0.36, q[1], 2.7, 0.12, 0.8, 0x3a2a1e, rot);
-        for (let k = -1; k <= 1; k++) {
-          const f2 = p2(-4.5 + k * 0.95, BZ);
-          b.box(f2[0], ground + 0.46, f2[1], 0.3, 0.42, 0.3, 0xe8891f, rot);
-          b.box(f2[0], ground + 0.88, f2[1], 0.16, 0.3, 0.16, 0xf2c24a, rot);
-        }
       }
     }
 
@@ -6846,6 +6794,37 @@ const BUILDERS = {
    * MadanMohanMandir.js from its survey and checker; what stood here was a
    * spine of nave and towers on flat ground, turned 45 degrees.
    */
+  /**
+   * Radha Raman: the 1826 haveli-temple at the back of Radharaman Ghera — the
+   * blank soot-streaked west wall, the carved frontispiece under its curved
+   * gable, the inner court under a sliding tin roof, and the ghera's two gates
+   * and two courts. Built in RadhaRamanMandir.js from its survey and checker.
+   */
+  'temple-radha-raman': ({ loc, b, ground, rng, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const signB = new MeshBuilder();
+    const r = buildRadhaRamanMandir({ b, signB, loc, ground, terrain, colliders, rng, h: {
+      cuspedArch, tint, signUV, buildDeities,
+    } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const H = r.hall;
+    const V = p((H.lx0 + H.lx1) / 2, (H.lz0 + H.lz1) / 2);
+    return {
+      altarY: r.altar.y - ground,
+      colliders,
+      meshes: [{ name: 'RadhaRamanSigns', builder: signB, x: loc.pos[0], z: loc.pos[1], r: 40, map: signAtlas }],
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.FL,
+        volume: { x: V[0], z: V[1], hw: (H.lx1 - H.lx0) / 2, hd: (H.lz1 - H.lz0) / 2, rot, door: p(H.door[0], H.door[1]) },
+      },
+    };
+  },
+
   'temple-madan-mohan': ({ loc, b, ground, rng, terrain }) => {
     const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
     const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];

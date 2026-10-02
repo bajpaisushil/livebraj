@@ -336,6 +336,9 @@ for (const lm of LANDMARKS) {
     type: lm.type,
     district: lm.district,
     grounds: lm.grounds || null,
+    // a walled campus's keep-out, in the builder's own frame (`also` for
+    // parts that stand apart) — read by BuildingGenerator and PropScatter
+    ...(lm.compound ? { compound: lm.compound } : {}),
     pos,
     geo: [round6(lat), round6(lon)],
     rot: lm.rot,

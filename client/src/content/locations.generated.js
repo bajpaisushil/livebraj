@@ -117,7 +117,7 @@ export const LOCATIONS = [
       "accent": "#75413b",
       "measured": true
     },
-    "osm": null
+    "osm": "मदन मोहन मंदिर"
   },
   {
     "id": "seva-kunj",
@@ -413,9 +413,10 @@ export const LOCATIONS = [
     "type": "temple",
     "district": "temple-quarter",
     "grounds": null,
+    "compound": { "lx0": -12.4, "lx1": 14.8, "lz0": -14, "lz1": 19, "ring": false },
     "pos": [812.1, -598.31],
     "geo": [27.585379, 77.698725],
-    "rot": 1.5707963267948966,
+    "rot": 0,
     "radius": 24,
     "icon": "temple",
     "deity": "Shri Radha Raman",
@@ -426,13 +427,13 @@ export const LOCATIONS = [
       "story"
     ],
     "build": {
-      "kind": "temple-haveli",
-      "w": 26,
-      "d": 30,
-      "h": 12,
-      "color": "#d9c7a4",
-      "accent": "#a8563c",
-      "arches": 3
+      "kind": "temple-radha-raman",
+      "w": 27,
+      "d": 33,
+      "h": 11,
+      "color": "#a98a6b",
+      "accent": "#7e6350",
+      "measured": true
     },
     "osm": "Sri Radha Raman Mandir"
   },

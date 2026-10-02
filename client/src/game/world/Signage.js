@@ -100,6 +100,8 @@ export const CAMPUS_BOARDS = [
   // Madan Mohan: the ASI's maroon notice board at the foot of the stair, the
   // tower pictured on it ("Radha Madan Mohan Temple (36399)")
   { key: 'mm-asi', bg: '#6b1f2a', fg: '#f2e6d0', name: 'Madan Mohan Temple', deva: 'मदन मोहन मंदिर' },
+  // Radha Raman: the painted board in the great arch's tympanum over the door
+  { key: 'rr-board', bg: '#c8502a', fg: '#fff3dc', name: 'Swayambhoo Shri Radharaman Mandir', deva: 'स्वयंभू श्री राधारमण मन्दिर' },
 ];
 
 /** Atlas slot of one of Krishna Balaram's boards, or -1. */

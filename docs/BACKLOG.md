@@ -3466,3 +3466,30 @@ written, so Madan Mohan was measured and built here, solo.
   centroid's; and pressed against a rail long enough, the player's own
   unsticking sets him back in the room, so a walk is judged by how far it got.
 - The old `buildMadanMohan` (a spine at 45 degrees) is removed.
+
+## 2026-10-02 — Radha Raman in its ghera; "how long limit about to expire ?"
+
+- **Asked mid-build: "how long limit about to expire ?"** Answered: I cannot see
+  the account's remaining usage; the only reset seen this session was 12:30 pm
+  IST; each temple is pushed as it passes, so a cut-off loses at most the one in
+  progress. Radha Raman ~30-40 min more, the last three ~1.5-2 h each.
+- **Built** in `RadhaRamanMandir.js` (kind `temple-radha-raman`, rot 0) on OSM
+  way 335527344 at the checker's centroid: the blank west wall with its carved
+  cornice and soot, the frontispiece under its curved gable, the domes level
+  with the gable, the finials and flag; the inner court with porticos, the
+  antechamber platform, the sanctum facing east, the half-drawn tin roof; the
+  ghera's two gates and two courts on OSM's spur. Details:
+  docs/research/radha-raman.md, "Built". The shared haveli's Radha Raman
+  branch is removed.
+- **The importer now carries `compound`** into locations.generated.js. It never
+  did: Radha Vallabh's keep-out (and Madan Mohan's) had been added to the
+  generated file by hand and a re-import would have dropped them.
+- **Found: the day sun is in the north** — queued as its own item (QUEUE 4).
+- **Checks.** New `ghera.mjs` walks in from the Parikrama Marg through both
+  gates and courts, up the steps, through the 1.1 m door and the vestibule's
+  four steps to the darshan point, tries the platform, and walks out: 9/9.
+  `halls` started its walk-out 1.9 m in front of every altar — here that is on
+  the 1.37 m antechamber platform nobody stands on (its stairs were removed),
+  so it now starts at the nearest floor toward the darshan; everywhere else
+  1.9 m is floor and nothing changes. The temple's volume edge crosses the
+  vestibule, not the narrow door, so `temples` sees its doorway.

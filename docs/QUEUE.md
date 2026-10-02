@@ -134,11 +134,22 @@ searching the backlog for it. That is the failure this file exists to stop.*
    in docs/research/iskcon-krishna-balaram.md, then photographs and OSM —
    then build, photograph, measure. Next after Start from here ships.
 
-4. **Eight surveyed temples — Shahji, Rangaji, Radha Vallabh and Madan Mohan BUILT, four to go.** Each
+4. **Eight surveyed temples — Shahji, Rangaji, Radha Vallabh, Madan Mohan and Radha Raman BUILT, three to go.** Each
    gets built from its survey AND its checker's corrections (re-paired
    correctly 2026-09-30 — see the backlog), photographed, and measured against
    the survey's own numbers. ~~Shahji~~ · ~~Rangaji~~ · ~~Radha Vallabh~~ ·
-   ~~Madan Mohan~~ · Radha Raman · Radha Damodar · Radha Gopinath · Jugal Kishore.
+   ~~Madan Mohan~~ · ~~Radha Raman~~ · Radha Damodar · Radha Gopinath · Jugal Kishore.
+   Radha Raman's open items (2026-10-02), queued: the appearance-place shrine
+   and Gopala Bhatta's samadhi (sources disagree where); the inner steps' turn
+   to the right; the porticos' real colours; the ghera's real plan.
+   **Found while measuring it, queued as its own item: the day sun is in the
+   NORTH.** `palette.js` day: azimuth 2.9 rad with world z south puts the sun
+   at bearing ~14 degrees, 60 degrees up; at 27.6 N the midday sun is always
+   due south. Every south face in the game stands in its own shadow at
+   midday — Radha Raman's frontispiece measures V29-37 against the
+   photographs' V60-79 at the right hue and saturation. Turning it is one
+   number, but it relights the whole world, so it gets photographed across
+   the temples first.
    Madan Mohan's open items (2026-10-02), queued: the trees in the court north
    of the sanctum; what stands south of the stair below the red building; the
    east approach Growse built in 1875; the choir, sanctum and gateway passage
