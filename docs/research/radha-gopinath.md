@@ -251,3 +251,44 @@ Confidence: Medium-high. The documentary layer is solid: I pulled Growse's full 
 - OpenStreetMap (ODbL), queried via Overpass on 2026-09-28 — node 4569657292 'Sri Radha Gopinath Mandir' at 27.58605 N, 77.69962 E; way 99418408 'Gopinath Bazar'; plus Govind Dev (way 99427138), Madan Mohan (way 334671983), Radha Raman (way 335527344), Jugal Kishor (node 7288063975) and Kesi Ghat (node 6313899527), from which all inter-temple distances in the Setting section were computed.
 - ESRI World Imagery tile service (ArcGIS Online), zoom 18 and 19 over 27.58605 N / 77.69962 E, ground sample 0.53 and 0.265 m/px — used only for measurement of the urban grain, lane widths and the ~15 × 14 m courtyard. Non-Google imagery, measurement use only. https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer
 - Braj Ras / brajrasik.org, 'Radha Gopinath Temple, Vrindavan' and The Gaudiya Treasures of Bengal, 'Radha Gopinath temple, Vrindavan: Founded by Madhu Pandit' — used for the devotional tradition (Madhu Pandit, Paramananda Bhattacharya, Vamsivat, Jahnava Devi) and for the 1819 date of the present working temple, all labelled as tradition rather than documentation. https://www.brajrasik.org/articles/5884f98058f4ac271a08b947/radha-gopinath-temple-vrindavan ; https://thegaudiyatreasuresofbengal.com/2023/04/18/radha-gopinath-temple-vrindavan-founded-by-madhu-pandit/
+
+## Built — 2026-10-02 (RadhaGopinathMandir.js)
+
+What was here before: a truncated mass with an arcade at the OSM node — which
+sits at the north edge of the 1821 working temple, 40 m from the ruin.
+
+**Where.** Frame +lx east, +lz south, origin the OSM node. ESRI imagery puts
+the red ruin ~40 m south-south-west, a grassed court on its east, and the
+haveli between it and the node — Growse's "the north side is blocked by the
+modern temple". The haveli's inner court is the imagery's ~13 x 14 m one.
+
+**The ruin**, on Madan Mohan's plan (Growse: "corresponds very closely both
+in style and dimensions"): sanctum and choir in a row, 7.6 m each outside,
+east-facing, on the five-member plinth, plain ashlar fields with projecting
+bhadras and clustered angle colonnettes, the mid band, and the crowning
+cornice on the checker's dense row of flat rosettes under an eave of small
+merlons. Over the sanctum, the spire that stands today (the checker, two
+photographs): a curvilinear latina on the square plan with a projecting lata
+and a spine of bosses, corner shringas to ~60 per cent of its height, a tall
+spiky finial — its height ESTIMATED (apex ~15.5 m). Over the choir, the broken
+grass-grown mass in its grey core. The east front: the straight-sided lancet
+arch with its saw-tooth fringe, the recessed tympanum and lotus boss, the
+square-headed door behind an iron gate, pilasters, the small niche, the
+steps (six risers here, so none is more than a step, to a threshold at the
+gate); the U.P. Tourism plaque on its balustrade, the blue state board, a
+leaning pole, cables. The chapel off the sanctum's south with its east door;
+the arcade of three bracket arches on the choir's south wall, bricked behind,
+on Growse's carved terrace of rosette panels; a walled grass court with one
+tree and a gate to the lane; storage cages on the north flank.
+
+**The working temple** (c.1821, INFERRED in plan): two storeys, whitewash
+under salmon, the court of cream marble with black diamonds under bird
+netting, jali-filled cusped arches round it, the gilt darshan arch on its west
+side with the five-figure altar group facing east (altars.js), the street
+front's deep chhajja on carved brackets with painted panels and the
+red-painted arched entrance. The door from its court into the ruin's court
+is INFERRED — no source says how the two connect.
+
+**Unresolved, as the checker left it:** whether the lane arch is the choir's
+front or the court's gateway (built as the choir's front); Madhu Pandit's
+samadhi (placed nowhere — no position known); Sawai Jai Singh's additions.

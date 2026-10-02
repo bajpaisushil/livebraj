@@ -475,10 +475,11 @@ export const LOCATIONS = [
     "type": "temple",
     "district": "temple-quarter",
     "grounds": null,
+    "compound": { "lx0": -28, "lx1": 13, "lz0": 3.6, "lz1": 48.4, "ring": false, "also": [{ "lx0": -4, "lx1": 28.6, "lz0": -1.4, "lz1": 3.8 }, { "lx0": -10, "lx1": -6, "lz0": 48, "lz1": 58 }] },
     "pos": [900.57, -672.44],
     "geo": [27.586048, 77.699621],
     "rot": 0,
-    "radius": 24,
+    "radius": 26,
     "icon": "temple",
     "deity": "Shri Radha Gopinath",
     "interactions": [
@@ -488,12 +489,13 @@ export const LOCATIONS = [
       "story"
     ],
     "build": {
-      "kind": "temple-truncated",
-      "w": 32,
-      "d": 38,
-      "h": 14,
-      "color": "#a8563c",
-      "accent": "#8a4230"
+      "kind": "temple-radha-gopinath",
+      "w": 41,
+      "d": 52,
+      "h": 16,
+      "color": "#8f6861",
+      "accent": "#71362b",
+      "measured": true
     },
     "osm": "Sri Radha Gopinath Mandir"
   },

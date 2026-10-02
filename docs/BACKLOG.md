@@ -3536,3 +3536,18 @@ written, so Madan Mohan was measured and built here, solo.
 - **Fixed on the way:** the sikhara's string courses were true circles at the
   octagon's corner radius, which stood 0.6 m off its flat faces — floating
   hoops, seen as dark arcs from below. They follow the tower's own section now.
+
+## 2026-10-02 — Radha Gopinath, the last of the eight; "how long ?"; pause
+
+- **"how long ?"** Answered: Gopinath 30-45 min to checks and push.
+- **Built** in `RadhaGopinathMandir.js` (kind `temple-radha-gopinath`): the
+  ruin ~40 m SSW of the OSM node in its walled grass court, with the standing
+  spire, the broken choir mass, the lancet front and Growse's arcade; the
+  1821 working temple north of it with the darshan court. Details:
+  docs/research/radha-gopinath.md, "Built". The old `buildRadhaGopinath` is
+  removed. `platforms` caught a flight that could not be climbed to its top
+  (the plinth's collider over the last tread, a 0.33 m first riser): six
+  even risers to a threshold now.
+- **"please take a good pause after finishing what you are on as i need some
+  tokens ok"** — paused after this commit. Next when resumed: the rest of the
+  queue (item 11's flaky checks first), nothing started.

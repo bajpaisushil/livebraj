@@ -136,8 +136,22 @@ export const LANDMARKS = [
     id: 'radha-gopinath', match: ['Radha Gopinath', 'Gopinath Mandir'],
     name: 'Shri Radha Gopinath Mandir', hindi: 'श्री राधा गोपीनाथ मंदिर',
     type: 'temple', deity: 'Shri Radha Gopinath', icon: 'temple',
-    build: { kind: 'temple-truncated', w: 32, d: 38, h: 14, color: '#a8563c', accent: '#8a4230' },
-    rot: 0, radius: 24, district: 'temple-quarter',
+    /*
+     * The OSM node, at the north edge of the 1821 working temple. Frame +lx
+     * EAST, +lz SOUTH: the ruin stands ~40 m SSW (imagery), the haveli
+     * between. Build: both and the ruin's walled court, 41 x 52 m. The
+     * compound is that, the lane from its door east to the street, and the
+     * lane south from the ruin's court.
+     */
+    build: { kind: 'temple-radha-gopinath', w: 41, d: 52, h: 16, color: '#8f6861', accent: '#71362b', measured: true },
+    rot: 0, radius: 26, district: 'temple-quarter',
+    compound: {
+      lx0: -28.0, lx1: 13.0, lz0: 3.6, lz1: 48.4, ring: false,
+      also: [
+        { lx0: -4.0, lx1: 28.6, lz0: -1.4, lz1: 3.8 },
+        { lx0: -10.0, lx1: -6.0, lz0: 48.0, lz1: 58.0 },
+      ],
+    },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
     fallback: [27.58605, 77.69962],
   },

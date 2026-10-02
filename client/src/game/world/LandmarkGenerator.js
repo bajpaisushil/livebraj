@@ -20,6 +20,7 @@ import { buildMadanMohanMandir } from './MadanMohanMandir.js';
 import { buildRadhaRamanMandir } from './RadhaRamanMandir.js';
 import { buildRadhaDamodarMandir } from './RadhaDamodarMandir.js';
 import { buildJugalKishoreMandir } from './JugalKishoreMandir.js';
+import { buildRadhaGopinathMandir } from './RadhaGopinathMandir.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
@@ -3914,174 +3915,6 @@ function buildRangaji({ loc, b, ground, rng }) {
 
 
 /* ================================================================
- * Shri Radha Gopinath Mandir
- * ================================================================ */
-
-/**
- * Growse, 1883, on the old temple: "the nave has entirely disappeared; the
- * three towers have been levelled with the roof; and the entrance gateway of
- * the court-yard is tottering to its fall." Every one of those is built here.
- *
- * He also says it "corresponds very closely both in style and DIMENSIONS with
- * that of Madan Mohan" — so the plan is the same 20 ft choir and 20 ft
- * sanctuary, with the 57 ft nave gone, and a lateral chapel on the south.
- *
- * THREE THINGS FIND THIS PLACE, and the research names them:
- *   - "the truncated, almost pyramidal red sandstone tower that just clears
- *     the rooftops and is the only way to find the place";
- *   - "the blind three-bracket-arch arcade stuck on the south wall like a
- *     screen" — Growse notes it serves NO structural purpose;
- *   - "a plain, busy living temple welded onto the north flank of a gutted
- *     Mughal-era shell", which is the honest state of it.
- *
- * "No documented chhatris, kalasha or flag on the old temple", so there are
- * none.
- */
-function buildRadhaGopinath({ loc, b, ground }) {
-  const { color, accent } = loc.build;
-  const [x, z] = loc.pos;
-  const rot = loc.rot;
-  const cs = Math.cos(rot), sn = Math.sin(rot);
-  const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
-  const colliders = [];
-
-  const BAY = 6.1;              // 20 ft, as at Madan Mohan
-  const HW = 4.0;
-  const WALL = 1.0;
-  const FL = ground + 0.9;
-  const H = 8.6;
-
-  b.box(x, ground - 0.35, z, 30, 1.25, 26, 0xbfae8e, rot);
-  // "a fine boldly moulded plinth"
-  b.box(x, ground + 0.9 - 0.45, z, HW * 2 + 2.4, 0.45, BAY * 2 + 2.4, accent, rot);
-
-  const face = (lx, lz, fw, fd) => {
-    const q = p(lx, lz);
-    b.box(q[0], FL, q[1], fw, H, fd, color, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: fw, d: fd + 0.2, rot });
-  };
-
-  /* ---- choir and sanctuary, each a 20 ft square. The nave is gone. ---- */
-  const DOOR = 2.4;
-  for (const sgn of [-1, 1]) face(sgn * (HW - WALL / 2), 0, WALL, BAY * 2);
-  face(0, -BAY + WALL / 2, HW * 2, WALL);
-  {
-    const seg = (HW * 2 - DOOR) / 2;
-    for (const sgn of [-1, 1]) face(sgn * (DOOR / 2 + seg / 2), BAY - WALL / 2, seg, WALL);
-  }
-  {
-    const q = p(0, 0);
-    b.box(q[0], FL - 0.1, q[1], HW * 2, 0.14, BAY * 2, 0xc9bda2, rot);
-  }
-  // "a richly carved arabesque choir arch"
-  {
-    const q = p(0, BAY - WALL / 2);
-    cuspedArch(b, q[0], FL, q[1], DOOR + 0.5, 4.6, WALL + 0.3, rot + Math.PI / 2, accent, 7, 0x241a12);
-    for (let i = -3; i <= 3; i++) {
-      const a2 = p(i * 0.55, BAY + 0.1);
-      b.box(a2[0], FL + 4.7, a2[1], 0.3, 0.42, 0.14, tint(accent, 1.04), rot);
-    }
-  }
-  // the line of the lost nave, marked and not rebuilt
-  {
-    const nq = p(0, BAY + 8.7);
-    b.box(nq[0], ground + 0.9, nq[1], HW * 2 + 1.4, 0.4, 17.4, 0xa8967a, rot);
-    for (const sgn of [-1, 1]) {
-      const q = p(sgn * HW, BAY + 8.7);
-      b.box(q[0], ground + 1.3, q[1], 0.9, 1.1, 17.4, tint(color, 0.94), rot);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: 0.9, d: 17.4, rot });
-    }
-  }
-
-  /* ---- the three towers, LEVELLED WITH THE ROOF ---- */
-  /*
-   * Not stumps rising a little: levelled. What is left reads as an almost
-   * pyramidal mass that "just clears the rooftops", so it is three low
-   * pyramidal masses and nothing above them.
-   */
-  b.box(x, FL + H, z, HW * 2 + 0.8, 0.7, BAY * 2 + 0.8, accent, rot);
-  for (const lz of [-BAY * 0.5, BAY * 0.5]) {
-    const q = p(0, lz);
-    let ty = FL + H + 0.7, y2 = 0;
-    for (let i = 0; i < 4; i++) {
-      const k = 1 - i * 0.2;
-      b.box(q[0], ty + y2, q[1], HW * 1.7 * k, 0.85, BAY * 0.85 * k, i % 2 ? color : tint(color, 1.04), rot);
-      y2 += 0.85;
-    }
-    b.box(q[0], ty + y2, q[1], HW * 1.0, 0.45, BAY * 0.5, 0x8a7060, rot);   // levelled off
-  }
-
-  /* ---- the blind three-bracket-arch arcade on the SOUTH wall ---- */
-  /*
-   * "Serves no structural purpose" — purely an ornamental screen applied to a
-   * wall that already had a fine moulded plinth. So it stands proud of the
-   * wall and carries nothing.
-   */
-  {
-    const TZ = 0;
-    const tq = p(HW + 1.3, TZ);
-    b.box(tq[0], FL - 0.45, tq[1], 2.6, 0.5, BAY * 1.8, accent, rot);      // its terrace
-    for (let i = -1; i <= 1; i++) {
-      const q = p(HW + 0.35, TZ + i * 3.0);
-      // a BRACKET arch: brackets corbelling in to a flat head, not a true arch
-      for (const sgn of [-1, 1]) {
-        for (let k = 0; k < 3; k++) {
-          const br = p(HW + 0.35, TZ + i * 3.0 + sgn * (1.15 - k * 0.26));
-          b.box(br[0], FL + 2.0 + k * 0.42, br[1], 0.5, 0.42, 0.55 + k * 0.2, tint(accent, 0.94), rot);
-        }
-      }
-      b.box(q[0], FL + 3.26, q[1], 0.55, 0.4, 2.5, accent, rot);           // the flat head
-      for (const sgn of [-1, 1]) {
-        const pq = p(HW + 0.35, TZ + i * 3.0 + sgn * 1.32);
-        b.box(pq[0], FL, pq[1], 0.5, 2.0, 0.45, tint(color, 0.96), rot);   // its jambs
-      }
-    }
-    // the carved stone railing along the terrace
-    for (let i = 0; i < 9; i++) {
-      const rq = p(HW + 2.5, TZ + (i / 8 - 0.5) * BAY * 1.7);
-      b.box(rq[0], FL + 0.05, rq[1], 0.22, 0.95, 0.22, accent, rot);
-    }
-  }
-
-  /* ---- the living temple welded onto the NORTH flank ---- */
-  {
-    const q = p(-HW - 5.5, BAY * 0.2);
-    b.box(q[0], ground + 0.4, q[1], 10.5, 6.2, 13, 0xe0d4ba, rot);          // plain, busy
-    b.box(q[0], ground + 6.6, q[1], 11.2, 0.5, 13.8, 0xc05a33, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: 10.5, d: 13, rot });
-    const dr = p(-HW - 5.5, BAY * 0.2 + 6.8);
-    cuspedArch(b, dr[0], ground + 0.4, dr[1], 2.6, 3.4, 0.5, rot + Math.PI / 2, 0xc05a33, 5, 0x241a12);
-  }
-
-  /* ---- "the entrance gateway of the court-yard is tottering to its fall" -- */
-  {
-    const g = p(0, BAY + 17.4 + 2.5);
-    for (const sgn of [-1, 1]) {
-      const q = p(sgn * 3.0, BAY + 17.4 + 2.5);
-      // leaning, and missing its upper courses
-      b.box(q[0], ground + 0.5, q[1], 2.0, 4.6, 2.0, tint(color, 0.92), rot + sgn * 0.035);
-      b.box(q[0], ground + 5.1, q[1], 2.3, 0.4, 2.3, 0x8a7060, rot + sgn * 0.035);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: 2.0, d: 2.0, rot });
-    }
-    b.box(g[0], ground + 4.2, g[1], 8.2, 0.7, 2.2, accent, rot + 0.02);
-  }
-
-  const darsh = p(0, BAY + 3.0);
-  return {
-    altarY: 2.0,
-    colliders,
-    interior: {
-      altar: [p(0, -BAY * 0.45)[0], FL + 1.3, p(0, -BAY * 0.45)[1]],
-      darshan: [darsh[0], darsh[1]],
-      facing: rot + Math.PI,
-      floor: FL,
-      volume: { x, z, hw: HW, hd: BAY, rot, door: p(0, BAY + 1.2) },
-    },
-  };
-}
-
-
-/* ================================================================
  * Prem Mandir, Raman Reti
  * ================================================================ */
 
@@ -6313,9 +6146,34 @@ const BUILDERS = {
    */
   'temple-truncated': (args) => (args.loc.build.cathedral
     ? buildGovindDev(args)
-    : args.loc.id === 'radha-gopinath'
-      ? buildRadhaGopinath(args)
-      : BUILDERS['temple-truncated-plain'](args)),
+    : BUILDERS['temple-truncated-plain'](args)),
+
+  /**
+   * Radha Gopinath: the ruin of c.1589 — choir and sanctum, the standing spire,
+   * the broken choir mass, the lancet arch, the arcade of three bracket arches
+   * on Growse's terrace — in its walled grass court, and the 1821 working
+   * temple on its north side, where the deities are. RadhaGopinathMandir.js.
+   */
+  'temple-radha-gopinath': ({ loc, b, ground, rng, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const r = buildRadhaGopinathMandir({ b, loc, ground, terrain, colliders, rng, h: { cuspedArch, tint, buildDeities } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const H = r.hall;
+    const V = p((H.lx0 + H.lx1) / 2, (H.lz0 + H.lz1) / 2);
+    return {
+      altarY: r.altar.y - ground,
+      colliders,
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.FL,
+        volume: { x: V[0], z: V[1], hw: (H.lx1 - H.lx0) / 2, hd: (H.lz1 - H.lz0) / 2, rot, door: p(H.door[0], H.door[1]) },
+      },
+    };
+  },
 
   'temple-truncated-plain': ({ loc, b, ground }) => {
     const { w, d, h, color, accent } = loc.build;

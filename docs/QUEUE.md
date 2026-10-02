@@ -134,11 +134,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
    in docs/research/iskcon-krishna-balaram.md, then photographs and OSM —
    then build, photograph, measure. Next after Start from here ships.
 
-4. **Eight surveyed temples — all BUILT but Radha Gopinath (2026-10-02).** Each
+4. ~~**Eight surveyed temples.**~~ **ALL EIGHT BUILT 2026-10-02.** Each
    gets built from its survey AND its checker's corrections (re-paired
    correctly 2026-09-30 — see the backlog), photographed, and measured against
    the survey's own numbers. ~~Shahji~~ · ~~Rangaji~~ · ~~Radha Vallabh~~ ·
-   ~~Madan Mohan~~ · ~~Radha Raman~~ · ~~Radha Damodar~~ · Radha Gopinath · ~~Jugal Kishore~~.
+   ~~Madan Mohan~~ · ~~Radha Raman~~ · ~~Radha Damodar~~ · ~~Radha Gopinath~~ · ~~Jugal Kishore~~.
+   Radha Gopinath's open items: the lane arch's identity (choir front or court
+   gateway, unresolved); the haveli's real plan and how its court reaches the
+   ruin's (INFERRED door); Madhu Pandit's samadhi; a walk check of its own.
    Radha Gopinath, the last, is the least certain: the imagery puts its ruin
    ~40 m SSW of the OSM node, beside a grassed court, with the 1821 haveli
    temple between; the checker leaves open whether the lane arch is the
