@@ -242,10 +242,11 @@ export const LOCATIONS = [
     "type": "temple",
     "district": "temple-quarter",
     "grounds": null,
-    "pos": [504.18, -419.01],
-    "geo": [27.583761, 77.695606],
+    "compound": { "lx0": -14, "lx1": 11.2, "lz0": -6, "lz1": 31.5, "ring": false, "also": [{ "lx0": 6.5, "lx1": 23.6, "lz0": -6.6, "lz1": 14.2 }, { "lx0": -17, "lx1": 6.7, "lz0": -35, "lz1": -5 }] },
+    "pos": [501.31, -417.32],
+    "geo": [27.583746, 77.695577],
     "rot": 0,
-    "radius": 20,
+    "radius": 26,
     "icon": "temple",
     "deity": "Shri Radha Damodar",
     "interactions": [
@@ -255,13 +256,13 @@ export const LOCATIONS = [
       "story"
     ],
     "build": {
-      "kind": "temple-haveli",
-      "w": 20,
-      "d": 24,
+      "kind": "temple-radha-damodar",
+      "w": 39,
+      "d": 66,
       "h": 9,
-      "color": "#dccfb4",
-      "accent": "#9c6a48",
-      "arches": 3
+      "color": "#f2e3cf",
+      "accent": "#af7f66",
+      "measured": true
     },
     "osm": "Sri Radha Damodara Mandir"
   },

@@ -223,10 +223,25 @@ export const LANDMARKS = [
     id: 'radha-damodar', match: ['Radha Damodara', 'Radha Damodar'],
     name: 'Shri Radha Damodar Mandir', hindi: 'श्री राधा दामोदर मंदिर',
     type: 'temple', deity: 'Shri Radha Damodar', icon: 'temple',
-    build: { kind: 'temple-haveli', w: 20, d: 24, h: 9, color: '#dccfb4', accent: '#9c6a48', arches: 3 },
-    rot: 0, radius: 20, district: 'temple-quarter',
+    /*
+     * On the checker's true area centroid of OSM way 334674939, the compound
+     * (the survey's was 7.7 m off), frame +lx EAST, +lz SOUTH. Build: the
+     * compound's 39 x 66 m; nothing over the neighbours. The compound keep-out
+     * follows the outline in three rectangles: the main block and south yard,
+     * the court with its gatehouse, the north arm.
+     */
+    at: [27.583746, 77.695577],
+    build: { kind: 'temple-radha-damodar', w: 39, d: 66, h: 9, color: '#f2e3cf', accent: '#af7f66', measured: true },
+    rot: 0, radius: 26, district: 'temple-quarter',
+    compound: {
+      lx0: -14.0, lx1: 11.2, lz0: -6.0, lz1: 31.5, ring: false,
+      also: [
+        { lx0: 6.5, lx1: 23.6, lz0: -6.6, lz1: 14.2 },
+        { lx0: -17.0, lx1: 6.7, lz0: -35.0, lz1: -5.0 },
+      ],
+    },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
-    fallback: [27.58330, 77.69760],
+    fallback: [27.583746, 77.695577],
   },
   {
     id: 'gopishwar-mahadev', match: ['Гопишвары Махадевы', 'Gopishwar'],

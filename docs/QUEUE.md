@@ -134,11 +134,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
    in docs/research/iskcon-krishna-balaram.md, then photographs and OSM —
    then build, photograph, measure. Next after Start from here ships.
 
-4. **Eight surveyed temples — Shahji, Rangaji, Radha Vallabh, Madan Mohan and Radha Raman BUILT, three to go.** Each
+4. **Eight surveyed temples — Shahji, Rangaji, Radha Vallabh, Madan Mohan, Radha Raman and Radha Damodar BUILT, two to go.** Each
    gets built from its survey AND its checker's corrections (re-paired
    correctly 2026-09-30 — see the backlog), photographed, and measured against
    the survey's own numbers. ~~Shahji~~ · ~~Rangaji~~ · ~~Radha Vallabh~~ ·
-   ~~Madan Mohan~~ · ~~Radha Raman~~ · Radha Damodar · Radha Gopinath · Jugal Kishore.
+   ~~Madan Mohan~~ · ~~Radha Raman~~ · ~~Radha Damodar~~ · Radha Gopinath · Jugal Kishore.
+   Radha Damodar's open items (2026-10-02), queued: the five other deity
+   groups on its wide altar; the gaushala; the kitchen by Prabhupada's room;
+   the real plan inside the compound (only OSM's five buildings are fixed).
    Radha Raman's open items (2026-10-02), queued: the appearance-place shrine
    and Gopala Bhatta's samadhi (sources disagree where); the inner steps' turn
    to the right; the porticos' real colours; the ghera's real plan.

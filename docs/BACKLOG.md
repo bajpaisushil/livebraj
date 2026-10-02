@@ -3493,3 +3493,24 @@ written, so Madan Mohan was measured and built here, solo.
   so it now starts at the nearest floor toward the darshan; everywhere else
   1.9 m is floor and nothing changes. The temple's volume edge crosses the
   vestibule, not the narrow door, so `temples` sees its doorway.
+
+## 2026-10-02 — Radha Damodar, on its outline
+
+- **Built** in `RadhaDamodarMandir.js` (kind `temple-radha-damodar`, rot 0) on
+  OSM way 334674939 at the checker's centroid: the caged lane and the portal
+  on the entrance node, the court and its venerated tree, the darshan hall,
+  Srila Prabhupada's room (a walk-in room), the paired samadhis of Jiva and
+  Krishnadas at the south end and Rupa Goswami's at the north at the checker's
+  half size, under the yard's modern slab. Details:
+  docs/research/radha-damodar.md, "Built". The shared haveli's Radha Damodar
+  branch is removed. The compound keep-out is three rectangles (`also`).
+- **New check `damodar.mjs`** walks the lane, portal, court, hall steps to the
+  darshan point, the passage into Prabhupada's room, north to Rupa's samadhi
+  and round into the south yard: 7/7. It caught a real one on the way: the
+  Govardhan shila's table was 0.5 m, within a step, and the walk stood on it;
+  it is not a step now.
+- **Found, not mine to change (Player.js has another session's work in it):**
+  pressed against an obstacle for about ten seconds, the player's unsticking
+  sets him down at the nearest clear spot — here THROUGH the hall's wall into
+  the passage beyond, at its ground level. Harmless, surprising; noted for
+  whoever next works on Player.js.

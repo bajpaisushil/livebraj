@@ -18,6 +18,7 @@ import { buildShahji } from './ShahjiMandir.js';
 import { buildRadhaVallabhMandir } from './RadhaVallabhMandir.js';
 import { buildMadanMohanMandir } from './MadanMohanMandir.js';
 import { buildRadhaRamanMandir } from './RadhaRamanMandir.js';
+import { buildRadhaDamodarMandir } from './RadhaDamodarMandir.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
@@ -6331,7 +6332,7 @@ const BUILDERS = {
       openings.push({ c: (i / (arches - 1) - 0.5) * w * 0.62, hw: archHW });
     }
     // (Radha Raman and its ghera have a builder of their own: RadhaRamanMandir.js)
-    const damodar = loc.id === 'radha-damodar';
+    // (Radha Damodar has a builder of its own: RadhaDamodarMandir.js)
     const shyam = loc.id === 'radha-shyamsundar';
     const shrine = hollowShrine(b, loc, {
       hx: w * 0.41, hz: d * 0.33, floorY: FL, height: h * 0.72, color, openings,
@@ -6388,61 +6389,6 @@ const BUILDERS = {
         }
       }
     });
-
-    if (damodar) {
-      /*
-       * "A compound of TOMBS, not a temple with a forecourt."
-       *
-       * The rear and northern courts are described as a "courtyard of one
-       * hundred samadhis", tombs in rows, including Rupa Goswami's. That is the
-       * place — not the shrine, which is small and plastered and peeling. The
-       * vertical incident comes from these compact chhatri-like tombs and from
-       * nothing else: no shikhara, no gopuram, no dome of any scale.
-       */
-      const tomb = (lx, lz, sc) => {
-        const q = p2(lx, lz);
-        b.box(q[0], ground, q[1], 2.0 * sc, 0.45, 2.0 * sc, 0xc2ad8c, rot);
-        b.box(q[0], ground + 0.45, q[1], 1.5 * sc, 1.9 * sc, 1.5 * sc, 0xd6c8ab, rot);
-        b.box(q[0], ground + 0.45 + 1.9 * sc, q[1], 1.9 * sc, 0.3, 1.9 * sc, accent, rot);
-        dome(b, q[0], ground + 0.75 + 1.9 * sc, q[1], 0.7 * sc, 0.85 * sc, 0xd6c8ab);
-        shrine.colliders.push({ type: 'box', x: q[0], z: q[1], w: 1.5 * sc, d: 1.5 * sc, rot });
-      };
-      // the northern court, in rows
-      for (let r2 = 0; r2 < 3; r2++) {
-        for (let c2 = 0; c2 < 7; c2++) {
-          tomb(-w * 0.42 + c2 * 2.9, -d * 0.5 - 5 - r2 * 3.4, 0.85 + (c2 % 3) * 0.08);
-        }
-      }
-      // and a few larger ones against the east wall
-      for (let r2 = 0; r2 < 4; r2++) tomb(w * 0.5 + 4.5, -d * 0.2 + r2 * 4.2, 1.15);
-
-      /*
-       * The tulasi in the courtyard, and the narrow rectangular corridor
-       * between the buildings that pilgrims circle FOUR times. That corridor is
-       * why this is "one of the most walked-in places in Vrindavan", so it is
-       * left deliberately clear of anything to walk into.
-       */
-      {
-        const tq = p2(0, d * 0.5 + 4.5);
-        b.box(tq[0], ground, tq[1], 2.2, 0.7, 2.2, accent, rot);
-        b.box(tq[0], ground + 0.7, tq[1], 1.0, 0.35, 1.0, 0xc0562f, rot);
-        b.box(tq[0], ground + 1.05, tq[1], 0.7, 1.0, 0.7, 0x3f7a42, rot);
-        b.box(tq[0], ground + 1.9, tq[1], 0.45, 0.5, 0.45, 0x4f8a4a, rot);
-        shrine.colliders.push({ type: 'circle', x: tq[0], z: tq[1], r: 1.2 });
-      }
-      // the Giriraj shila, on its own small seat
-      {
-        const gq = p2(-w * 0.3, d * 0.5 + 3.2);
-        b.box(gq[0], ground, gq[1], 1.1, 0.55, 1.1, 0xc8b38c, rot);
-        b.box(gq[0], ground + 0.55, gq[1], 0.6, 0.42, 0.5, 0x6a6a62, rot);
-        b.box(gq[0], ground + 0.97, gq[1], 0.34, 0.1, 0.3, 0xc9a03c, rot);
-      }
-      // crumbling render, exposing brick
-      for (let i = 0; i < 9; i++) {
-        const q = p2((i / 8 - 0.5) * w * 0.7, d * 0.33 + 0.26);
-        b.box(q[0], ground + 1.2 + (i % 3) * 1.1, q[1], 1.1, 0.8, 0.08, 0xa0705e, rot);
-      }
-    }
 
     if (shyam) {
       /*
@@ -6815,6 +6761,38 @@ const BUILDERS = {
       altarY: r.altar.y - ground,
       colliders,
       meshes: [{ name: 'RadhaRamanSigns', builder: signB, x: loc.pos[0], z: loc.pos[1], r: 40, map: signAtlas }],
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.FL,
+        volume: { x: V[0], z: V[1], hw: (H.lx1 - H.lx0) / 2, hd: (H.lz1 - H.lz0) / 2, rot, door: p(H.door[0], H.door[1]) },
+      },
+    };
+  },
+
+  /**
+   * Radha Damodar: the walled haveli-compound on OSM's outline — the carved
+   * portal on its lane, the arcaded darshan hall, Srila Prabhupada's rooms,
+   * and the two samadhi yards, Rupa Goswami's chala-roofed shrine in the
+   * north. Built in RadhaDamodarMandir.js from its survey and checker.
+   */
+  'temple-radha-damodar': ({ loc, b, ground, rng, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const signB = new MeshBuilder();
+    const r = buildRadhaDamodarMandir({ b, signB, loc, ground, terrain, colliders, rng, h: {
+      cuspedArch, tint, signUV, buildDeities,
+    } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const H = r.hall;
+    const V = p((H.lx0 + H.lx1) / 2, (H.lz0 + H.lz1) / 2);
+    return {
+      altarY: r.altar.y - ground,
+      colliders,
+      meshes: [{ name: 'RadhaDamodarSigns', builder: signB, x: loc.pos[0], z: loc.pos[1], r: 50, map: signAtlas }],
+      rooms: r.rooms,
       interior: {
         altar: [A[0], r.altar.y, A[1]],
         darshan: [D[0], D[1]],

@@ -331,3 +331,59 @@ Confidence: High on the two things that matter most, medium on the rest. HIGH th
 - **The Gaudiya Treasures of Bengal** — https://thegaudiyatreasuresofbengal.com/2023/04/27/radha-damodar-temple-vrindavan-all-you-need-to-know/ — address "Loi Bazar, near Seva Kunj Gali, Vrindavan – 281121". Contains no architectural description whatsoever, which I record because it is one of the most detailed devotional accounts available.
 - **Overpass API (OpenStreetMap, ODbL)** — named-street distances measured from the compound centroid: Loi Bazar (way 99427129) 201 m @ 153°; Loi Bazar (way 99418388) 325 m @ 183°; Parikram Marg (way 970910718) 399 m @ 53°; Bankhandi Mahadev Bazar (way 99418410) 407 m @ 212°.
 - **Cross-check against this project's own earlier survey** — docs/research/radha-gokulananda.md gives Radha Damodar as 410 m SW at bearing 229° from Radha Gokulananda (27.586176, 77.698756); back-projection yields 27.5838 / 77.6956, agreeing with both OSM and Wikipedia.
+
+## Built — 2026-10-02 (RadhaDamodarMandir.js)
+
+What was here before: the shared haveli, 20 x 24 m, with "a compound of
+tombs" drawn round it on a guess.
+
+**Where and which way.** On the checker's true area centroid of OSM way
+334674939, frame +lx EAST, +lz SOUTH (rot 0). The compound wall is the way's
+nine vertices. The portal stands on the entrance node 3417359583, laid along
+the boundary's own line (6 degrees off the frame), at the end of the lane way
+334674940 — a game street, so arrival works. OSM's five buildings inside
+fix the rest that is fixed: Jiva's and Krishnadas Kaviraja's samadhis paired
+at the SOUTH end (the checker's correction of the survey's "samadhi garden
+north"), Prabhupada's room mid-way, Rupa Goswami's and Bhugarbha's north.
+
+**INFERRED, said so in the code:** the darshan hall on the court's west side
+with its sanctum at the west end, so the deities face east down the axis from
+the gate ("you look straight through the open doorway into a sunlit courtyard
+of white columns"); a 1.7 m passage along the hall's north side to
+Prabhupada's door and on north into the samadhi yard; the Goswamis' quarters
+and kitchen as plain two-storey blocks where no source describes anything.
+
+**Built:** the caged lane (the mesh blue, per the checker) and the slab you
+pass under; the portal — a skin of buff sandstone flush on a plain plastered
+gatehouse, the scalloped ~23-cusp archivolt over a 5-foil inner arch, the door
+open, the deity niche in orange over it, 9-foil flanking niches, the benches
+and the cow on the plinth, the foliate frieze, the chhajja on ten brackets in
+the redder stone, notice boards beside it. The court in grey-white slabs with
+a border, the turquoise-and-white tile dado on its walls, a photography
+notice, festoon lights, and the venerated tree in its raised kerb with red
+thread. The hall: five steps, three ogee-cusped bays on slender ringed
+columns, a baluster rail across the centre bay, the frieze of rosettes, a
+deep chhajja on 22 small brackets, a first floor with a gallery rail and green
+grilles; inside, the diagonal black-and-white chequer, sunk panels under
+cusped canopies, the gallery string course, blind niches above, the sanctum
+recess with clustered colonnettes over a stepped white marble altar — the
+principal group from altars.js; the Govardhan shila on its own yellow table
+in front of the altar (the checker), not on it. Prabhupada's room is a walk-in
+room: thick walls, the six-panel door open, a roshandan, rough flags, a
+reddish-brown pilaster strip, the arched niche, the English plaque, the
+seated murti behind a red rope; no dado (the checker's photograph). The south
+yard in red flags banded with marble: Jiva's chala-roofed shrine and
+Krishnadas's doorway (round arch, gilded consoles, plaque, turquoise mesh
+doors), with rows of aedicules, chest-cenotaphs and conical markers. The north
+yard: Rupa Goswami's samadhi at the checker's size — OSM's 3.4 x 2.7 m roof
+outline, ~3.5 m tall, not the survey's 5-6 m — re-plastered white, with a
+second chala shrine beside it in salmon; Bhugarbha's marker; rows of shrines;
+the modern slab over them on tall blue columns; the tall bare-brick mass
+behind, whose nobody can say.
+
+**Epoch 2019:** the hall terracotta-pink, Rupa's shrine white.
+
+**Not built, queued:** the other deity groups on the wide altar
+(Vrindavanchandra, Chhail Chikani, Radha-Vinoda, Radha-Madhava, Gaura-Nitai,
+Jagannath — their forms are not in altars.js); the gaushala; the kitchen
+beside Prabhupada's room; the hall's carved jharokha variant; the real plan.
