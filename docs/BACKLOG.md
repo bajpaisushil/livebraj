@@ -3551,3 +3551,29 @@ written, so Madan Mohan was measured and built here, solo.
 - **"please take a good pause after finishing what you are on as i need some
   tokens ok"** — paused after this commit. Next when resumed: the rest of the
   queue (item 11's flaky checks first), nothing started.
+
+## 2026-10-08 — "continue whatever left ?"; "don't stop and continue when limit is back"
+
+- **"how long ?"** (after the pause) — answered: the rest of the queue is
+  roughly 12-16 hours, pushed in pieces.
+- **"but nothing is pushed as i see here"** — checked: GitHub's main was at
+  0b893a0 with all six commits, and Vercel's status for it read "Deployment has
+  completed". What shows as unpushed in the editor is the other session's
+  uncommitted work (PluckInteraction, InteractionSystem, Player, CheatCodes,
+  four checks, its doc lines), deliberately left alone; a cached build can
+  also hide a deploy (the game is offline-first).
+- **"continue whatever lefft ?"** (CheatCodes.js open in the editor — the
+  other session's file, not touched) and **"don't stop and continue when limit
+  is abck"** — standing: keep going, and when a usage limit cuts in, resume
+  where it stopped as soon as it is back.
+- Ultracode is on, so the queue runs as workflows, each agent in its own git
+  worktree committing to a wf/* branch, each branch adversarially reviewed and
+  fixed before it is merged here:
+  - batch 1 (engineering): item 11 the checks that wait on a clock (chatter,
+    traffic, verges), item 9 the D-pad over the stick, item 15 honest ride
+    speeds, item 17 the crowd on floors, item 10 offline on the web;
+  - batch 2 (places): ISKCON's museum room / 35.3 m block / tower openings,
+    item 13 Jaipur Mandir's layout, item 16 Prem Mandir's setting, item 12 the
+    ghats and the river, Rangaji's and Shahji's open items, and the new
+    temples' loose ends (Sundar Das's chhatri, Madan Mohan's trees and east
+    approach, a walk check for Radha Gopinath).
