@@ -3726,3 +3726,11 @@ the very triangles it dropped with the basin cut out of them exactly.
 the checks (39406ee): `stairs` took the tread nearest a ghat's pin as the top
 of its flight; `offline` and `map-search` timed out under a parallel suite.
 Full suite 45/45.
+
+## 2026-10-09 — item 20: the e-rickshaw at its real width; item 21 queued
+
+DONE (0299d77): the e-rickshaw is 1.0 m wide (Saarthi, JSA, Neelam, Ele,
+E-Ashwa: 0.95-1.0 m), was 1.4. Swept over seeds 1-60: traffic 46 green at
+1.0 m vs 49 at 1.4 (noise: the same head-on standoffs reshuffled), verges 43
+either way. QUEUED as item 21: vehicles drive a leg's centreline both ways,
+which is where every remaining traffic failure comes from; keep left.

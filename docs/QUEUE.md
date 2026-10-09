@@ -413,11 +413,23 @@ searching the backlog for it. That is the failure this file exists to stop.*
     the honest options are a faster vehicle class on the highway stretch, or
     a shorter world (the old queue's 12 km question), not a rickshaw at 94.
 
-20. **The e-rickshaw is 1.4 m wide; real ones are 0.95-1.0 m** (Saarthi,
-    JSA, Neelam, Ele and E-Ashwa specifications, all 2.7-2.8 m long and
-    1.73-1.87 m tall, which the model now is). Narrowing it changes how
-    traffic spaces itself, and so the seeded `traffic` and `verges` baselines:
-    a pass of its own, with those seeds swept again.
+20. ~~**The e-rickshaw is 1.4 m wide; real ones are 0.95-1.0 m**~~ **DONE
+    2026-10-09** (0299d77): 1.0 m. Swept over seeds 1-60: `traffic` green on
+    46 at 1.0 m against 49 at 1.4, `verges` on 43 either way — the traffic
+    failures the same head-on standoffs reshuffled among the seeds (item 21).
+    Original notes follow. (Saarthi, JSA, Neelam, Ele and E-Ashwa
+    specifications, all 2.7-2.8 m long and 1.73-1.87 m tall, which the model
+    now is). Narrowing it changes how traffic spaces itself, and so the
+    seeded `traffic` and `verges` baselines: a pass of its own, with those
+    seeds swept again.
+21. **Vehicles keep left.** Found sweeping item 20: every remaining
+    `traffic` failure, on 14 of 60 seeds, is two vehicles meeting head-on on
+    one leg, each seeing the other dead ahead and stopping for good. They
+    drive the leg's CENTRELINE in both directions (CrowdSystem: pure pursuit
+    on the line), so on any two-way road they are on collision course. India
+    keeps left: hold a left-hand offset scaled to the road's width, check
+    the people on the verges (`verges` asks for 0.85 m) and the lane median
+    `verges` measures against, and sweep the seeds again.
 
 ## OPEN — reported, not yet reproduced
 
