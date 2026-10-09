@@ -3689,3 +3689,26 @@ Yamuna is a destination — the nearest stretch of bank that a path from where
 you stand reaches, on the same connected piece of the path network (the import
 leaves 30 islands; the nearest bank to Banke Bihari was on one). Destinations
 of every kind survive a reload.
+
+## 2026-10-09 — item 12: the Yamuna moved to where it is; Keshi Ghat rebuilt
+
+Continuing the queue ("continue with whatever is left and improve"). Status:
+the river and Keshi Ghat DONE (cba9606), Kaliya Ghat next.
+
+- **The river** was a 130 m band on a 30-point centreline, 0.55 m below the
+  town. Now: OSM's riverbank multipolygons (9075838, 1423292) intersected
+  with the low-water channel on the centreline, the water run on to the
+  mapped bank where the channel nearly meets it, and Keshi Ghat's front a
+  measured exception (`content/riverbanks.js`). Within 9 m of the imagery at
+  all five ghats measured; Keshi's water from 30 m out to 5.
+- **3.6 m below the town**, not 0.55: the bluff Vrindavan stands on; no more
+  flooded fields; the dry riverbed is sand flats.
+- **Things that leaned on the old river:** water depth (now to the surface
+  you stand on), riverbank planting (now across the river's real direction,
+  and never in it), the map (now draws the world's own water), the promenade
+  ways (`motor_vehicle=no` honoured; a walk, not an 11 m road).
+- **Keshi Ghat** from the surveyed plan (Sinha & Dhariwal, ISVS 2024, Fig. 7)
+  laid on the front measured off the imagery, with Growse and Commons
+  photographs: see `docs/research/keshi-ghat.md`.
+- **Guarded by** `keshi.mjs` 21/21 (mutations: no wet bank, the old water
+  level, depth to the bed, no end flights — each caught); full suite 44/44.

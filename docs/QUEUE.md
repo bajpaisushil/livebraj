@@ -279,10 +279,29 @@ searching the backlog for it. That is the failure this file exists to stop.*
     together under a minute, twice; vehcam no longer flaky. Still on the wall
     clock: `driving` (13 s, fine) and the probe tools.
 
-12. **The ghats stand in town with no river in sight.** Found photographing
-    Kaliya Ghat for the arch fix. Research first, per ghat, what is actually
-    there today — the Yamuna has moved away from many of Vrindavan's ghats, so
-    "dry ghat facing a floodplain" may be the true picture — then build that.
+12. **The ghats stand in town with no river in sight.** **THE RIVER AND KESHI
+    GHAT DONE 2026-10-09** (cba9606), `keshi.mjs` 21/21, mutation-tested four
+    ways; Kaliya Ghat is next. Found photographing Kaliya Ghat for the arch
+    fix. Research first, per ghat, what is actually there today — the Yamuna
+    has moved away from many of Vrindavan's ghats, so "dry ghat facing a
+    floodplain" may be the true picture — then build that.
+    Measured, where the water starts out from each ghat (imagery Feb 2024 /
+    game before / now): Keshi 0 / 30 / 5 m, Chir 61 / 40 / 59, Imli Tala 80 /
+    55 / 81, Yugal 171 / 167 / 162, Kaliya 546 / 511 / 541. The water is now
+    OSM's riverbank polygon intersected with the low-water channel on its
+    centreline, and at Keshi Ghat — outside the bend, where the current cuts
+    the bank — a measured front the water comes right up to. The river's
+    surface is 3.6 m below the town instead of 0.55 (the bluff Vrindavan
+    stands on); 387 sampled points of flooded field are 0. Water depth is
+    measured to what you stand on, not to the bed under a ghat. Keshi Ghat
+    itself is rebuilt from the surveyed plan in Sinha & Dhariwal (ISVS 2024)
+    laid on the front measured off the imagery: promenade, fifteen treads
+    into the river, eight burjes, five kunjs and two shrines, boats, and the
+    aarti on the last dry tread — `docs/research/keshi-ghat.md`.
+    STILL OPEN: Kaliya Ghat (dry, 540 m from the water: the kadamba in OSM
+    node 3417299004, the round Old Kaliya Temple, the sunken court — which
+    wants item 19's basins); the river's south-eastern loop, never in the
+    game; the highway and pontoon bridges, which still drown; seasons.
 13. ~~**Jaipur Mandir's layout.**~~ **DONE 2026-10-09** (137a53b). It had
     stood 1 km south-west of its own building from the first day: the curated
     pin named OSM way 679447890 and sat at 27.56720 / 77.68190. It is imported
