@@ -343,7 +343,9 @@ searching the backlog for it. That is the failure this file exists to stop.*
     down with its chhatri, pillar, lamp tower and Krishna on Kaliya's hoods —
     `docs/research/kaliya-ghat.md`. Its story now says the river moved.
     STILL OPEN: the river's south-eastern loop, never in the game; the
-    highway and pontoon bridges, which still drown; seasons; Rani Laxmibai
+    highway and pontoon bridges, which still drown (**DONE 2026-10-10**,
+    64d1108: the pontoon floats over the water and the rail over-bridges and
+    NH 44's flyover stand on decks, item 24); seasons; Rani Laxmibai
     Kunj's court chapel (Growse: "a colonnade of five arches on a high plinth
     … unusually broad eaves").
 13. ~~**Jaipur Mandir's layout.**~~ **DONE 2026-10-09** (137a53b). It had
@@ -573,7 +575,16 @@ searching the backlog for it. That is the failure this file exists to stop.*
     part for a horn), and one vehicle at a time through a junction's stitch.
 
 24. **Chhatikara, where everyone starts — THE VILLAGE DONE 2026-10-10**
-    (5285982); **the flyover, the rail over-bridge, the railway QUEUED.**
+    (5285982); **THE FLYOVER AND THE BRIDGES DONE 2026-10-10** (64d1108):
+    OSM's bridge=yes carried by the importer, and every span of 60 m or more
+    lifted (Bridges.js) — NH 44 on a deck 7 m over the junction, up straight
+    4 % ramps walled below 4.5 m and on piers with crossheads above, parapets
+    both sides; the rail over-bridges the same; the pontoon over the Yamuna
+    floating 0.9 m over the water. Decks and parapets carry a `base`, so they
+    stop what is on them and nothing under them; NavGraph never joins a deck
+    to the road it crosses; rides stand on the deck. `bridges.mjs` 10/10,
+    mutation-tested; full suite 50/50. **The railway QUEUED** — the
+    over-bridges cross a line the game does not have. Original notes follow.
     Photographed before: open grass and scattered trees round the start, the
     farmland rule for the corridor (BuildingGenerator's `country`) covering
     the village at the highway too. ESRI z17-z19 on the world's 200 m grid:

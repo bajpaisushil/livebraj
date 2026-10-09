@@ -3895,3 +3895,37 @@ any seed; verges 56 of 60. traffic now prints its worst pair when it fails.
 Full suite 49/49 in 32 min. Queued in item 24: the flyover (measured), the
 rail over-bridge and the railway, the roofs, the river's bridges and its
 south-eastern loop.
+
+## 2026-10-10 — Bridges: the flyover, the over-bridges, the pontoon
+
+DONE (64d1108). Items 12 and 24. Every road was a ribbon laid on the terrain,
+and a bridge was too: NH 44 crossed Chhatikara's junction at grade, and the
+road over the Yamuna went down the riverbed under the water. The importer now
+carries OSM's bridge=yes (seven spans of 60 m or more; the culverts and the
+station footbridge stay on the ground), and Bridges.js lifts them. Over land:
+a deck 7 m up a straight 4 % grade from each end (a smoothstep ramp, the first
+try, climbs half as steeply again as its average and holds the deck high
+almost to its foot), walled in reinforced earth below 4.5 m, on piers with
+crossheads above, a soffit, fascias, parapets — none where one carriageway's
+deck lies on the other's. Over the river: the road down the bank and over the
+sand, floating 0.9 m over the water on pontoons, railed. Measured on ESRI z19
+at Chhatikara (the central carriageways on a deck about 29 m wide, a parapet
+line and the deck's shadow, the service roads at grade either side).
+
+What it took underneath: colliders may carry a `base` — solid only between it
+and the top — so a parapet stops a body on the deck and not one on the road
+under it (collide, fits, isClear, the camera); NavGraph's deck nodes have
+their own keys and are never stitched to the ground, and "nearest" and the
+random placements answer from the ground; a hired ride and its passenger
+stand on the surface underfoot (it was the terrain for both, which would
+have driven a ride over the flyover along the ground through the piers), and
+crowdfloor pins that rule now instead of the old one; the arches check no
+longer judges Chandrodaya's gate by a parapet floating 7 m over it.
+bridges.mjs 10/10: on the deck at 7.8 (ground 0.44), the ramp climbed a step
+at a time, the parapet stopping you on the deck and not under it, 43 m
+walked straight across under it, the camera free there, 424 deck nodes and
+none joined to the ground, the pontoon 0.9 m over the water, a vehicle up on
+the deck for 2,509 frames and never under it. Mutation-tested: parapets
+solid to the ground (and a walk test that the player's unstick had been
+lifting across a solid parapet now counts a lift as being stopped), no deck
+nodes, the pontoon on the riverbed. Full suite 50/50 in 33 min.
