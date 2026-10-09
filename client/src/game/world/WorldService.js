@@ -33,6 +33,47 @@ const STEP_UP = 0.52;
  */
 const STAND_PAD = 0.1;
 
+/**
+ * The side of a cell in the standables' own index, in metres. See
+ * `_fileStandable`.
+ *
+ * Measured over the crowd's own positions and points round every landmark,
+ * the call costs the same at any cell from 4 m to 20 m — 0.13 to 0.14 µs,
+ * because a crowd agent's cell holds 0.2 standables on average — so the size
+ * is chosen on what it stores. At ten metres the index is about 30,000
+ * entries and its fullest cell 84 standables (ISKCON's paving); at four it is
+ * 150,000 entries for nothing, at twenty the fullest cell is 135.
+ */
+const STAND_CELL = 10;
+
+/**
+ * How much further than the shaped test a standable is filed, in metres.
+ *
+ * A filing that is a hair too wide costs a cheap reject; one a hair too narrow
+ * is a surface the index cannot see and the full scan can. Rounding is
+ * nanometres at these coordinates, so a centimetre is all margin.
+ */
+const STAND_SLACK = 0.01;
+
+/**
+ * A cell's key: a number, not the "ix,iz" string SpatialGrid builds.
+ *
+ * The crowd asks this a few hundred times a frame, and building the string was
+ * half the cost of the whole call — 0.21 µs against 0.14, measured. Unique for
+ * |iz| under 32,768 cells, which is 327 km; past that two cells can share a
+ * key, and that is still harmless, because a cell that hands back surfaces
+ * from somewhere else only costs their cheap reject. What would be wrong is a
+ * cell that LACKS one, and sharing a key never takes anything away.
+ */
+const standKey = (ix, iz) => ix * 65536 + iz;
+
+/**
+ * What an empty cell answers with. Never written to — and deliberately not
+ * frozen, because a frozen array is a different shape of object to the engine
+ * and `_standOn` is happier reading one shape of list.
+ */
+const NO_STANDABLES = [];
+
 const _v = new THREE.Vector3();
 const _v2 = new THREE.Vector3();
 const _hits = [];
@@ -57,6 +98,18 @@ export class WorldService {
      * it is walked directly.
      */
     this.standables = [];
+
+    /**
+     * ...and the same standables again, filed by every cell they reach.
+     *
+     * The list stopped being a few hundred: it is 2,405 now, 2,646 while every
+     * gathering is sitting, and walking it is 8.9 µs a call — nothing once a
+     * frame for the player, 3.3 ms a frame for a crowd of 369. So the crowd
+     * asks `standHeightFast`, which reads one cell of this instead of the whole
+     * list. Kept in step with `standables` by `_addColliders` and
+     * `removeColliders`, the only two places either one changes.
+     */
+    this._standCells = new Map();
     this.grid = new SpatialGrid(20);
     this.locationGrid = new SpatialGrid(64);
     this.flowerGrid = new SpatialGrid(16);
@@ -144,6 +197,12 @@ export class WorldService {
     };
     const n = strip(this.colliders);
     strip(this.standables);
+    // and out of the stand index, or `standHeightFast` would go on standing
+    // people on a surface `standHeight` no longer knows about
+    for (const [k, cell] of this._standCells) {
+      strip(cell);
+      if (!cell.length) this._standCells.delete(k);
+    }
     this.grid.removeWhere(hit);
     return n;
   }
@@ -180,14 +239,14 @@ export class WorldService {
         else if (c.h != null) norm.top = this.groundHeight(c.x, c.z) + c.h;
         this.colliders.push(norm);
         this._index(norm);
-        if (norm.top !== undefined) this.standables.push(norm);
+        if (norm.top !== undefined) { this.standables.push(norm); this._fileStandable(norm); }
       } else {
         const norm = { type: 'circle', x: c.x, z: c.z, r: c.r || 0.5, tag: c.tag, standOnly: !!c.standOnly, soft: !!c.soft, floor: !!c.floor, over: !!c.over };
         if (c.top != null) norm.top = c.top;
         else if (c.h != null) norm.top = this.groundHeight(c.x, c.z) + c.h;
         this.colliders.push(norm);
         this._index(norm);
-        if (norm.top !== undefined) this.standables.push(norm);
+        if (norm.top !== undefined) { this.standables.push(norm); this._fileStandable(norm); }
       }
     }
   }
@@ -222,6 +281,37 @@ export class WorldService {
     for (let ix = x0; ix <= x1; ix++) {
       for (let iz = z0; iz <= z1; iz++) {
         this.grid.insert(ix * cell + half, iz * cell + half, norm);
+      }
+    }
+  }
+
+  /**
+   * File a standable in every cell of `_standCells` that its CHEAP REJECT
+   * would let through — the square `standHeight` tests before the shaped one,
+   * `c.r + STAND_PAD` either side of the centre.
+   *
+   * That square is the whole contract. Any point a surface can hold falls
+   * inside it, so the one cell a point falls in holds every surface that could
+   * hold that point, and reading that cell gives exactly the answer reading the
+   * whole list does. Nothing else is needed for `standHeightFast` to agree with
+   * `standHeight`, and no smaller bound would do.
+   *
+   * Why not `this.grid`, which already has them: it files anything under half
+   * a cell by its centre alone, so an exact point query there has to read up
+   * to nine cells round the point; its bound is the circumradius without the
+   * pad; and half its entries are walls and trunks nobody can stand on.
+   * Measured, reading it that way is 1.19 µs a call against 0.14 for this.
+   */
+  _fileStandable(c) {
+    const reach = c.r + STAND_PAD + STAND_SLACK;
+    const x0 = Math.floor((c.x - reach) / STAND_CELL), x1 = Math.floor((c.x + reach) / STAND_CELL);
+    const z0 = Math.floor((c.z - reach) / STAND_CELL), z1 = Math.floor((c.z + reach) / STAND_CELL);
+    for (let ix = x0; ix <= x1; ix++) {
+      for (let iz = z0; iz <= z1; iz++) {
+        const k = standKey(ix, iz);
+        const cell = this._standCells.get(k);
+        if (cell) cell.push(c);
+        else this._standCells.set(k, [c]);
       }
     }
   }
@@ -611,8 +701,43 @@ export class WorldService {
    * you keep the ground you are on rather than being swallowed by a flight you
    * are merely standing beside, and over a hole you stand on the terrain
    * instead of hovering in the air above it.
+   *
+   * This walks every standable in the world, and it stays that way on
+   * purpose: it is the reference `standHeightFast` is measured against, and the
+   * player asks it once a frame, where its 9 µs is nothing.
    */
   standHeight(x, z, feetY, maxStep = STEP_UP) {
+    return this._standOn(this.standables, x, z, feetY, maxStep);
+  }
+
+  /**
+   * `standHeight`, for when a few hundred things ask it every frame.
+   *
+   * Same question, same rules, same answer — not approximately: the rules are
+   * one function, `_standOn`, and the only thing that differs is the list it
+   * is handed. Here that is the one cell of `_standCells` the point falls in,
+   * which holds every surface whose cheap bound reaches the point (see
+   * `_fileStandable`), where `standHeight` hands over every surface in the
+   * world. Whatever the long list has and the short one lacks is a surface the
+   * cheap bound throws away anyway, and what `_standOn` keeps from the rest —
+   * the highest surface, the highest backstop, whether either is a cut tread —
+   * comes out the same in any order. `crowdfloor.mjs` asks both at thousands
+   * of points round the landmarks and requires them to agree to the last bit.
+   *
+   * The crowd and the gatherings use this; the player keeps `standHeight`.
+   */
+  standHeightFast(x, z, feetY, maxStep = STEP_UP) {
+    const cell = this._standCells.get(standKey(Math.floor(x / STAND_CELL), Math.floor(z / STAND_CELL)));
+    return this._standOn(cell || NO_STANDABLES, x, z, feetY, maxStep);
+  }
+
+  /**
+   * The rules of standing, over whichever standables a caller hands in.
+   *
+   * One copy, so the full scan and the indexed one cannot drift apart: change
+   * how a backstop or a cut tread works here and both of them change.
+   */
+  _standOn(list, x, z, feetY, maxStep) {
     const terrain = this.groundHeight(x, z);
     const reachUp = feetY + maxStep;
     const reachDown = feetY - maxStep;
@@ -620,7 +745,6 @@ export class WorldService {
     let soft = -Infinity;       // ...and the best BACKSTOP, if nothing else holds
     let cut = false;            // is one of them holding you under the terrain
     let softCut = false;
-    const list = this.standables;
     for (let i = 0; i < list.length; i++) {
       const c = list[i];
       if (c.top > reachUp) continue;              // too tall to step onto

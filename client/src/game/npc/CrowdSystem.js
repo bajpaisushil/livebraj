@@ -257,6 +257,22 @@ export class Crowd {
     return nav.randomNode(rng);
   }
 
+  /**
+   * How high to stand somebody who has been PUT somewhere, not walked there.
+   *
+   * Every step an agent takes is measured from its own feet — see the end of
+   * `_stepAgent` — but a spawn or a recycle is a placement, and the feet it
+   * carries belong to wherever it was before, if anywhere: they used to start
+   * at 0 for everyone. So a placement starts again from the terrain under the
+   * new spot, which is the rule the player keeps for a placement too:
+   * `Player.placeAt` asks `standHeight` from the terrain under where it puts
+   * you, and `Player._feet` forgets the old ground after a jump that large.
+   */
+  _placedY(x, z) {
+    const w = this.ctx.world;
+    return w.standHeightFast(x, z, w.groundHeight(x, z));
+  }
+
   _addPerson(rng, i) {
     const typeIdx = i % PEOPLE.length;
     const slot = this.peopleInst[typeIdx];
@@ -265,7 +281,7 @@ export class Crowd {
     if (!node) return;
     const agent = {
       type: typeIdx,
-      archetype: PEOPLE[typeIdx].id, x: node.x, z: node.z, y: 0, yaw: rng() * TAU,
+      archetype: PEOPLE[typeIdx].id, x: node.x, z: node.z, y: this._placedY(node.x, node.z), yaw: rng() * TAU,
       speed: PEOPLE[typeIdx].speed * range(rng, 0.85, 1.15),
       target: null, phase: rng() * TAU, idle: 0, node,
       // which verge this person keeps to, for life. Held rather than rerolled
@@ -281,7 +297,7 @@ export class Crowd {
     const node = this._startNode(rng);
     if (!node) return;
     list.push({
-      x: node.x, z: node.z, y: 0, yaw: rng() * TAU,
+      x: node.x, z: node.z, y: this._placedY(node.x, node.z), yaw: rng() * TAU,
       speed: speed * range(rng, 0.7, 1.2),
       target: null, idle: range(rng, 0, 8), sitting: chance(rng, 0.35), phase: rng() * TAU,
       // cows wander nearer the middle than people do, because they do
@@ -307,7 +323,7 @@ export class Crowd {
     }
     if (!node) return;
     slot.agents.push({
-      x: node.x, z: node.z, y: 0, yaw: rng() * TAU,
+      x: node.x, z: node.z, y: this._placedY(node.x, node.z), yaw: rng() * TAU,
       speed: VEHICLES[typeIdx].speed * range(rng, 0.8, 1.1),
       cur: 0, target: null, node,
     });
@@ -389,7 +405,10 @@ export class Crowd {
       // populated across the whole district
       if (away > far * 1.15 && nav) {
         const n = nav.randomNodeNear(p.x, p.z, far * 0.75, Math.random);
-        if (n) { a.x = n.x; a.z = n.z; a.node = n; a.target = null; }
+        // and the height goes with them. It used to be left behind, and the
+        // height is only set by walking, so somebody recycled into a pause
+        // stood for those seconds at the height of the place they had left.
+        if (n) { a.x = n.x; a.z = n.z; a.y = this._placedY(n.x, n.z); a.node = n; a.target = null; }
       }
       const edges = a.node ? a.node.edges : null;
       if (edges && edges.length) {
@@ -496,7 +515,22 @@ export class Crowd {
     const step = a.speed * dt;
     a.x += nx * step;
     a.z += nz * step;
-    a.y = ctx.world.groundHeight(a.x, a.z);
+    /*
+     * ON the floor, not on the terrain under it.
+     *
+     * This was `groundHeight`, which is the terrain and nothing else, so
+     * anyone crossing paving, a forecourt or a ghat walked at the height of
+     * the ground beneath it: 17 cm into Prem Mandir's plaza, and at Rangaji a
+     * cow was measured 12 cm into the forecourt flags. It only went unseen
+     * because the nav graph mostly keeps the crowd off built ground.
+     *
+     * The answer is the player's — the highest surface within a step of where
+     * the feet already are, so a person climbs a tread and walks under a
+     * balcony — asked through the index, because the full scan is 9 µs a call
+     * and this is asked for every agent, every frame. `a.y` is the feet the
+     * last step resolved, which is what the player measures from too.
+     */
+    a.y = ctx.world.standHeightFast(a.x, a.z, a.y);
     a.phase += dt * a.speed * 4;
     a.walking = true;
   }
@@ -519,7 +553,8 @@ export class Crowd {
           a.z += (dz / d) * a.speed * dt;
         }
       }
-      a.y = ctx.world.groundHeight(a.x, a.z);
+      // on whatever floor is underfoot, the same as the people (`_stepAgent`)
+      a.y = ctx.world.standHeightFast(a.x, a.z, a.y);
       const ddx = a.x - p.x, ddz = a.z - p.z;
       if (ddx * ddx + ddz * ddz > far2) continue;
       if (n >= inst.instanceMatrix.count) break;
@@ -682,6 +717,13 @@ export class Crowd {
         // and still sits on the ground, it just does not wander off with you
         // aboard.
         if (a.chartered) {
+          /*
+           * Still the terrain, unlike every other agent here, because this one
+           * is not ours to lift. RickshawSystem owns a chartered vehicle's
+           * height and seats its passenger by `groundHeight`; standing the deck
+           * on a floor while the seat stays on the terrain would sink whoever
+           * is riding into it. Both move together or neither does.
+           */
           a.y = ctx.world.groundHeight(a.x, a.z);
           if (n < slot.capacity) this._writeMatrix(slot.mesh, n++, a, 1, 0);
           continue;
@@ -725,7 +767,8 @@ export class Crowd {
           a.honks = 0;
         }
 
-        a.y = ctx.world.groundHeight(a.x, a.z);
+        // on the paving it is driving over, not in it (see `_stepAgent`)
+        a.y = ctx.world.standHeightFast(a.x, a.z, a.y);
         if (d2 > far2) continue;
         if (n >= slot.capacity) break;
         this._writeMatrix(slot.mesh, n++, a, 1, 0);
@@ -766,7 +809,8 @@ export class Crowd {
       const ax = a.x - p.x, az = a.z - p.z;
       if (Math.hypot(ax, az) > far * 1.15 && nav) {
         const n = nav.randomNodeNear(p.x, p.z, far * 0.75, Math.random);
-        if (n) { a.x = n.x; a.z = n.z; a.node = n; a.prev = null; a.vel = 0; a.stuck = 0; }
+        // a placement, so the height starts again from the new spot's terrain
+        if (n) { a.x = n.x; a.z = n.z; a.y = this._placedY(n.x, n.z); a.node = n; a.prev = null; a.vel = 0; a.stuck = 0; }
       }
       const next = this._nextRoad(a, nav);
       // the leg it is driving, not just where it is going: without the start
@@ -993,6 +1037,8 @@ export class Crowd {
     }
 
     slot.agents.push({
+      // the terrain, not a floor: it is chartered from the start, and a
+      // chartered vehicle's height is RickshawSystem's (see `_stepVehicles`)
       x: px, z: pz, y: this.ctx.world.groundHeight(px, pz), yaw,
       speed: VEHICLES[ti].speed,
       cur: 0, target: null, node: onRoad ? node : null, throttle: 1,

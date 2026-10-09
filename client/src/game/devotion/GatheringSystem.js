@@ -296,7 +296,8 @@ export class GatheringSystem {
         const facing = rng() * TAU;
         const g = {
           kind, K, x, z, facing,
-          y: ctx.world.groundHeight(x, z),
+          // where the kund, the durrie or the dais goes down: see _member
+          y: this._seatY(x, z),
           members: this._members(kind, x, z, facing,
             rngAt(`gathering-${kind}-${Math.round(x)}-${Math.round(z)}`)),
           phase: rng() * TAU,
@@ -398,12 +399,30 @@ export class GatheringSystem {
       type: this._archetype(pose, kind, rng),
       x: wx,
       z: wz,
-      y: this.ctx.world.groundHeight(wx, wz) + lift,
+      y: this._seatY(wx, wz) + lift,
       yaw: yaw + facing,
       off: rng() * TAU,
       swayX: K.sway * range(rng, 0.7, 1.3),
       swayZ: K.sway * range(rng, 0.4, 1.0),
     };
+  }
+
+  /**
+   * The height somebody sits at: on the floor under them, not the terrain
+   * under the floor.
+   *
+   * This was `groundHeight` for every member and for the gathering itself, so
+   * a kirtan on paving would have sat in it — 17 cm deep on Prem Mandir's
+   * plaza. `_siteOk` keeps every site off the landmarks today, which is why
+   * nobody has; the height should not depend on that staying true.
+   *
+   * A placement and not a step, so it is measured from the terrain under the
+   * spot, as `Crowd._placedY` is. Asked through the index for the crowd's
+   * reason, though here it is only asked once, at build: nobody here moves.
+   */
+  _seatY(x, z) {
+    const w = this.ctx.world;
+    return w.standHeightFast(x, z, w.groundHeight(x, z));
   }
 
   /** Face the centre of the thing you are sitting at. */
