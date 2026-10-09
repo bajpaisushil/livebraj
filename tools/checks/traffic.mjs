@@ -57,6 +57,20 @@ const __PORT = server.address().port;   // any free port, so parallel runs never
  * long standoffs left (seeds 40, 43, 56, 60) are true head-on meetings on
  * two-way streets: vehicles drive a leg's centreline in both directions
  * (queue item 21, keeping left).
+ *
+ * Item 21, the same day: vehicles keep left, do not turn round in the road,
+ * go round what will not move, and queue by their lengths. And "the same
+ * place" is now two BODIES that touch, each its real size, which the old
+ * count — any two centres within 1.5 m — was not: measured as bodies, the
+ * traffic before this had a pair inside each other for 36-45 s on 16 of 60
+ * seeds (cabs queued a metre into each other: the stop was 3.2 m centre to
+ * centre, and a cab is 4.1 m long), all invisible to the old count.
+ * Measured the same way over seeds 1-60, the traffic before had 44 towns
+ * within the limits below and this has 49; this check, run over the same
+ * seeds, is green on 51. What is left is brief, but it is there: corners
+ * clipped at junctions, and vehicles held among the crowd that gathers round
+ * you at the start, which walks through them (seeds 32 and 47: 16-18 s).
+ * Queue item 21 keeps the notes.
  */
 const SEED = Number((process.argv.find((a) => a.startsWith('--seed=')) || '').slice(7)) || 1;
 
@@ -148,7 +162,7 @@ const r = await p.evaluate(() => {
    * they are going, so it can simply be ASKED. The scene is left alone.
    */
   const A = all[0], B = all[1];
-  const save = [A, B].map((q) => ({ x: q.a.x, z: q.a.z, yaw: q.a.yaw, sp: q.a.speed, th: q.a.throttle }));
+  const save = [A, B].map((q) => ({ x: q.a.x, z: q.a.z, yaw: q.a.yaw, aim: q.a.aimYaw, sp: q.a.speed, th: q.a.throttle }));
   const FAR = 6000;
   const park = all.slice(2);
   const parked = park.map((q) => ({ x: q.a.x, z: q.a.z }));
@@ -158,8 +172,10 @@ const r = await p.evaluate(() => {
 
   /** Put the pair in a configuration and ask each what it would do. */
   const ask = (ax, az, ayaw, bx, bz, byaw) => {
-    A.a.x = ax; A.a.z = az; A.a.yaw = ayaw; A.a.speed = 6; A.a.throttle = 1;
-    B.a.x = bx; B.a.z = bz; B.a.yaw = byaw; B.a.speed = 6; B.a.throttle = 1;
+    // steering the way it faces: `_vehicleAhead` also looks down the line a
+    // vehicle is steering for, and that is still the line of its real road
+    A.a.x = ax; A.a.z = az; A.a.yaw = ayaw; A.a.aimYaw = ayaw; A.a.speed = 6; A.a.throttle = 1;
+    B.a.x = bx; B.a.z = bz; B.a.yaw = byaw; B.a.aimYaw = byaw; B.a.speed = 6; B.a.throttle = 1;
     return { a: crowd._crossYield(A.a, A.ti), b: crowd._crossYield(B.a, B.ti) };
   };
 
@@ -179,6 +195,47 @@ const r = await p.evaluate(() => {
   const passing = ask(C - 14, C, Math.PI / 2, C + 14, C + 3.4, -Math.PI / 2);
   // crossing, but far enough apart that they clear each other
   const clear = ask(C - 40, C, Math.PI / 2, C, C - 9, 0);
+  /*
+   * Kept left, two vehicles on a street pass 2.1 m apart, centre to centre
+   * (CrowdSystem's LANE: 1.05 m each side of the middle). Neither may brake
+   * for the other — not in `_crossYield`, and not in `_vehicleAhead`, which
+   * took anything within 1.7 m of the nose's line, beyond its width, as in
+   * the way. Asked eight metres apart, inside the nine `_vehicleAhead` looks
+   * down, and for the widest vehicle on the road (a cab, 1.75 m).
+   */
+  const lanePass = ask(C - 4, C, Math.PI / 2, C + 4, C + 2.1, -Math.PI / 2);
+  const CAB = 1.75 / 2;
+  const P0 = ctx.player.position;
+  lanePass.aheadA = crowd._vehicleAhead(A.a, CAB, ctx, P0);
+  lanePass.aheadB = crowd._vehicleAhead(B.a, CAB, ctx, P0);
+  // and one in YOUR lane coming at you is still in the way
+  ask(C - 4, C, Math.PI / 2, C + 4, C, -Math.PI / 2);
+  const sameLane = crowd._vehicleAhead(A.a, CAB, ctx, P0);
+  /*
+   * Two vehicles nose to nose, each waiting for the other: after a moment
+   * exactly one goes round. And one held by somebody standing in the road
+   * goes round them. Asked of `_goRound` directly, as `_crossYield` is
+   * above, with what each sees ahead set down by hand as `_vehicleAhead`
+   * would leave it.
+   */
+  const held = (q, o, at, isV, on, r) => {
+    q.a.aheadObj = o; q.a.aheadAt = at; q.a.aheadV = isV; q.a.aheadOn = on; q.a.aheadR = r;
+  };
+  const reset = () => { for (const q of [A, B]) { q.a.round = null; q.a.heldT = 0; q.a.vel = 0; q.a.aheadObj = null; } };
+  ask(C, C, 0, C, C + 1, Math.PI);
+  reset();
+  held(A, B.a, 0.3, true, true, 0.5); held(B, A.a, 0.3, true, true, 0.5);   // gaps, nose to nose
+  for (let i = 0; i < 30; i++) { crowd._goRound(A.a, 0.1, 0.5); crowd._goRound(B.a, 0.1, 0.5); }
+  const standoff = { a: !!A.a.round, b: !!B.a.round };
+  reset();
+  const standing = { x: C, z: C + 2 };
+  ask(C, C, 0, C - 40, C, 0);
+  held(A, standing, 0.5, false, false, 0.35);    // half a metre off the nose
+  for (let i = 0; i < 10; i++) crowd._goRound(A.a, 0.1, 0.5);
+  const roundSoon = !!A.a.round;
+  for (let i = 0; i < 20; i++) crowd._goRound(A.a, 0.1, 0.5);
+  const roundSomebody = !!A.a.round && A.a.round.o === standing;
+  reset();
 
   /*
    * And the thing that actually matters, measured on the real town rather than
@@ -187,12 +244,59 @@ const r = await p.evaluate(() => {
    */
   park.forEach((q, i) => { q.a.x = parked[i].x; q.a.z = parked[i].z; });
   [A, B].forEach((q, i) => {
-    q.a.x = save[i].x; q.a.z = save[i].z; q.a.yaw = save[i].yaw;
+    q.a.x = save[i].x; q.a.z = save[i].z; q.a.yaw = save[i].yaw; q.a.aimYaw = save[i].aim;
     q.a.speed = save[i].sp; q.a.throttle = save[i].th;
   });
   ctx.player.position.set(px, ctx.player.position.y, pz);
 
-  let overlaps = 0, samples = 0, stopped = 0;
+  /*
+   * Turning round in the road. A vehicle chose among every drivable edge out
+   * of a node, the one it had just driven included, and there is a node every
+   * 8 m: about one leg in three was a U-turn, in front of whoever followed.
+   * It may turn back only where nothing else it may take, and fits down,
+   * leaves the node.
+   */
+  const DRIVABLE = new Set(['street', 'main', 'highway', 'trunk', 'parikrama', 'stitch']);
+  let legs = 0, uturns = 0;
+  const nextRoad = crowd._nextRoad.bind(crowd);
+  crowd._nextRoad = (a, nav) => {
+    const from = a.prev, at = a.node;
+    const n = nextRoad(a, nav);
+    if (n && from && at) {
+      legs++;
+      // forced only if nothing else a vehicle may take, and fits down, leaves the node
+      const fits = (e) => !nav._edgeOpen || nav._edgeOpen(at, e);
+      if (n === from && at.edges.some((e) => DRIVABLE.has(e.kind) && !e.against && e.to !== from.k && fits(e))) uturns++;
+    }
+    return n;
+  };
+
+  /*
+   * "In the same place" is two bodies that intersect, each the size it is
+   * (`crowd.vehicleTypes`, a few centimetres in from the paint). It was any
+   * two centres within 1.5 m, which came to the same thing while every
+   * vehicle drove down the middle of the road. Kept left, two e-rickshaws
+   * pass 1.5 m apart with half a metre between them, and that is not a
+   * collision; nose to tail at 1.5 m is, and so is a cab across a bike. The
+   * old count is kept beside it, for comparison.
+   */
+  const TYPES = crowd.vehicleTypes;
+  const body = (q) => {
+    const k = TYPES[q.ti];
+    return { x: q.a.x, z: q.a.z, fx: Math.sin(q.a.yaw), fz: Math.cos(q.a.yaw), hl: k.l / 2 - 0.05, hw: k.w / 2 - 0.05 };
+  };
+  // two rectangles meet unless some axis of either separates them
+  const touch = (P, Q) => {
+    const dx = Q.x - P.x, dz = Q.z - P.z;
+    for (const [ax, az] of [[P.fx, P.fz], [P.fz, -P.fx], [Q.fx, Q.fz], [Q.fz, -Q.fx]]) {
+      const rp = P.hl * Math.abs(P.fx * ax + P.fz * az) + P.hw * Math.abs(P.fz * ax - P.fx * az);
+      const rq = Q.hl * Math.abs(Q.fx * ax + Q.fz * az) + Q.hw * Math.abs(Q.fz * ax - Q.fx * az);
+      if (Math.abs(dx * ax + dz * az) > rp + rq) return false;
+    }
+    return true;
+  };
+  let overlaps = 0, within15 = 0, samples = 0, stopped = 0, longest = 0;
+  const running = new Map();     // how many samples running each pair has touched
   for (let step = 0; step < 30 * 45; step++) {
     crowd.update(1 / 30, ctx);
     if (step % 15) continue;
@@ -200,17 +304,27 @@ const r = await p.evaluate(() => {
     let moving = 0;
     for (let i = 0; i < all.length; i++) {
       if ((all[i].a.throttle ?? 1) > 0.5) moving++;
+      if (all[i].a.away) continue;
       for (let j = i + 1; j < all.length; j++) {
+        if (all[j].a.away) continue;
         const d = Math.hypot(all[i].a.x - all[j].a.x, all[i].a.z - all[j].a.z);
-        if (d < 1.5) overlaps++;
+        if (d < 1.5) within15++;
+        const k = i * 1000 + j;
+        if (d < 5 && touch(body(all[i]), body(all[j]))) {
+          overlaps++;
+          const n = (running.get(k) || 0) + 1;
+          running.set(k, n);
+          if (n > longest) longest = n;
+        } else running.delete(k);
       }
     }
     if (moving < all.length * 0.4) stopped++;
   }
 
+  crowd._nextRoad = nextRoad;
   return { ok: true, vehicles: all.length,
-    junction, committed, queue, passing, clear,
-    overlaps, samples, stalledSamples: stopped };
+    junction, committed, queue, passing, clear, lanePass, sameLane, standoff, roundSoon, roundSomebody,
+    overlaps, within15, longest, samples, stalledSamples: stopped, legs, uturns };
 });
 
 if (!r.ok) {
@@ -241,15 +355,42 @@ if (!r.ok) {
     r.passing.a > 0.9 && r.passing.b > 0.9,
     `${r.passing.a.toFixed(2)} and ${r.passing.b.toFixed(2)}`);
 
+  check('two in their own lanes pass without either braking',
+    r.lanePass.a > 0.9 && r.lanePass.b > 0.9 && !Number.isFinite(r.lanePass.aheadA) && !Number.isFinite(r.lanePass.aheadB),
+    `ceilings ${r.lanePass.a.toFixed(2)} and ${r.lanePass.b.toFixed(2)}, `
+    + `nothing ahead of either: ${!Number.isFinite(r.lanePass.aheadA)} and ${!Number.isFinite(r.lanePass.aheadB)}`);
+
+  check('one coming at you in your own lane is still in the way',
+    Number.isFinite(r.sameLane) && r.sameLane < 9, `seen ${r.sameLane} m ahead`);
+
+  check('of two nose to nose, each waiting for the other, exactly one goes round',
+    r.standoff.a !== r.standoff.b, `${r.standoff.a} and ${r.standoff.b}`);
+
+  check('somebody standing in the road is waited for a moment, then gone round',
+    !r.roundSoon && r.roundSomebody, `going round after 1 s: ${r.roundSoon}, after 3 s: ${r.roundSomebody}`);
+
   check('nobody brakes for a vehicle that will clear them',
     r.clear.a > 0.9 && r.clear.b > 0.9,
     `${r.clear.a.toFixed(2)} and ${r.clear.b.toFixed(2)} at 40 m out`);
 
   // and the town itself, unstaged
+  /*
+   * Two things, and they are different. Two vehicles that STAY in each other
+   * are a standoff, or a queue driven into, and that is the fault this was
+   * written for: no pair may touch for more than 4 s at a stretch (8 samples
+   * half a second apart). A corner clipped at a junction is not that, and is
+   * held to "rarely": 15 samples in the 45 s, among 39 vehicles. Measured as
+   * bodies, the traffic before keeping left had a pair inside each other for
+   * 36-45 s on 16 of 60 seeds; see the header.
+   */
   check('vehicles rarely end up in the same place',
-    r.overlaps <= 2,
-    `${r.overlaps} overlapping pair(s) across ${r.samples} samples of `
-    + `${r.vehicles} vehicles over 45 s`);
+    r.longest <= 8 && r.overlaps <= 15,
+    `${r.overlaps} sample(s) of a pair touching across ${r.samples} samples of `
+    + `${r.vehicles} vehicles over 45 s, the longest ${r.longest * 0.5} s at a stretch `
+    + `(${r.within15} with centres within 1.5 m, the old measure)`);
+
+  check('nobody turns round in the road unless the road ends there',
+    r.legs > 100 && r.uturns === 0, `${r.uturns} U-turns where the road went on, in ${r.legs} legs driven`);
 
   check('and the traffic has not simply stopped',
     r.stalledSamples < r.samples * 0.25,

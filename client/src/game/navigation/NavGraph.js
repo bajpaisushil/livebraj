@@ -181,15 +181,17 @@ export class NavGraph {
     if (a.edges.some((e) => e.to === b.k)) return;
     const mult = (KIND_COST[kind] ?? 1) * (named ? NAMED_BONUS : 1);
     const w = Math.sqrt(dist2(a.x, a.z, b.x, b.z)) * mult;
-    a.edges.push({ to: b.k, w, kind, named: !!named });
     /*
      * A one-way road (OSM's oneway=yes, in the way's own order) is still
      * walked both ways, so the reverse edge stays — but it is marked as
      * AGAINST the traffic, which no vehicle takes. NH 44 is two such
      * carriageways, and with both driven both ways every standoff the
      * traffic check ever found was two vehicles meeting head-on on one of
-     * them, by Chhatikara where you start.
+     * them, by Chhatikara where you start. The edge WITH the traffic says so
+     * too: a carriageway that is all one way is driven down its middle, not
+     * kept to one side of (CrowdSystem, LANE).
      */
+    a.edges.push({ to: b.k, w, kind, named: !!named, ...(oneway ? { oneway: true } : {}) });
     b.edges.push({ to: a.k, w, kind, named: !!named, ...(oneway ? { against: true } : {}) });
     this._edgeCount++;
   }

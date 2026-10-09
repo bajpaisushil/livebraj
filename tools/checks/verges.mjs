@@ -35,6 +35,11 @@ const __PORT = server.address().port;   // any free port, so parallel runs never
  * Swept again 2026-10-09 with the e-rickshaw at its real 1.0 m (from 1.4):
  * over seeds 1-60, 43 green either way. Seed 27's strike went from 0.35 m to
  * 0.66 m. With one-way roads one way, 52 of 60.
+ *
+ * And with the vehicles keeping left (queue item 21), with the lane measured
+ * from the lane and keeping left asserted: 52 of 60, every red one vehicle
+ * within 0.85 m of somebody at the moment of measuring (8 towns; 7 before).
+ * Walkers now step round a vehicle rather than stand at its nose.
  */
 const SEED = Number((process.argv.find((a) => a.startsWith('--seed=')) || '').slice(7)) || 1;
 
@@ -80,8 +85,36 @@ if (!held) {
 
 const r = await p.evaluate(() => {
   const ctx = window.vrindavan.ctx;
+  /*
+   * Which side of a two-way road the vehicles keep, sampled once a second
+   * over the last twenty: at any one moment only a handful are settled on
+   * one — most of the traffic near the start is on NH 44's one-way
+   * carriageways, or turning — and a handful is not a measurement. Settled
+   * means past the first few metres of the leg (a turn is still being made
+   * there), not on a junction's stitch (whose line is no road's), and not
+   * going round anything (CrowdSystem: LANE, `_goRound`).
+   */
+  const sides = [];
+  const sideOf = () => {
+    for (const slot of ctx.crowd.vehicleInst || []) {
+      for (const v of slot.agents || []) {
+        if (!v.prev || !v.target || v.round) continue;
+        const sx = v.target.x - v.prev.x, sz = v.target.z - v.prev.z;
+        const sl = Math.hypot(sx, sz);
+        if (sl < 0.5) continue;
+        const ux = sx / sl, uz = sz / sl;
+        const ex = v.x - v.prev.x, ez = v.z - v.prev.z;
+        const e = v.prev.edges.find((q) => q.to === v.target.k);
+        if (!e || e.kind === 'stitch' || e.oneway || e.against || ex * ux + ez * uz < 3) continue;
+        sides.push(ex * uz - ez * ux);             // + is to the left of the way it is going
+      }
+    }
+  };
   // let them walk a while, so everyone has left the node they spawned on
-  for (let i = 0; i < 900; i++) ctx.crowd.update(1 / 30, ctx);
+  for (let i = 0; i < 900; i++) {
+    ctx.crowd.update(1 / 30, ctx);
+    if (i >= 300 && i % 30 === 0) sideOf();
+  }
 
   const terrain = ctx.world.terrain;
   /*
@@ -109,7 +142,7 @@ const r = await p.evaluate(() => {
   // per-type instance slots; `crowd.vehicles` is only bookkeeping and carries
   // no position at all, which is what the first draft of this check read.
   const veh = [];
-  const diag = { withPrev: 0, noPrev: 0, idle: 0, noTarget: 0, offLeg: [] };
+  const diag = { withPrev: 0, noPrev: 0, idle: 0, noTarget: 0, offLeg: [], left: sides };
   for (const slot of ctx.crowd.vehicleInst || []) {
     for (const v of slot.agents || []) {
       const d = terrain.roadDistance(v.x, v.z);
@@ -118,14 +151,32 @@ const r = await p.evaluate(() => {
       if (v.prev) diag.withPrev++; else diag.noPrev++;
       if (v.idle > 0) diag.idle++;
       if (!v.target) diag.noTarget++;
-      // how far off ITS OWN leg is it, as opposed to off any road at all?
-      if (v.prev && v.target) {
+      /*
+       * How far off ITS OWN LANE is it, as opposed to off any road at all?
+       * A vehicle keeps left of a two-way road's middle and drives down the
+       * middle of a one-way one, moves over for what is coming the other way
+       * and goes round what will not move (CrowdSystem: LANE, `_goRound`).
+       * `laneNow` is where across the leg it is steering for, all of that
+       * included, so this is measured from there — for the vehicles driving
+       * ALONG their leg: between its ends and facing down it. Not one going
+       * round something, which is leaving its lane, nor one turning onto the
+       * leg at a node, which is between lanes because that is what a turn
+       * is: counted, those put a snapshot's median at whatever share of the
+       * town happened to be at a junction (seed 38, 1.34 m, every vehicle
+       * over a metre out of it mid-turn).
+       */
+      if (v.prev && v.target && !v.round) {
         const sx = v.target.x - v.prev.x, sz = v.target.z - v.prev.z;
         const sl = Math.hypot(sx, sz);
         if (sl > 0.5) {
           const ux = sx / sl, uz = sz / sl;
           const ex = v.x - v.prev.x, ez = v.z - v.prev.z;
-          diag.offLeg.push(Math.abs(ex * uz - ez * ux));
+          const along = ex * ux + ez * uz;
+          const facing = Math.sin(v.yaw) * ux + Math.cos(v.yaw) * uz;   // cos of the angle off the leg
+          if (along >= 0 && along <= sl && facing > 0.82) {
+            const left = ex * uz - ez * ux;        // + is to the left of the way it is going
+            diag.offLeg.push(Math.abs(left - (v.laneNow ?? v.lane ?? 0)));
+          }
         }
       }
     }
@@ -135,6 +186,10 @@ const r = await p.evaluate(() => {
   diag.offLegMedian = diag.offLeg.length ? +diag.offLeg[Math.floor(diag.offLeg.length / 2)].toFixed(2) : -1;
   diag.offLegP90 = diag.offLeg.length ? +diag.offLeg[Math.floor(diag.offLeg.length * 0.9)].toFixed(2) : -1;
   diag.offLeg = diag.offLeg.length;
+  diag.left.sort((a2, b2) => a2 - b2);
+  diag.leftMedian = diag.left.length ? +diag.left[Math.floor(diag.left.length / 2)].toFixed(2) : -1;
+  diag.leftShare = diag.left.length ? +(diag.left.filter((q) => q > 0).length / diag.left.length).toFixed(2) : -1;
+  diag.left = diag.left.length;
 
   /*
    * Clearance: for every vehicle, how close is the nearest WALKING person?
@@ -204,9 +259,16 @@ check('the typical walker is off the centreline', r.median > 1.6,
  * What was actually asked for is that the rickshaw stops hitting people. So
  * measure that: the clearance between every vehicle and every walker.
  */
-check('vehicles hold their own lane', r.diag.offLegMedian < 2.0,
-  `off their own leg: median ${r.diag.offLegMedian} m, p90 ${r.diag.offLegP90} m`
-  + ` (${r.diag.withPrev}/${r.diag.withPrev + r.diag.noPrev} on a known leg)`);
+check('vehicles hold their own lane', r.diag.offLeg >= 10 && r.diag.offLegMedian < 1.0,
+  `off their own lane: median ${r.diag.offLegMedian} m, p90 ${r.diag.offLegP90} m`
+  + ` (${r.diag.offLeg} driving along their leg, of ${r.diag.withPrev + r.diag.noPrev})`);
+/*
+ * And the lane is on the LEFT. Every vehicle drove its leg's centreline both
+ * ways, and two meeting on a two-way road met nose to nose (queue item 21).
+ */
+check('on a two-way road they keep left', r.diag.left >= 60 && r.diag.leftMedian > 0.4 && r.diag.leftShare >= 0.8,
+  `${r.diag.left} looks at a vehicle settled on a two-way road over 20 s: `
+  + `median ${r.diag.leftMedian} m left of the middle, ${Math.round(r.diag.leftShare * 100)}% on the left`);
 check('no vehicle is standing in somebody', r.strikes === 0,
   `${r.strikes} vehicle/person pairs closer than ${r.STRIKE} m`
   + ` | nearest person to a vehicle: min ${r.clearMin} m, median ${r.clearMedian} m`

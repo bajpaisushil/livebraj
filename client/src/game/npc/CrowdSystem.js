@@ -108,6 +108,76 @@ const KIND_HALF = {
  * after. Shorter than the leg by enough to bite.
  */
 const LANE_LOOK = 3.5;
+/*
+ * Which side of the road a vehicle keeps — the LEFT, as everywhere in India —
+ * and how far off the middle, by the kind of road.
+ *
+ * Every vehicle drove its leg's centreline, both ways. Two meeting on a
+ * two-way road met nose to nose, each saw the other dead ahead, and both
+ * stopped for good: once the one-way roads were one way, that was every long
+ * standoff the traffic check had left (queue item 21).
+ *
+ * The street is the tight one: 3.6 m to the kerb, and its people walk 2.6 m
+ * off the middle (`vergeFor`). A full lane there (1.05 m) put every vehicle
+ * 1.55 m from the walkers on its side, and with the corridor narrowed to
+ * match, a sweep of sixty towns had a vehicle standing in somebody in 27 of
+ * them, against 7 before. So on a street a
+ * vehicle keeps a little left of the middle, as it does in the town, and
+ * moves over only as far as it needs to for whatever is coming the other
+ * way (`meet` in `_vehicleAhead`). The wider roads have room for a lane each
+ * all the time. A one-way carriageway is all one lane, driven down its middle.
+ */
+const LANE = { street: 0.6, parikrama: 1.7, main: 1.9, highway: 2.4, trunk: 2.8 };
+/* How far ahead a vehicle coming the other way is seen and made room for,
+ * and the least each moves over for it: two passing 1.5 m apart, centre to
+ * centre, whatever their widths. */
+const MEET_M = 22;
+const MEET_MIN = 0.75;
+/*
+ * How much room a vehicle wants beside what it is passing, flank to flank:
+ * PASS_GAP for a vehicle coming the other way in its own lane, PEOPLE_GAP for
+ * somebody on foot, a cow, or you. `_vehicleAhead` used one corridor 1.7 m
+ * beyond the other's width for everything, and kept left, the walkers on the
+ * verge and the traffic coming the other way are all inside that.
+ */
+const PASS_GAP = 0.2;
+const PEOPLE_GAP = 0.5;
+/*
+ * Going round.
+ *
+ * A vehicle held by something that is going nowhere never moved again:
+ * `_vehicleAhead` held it, wanting no speed, and getting nowhere while
+ * wanting none is not "stuck" to VehicleDrive. Two that met face to face at
+ * a junction held each other for good (seed 39: a cycle rickshaw and a bike
+ * on a stitch, for thirty seconds), and so did a rickshaw nosed up to
+ * somebody standing in the road (seed 17). So, as everybody here does: wait
+ * a moment, then go round — overtaking on the right, or pulling in to the
+ * left of something coming the other way — slowly, and only round that one
+ * thing. Of two holding each other, only one goes, by a fixed order; the
+ * other waits, since what it waits for is leaving.
+ */
+/*
+ * What is ahead is measured as the GAP, from this vehicle's nose to the near
+ * side of the thing, and not centre to centre. It was centre to centre, with
+ * the stop at 3.2 m: shorter than a cab, which is 4.1 m long, so cabs queued
+ * a metre into each other and the traffic check, counting centres within
+ * 1.5 m, never saw it. Somebody on foot is given half a metre more.
+ */
+const STOP_GAP = 0.8;        // stop
+const SLOW_GAP = 4.0;        // ease off to a crawl
+const FOOT_GAP = 0.5;        // and this much more for somebody on foot, a cow, or you
+const HOLD_S = 2.0;          // held by somebody, a cow, or a vehicle holding for it
+const HOLD_QUEUE_S = 6.0;    // held behind a vehicle that is itself waiting
+const ROUND_S = 7.0;         // the longest a way round is kept
+const ROUND_THR = 0.55;      // and the throttle it is taken at
+
+/** The lane for a leg: kept left on a two-way road, the middle of a one-way
+ *  one, and across a junction's stitch, whatever it had coming in. */
+function laneFor(e, had) {
+  if (e.kind === 'stitch') return had || 0;
+  if (e.oneway || e.against) return 0;
+  return LANE[e.kind] || 0;
+}
 
 /*
  * The horn.
@@ -124,6 +194,7 @@ const HORN_MAX = 3;
 const HORN_GAP = [4.5, 11];
 const HORN_RANGE = 42;
 const VERGE_INSET = 1.0;      // how far inside the kerb a person walks
+const STEP_ASIDE = 2.4;       // how near a vehicle has to be for a walker to step out of its way
 const MIN_VERGE = 0.35;       // a gali is not wide enough for a footway
 const MAX_VERGE_FRAC = 0.82;  // never out past the kerb itself
 
@@ -264,6 +335,8 @@ export class Crowd {
     this.cowInst = this._instanced(this.cowGeo, this.counts.cows);
     this.dogInst = this._instanced(this.dogGeo, this.counts.dogs);
     this.birdInst = this._instanced(this.birdGeo, this.counts.birds);
+    // what each slot of `vehicleInst` is, by the same index (sizes for the checks)
+    this.vehicleTypes = VEHICLES;
     this.vehicleInst = VEHICLES.map((v, i) => {
       const n = Math.max(1, Math.round(this.counts.vehicles / VEHICLES.length));
       const m = new THREE.InstancedMesh(this.vehicleGeo[i], this.mat, n);
@@ -669,6 +742,36 @@ export class Crowd {
     }
 
     /*
+     * And out of a vehicle's way — AROUND it, as round the people sitting
+     * down below, and not straight back. Nobody gave way to a vehicle at all:
+     * a walker on the verge kept their line into the side of a bike going
+     * round a wall (seed 40). Pushed straight away, one whose way lay past a
+     * rickshaw's nose stood at the nose, the push and the pull cancelling,
+     * and the rickshaw waited for them for good (seed 17). So: a little away,
+     * and more along — the way round that agrees with where they were going.
+     */
+    let shy = false;
+    for (let ti = 0; ti < this.vehicleInst.length; ti++) {
+      for (const v of this.vehicleInst[ti].agents) {
+        const vx = a.x - v.x, vz = a.z - v.z;
+        if (vx > STEP_ASIDE || vx < -STEP_ASIDE || vz > STEP_ASIDE || vz < -STEP_ASIDE) continue;
+        const vd = Math.hypot(vx, vz);
+        if (vd >= STEP_ASIDE || vd < 1e-4) continue;
+        const k = (STEP_ASIDE - vd) / STEP_ASIDE;
+        const ox = vx / vd, oz = vz / vd;
+        // the tangent on the side they were already heading
+        const side = -oz * nx + ox * nz >= 0 ? 1 : -1;
+        nx += ox * k * 0.8 - oz * side * k * 1.4;
+        nz += oz * k * 0.8 + ox * side * k * 1.4;
+        shy = true;
+      }
+    }
+    if (shy) {
+      const l = Math.hypot(nx, nz) || 1;
+      nx /= l; nz /= l;
+    }
+
+    /*
      * Go round the people who have sat down.
      *
      * Same shape as the avoidance for the player just above, and for the same
@@ -777,46 +880,171 @@ export class Crowd {
   }
 
   /** Anything in this vehicle's path within a few metres, and how close. */
-  _vehicleAhead(a, self, ctx, p) {
+  _vehicleAhead(a, half, ctx, p, hl = 1.4) {
     const fx = Math.sin(a.yaw), fz = Math.cos(a.yaw);
+    // what it is already going round is not in its way (`_goRound`)
+    const skip = a.round ? a.round.o : null;
     let nearest = Infinity;
+    let who = null, whoR = 0, whoV = false, whoOn = false;
 
-    const consider = (ox, oz, radius) => {
-      const dx = ox - a.x, dz = oz - a.z;
-      const along = dx * fx + dz * fz;              // distance down the road
-      if (along <= 0 || along > 9) return;
-      const across = Math.abs(dx * fz - dz * fx);   // how far off the line
-      if (across > 1.7 + radius) return;
-      if (along < nearest) nearest = along;
+    /*
+     * Down the line it is steering for, too, when that is not the way it is
+     * facing — for other vehicles only. Looking only off the nose, a rickshaw
+     * turning onto its next leg saw the auto stopped across that leg 6 cm
+     * from its nose, and turned into it (seed 1). Looking for everything down
+     * that line stopped the traffic at every corner for the people on the
+     * verge it was turning past, and the traffic check's sweep was worse for
+     * it, not better.
+     */
+    let gx = fx, gz = fz;
+    if (a.aimYaw !== undefined) {
+      let d = a.aimYaw - a.yaw;
+      d = Math.atan2(Math.sin(d), Math.cos(d));
+      if (Math.abs(d) > 0.15) { gx = Math.sin(a.aimYaw); gz = Math.cos(a.aimYaw); }
+    }
+    /*
+     * `reach`: how far off the nose's line something has to be to be passed.
+     * `depth`: how far it reaches back toward this vehicle along that line,
+     * so what comes back is the gap from the nose (STOP_GAP).
+     */
+    const along1 = (dx, dz, ux, uz, reach) => {
+      const along = dx * ux + dz * uz;              // distance down the road
+      if (along <= 0 || along > 9 + hl) return Infinity;
+      return Math.abs(dx * uz - dz * ux) > reach ? Infinity : along;   // how far off the line
     };
+    const consider = (ox, oz, reach, o, radius, depth, isV = false, on = false) => {
+      if (o === skip) return;
+      const dx = ox - a.x, dz = oz - a.z;
+      let along = along1(dx, dz, fx, fz, reach);
+      if (isV && (gx !== fx || gz !== fz)) along = Math.min(along, along1(dx, dz, gx, gz, reach));
+      if (along === Infinity) return;
+      const gap = along - hl - depth;
+      if (gap < nearest) { nearest = gap; who = o; whoR = radius; whoV = isV; whoOn = on; }
+    };
+    // somebody on foot, a cow, or you: passed once the flanks clear (PEOPLE_GAP)
+    const flank = (radius) => half + radius + PEOPLE_GAP;
 
     // the player
-    consider(p.x, p.z, 0.4);
+    consider(p.x, p.z, flank(0.4), p, 0.4, 0.4 + FOOT_GAP);
 
     // other vehicles
+    let meet = 0;
     for (let ti = 0; ti < this.vehicleInst.length; ti++) {
+      const ow = VEHICLES[ti].w * 0.5;
       for (const o of this.vehicleInst[ti].agents) {
         if (o === a) continue;
-        if (Math.abs(o.x - a.x) > 12 || Math.abs(o.z - a.z) > 12) continue;
-        consider(o.x, o.z, VEHICLES[ti].w * 0.5);
+        const dx = o.x - a.x, dz = o.z - a.z;
+        if (Math.abs(dx) > MEET_M || Math.abs(dz) > MEET_M) continue;
+        /*
+         * Coming the other way, it is in its own lane and is passed the same
+         * way — and made room for, by moving over as far as the two of them
+         * need (LANE). Going this way, it is the queue, and the queue keeps
+         * the wide corridor it always had: a vehicle in front is followed.
+         */
+        const oncoming = Math.sin(o.yaw) * fx + Math.cos(o.yaw) * fz < 0;
+        if (oncoming && o !== skip) {
+          const along = dx * fx + dz * fz;
+          if (along > 0 && along < MEET_M && Math.abs(dx * fz - dz * fx) < 4.5) {
+            meet = Math.max(meet, (half + ow + PASS_GAP + 0.15) * 0.5, MEET_MIN);
+          }
+        }
+        if (Math.abs(dx) > 14 || Math.abs(dz) > 14) continue;
+        // its length along this vehicle's line, as it lies: end on, or across
+        const ofx = Math.sin(o.yaw), ofz = Math.cos(o.yaw);
+        const depth = VEHICLES[ti].l * 0.5 * Math.abs(ofx * fx + ofz * fz) + ow * Math.abs(ofz * fx - ofx * fz);
+        consider(o.x, o.z, oncoming ? half + ow + PASS_GAP : 1.7 + ow, o, ow, depth, true, oncoming);
       }
     }
 
     // cows, which stand in the road and are not going to move for you
     for (const c of this.cows) {
       if (Math.abs(c.x - a.x) > 12 || Math.abs(c.z - a.z) > 12) continue;
-      consider(c.x, c.z, 0.8);
+      consider(c.x, c.z, flank(0.8), c, 0.8, 0.8 + FOOT_GAP);
     }
 
     // people crossing
     for (const slot of this.peopleInst) {
       for (const o of slot.agents) {
         if (Math.abs(o.x - a.x) > 10 || Math.abs(o.z - a.z) > 10) continue;
-        consider(o.x, o.z, 0.35);
+        consider(o.x, o.z, flank(0.35), o, 0.35, 0.35 + FOOT_GAP);
       }
     }
 
+    // what it is waiting for, and how big, for `_goRound`
+    a.aheadAt = nearest;
+    a.aheadObj = who; a.aheadR = whoR; a.aheadV = whoV; a.aheadOn = whoOn;
+    a.meet = meet;
     return nearest;
+  }
+
+  /**
+   * Held by something going nowhere: wait a moment, then go round it (HOLD_S).
+   *
+   * The way round is a place across the leg — `round.left`, metres left of
+   * its line, as the lane is — far enough from the thing that the two flanks
+   * clear: on its right to overtake, on its left to make way for something
+   * coming the other way. Taken slowly, and only round that one thing: it is
+   * looked past in `_vehicleAhead` and `_crossYield` until it is behind, out
+   * of reach, or ROUND_S is up. The time held runs down rather than resetting
+   * when the hold lifts for a moment: somebody walking between the two of a
+   * standoff was enough to start the count again, every time (seed 39).
+   */
+  _goRound(a, dt, half) {
+    const r = a.round;
+    if (r) {
+      r.t -= dt;
+      const dx = r.o.x - a.x, dz = r.o.z - a.z;
+      const along = dx * Math.sin(a.yaw) + dz * Math.cos(a.yaw);
+      if (r.t <= 0 || along < -2.5 || Math.hypot(dx, dz) > 12) a.round = null;
+    }
+    const o = a.aheadObj;
+    // a vehicle that is moving is a queue, not an obstruction
+    const going = o && a.aheadV && Math.abs(o.vel || 0) > 0.3;
+    if (!o || !(a.aheadAt < STOP_GAP + 0.4) || going) {
+      a.heldT = Math.max(0, (a.heldT || 0) - dt * 2);
+      return;
+    }
+    a.heldT = (a.heldT || 0) + dt;
+    // two holding each other: one goes round, by a fixed order, so only one —
+    // and the other starts its count again, or it would follow the first out
+    const mutual = a.aheadV && o.aheadObj === a;
+    if (mutual && (o.x !== a.x ? o.x < a.x : o.z < a.z)) { a.heldT = 0; return; }
+    const wait = a.aheadV && !mutual && o.aheadAt < STOP_GAP + 0.4 ? HOLD_QUEUE_S : HOLD_S;
+    if (a.heldT < wait) return;
+
+    const now = a.laneNow !== undefined ? a.laneNow : (a.lane || 0);
+    /*
+     * A vehicle across its path is not gone round: there is no "beside" to a
+     * thing meeting you at a right angle, and a place across your own leg
+     * computed from one put a tempo straight back in front of the auto it was
+     * trying to clear (seed 5). It is driven on past, on its own line, and
+     * the other — which waits, by the order above — is left behind.
+     */
+    if (a.aheadV) {
+      let turn = Math.abs(a.yaw - o.yaw) % (Math.PI * 2);
+      if (turn > Math.PI) turn = Math.PI * 2 - turn;
+      if (turn > 0.6 && turn < Math.PI - 0.6) {
+        a.round = { o, left: now, t: ROUND_S };
+        a.heldT = 0;
+        return;
+      }
+    }
+    // where it is across this leg, and where to be to clear it
+    const clear = Math.max(half + a.aheadR + PEOPLE_GAP, a.aheadV ? 1.6 : 0);
+    let oLeft = 0, room = 3.2;
+    if (a.prev && a.target) {
+      const sx = a.target.x - a.prev.x, sz = a.target.z - a.prev.z;
+      const sl = Math.hypot(sx, sz) || 1;
+      oLeft = ((o.x - a.prev.x) * sz - (o.z - a.prev.z) * sx) / sl;
+      const e = a.prev.edges.find((q) => q.to === a.target.k);
+      if (e && KIND_HALF[e.kind] !== undefined && e.kind !== 'stitch') room = KIND_HALF[e.kind];
+    }
+    // pull in left of something coming at you; overtake anything else on its
+    // right — and on the road: a rickshaw in a gali went 4 m out, into a wall
+    const most = Math.max(1, room - half - 0.3);
+    const left = a.aheadOn ? oLeft + clear : oLeft - clear;
+    a.round = { o, left: Math.max(-most, Math.min(most, left)), t: ROUND_S };
+    a.heldT = 0;
   }
 
   /**
@@ -856,7 +1084,7 @@ export class Crowd {
     for (let tj = 0; tj < this.vehicleInst.length; tj++) {
       const ow = VEHICLES[tj].w * 0.5;
       for (const o of this.vehicleInst[tj].agents) {
-        if (o === a) continue;
+        if (o === a || (a.round && o === a.round.o)) continue;
         const rx = o.x - a.x, rz = o.z - a.z;
         if (Math.abs(rx) > 18 || Math.abs(rz) > 18) continue;
 
@@ -867,6 +1095,13 @@ export class Crowd {
 
         const ov = (o.speed || 0) * (o.throttle === undefined ? 1 : o.throttle);
         const ofx = Math.sin(o.yaw), ofz = Math.cos(o.yaw);
+        /*
+         * Coming the other way is not crossing. Kept left (LANE), two
+         * vehicles on a street pass 1.5-2.1 m apart, centre to centre, which
+         * the crossing margin below calls a near miss — and one of every pair
+         * braked as they passed. Head on, it only matters if they will touch.
+         */
+        const headOn = turn > Math.PI - MIN_TURN;
 
         // closest approach of the two, as they are going now
         /*
@@ -884,7 +1119,7 @@ export class Crowd {
         const t = (rx * vx + rz * vz) / vv;
         if (t <= 0 || t > LOOK_T) continue;       // behind, or too far off
         const miss = Math.hypot(rx - vx * t, rz - vz * t);
-        if (miss > aw + ow + 0.9) continue;       // they clear each other
+        if (miss > aw + ow + (headOn ? PASS_GAP : 0.9)) continue;   // they clear each other
 
         /*
          * Both are heading for the same square metre. Who gets there first?
@@ -952,9 +1187,13 @@ export class Crowd {
         }
 
         // look down the road before moving — and across it
-        const ahead = this._vehicleAhead(a, slot, ctx, p);
-        const queue = ahead < 3.2 ? 0 : ahead < 6.5 ? 0.35 : 1;
-        const want = Math.min(queue, this._crossYield(a, ti));
+        const half = VEHICLES[ti].w * 0.5, hl = VEHICLES[ti].l * 0.5;
+        this._vehicleAhead(a, half, ctx, p, hl);
+        this._goRound(a, dt, half);
+        // looked at again once it has decided to go round, so it is looking past it
+        const ahead = a.round ? this._vehicleAhead(a, half, ctx, p, hl) : a.aheadAt;
+        const queue = ahead < STOP_GAP ? 0 : ahead < SLOW_GAP ? 0.35 : 1;
+        const want = Math.min(queue, this._crossYield(a, ti), a.round ? ROUND_THR : 1);
         a.throttle = a.throttle === undefined ? 1 : a.throttle + (want - a.throttle) * Math.min(1, dt * 3.5);
 
         const dx = a.x - p.x, dz = a.z - p.z;
@@ -1030,9 +1269,18 @@ export class Crowd {
       // recycle anyone who has drifted out of sight to somewhere just inside it
       const ax = a.x - p.x, az = a.z - p.z;
       if (Math.hypot(ax, az) > far * 1.15 && nav) {
-        const n = nav.randomNodeNear(p.x, p.z, far * 0.75, Math.random);
+        /*
+         * Onto a road a vehicle takes, as `_addVehicle` and `_driveOut` place
+         * them. Any node at all put rickshaws in the galis, where nothing
+         * drivable leads out and they drove the lanes looking for one.
+         */
+        let n = null;
+        for (let k = 0; k < 8 && !n; k++) {
+          const q = nav.randomNodeNear(p.x, p.z, far * 0.75, Math.random);
+          if (q && q.edges.some((e) => DRIVABLE.has(e.kind) && e.kind !== 'stitch')) n = q;
+        }
         // a placement, so the height starts again from the new spot's terrain
-        if (n) { a.x = n.x; a.z = n.z; a.y = this._placedY(n.x, n.z); a.node = n; a.prev = null; a.vel = 0; a.stuck = 0; }
+        if (n) { a.x = n.x; a.z = n.z; a.y = this._placedY(n.x, n.z); a.node = n; a.prev = null; a.vel = 0; a.stuck = 0; a.round = null; a.heldT = 0; }
       }
       const next = this._nextRoad(a, nav);
       // the leg it is driving, not just where it is going: without the start
@@ -1058,6 +1306,17 @@ export class Crowd {
      * it there, and because it is an aim POINT rather than a correction angle
      * there is no sign convention to get backwards.
      */
+    /*
+     * And the line is the vehicle's own LANE, `a.lane` to the left of the leg
+     * (LANE). Kept to one side, it passes the node a lane's width off and
+     * may never come within 1.6 m of it, so it has also arrived once it is
+     * level with the node, measured along the leg. (The first try at keeping
+     * left had a 2.2 m lane circling every node it could not reach.) But only
+     * level AND in its lane, give or take: arriving merely level let one that
+     * had swung wide start the next 8 m leg still 5 m out, and the next, and
+     * never come back (seed 50, a third of its traffic). Well past the node,
+     * it gives that one up rather than turn back for it.
+     */
     let aimX = a.target.x, aimZ = a.target.z;
     if (a.prev) {
       const sx = a.target.x - a.prev.x, sz = a.target.z - a.prev.z;
@@ -1065,29 +1324,86 @@ export class Crowd {
       if (sl > 0.5) {
         const ux = sx / sl, uz = sz / sl;
         const along = (a.x - a.prev.x) * ux + (a.z - a.prev.z) * uz;
+        // its lane, moved over for whatever is coming, or its way round something
+        const lane = a.round ? a.round.left : Math.max(a.lane || 0, a.meet || 0);
+        a.laneNow = lane;
+        const left = (a.x - a.prev.x) * uz - (a.z - a.prev.z) * ux;
+        if (along > sl - 1.6 && (Math.abs(left - lane) < 2.5 || along > sl + 1.5)) { a.target = null; return; }
         const look = Math.min(sl, Math.max(0, along) + LANE_LOOK);
-        aimX = a.prev.x + ux * look;
-        aimZ = a.prev.z + uz * look;
+        // left of the way it is going is (uz, -ux): x is east and z south
+        aimX = a.prev.x + ux * look + uz * lane;
+        aimZ = a.prev.z + uz * look - ux * lane;
       }
     }
+    // the way it is about to go, for `_vehicleAhead` to look down as well
+    a.aimYaw = Math.atan2(aimX - a.x, aimZ - a.z);
 
     driveStep(a, dt, ctx, Math.atan2(aimX - a.x, aimZ - a.z), want, AMBIENT, solid);
   }
 
-  /** The next node a vehicle would take, from the roads a vehicle can use. */
+  /**
+   * The next node a vehicle would take, from the roads a vehicle can use —
+   * and not back the way it came, unless the road gives it nothing else.
+   *
+   * It chose among every drivable edge out of the node, the one it had just
+   * driven included, and NavGraph puts a node every 8 m: so a vehicle
+   * half-way down a street turned round in the road about one leg in three
+   * (51 of 163 on the traffic check's seed 1, 70 of 169 on seed 60). Turning
+   * round in front of whoever was following is how two of the last four
+   * standoffs began.
+   *
+   * Nor into a dead end, where there is a way on: the turn it is forced to
+   * make at the end of one is the same turn, made in front of whoever came
+   * down after it (seed 56: a stitch 9 m into a road's end, and the auto
+   * behind it met it coming back). One node ahead is enough to see one.
+   *
+   * It also sets the leg's lane (`laneFor`), since only here is the edge in
+   * hand.
+   */
   _nextRoad(a, nav) {
     const edges = a.node && a.node.edges;
     if (!nav || !edges || !edges.length) return null;
-    // a drivable edge, and not against a one-way road's traffic (NavGraph)
-    const ok = (e) => DRIVABLE.has(e.kind) && !e.against;
-    let n = 0;
-    for (let i = 0; i < edges.length; i++) if (ok(edges[i])) n++;
+    /*
+     * A drivable edge, not against a one-way road's traffic, and one a
+     * vehicle fits down (NavGraph `_edgeOpen`, measured once an edge and
+     * kept). The routes the rickshaws are hired for always asked that; the
+     * traffic never did, and a junction's stitch cuts its corner through
+     * whatever stands there — a cycle rickshaw spent twenty seconds grinding
+     * along a wall by Chhatikara on one (seed 20).
+     */
+    const fits = nav._edgeOpen ? (n, e) => nav._edgeOpen(n, e) : () => true;
+    const okAt = (n, e) => DRIVABLE.has(e.kind) && !e.against && fits(n, e);
+    const ok = (e) => okAt(a.node, e);
+    const back = a.prev ? a.prev.k : null;
+    const here = a.node.k;
+    // does the road go on from there, other than straight back here?
+    const goesOn = (e) => {
+      const m = nav.nodes.get(e.to);
+      return !!m && m.edges.some((f) => okAt(m, f) && f.to !== here);
+    };
+    let n = 0, on = 0, open = 0;
+    for (let i = 0; i < edges.length; i++) {
+      const e = edges[i];
+      if (!ok(e)) continue;
+      n++;
+      if (e.to === back) continue;
+      on++;
+      if (goesOn(e)) open++;
+    }
     // nothing drivable out of here: take anything rather than sit in the gali
     // for ever, and the steering will get it back out
-    let pick = Math.floor(Math.random() * (n || edges.length));
+    const take = open ? (e) => ok(e) && e.to !== back && goesOn(e)
+      : on ? (e) => ok(e) && e.to !== back
+        : n ? ok : () => true;
+    let pick = Math.floor(Math.random() * (open || on || n || edges.length));
     for (let i = 0; i < edges.length; i++) {
-      if (n && !ok(edges[i])) continue;
-      if (pick-- === 0) return nav.nodes.get(edges[i].to) || null;
+      const e = edges[i];
+      if (!take(e)) continue;
+      if (pick-- === 0) {
+        const next = nav.nodes.get(e.to) || null;
+        if (next) a.lane = laneFor(e, a.lane);
+        return next;
+      }
     }
     return null;
   }
