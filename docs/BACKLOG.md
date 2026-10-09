@@ -3743,3 +3743,12 @@ ways — the cause of the worst traffic standoffs, by Chhatikara where you
 start. Now carried, honoured by ambient traffic, priced for rides. traffic
 52/60 seeds (from 46), verges 52/60 (from 43). The rest of item 21 —
 keeping left on two-way streets — tried, reverted, notes in the queue.
+
+## 2026-10-09 — item 7: the crowd follows the calendar
+
+DONE. The walking crowd now keeps the share of its people the Braj hour,
+weekday, season and festival call for (CrowdCalendar.js, with sources):
+full at darshan and on weekend evenings, thin in the small hours, full all
+day on a festival. People come and go a few a second, only out of sight. A
+toast says why on a festival or weekend. Off under automation so other
+checks stay deterministic; `crowdcal.mjs` turns it on with its own clock.

@@ -225,7 +225,19 @@ searching the backlog for it. That is the failure this file exists to stop.*
    — pose, stone and colour, height, what is held, how it is dressed — so
    nothing is invented. See the honest limits below before expecting
    photoreal.
-7. **Live data.** *"can we have live data like crowd show here from iskcon
+7. ~~**Live data.**~~ **THE CALENDAR CROWD DONE 2026-10-09** (see the
+   commit "The crowd follows the calendar"), `crowdcal.mjs` 11/11,
+   mutation-tested. The town is full at darshan and on a Sunday evening,
+   three-quarters on a weekday morning, thin after the temples shut at noon
+   and in the small hours (never below three in ten), and full all day on a
+   festival — from Banke Bihari's summer and winter darshan hours, published
+   footfall (30-40,000 a day, 1.5 lakh at weekends, 5 lakh on Janmashtami)
+   and the 2026-27 festival dates (`CrowdCalendar.js` cites them). People
+   come and go a few a second and only out of sight; a toast says why on a
+   festival or a weekend. STILL OPEN: embedding the official live darshan
+   stream (allowed, but needs a network and a screen to put it on); vehicles
+   do not thin yet. Original notes follow.
+   **Live data.** *"can we have live data like crowd show here from iskcon
    vrindavan youtube channel or somewhat?"* Feasibility logged 2026-09-30:
    the official live darshan can be EMBEDDED (allowed); counting people out
    of the video cannot (terms, backend, offline). A crowd driven by the real
