@@ -583,8 +583,15 @@ searching the backlog for it. That is the failure this file exists to stop.*
     floating 0.9 m over the water. Decks and parapets carry a `base`, so they
     stop what is on them and nothing under them; NavGraph never joins a deck
     to the road it crosses; rides stand on the deck. `bridges.mjs` 10/10,
-    mutation-tested; full suite 50/50. **The railway QUEUED** — the
-    over-bridges cross a line the game does not have. Original notes follow.
+    mutation-tested; full suite 50/50. **THE RAILWAYS DONE 2026-10-10**
+    (6e1f756): the New Delhi-Mathura main line through Chhatikara — four
+    broad-gauge tracks, wired, with Vrindaban Road station's loops — and the
+    metre gauge from Mathura into Vrindavan station, from OSM; ballast,
+    sleepers, rails, masts and contact wire; buildings, trees and piers kept
+    off; each over-bridge's crest over its tracks (9.2 m over the main line,
+    8.9 over the metre gauge). `rail.mjs` 8/8, mutation-tested; full suite
+    51/51. STILL OPEN: Vrindaban Road station's building and platforms, just
+    past the world's south edge; trains. Original notes follow.
     Photographed before: open grass and scattered trees round the start, the
     farmland rule for the corridor (BuildingGenerator's `country`) covering
     the village at the highway too. ESRI z17-z19 on the world's 200 m grid:

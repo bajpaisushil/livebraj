@@ -3929,3 +3929,31 @@ the deck for 2,509 frames and never under it. Mutation-tested: parapets
 solid to the ground (and a walk test that the player's unstick had been
 lifting across a solid parapet now counts a lift as being stopped), no deck
 nodes, the pontoon on the riverbed. Full suite 50/50 in 33 min.
+
+## 2026-10-10 — The railways
+
+DONE (6e1f756). The bridges were over nothing: two lines cross the world and
+the game had neither. From OSM — a new raw extract (way["railway"], stations)
+and rail.generated.js, written by the importer's own new section reproduced
+standalone so no other generated file churns: the New Delhi-Mathura main
+line through Chhatikara (four broad-gauge tracks wired for electric
+traction, 1676 mm, and the loops and crossovers of Vrindaban Road station at
+the world's south edge — Chhatikara's station is "Vrindaban Road" on the
+railway), and the metre gauge (1000 mm) from Mathura into Vrindavan station,
+the railbus line, unwired. OSM's metre-gauge way doubles back 18 m at the
+Chandrodaya over-bridge; a point where a line turns back on itself is now
+dropped as a mapping slip. RailBuilder.js lays a ballast bed with shoulders,
+sleepers (the old line's darker), two rails, and on the wired tracks a mast
+every 58 m with its cantilever and contact wire, never on another track.
+Kept off the track: buildings (the road grid BuildingGenerator tests lots
+against), trees, grass and bushes — and Chandrodaya's site huts, which the
+tower builder had laid out on the metre gauge (found by the new check: two
+of 2,162 points along the track blocked). A rail over-bridge now has its
+crest over the tracks at 8.6 m with a ramp to it from each end (the
+Chandrodaya pair crosses 188 m along a 457 m span, and laid symmetrically
+stood 7.9 m over it), and no pier on a track. rail.mjs 8/8: 6.44 km of broad
+gauge, 3.27 of metre gauge, nothing built or grown on either, 97 masts
+beside their tracks, no pier on one, 9.2 m over the main line and 8.9 over
+the metre gauge, and the main line walked across. Mutation-tested
+(buildings and trees back on the track, decks 6 m, piers anywhere). Full
+suite 51/51 in 30 min.
