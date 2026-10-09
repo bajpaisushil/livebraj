@@ -18,17 +18,45 @@ const b = await chromium.launch({ args:['--use-angle=swiftshader','--enable-unsa
 const p = await b.newPage({ viewport:{width:390,height:844}, hasTouch:true });
 p.on('pageerror', e => errors.push(e.message));
 p.on('console', m => { const t=m.text(); if (m.type()==='error' && !/vibrate/.test(t)) errors.push(t); });
+/*
+ * The check owns the clock (item 11), as driving and vehcam do: the game loop
+ * is held, Math.random is the game's seeded stream, and every frame between
+ * the check's own steps is one it asks for. The rides here were already
+ * stepped in fixed increments, but the town went on in real time between
+ * them, so where the traffic stood when a ride set off was the wall clock's
+ * to decide — and under a parallel suite "the ride keeps going while the map
+ * is open" moved 1 m, on the build before as on this one.
+ */
+await p.addInitScript(() => {
+  let app = null;
+  Object.defineProperty(window, 'vrindavan', {
+    configurable: true, get: () => app,
+    set: (v) => { app = v; if (v) v.start = function held() { this.running = true; }; },
+  });
+});
 await p.goto(`http://localhost:${__PORT}/`,{waitUntil:'networkidle'});
-await p.waitForFunction(()=>window.vrindavan?.ctx?.cheats && window.vrindavan?.ctx?.rickshaw,null,{timeout:60000});
-await p.evaluate(()=>window.vrindavan.ctx.ui.show('world'));
-await p.waitForTimeout(700);
+await p.waitForFunction(()=>window.vrindavan?.ctx?.cheats && window.vrindavan?.ctx?.rickshaw && window.vrindavan?.ctx?.ui,null,{timeout:240000});
+await p.evaluate(()=>{
+  const app = window.vrindavan, ctx = app.ctx;
+  ctx.clock.getDelta = () => 1 / 30;
+  Math.random = ctx.rngAt(1);
+  ctx.renderer.render = (scene, camera) => {
+    if (scene.matrixWorldAutoUpdate === true) scene.updateMatrixWorld();
+    if (camera.parent === null && camera.matrixWorldAutoUpdate === true) camera.updateMatrixWorld();
+  };
+  // n frames of the whole game, where this used to wait n/30 s for them
+  window.__frames = (n) => { for (let i = 0; i < n; i++) app._frame(); };
+  ctx.ui._endIntro();
+  ctx.ui.show('world');
+  window.__frames(21);
+});
 
 check('cheat system is wired', await p.evaluate(()=>!!window.vrindavan.ctx.cheats), '');
 
 /* typing a vehicle word puts one beside you */
 const before = await p.evaluate(()=>window.vrindavan.ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0));
 await p.keyboard.type('rickshaw', { delay: 25 });
-await p.waitForTimeout(400);
+await p.evaluate(() => window.__frames(12));
 const after = await p.evaluate(()=>{
   const ctx = window.vrindavan.ctx;
   const total = ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0);
@@ -50,7 +78,7 @@ const ignored = await p.evaluate(async ()=>{
   const i = document.createElement('input'); document.body.appendChild(i); i.focus();
   const n0 = window.vrindavan.ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0);
   for (const ch of 'rath') i.dispatchEvent(new KeyboardEvent('keydown',{key:ch,bubbles:true}));
-  await new Promise(r=>setTimeout(r,200));
+  window.__frames(6);
   const n1 = window.vrindavan.ctx.crowd.vehicleInst.reduce((n,s)=>n+s.agents.length,0);
   i.remove();
   return n1 === n0;
@@ -75,10 +103,10 @@ const pace = await p.evaluate(async ()=>{
   r._acc=99; r.update(0.5,ctx);
   if (!r.board()) return { ok:false, why:'could not get in' };
   for (let i=0;i<90;i++) r.update(1/30,ctx);
-  await new Promise(res=>setTimeout(res,200));
+  window.__frames(6);
   const el=document.querySelector('[data-go="iskcon-krishna-balaram"]') || document.querySelector('.rk-row[data-go]');
   if(!el) return {ok:false,why:'no destinations'};
-  el.click(); await new Promise(res=>setTimeout(res,200));
+  el.click(); window.__frames(6);
   if (!r.startRide()) return { ok:false, why:'start refused' };
 
   /*
@@ -88,6 +116,18 @@ const pace = await p.evaluate(async ()=>{
    * and the other way on the next. So: twenty seconds at the agreed pace,
    * then jaldi and twenty seconds more, on the same long road, in fixed steps.
    */
+  /*
+   * The road clear of everything but the ride. The town is frozen between
+   * the check's steps, so a cow or a waiting rickshaw on the line the ride
+   * takes holds it up for both stretches alike, and "hurry" has nothing to
+   * show: with the clock owned, one did, every run — 1.8 m/s both ways.
+   */
+  {
+    const car0 = r.ride.car;
+    const clear = (list) => { for (const a of list || []) if (a !== car0 && Math.hypot(a.x - car0.x, a.z - car0.z) < 400) { a.x += 5000; a.z += 5000; } };
+    for (const s of ctx.crowd.vehicleInst) clear(s.agents);
+    clear(ctx.crowd.people); clear(ctx.crowd.cows); clear(ctx.crowd.dogs);
+  }
   for (let i=0;i<150;i++) r.update(1/30,ctx);
   const m0 = r.ride.paceMult;
   /*
@@ -157,7 +197,7 @@ const live = await p.evaluate(async ()=>{
   const ctx = window.vrindavan.ctx, app = window.vrindavan, r = ctx.rickshaw;
   if (!r.ride) return { ok:false, why:'no ride running' };
   ctx.ui.show('map');
-  await new Promise(res=>setTimeout(res,300));
+  window.__frames(9);
   const paused = app.paused;
   const a = { x: ctx.player.position.x, z: ctx.player.position.z };
   for (let i=0;i<60;i++) r.update(1/30,ctx);
@@ -172,8 +212,12 @@ check('the ride keeps going while the map is open',
 /* the same words must work without a keyboard */
 const mobile = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx;
+  // out of the ride first: under its time-lapse twelve frames carry you 18 m
+  // from where you typed, and the vehicle you asked for is beside you there
+  if (ctx.rickshaw && ctx.rickshaw.leave) ctx.rickshaw.leave();
+  window.__frames(6);
   ctx.ui.show("menu");
-  await new Promise(r=>setTimeout(r,300));
+  window.__frames(9);
   const input = document.getElementById("code-input");
   const go = document.getElementById("code-go");
   if (!input || !go) return { ok:false, why:"no code field in the menu" };
@@ -181,7 +225,7 @@ const mobile = await p.evaluate(async () => {
   const pp = { x: ctx.player.position.x, z: ctx.player.position.z };
   input.value = "auto";
   go.click();
-  await new Promise(r=>setTimeout(r,400));
+  window.__frames(12);
   let near = 1e9;
   for (const s of ctx.crowd.vehicleInst) for (const a of s.agents) near = Math.min(near, Math.hypot(a.x-pp.x, a.z-pp.z));
   return { ok:true, screen: ctx.ui.screen, near: Math.round(near) };
@@ -194,11 +238,11 @@ const rath = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, r = ctx.rickshaw;
   r.state='idle'; r.ride=null; r._boarding=null; r.pending=null; r.drive=null;
   ctx.ui.show('world');
-  await new Promise(s=>setTimeout(s,250));
+  window.__frames(8);
 
   const before = { x: ctx.player.position.x, z: ctx.player.position.z };
   ctx.cheats.codes.rath();
-  await new Promise(s=>setTimeout(s,300));
+  window.__frames(9);
 
   // find the one we just asked for
   let mine = null;
@@ -228,7 +272,7 @@ const rath = await p.evaluate(async () => {
   // and boarding it should put you at the wheel, with no fare dialog
   const boarded = r.board();
   for (let i=0;i<60;i++) r.update(1/30, ctx);
-  await new Promise(s=>setTimeout(s,200));
+  window.__frames(6);
 
   return { ok:true, dist:+dist.toFixed(1), wandered:+wandered.toFixed(2), label,
            boarded, state: r.state, driving: !!r.drive,
