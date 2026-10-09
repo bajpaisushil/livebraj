@@ -63,36 +63,73 @@ const out = await p.evaluate(async () => {
   const pos = ctx.player.position;
   // who is parked, and who is out within sight, by index
   const state = () => crowd.people.map((a) => (a.away ? 'away' : Math.hypot(a.x - pos.x, a.z - pos.z) < 60 ? 'near' : 'out'));
+  // and the traffic, the same way
+  const traffic = () => { const o = []; for (const s of crowd.vehicleInst) for (const a of s.agents) o.push(a); return o; };
+  const totalV = traffic().length;
+  const outV = () => traffic().filter((a) => !a.away).length;
+  const vstate = () => traffic().map((a) => (a.away ? 'away' : Math.hypot(a.x - pos.x, a.z - pos.z) < 60 ? 'near' : 'out'));
+  const drawnV = () => crowd.vehicleInst.reduce((n, s) => n + s.mesh.count, 0);
 
   // 3 a.m. on a Tuesday: the town settles to its floor, at once, as at boot
   crowd.setCalendar(true, at(2026, 10, 13, 3, 0), true);
   run(1.2);
   const night = outNow();
+  const nightV = outV();
+  // a ride you are on is never taken off the road, small hours or not
+  const mine = traffic()[traffic().length - 1];
+  if (mine) {
+    crowd.setCalendar(true, at(2026, 10, 11, 19, 30), true);
+    run(1.2);
+    mine.chartered = true; mine.x = pos.x + 200; mine.z = pos.z;
+    crowd.setCalendar(true, at(2026, 10, 13, 3, 0), true);
+    run(1.2);
+  }
+  const charteredKept = !!mine && !mine.away;
+  if (mine) mine.chartered = false;
+  crowd.setCalendar(true, at(2026, 10, 13, 3, 0), true);
+  run(1.2);
   // Sunday evening: people come out, a few a second, and none in sight —
   // nobody parked turns up within sight, nobody in sight is parked
   crowd.setCalendar(true, at(2026, 10, 11, 19, 30));
-  let vanished = 0, appeared = 0;
+  let vanished = 0, appeared = 0, vanishedV = 0, appearedV = 0, drawnOver = 0, evening5V = 0;
   for (let k = 0; k < 40; k++) {
-    const before = state();
+    const before = state(), beforeV = vstate();
     run(1);
-    const after = state();
+    const after = state(), afterV = vstate();
     for (let i = 0; i < before.length; i++) {
       if (before[i] === 'near' && after[i] === 'away') vanished++;
       if (before[i] === 'away' && after[i] === 'near') appeared++;
     }
+    for (let i = 0; i < beforeV.length; i++) {
+      if (beforeV[i] === 'near' && afterV[i] === 'away') vanishedV++;
+      if (beforeV[i] === 'away' && afterV[i] === 'near') appearedV++;
+    }
+    if (drawnV() > outV()) drawnOver++;
+    if (k === 4) evening5V = outV();
   }
   const evening40 = outNow();
+  const evening40V = outV();
   run(160);
   const evening = outNow();
+  const eveningV = outV();
   // nobody parked is anywhere a proximity query could find them
   const parkedFar = crowd.people.filter((a) => a.away).every((a) => Math.abs(a.x) > 1e6 && Math.abs(a.z) > 1e6);
+  // the traffic parked at night stays parked: nothing recycles it back beside you
+  crowd.setCalendar(true, at(2026, 10, 13, 3, 0), true);
+  run(1.2);
+  const nightV2 = outV();
+  run(20);
+  const nightV3 = outV();
+  const parkedFarV = traffic().filter((a) => a.away).every((a) => Math.abs(a.x) > 1e6 && Math.abs(a.z) > 1e6);
   // off: everyone out, at once
   crowd.setCalendar(true, at(2026, 10, 13, 3, 0), true);
   run(1.2);
   const nightAgain = outNow();
   crowd.setCalendar(false);
   const off = outNow();
-  return { rule, auto, total, night, evening40, evening, vanished, appeared, parkedFar, nightAgain, off, toasts };
+  const offV = outV();
+  return { rule, auto, total, night, evening40, evening, vanished, appeared, parkedFar, nightAgain, off, toasts,
+    totalV, nightV, nightV2, nightV3, evening5V, evening40V, eveningV, vanishedV, appearedV, drawnOver, parkedFarV, offV, charteredKept };
 });
 
 const R = out.rule;
@@ -116,6 +153,19 @@ check('nobody vanishes or appears within sight of you', out.vanished === 0 && ou
 check('those not out are nowhere anything could find them', out.parkedFar, '');
 check('it says why, once: "Sunday"', out.toasts.filter((t) => t === 'Sunday').length === 1, JSON.stringify(out.toasts));
 check('switched off, everyone is out at once', out.nightAgain < out.total && out.off === out.total, `${out.nightAgain} → ${out.off} of ${out.total}`);
+/* ---- the traffic keeps the same day ---- */
+check('at 3 a.m. the traffic thins to a quarter, not to nothing',
+  Math.abs(out.nightV - Math.round(out.totalV * 0.25)) <= 1, `${out.nightV} of ${out.totalV} vehicles on the road`);
+check('a Sunday evening brings it back a couple a second, all of it',
+  out.evening5V > out.nightV && out.evening5V < out.totalV && out.eveningV === out.totalV,
+  `${out.nightV} → ${out.evening5V} after 5 s → ${out.evening40V} after 40 s → ${out.eveningV} after 200 s`);
+check('no vehicle vanishes or appears within sight, and none parked is drawn',
+  out.vanishedV === 0 && out.appearedV === 0 && out.drawnOver === 0,
+  `${out.vanishedV} vanished, ${out.appearedV} appeared, ${out.drawnOver} seconds with more drawn than out`);
+check('parked traffic stays parked, far off: nothing recycles it beside you',
+  out.parkedFarV && out.nightV3 === out.nightV2, `${out.nightV2} out, ${out.nightV3} twenty seconds later`);
+check('a ride you are on is never taken off the road', out.charteredKept, '');
+check('switched off, all the traffic is back', out.offV === out.totalV, `${out.offV} of ${out.totalV}`);
 check('no page errors', errs.length === 0, errs.slice(0, 3).join(' | '));
 await b.close(); server.close();
 const passed = res.filter(Boolean).length;

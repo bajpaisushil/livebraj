@@ -29,6 +29,14 @@ const CALENDAR_FLOOR = 0.3;
 const CALENDAR_STEP = 3;          // people sent home or brought out per second
 const OUT_OF_SIGHT = 70;          // metres from you before anyone may come or go
 const AWAY = 1e7;                 // where the people not out right now are kept
+/*
+ * And the traffic: e-rickshaws and autos run to the same day as the people
+ * they carry — thin in the small hours, every one out on a festival — but
+ * never fewer than a quarter of them, because the night has its share of
+ * station runs and the late bus from Delhi.
+ */
+const TRAFFIC_FLOOR = 0.25;
+const TRAFFIC_STEP = 2;           // vehicles sent off the road or brought back per second
 
 const _v = new THREE.Vector3();
 
@@ -321,7 +329,44 @@ export class Crowd {
     const c = this.calendar;
     c.on = !!on; c.clock = clock; c.acc = 1;
     if (atOnce) c.fresh = true;
-    if (!c.on) for (const a of this.people) if (a.away) this._comeOut(a, null, true);
+    if (!c.on) {
+      for (const a of this.people) if (a.away) this._comeOut(a, null, true);
+      for (const a of this._traffic()) if (a.away) this._driveOut(a, null, true);
+    }
+  }
+
+  /** Every ambient vehicle, in a fixed order: by kind, then as added. */
+  _traffic() {
+    const out = [];
+    for (const slot of this.vehicleInst) for (const a of slot.agents) out.push(a);
+    return out;
+  }
+
+  /**
+   * Bring one vehicle back onto the road: where it was, if that is out of
+   * sight and in the band the traffic recycles within; else a node there on
+   * a road a vehicle takes (`_addVehicle` places them the same way).
+   */
+  _driveOut(a, p, anywhere) {
+    let x = a.away.x, z = a.away.z, node = a.away.node || a.node;
+    if (!anywhere && p) {
+      const far = this.ctx.quality.drawDistance;
+      const inBand = (qx, qz) => { const d = Math.hypot(qx - p.x, qz - p.z); return d > OUT_OF_SIGHT && d < far * 1.1; };
+      if (!inBand(x, z)) {
+        const nav = this.ctx.nav;
+        let n = null;
+        for (let k = 0; k < 16 && nav && nav.randomNodeNear; k++) {
+          const q = nav.randomNodeNear(p.x, p.z, far * 1.05, Math.random);
+          if (q && inBand(q.x, q.z) && q.edges.some((e) => DRIVABLE.has(e.kind))) { n = q; break; }
+        }
+        if (!n) return false;
+        x = n.x; z = n.z; node = n;
+      }
+    }
+    a.x = x; a.z = z; a.y = this._placedY(x, z);
+    a.node = node; a.prev = null; a.target = null; a.vel = 0; a.stuck = 0; a.throttle = 1;
+    a.away = null;
+    return true;
   }
 
   /** How busy the town is now, by the calendar (or full, with it off). */
@@ -368,6 +413,34 @@ export class Crowd {
         const a = this.people[i];
         if (!a.away) continue;
         if (this._comeOut(a, p, first)) { out++; budget--; }
+      }
+    }
+    /*
+     * The traffic, by the same rule and the same courtesy: never a vehicle
+     * you could see, never one somebody is riding in or asked for by name.
+     */
+    {
+      const all = this._traffic();
+      const level = c.on ? Math.max(TRAFFIC_FLOOR, now.level) : 1;
+      const wantV = Math.round(all.length * level);
+      let outV = 0;
+      for (const a of all) if (!a.away) outV++;
+      let budgetV = first ? Infinity : TRAFFIC_STEP;
+      const keep = (a) => a.chartered || a.spawnedByWord || a.hired || a.driven;
+      if (outV > wantV) {
+        for (let i = all.length - 1; i >= 0 && outV > wantV && budgetV > 0; i--) {
+          const a = all[i];
+          if (a.away || keep(a) || !unseen(a.x, a.z)) continue;
+          a.away = { x: a.x, z: a.z, node: a.node };
+          a.x = AWAY; a.z = AWAY; a.target = null; a.vel = 0;
+          outV--; budgetV--;
+        }
+      } else if (outV < wantV) {
+        for (let i = 0; i < all.length && outV < wantV && budgetV > 0; i++) {
+          const a = all[i];
+          if (!a.away) continue;
+          if (this._driveOut(a, p, first)) { outV++; budgetV--; }
+        }
       }
     }
     // say so once, on a day worth saying it about, once you are in the world
@@ -855,6 +928,16 @@ export class Crowd {
         // agreed route, with the passenger sitting in it. It still gets drawn
         // and still sits on the ground, it just does not wander off with you
         // aboard.
+        /*
+         * Off the road by the calendar: not stepped, not drawn, and above all
+         * not "recycled" — anything this far off is moved back beside you.
+         * Unless something has put it back in the town (a cheat word, a hire
+         * that found it), in which case it is out again.
+         */
+        if (a.away) {
+          if (a.x === AWAY && a.z === AWAY) continue;
+          a.away = null;
+        }
         if (a.chartered) {
           /*
            * Still the terrain, unlike every other agent here, because this one
