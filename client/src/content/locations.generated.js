@@ -500,6 +500,51 @@ export const LOCATIONS = [
     "osm": "Sri Radha Gopinath Mandir"
   },
   {
+    "id": "jaipur-mandir",
+    "name": "Shri Radha Madhav Mandir (Jaipur Temple)",
+    "hindi": "श्री राधा माधव मंदिर",
+    "type": "temple",
+    "district": "outskirts",
+    "grounds": null,
+    "compound": {
+      "lx0": -49,
+      "lx1": 116,
+      "lz0": -43,
+      "lz1": 40,
+      "ring": false,
+      "also": [
+        {
+          "lx0": -64,
+          "lx1": 62,
+          "lz0": 40,
+          "lz1": 74
+        }
+      ]
+    },
+    "pos": [-14.18, 859.61],
+    "geo": [27.572223, 77.690356],
+    "rot": 0.038397243543875255,
+    "radius": 40,
+    "icon": "temple",
+    "deity": "Shri Shri Radha Madhav",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-jaipur",
+      "w": 50,
+      "d": 35,
+      "h": 25,
+      "color": "#c2967d",
+      "accent": "#efebd1",
+      "measured": true
+    },
+    "osm": "Jaipur Mandir"
+  },
+  {
     "id": "brahma-kund",
     "name": "Brahma Kund",
     "hindi": "ब्रह्म कुंड",

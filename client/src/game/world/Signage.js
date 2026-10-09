@@ -102,6 +102,12 @@ export const CAMPUS_BOARDS = [
   { key: 'mm-asi', bg: '#6b1f2a', fg: '#f2e6d0', name: 'Madan Mohan Temple', deva: 'मदन मोहन मंदिर' },
   // Radha Raman: the painted board in the great arch's tympanum over the door
   { key: 'rr-board', bg: '#c8502a', fg: '#fff3dc', name: 'Swayambhoo Shri Radharaman Mandir', deva: 'स्वयंभू श्री राधारमण मन्दिर' },
+  // Jaipur Mandir: the board across the gateway frontispiece, "राजस्थान सरकार /
+  // कार्यालय सहायक आयुक्त / देवस्थान विभाग राजस्थान / वृन्दावन", and the small red
+  // "Devasthan" sign at the forecourt's edge (the survey). The big board's
+  // colours are not recorded: inferred.
+  { key: 'jm-devasthan', bg: '#f4efe2', fg: '#7a1a14', name: 'Govt. of Rajasthan · Devasthan Vibhag', deva: 'देवस्थान विभाग राजस्थान, वृन्दावन' },
+  { key: 'jm-devasthan-small', bg: '#c42a1e', fg: '#fff6ea', name: 'Devasthan', deva: 'देवस्थान' },
 ];
 
 /** Atlas slot of one of Krishna Balaram's boards, or -1. */

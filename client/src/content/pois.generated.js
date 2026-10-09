@@ -474,7 +474,6 @@ export const POIS = [
     "pos": [-1111.39, 916.9]
   },
   {
-    "id": "p679447890",
     "name": "Jaipur Mandir",
     "hindi": null,
     "kind": "temple",

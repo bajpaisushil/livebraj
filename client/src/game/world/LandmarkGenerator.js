@@ -21,8 +21,9 @@ import { buildRadhaRamanMandir } from './RadhaRamanMandir.js';
 import { buildRadhaDamodarMandir } from './RadhaDamodarMandir.js';
 import { buildJugalKishoreMandir } from './JugalKishoreMandir.js';
 import { buildRadhaGopinathMandir } from './RadhaGopinathMandir.js';
+import { buildJaipurMandir } from './JaipurMandir.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
-import { signAtlas, signUV } from './Signage.js';
+import { signAtlas, signUV, campusSign } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
 
 import { vMul, correct as correctHex, PT_OCHRE, PT_VERM, W_ALGAE, shade as vShade }
@@ -5460,216 +5461,31 @@ const BUILDERS = {
   },
 
   /**
-   * The Jaipur Mandir (Shri Radha Madhav) — A FORT, NOT A TEMPLE SILHOUETTE.
-   *
-   * Built by Sawai Madho Singh II of Jaipur. "It looks like a fort or a state
-   * palace, not a temple — and it now partly IS a government office."
-   *
-   * "NO SHIKHARA. No nagara tower, no urushringas, no curvilinear spire, no
-   * amalaka-and-kalasha summit. Nothing like Govind Dev, Madan Mohan, Jugal
-   * Kishor or Radha Raman." The entire complex is flat-roofed except for ONE
-   * thing: a single open five-arched pavilion standing on the centre of the
-   * shrine roof. That kiosk is the whole vertical event and it is what
-   * identifies the building.
-   *
-   * Colour matters and is easy to get wrong: "not Agra/Fatehpur red and not
-   * Jaipur 'pink city' pink" — dusty pale pink sandstone with cream plaster.
+   * The Jaipur Mandir — Shri Radha Madhav — on its real site at last: the
+   * shrine block with its east terrace and roof kiosk, the dark hypostyle hall
+   * and the three sanctums, the cloister ranges, the two-storey street range
+   * and its gateway facing east, the courts, the forecourt, the goshala.
+   * JaipurMandir.js.
    */
-  'temple-fort-palace': ({ loc, b, ground }) => {
-    const { w, d, h, color, accent } = loc.build;
-    const [x, z] = loc.pos;
+  'temple-jaipur': ({ loc, b, ground, rng, terrain }) => {
     const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
-    /*
-     * THE BOX FRAME, like every older builder in this file.
-     *
-     * This builder was written with p() in the MIRROR frame — lx along
-     * (cos, -sin) — while every b.box(..., rot) it draws, and every collider
-     * and cuspedArch, works in the BOX frame, lx along (cos, sin). At rot 0
-     * the two agree. At Jaipur Mandir's 15 degrees every part was POSITIONED
-     * along one line and ORIENTED along another, 30 degrees apart, and the
-     * arch audit found 19 of its blind-arcade arches standing across their
-     * own wall. Same class of fault as the town's, where footprints once sat
-     * "a mean 44 degrees off their own street".
-     */
-    const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
     const colliders = [];
-    const HW = w * 0.5, HD = d * 0.5;
-
-    b.box(x, ground - 0.4, z, w + 16, 0.8, d + 16, 0xddd2bb, rot);
-
-    /*
-     * The long low two-storey range along the road. Deep bracketed chhajja
-     * between the storeys and a blind arcade of cusped niches along it — that
-     * horizontal banding is what makes it read as a palace front.
-     */
-    const rangeD = d * 0.30;
-    const GATE = 4.2;
-    for (const side of [-1, 1]) {
-      /*
-       * THE FULL BRAJ GRAMMAR, because this range is the building you see
-       * from the road and it photographed as a flat box with a stripe.
-       *
-       * A palace-temple front is: kursi, then a wall broken into registers
-       * and bays, then a bracketed chhajja at the storey line, then the upper
-       * storey with its jharokhas, then the eave, then the parapet. Every one
-       * of those is a horizontal shadow, and the shadows are the building.
-       */
-      const q = p(0, side * (HD - rangeD * 0.5));
-      const PL = plinthFor('compound');
-      mouldedPlinth(b, q[0], ground, q[1], w, rangeD, rot, color, PL);
-      const y0 = ground + PL;
-
-      // the lower storey, its registers and its bays
-      b.box(q[0], y0, q[1], w, h * 0.46, rangeD, weathered(color, 0.2), rot);
-      registers(b, q[0], y0, q[1], w, rangeD, rot, color, [0.62], 9, h * 0.46);
-      // the storey chhajja, on brackets, at the measured 3.2-3.6 m line
-      chhajja(b, q[0], y0 + h * 0.46, q[1], w, rangeD, rot, color, 0.85);
-
-      // the upper storey, and the jharokhas that make it a palace front
-      const y1 = y0 + h * 0.46 + 0.3;
-      b.box(q[0], y1, q[1], w, h * 0.40, rangeD, weathered(color, 0.7), rot);
-      registers(b, q[0], y1, q[1], w, rangeD, rot, color, [0.58], 0, h * 0.40);
-      {
-        const cs2 = Math.cos(rot), sn2 = Math.sin(rot);
-        const NJ = 5;
-        for (let i = 0; i < NJ; i++) {
-          const lx = (i / (NJ - 1) - 0.5) * w * 0.78;
-          const az = side * (rangeD * 0.5);
-          jharokha(b, q[0] + lx * cs2 - az * sn2, y1 + 0.7, q[1] + lx * sn2 + az * cs2,
-            2.0, rot + (side > 0 ? 0 : Math.PI), color, accent);
-        }
-      }
-      // the eave, and the parapet against the sky
-      chhajja(b, q[0], y0 + h * 0.88, q[1], w, rangeD, rot, color, 0.95);
-      parapet(b, q[0], y0 + h * 0.88 + 0.28, q[1], w + 1.2, rangeD + 1.2, rot, color, true);
-      // the blind arcade
-      const N = Math.max(9, Math.round(w / 5.2));
-      for (let i = 0; i < N; i++) {
-        const lx = (i / (N - 1) - 0.5) * w * 0.92;
-        const c2 = p(lx, side * (HD - rangeD + 0.1));
-        cuspedArch(b, c2[0], ground + 0.5, c2[1], w / (N * 1.5), h * 0.3, 0.3,
-          rot, accent, 5, 0x2a1d12);
-        cuspedArch(b, c2[0], ground + h * 0.52, c2[1], w / (N * 1.5), h * 0.26, 0.3,
-          rot, accent, 5, 0x2a1d12);
-      }
-      /*
-       * The ROAD range carries the gateway, so it is solid in two pieces with
-       * a gap between them. Built that way here rather than punched out
-       * afterwards — the first attempt added a full-width collider and then
-       * spliced a differently-tagged one, so the doorway never opened and the
-       * court had no way in at all.
-       */
-      if (side > 0) {
-        const seg = (w - GATE) / 2;
-        for (const sx of [-1, 1]) {
-          const c2 = p(sx * (GATE / 2 + seg / 2), side * (HD - rangeD * 0.5));
-          colliders.push({ type: 'box', x: c2[0], z: c2[1], w: seg, d: rangeD, rot });
-        }
-      } else {
-        colliders.push({ type: 'box', x: q[0], z: q[1], w, d: rangeD, rot });
-      }
-    }
-    /*
-     * The side ranges run the FULL depth, so the corners are masonry.
-     *
-     * They used to stop at `d - rangeD * 2`, which ends exactly where the
-     * court's declared volume ends — so a ray crossing the ring near a corner
-     * slipped between the side range and the front one and found open air.
-     * Measured 33.8% of the wall line open for a building with one 4.2 m gate
-     * in a 151 m perimeter, which should be 2.8%. A corner is a corner: the
-     * two ranges meet there.
-     */
-    for (const sx of [-1, 1]) {
-      const q = p(sx * (HW - rangeD * 0.5), 0);
-      const PL2 = plinthFor('compound');
-      mouldedPlinth(b, q[0], ground, q[1], rangeD, d, rot, color, PL2);
-      b.box(q[0], ground + PL2, q[1], rangeD, h * 0.86, d, weathered(color, 0.4), rot);
-      registers(b, q[0], ground + PL2, q[1], rangeD, d, rot, color, [0.36, 0.72], 0, h * 0.86);
-      chhajja(b, q[0], ground + PL2 + h * 0.86, q[1], rangeD, d, rot, color, 0.9);
-      parapet(b, q[0], ground + PL2 + h * 0.86 + 0.28, q[1], rangeD + 1.2, d + 1.2, rot, color, true);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: rangeD, d, rot });
-    }
-
-    /* ---- the shrine in the middle of the court, and its ONE kiosk ---- */
-    const SW = w * 0.34, SD = d * 0.34, SWT = 0.8;
-    b.box(x, ground, z, SW, h * 0.92, SD, tint(color, 1.05), rot);
-    b.box(x, ground + h * 0.92, z, SW + 1.6, 0.44, SD + 1.6, accent, rot);
-    /*
-     * Walls with a doorway, not a block. The altar stands inside this and a
-     * solid box seals it in — `halls.mjs` got within 13.5 m of it and stopped,
-     * which is the Prem Mandir mistake for the third time in one file.
-     */
-    for (const sx of [-1, 1]) {
-      const q = p(sx * (SW * 0.5 - SWT * 0.5), 0);
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: SWT, d: SD, rot });
-    }
-    { const q = p(0, -(SD * 0.5 - SWT * 0.5));
-      colliders.push({ type: 'box', x: q[0], z: q[1], w: SW, d: SWT, rot }); }
-    { const SDOOR = 2.8, seg = (SW - SDOOR) / 2;
-      for (const sx of [-1, 1]) {
-        const q = p(sx * (SDOOR / 2 + seg / 2), SD * 0.5 - SWT * 0.5);
-        colliders.push({ type: 'box', x: q[0], z: q[1], w: seg, d: SWT, rot });
-      }
-      const g = p(0, SD * 0.5);
-      cuspedArch(b, g[0], ground, g[1], SDOOR, h * 0.5, 0.5, rot + Math.PI / 2, accent, 9, 0x241a12); }
-
-    /*
-     * THE ROOF KIOSK. Five open arches on a plinth, carrying a chhatri. It is
-     * the only thing standing above the parapet line anywhere on the site, and
-     * a viewer who knows the building knows it by this alone.
-     */
-    {
-      const ky = ground + h * 0.92 + 0.44;
-      const KW = SW * 0.72, KD = SD * 0.5;
-      b.box(x, ky, z, KW + 1.2, 0.4, KD + 1.2, accent, rot);
-      const BAYS = loc.build.kiosk || 5;
-      for (let i = 0; i <= BAYS; i++) {
-        const lx = (i / BAYS - 0.5) * KW;
-        const q = p(lx, 0);
-        for (const sz of [-1, 1]) {
-          const c2 = p(lx, sz * KD * 0.5);
-          b.box(c2[0], ky + 0.4, c2[1], 0.3, 3.0, 0.3, 0xf0e6d2, rot);
-        }
-      }
-      for (let i = 0; i < BAYS; i++) {
-        const lx = ((i + 0.5) / BAYS - 0.5) * KW;
-        const c2 = p(lx, -KD * 0.5);
-        cuspedArch(b, c2[0], ky + 0.4, c2[1], KW / (BAYS * 1.25), 2.2, 0.3,
-          rot, 0xf0e6d2, 7, null);
-      }
-      b.box(x, ky + 3.4, z, KW + 1.4, 0.34, KD + 1.4, accent, rot);
-      chhatri(b, x, ky + 3.74, z, KW * 0.2, 1.9, 0xf0e6d2);
-    }
-
-    /*
-     * THE GATEWAY, and the court it lets you into.
-     *
-     * The first pass closed the road range right across, so there was no way
-     * in at all — `temples.mjs` read 74.2% of the wall line as open because
-     * the ranges are only two of its four sides and nothing declared the
-     * inside. A palace-temple of this plan is entered through a gate in the
-     * middle of its front range.
-     */
-    // the gateway itself, drawn over the gap the range already leaves
-    {
-      const g = p(0, HD + 0.2);
-      b.box(g[0], ground, g[1], GATE + 3.0, h * 0.82, 1.2, tint(color, 1.06), rot);
-      cuspedArch(b, g[0], ground, g[1], GATE, h * 0.58, 0.6, rot + Math.PI / 2, accent, 9, 0x241a12);
-      b.box(g[0], ground + h * 0.82, g[1], GATE + 4.0, 0.4, 1.8, accent, rot);
-      for (const sx of [-1, 1]) chhatri(b, g[0] + sx * (GATE * 0.5 + 1.4) * cs,
-        ground + h * 0.86, g[1] + sx * (GATE * 0.5 + 1.4) * sn, 0.9, 1.8, 0xf0e6d2);
-    }
-
-    const jAltar = p(0, -SD * 0.3);
-    const jDarshan = p(0, SD * 0.5 + 3.0);
+    const signB = new MeshBuilder();
+    const r = buildJaipurMandir({ b, signB, loc, ground, terrain, colliders, rng, h: { cuspedArch, tint, signUV, campusSign } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const H = r.hall;
+    const V = p((H.lx0 + H.lx1) / 2, (H.lz0 + H.lz1) / 2);
     return {
-      altarY: 1.9, noCollider: true, colliders,
+      altarY: r.altar.y - ground,
+      colliders,
+      meshes: [{ name: 'JaipurSigns', builder: signB, x: loc.pos[0], z: loc.pos[1], r: 80, map: signAtlas }],
       interior: {
-        altar: [jAltar[0], ground + 1.9, jAltar[1]],
-        darshan: [jDarshan[0], jDarshan[1]],
-        facing: rot + Math.PI, floor: ground + 0.1, open: true,
-        volume: { x, z, hw: HW - rangeD, hd: HD - rangeD, rot, open: true,
-          door: p(0, HD + 1.6) },
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.FL,
+        volume: { x: V[0], z: V[1], hw: (H.lx1 - H.lx0) / 2, hd: (H.lz1 - H.lz0) / 2, rot, door: p(H.door[0], H.door[1]) },
       },
     };
   },

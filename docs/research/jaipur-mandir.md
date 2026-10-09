@@ -173,3 +173,38 @@ The sect is the NIMBARKA (Sanakadi / Hamsa) SAMPRADAYA, attributed by the Vrinda
 - mathuravrindavantemples.com, 'Jaipur Mandir in Vrindavan' — darshan timings (summer 5:00-12:00 and 15:00-21:00; winter 5:30-12:30 and 15:00-20:30), 'commissioned 1917', 'Mughal and Rajasthani'. Treat the dates as unreliable.
 - Wikidata Special:Search — no item exists for this temple; there is no English Wikipedia article either. This is why confidence stays partial.
 - My own photogrammetry and colour sampling (Python/PIL over the Braj Ras and Commons originals): great arch 4.8-5.4 m measured twice against standing figures; shrine ground storey 10-11 m; roof terrace ~16 m; total to finial tips 24-27 m; hall 9 m at sides and 11-12 m at the central crown; median lit-masonry colours #B5937D / #C2967D (outer ranges) versus #EFEBD1 / #F3E1B7 (shrine and kiosk), with a within-frame saturation contrast of 31% versus 2%.
+
+## 2026-10-09 — the site, the gate and the plan, settled
+
+*Measured off ESRI World Imagery at z19 (0.265 m/px; measurement only) against
+OSM ways 679447890, 679447888 and 679447897, fetched from the OSM API.*
+
+- **WHERE IT STOOD IN THE GAME WAS WRONG BY 1 KM.** The curated entry carried
+  `osm: 'way 679447890'` and a pin at 27.56720 / 77.68190 — about 560 m south
+  and 835 m west of that way, whose centre is 27.5722227 / 77.6903564. It now
+  comes from the OSM import, on the way's centre. [MEASURED]
+- **THE GATE FACES EAST.** The orientation this survey left unresolved is
+  settled by the imagery: the drive from Mathura Road (a 6.5 m street in OSM)
+  meets the middle of the east range on the shrine's axis; two coaches and
+  several cars stand on the forecourt in front of it; and a pale axial path
+  crosses the east court from it to the shrine's east face. [MEASURED]
+- **THE PLAN**, in metres from the way's centre, +x east along the long axis
+  (bearing 92.2), +z south. Absolute positions follow OSM; the imagery sits
+  about 4 m west of it, so everything below is measured RELATIVE to the
+  block and then squared with OSM's outlines. [MEASURED, +-1 m]
+  - the shrine block's roof x -24.9..19.6, z -17.6..17.6 (44.5 x 35.2 m), and
+    a 5.3 m terrace along its east face to x 24.9 — the two together are
+    OSM's 48.4 x 35.7 m trace;
+  - the walled core x -44.7..77.0, z -39.3..36.0 — OSM's outer enclosure
+    (124 x 74 m) is its outer walls, the inner one (96 x 49 m) the inner
+    faces of the ranges round the courts;
+  - the ranges 12.7 m deep on the north, 13.1 on the south, 8.7 on the west,
+    13.7 on the east (the street range);
+  - the courts: east x 24.9..63.3 (the formal court, the gate to the shrine's
+    steps), north 9 m wide, south 5.3, west 11;
+  - outside: the forecourt and the drive east (the drive at z +8), a
+    two-storey building north of the forecourt (x 92..113), the goshala's two
+    blue-roofed sheds south of a lane along the south wall (z > 46), the wood
+    north, open ground west.
+- **THE ROOFS** are dark weathered concrete and lime in the imagery, the
+  shrine's with paler patches; nothing on the ranges is red.

@@ -80,55 +80,6 @@ const PLACES = [
   },
 
   {
-    id: 'jaipur-mandir',
-    name: 'Shri Radha Madhav Mandir (Jaipur Temple)',
-    hindi: 'श्री राधा माधव मंदिर',
-    type: 'temple',
-    district: 'outskirts',
-    geo: [27.56720, 77.68190],
-    /*
-     * 2 degrees, not 15. The survey measured OSM way 679447890's long axis at
-     * a bearing of 92 degrees — essentially east-west — and the two nested
-     * enclosures around it run the same way. 15 was never sourced.
-     * (Bearing 92 means 2 degrees south of east; in this world +X is east and
-     * +Z south, and the builder's long axis runs along (cos rot, sin rot).)
-     * Which side the gate faces is a separate, still-UNRESOLVED question the
-     * survey flags explicitly; only the axis is measured.
-     */
-    rot: 2 * DEG,
-    grounds: 120,
-    radius: 60,
-    icon: 'temple',
-    deity: 'Shri Shri Radha Madhav',
-    interactions: ['darshan', 'offer', 'pranam', 'story'],
-    /*
-     * Built by Sawai Madho Singh II of Jaipur. A FORTRESS, not a temple
-     * silhouette: a long low two-storey range along the road, deep bracketed
-     * chhajja, a blind arcade of cusped niches, and the whole thing flat-
-     * roofed — except for ONE open five-arched pavilion standing on the centre
-     * of the shrine roof. That kiosk is the entire vertical event.
-     *
-     * NO shikhara, no urushringas, no amalaka-kalasha. And not Agra red nor
-     * Jaipur "pink city" pink — dusty pale pink sandstone with cream plaster.
-     */
-    build: {
-      kind: 'temple-fort-palace', w: 86, d: 52, h: 11.5,
-      /*
-       * TWO FAMILIES, measured off the Braj Ras photographs at 2048x1152 —
-       * "within one frame the foreground gateway masonry is warm and the
-       * shrine block behind it is essentially NEUTRAL GREY: 2% saturation on
-       * the shrine, 31% on the gateway range."
-       *   outward ranges, gateways, cloisters  warm dusty salmon-tan
-       *   shrine block, crowning kiosk         pale cream / ivory
-       * That shift as you pass through the gate "is as recognisable as the
-       * kiosk, and nobody describes it".
-       */
-      color: '#b5937d', accent: '#efebd1', kiosk: 5, measured: true,
-    },
-    osm: 'way 679447890',
-  },
-
-  {
     id: 'pagal-baba',
     name: 'Pagal Baba Mandir (Leeladham)',
     hindi: 'पागल बाबा मंदिर',

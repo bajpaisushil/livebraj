@@ -156,6 +156,38 @@ export const LANDMARKS = [
     fallback: [27.58605, 77.69962],
   },
   {
+    id: 'jaipur-mandir', match: ['Jaipur Mandir'],
+    name: 'Shri Radha Madhav Mandir (Jaipur Temple)', hindi: 'श्री राधा माधव मंदिर',
+    type: 'temple', deity: 'Shri Shri Radha Madhav', icon: 'temple',
+    /*
+     * From OSM now, not a curated pin. The curated one named this very way and
+     * stood 1 km south-west of it, at 27.56720 / 77.68190, from the first day;
+     * the way's centre is 27.57222 / 77.69036 (docs/research/jaipur-mandir.md).
+     * Origin: that centre, the middle of the shrine block and its east terrace.
+     * Frame +lx EAST (the long axis, bearing 92.2), +lz SOUTH.
+     *
+     * The gate faces EAST — the survey's working assumption, now settled by
+     * ESRI z19 imagery (measurement only): the drive from Mathura Road meets
+     * the middle of the east range, coaches park on the forecourt outside it,
+     * and a pale axial path crosses the east court from it to the shrine. The
+     * block stands in the west of the walled core (127 x 79 m), the ranges
+     * round it, the goshala's blue sheds to the south.
+     *
+     * Build: the block with its terrace, 50 x 35 m, the kiosk's finials 25 m
+     * up. Colours: the outward ranges salmon-tan, the shrine cream (measured).
+     * The compound: the walled core, the forecourt and the office east of it,
+     * and the goshala yard south.
+     */
+    build: { kind: 'temple-jaipur', w: 50, d: 35, h: 25, color: '#c2967d', accent: '#efebd1', measured: true },
+    rot: 2.2 * Math.PI / 180, radius: 40, district: 'outskirts',
+    compound: {
+      lx0: -49.0, lx1: 116.0, lz0: -43.0, lz1: 40.0, ring: false,
+      also: [{ lx0: -64.0, lx1: 62.0, lz0: 40.0, lz1: 74.0 }],
+    },
+    interactions: ['darshan', 'offer', 'pranam', 'story'],
+    fallback: [27.5722227, 77.6903564],
+  },
+  {
     id: 'radha-shyamsundar', match: ['Radha Shyamsundar'],
     name: 'Shri Radha Shyamsundar Mandir', hindi: 'श्री राधा श्यामसुन्दर मंदिर',
     type: 'temple', deity: 'Shri Radha Shyamsundar', icon: 'temple',
