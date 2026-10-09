@@ -405,7 +405,7 @@ function buildTrees(ctx, terrain, group) {
    * tree in the carriageway gets dropped. A verge tree is wanted; a tree you
    * drive through is not.
    */
-  let onRoad = 0;
+  let onRoad = 0, inRiver = 0;
   const inTheWay = (x, z) => {
     const surf = terrain.surfaceAt(x, z);
     if (surf === 'road' || surf === 'stone' || surf === 'gali') return true;
@@ -419,6 +419,8 @@ function buildTrees(ctx, terrain, group) {
     if ((i % 100) / 100 >= keep) continue;
     if (indoors(t.pos[0], t.pos[1])) continue;
     if (inTheWay(t.pos[0], t.pos[1])) { onRoad++; continue; }
+    // nor in the Yamuna: the bank is OSM's now, and the planting was laid out on the old one
+    if (terrain.isWater(t.pos[0], t.pos[1])) { inRiver++; continue; }
     const key = t.kind + '|' + Math.floor(t.pos[0] / CHUNK) + ',' + Math.floor(t.pos[1] / CHUNK);
     let arr = byKind.get(key);
     if (!arr) { arr = []; byKind.set(key, arr); }
@@ -426,6 +428,7 @@ function buildTrees(ctx, terrain, group) {
   }
 
   if (onRoad) console.info(`[props] ${onRoad} trees dropped from the carriageway`);
+  if (inRiver) console.info(`[props] ${inRiver} trees dropped from the river`);
 
   let total = 0;
   for (const [key, list] of byKind) {
@@ -721,8 +724,9 @@ function buildGroundCover(ctx, terrain, group) {
      * ground is fbm noise about zero, so it dips under 0.25 across a good
      * third of Braj on land that is perfectly dry, and the first cut of this
      * pass lost four verge bushes in five to it. Asking for 'sand' instead is
-     * the same mistake wearing a hat: the waterline is at -0.55 and sand runs
-     * to 1.6 above it, which is most of the map again. The river is what
+     * the same mistake wearing a hat: sand runs to 1.6 m above the waterline,
+     * which was most of the map again while the river lay level with the
+     * town. The river is what
      * surfaceAt calls water — that is the one test that means what it says.
      */
     const surf = terrain.surfaceAt(x, z);

@@ -11,6 +11,7 @@
 
 import { ROADS } from './roads.generated.js';
 import { RIVER } from './river.generated.js';
+import { WET_BANKS } from './riverbanks.js';
 import { PARIKRAMA } from './parikrama.generated.js';
 import { LOCATIONS as RAW_LOCATIONS } from './locations.generated.js';
 import { CURATED_PLACES } from './places.curated.js';
@@ -71,7 +72,7 @@ export const LOCATION_BY_ID = new Map(LOCATIONS.map((l) => [l.id, l]));
 export const ICONS = ['temple', 'ghat', 'grove', 'kund', 'landmark', 'gate', 'market'];
 
 export {
-  ROADS, RIVER, PARIKRAMA, DISTRICTS,
+  ROADS, RIVER, WET_BANKS, PARIKRAMA, DISTRICTS,
   TREES, FLOWER_SPOTS, FLOWER_KINDS,
   STORIES, AMBIENT_NOTES,
   PALETTE, TIME_OF_DAY, AVATAR_OPTIONS,
@@ -79,7 +80,7 @@ export {
 
 /** A single import for systems that just want everything. */
 export default {
-  WORLD, LOCATIONS, LOCATION_BY_ID, ROADS, RIVER, PARIKRAMA, DISTRICTS, POIS,
+  WORLD, LOCATIONS, LOCATION_BY_ID, ROADS, RIVER, WET_BANKS, PARIKRAMA, DISTRICTS, POIS,
   TREES, FLOWER_SPOTS, FLOWER_KINDS, STORIES, AMBIENT_NOTES,
   PALETTE, TIME_OF_DAY, AVATAR_OPTIONS, ICONS,
 };

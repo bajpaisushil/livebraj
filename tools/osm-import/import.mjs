@@ -176,6 +176,9 @@ const rawRoads = readRaw('roads').elements;
 const rawWater = readRaw('water').elements;
 const rawPlaces = readRaw('places').elements;
 const rawPoi = readRaw('poi_all').elements;
+// relation(9075838); relation(1423292); out geom; — the Yamuna's water as
+// mapped, the Vrindavan stretch and the next one down toward Mathura
+const rawRiverbank = readRaw('riverbank').elements;
 
 /* ------------------------------------------------------------------ *
  * Roads
@@ -191,10 +194,33 @@ const localNames = nameIndex();
 const localApplied = new Set();
 const refApplied = new Set();
 
+/*
+ * Ways filed as roads that are, on the ground, the promenade of a ghat.
+ *   1537934884  highway=tertiary with no access tags, but it is the same walk
+ *               as 673572958 (motor_vehicle=no) carried on along the front of
+ *               Badan Singh Kunj to the Keshi landing: the plan in Sinha &
+ *               Dhariwal (ISVS 2024, Fig. 7) and every photograph have a
+ *               paved ghat there, steps on one side and the palaces on the
+ *               other, and no carriageway.
+ */
+const FOOT_ONLY = new Set([1537934884]);
+
 for (const way of rawRoads) {
   if (!way.geometry || way.geometry.length < 2) continue;
-  const cls = ROAD_CLASSES[way.tags?.highway];
+  let cls = ROAD_CLASSES[way.tags?.highway];
   if (!cls) { droppedClass++; continue; }
+  /*
+   * A way nothing with an engine may use is a footway, whatever class it was
+   * filed under. The promenade along the front of Keshi Ghat is mapped as
+   * highway=tertiary with motor_vehicle=no and bicycle=no — which made it an
+   * 11 m `main` road down the top of the ghat steps, and a route the traffic
+   * could take along them.
+   */
+  const t = way.tags || {};
+  if ((t.motor_vehicle === 'no' || t.vehicle === 'no' || t.access === 'no') && cls.prio >= 3) {
+    cls = ROAD_CLASSES.pedestrian;
+  }
+  if (FOOT_ONLY.has(way.id)) cls = ROAD_CLASSES.pedestrian;
 
   const projected = way.geometry.map((g) => toWorld(g.lat, g.lon));
   const runs = clipToBounds(projected, WORLD_BOUNDS);
@@ -281,6 +307,119 @@ if (riverWays.length) {
   riverPoints = simplify(best, 6);
 }
 console.log(`river     ${riverPoints.length} points, ${(polylineLength(riverPoints) / 1000).toFixed(2)} km of Yamuna`);
+
+/*
+ * The water itself, as OSM maps it: the riverbank multipolygons, outer ring
+ * and islands.
+ *
+ * The centreline above is 30 points with a constant 130 m width hung on it,
+ * and that is where the game drew the Yamuna. Measured against the riverbank
+ * polygon and the February 2024 imagery, the town-side edge was out by 23 m
+ * at Keshi Ghat (the water stopped 30 m short of steps that stand in it) and
+ * by 18-30 m at Chir and Imli Tala, while the far side covered land the river
+ * has not run over in years. OSM's town-side bank agrees with the imagery to
+ * within 10 m at all five ghats measured; the far side includes the sand
+ * flats the monsoon covers, which is what a riverbank polygon is.
+ *
+ * Rings are clipped well OUTSIDE the world (400 m), so the cut line can never
+ * read as a bank inside the terrain, and simplified to a metre.
+ */
+function closedRings(ways) {
+  const segs = ways.map((g) => g.map((q) => toWorld(q.lat, q.lon))).filter((g) => g.length > 1);
+  const rings = [];
+  const same = (a, b) => Math.abs(a[0] - b[0]) < 0.02 && Math.abs(a[1] - b[1]) < 0.02;
+  while (segs.length) {
+    let cur = segs.shift();
+    for (let joined = true; joined && !same(cur[0], cur[cur.length - 1]);) {
+      joined = false;
+      for (let i = 0; i < segs.length; i++) {
+        const sg = segs[i];
+        if (same(cur[cur.length - 1], sg[0])) cur = cur.concat(sg.slice(1));
+        else if (same(cur[cur.length - 1], sg[sg.length - 1])) cur = cur.concat(sg.slice(0, -1).reverse());
+        else if (same(cur[0], sg[sg.length - 1])) cur = sg.slice(0, -1).concat(cur);
+        else if (same(cur[0], sg[0])) cur = sg.slice(1).reverse().concat(cur);
+        else continue;
+        segs.splice(i, 1); joined = true; break;
+      }
+    }
+    if (same(cur[0], cur[cur.length - 1])) cur = cur.slice(0, -1);
+    if (cur.length >= 3) rings.push(cur);
+  }
+  return rings;
+}
+
+/** Sutherland-Hodgman against an axis-aligned rectangle. */
+function clipRing(ring, b) {
+  const edges = [
+    [(p) => p[0] >= b.minX, (p, q) => [b.minX, p[1] + (q[1] - p[1]) * (b.minX - p[0]) / (q[0] - p[0])]],
+    [(p) => p[0] <= b.maxX, (p, q) => [b.maxX, p[1] + (q[1] - p[1]) * (b.maxX - p[0]) / (q[0] - p[0])]],
+    [(p) => p[1] >= b.minZ, (p, q) => [p[0] + (q[0] - p[0]) * (b.minZ - p[1]) / (q[1] - p[1]), b.minZ]],
+    [(p) => p[1] <= b.maxZ, (p, q) => [p[0] + (q[0] - p[0]) * (b.maxZ - p[1]) / (q[1] - p[1]), b.maxZ]],
+  ];
+  let out = ring;
+  for (const [inside, cut] of edges) {
+    const src = out;
+    out = [];
+    for (let i = 0; i < src.length; i++) {
+      const p = src[i], q = src[(i + 1) % src.length];
+      if (inside(p)) {
+        out.push(p);
+        if (!inside(q)) out.push(cut(p, q));
+      } else if (inside(q)) out.push(cut(p, q));
+    }
+    if (!out.length) return [];
+  }
+  return out.map(([x, z]) => [round2(x), round2(z)]);
+}
+
+/** Douglas-Peucker on a closed ring: split at its two furthest-apart points. */
+function simplifyRing(ring, tol) {
+  if (ring.length < 8) return ring;
+  let far = 0, fd = 0;
+  for (let i = 1; i < ring.length; i++) {
+    const d = dist(ring[0], ring[i]);
+    if (d > fd) { fd = d; far = i; }
+  }
+  const a = simplify(ring.slice(0, far + 1), tol);
+  const b = simplify(ring.slice(far).concat([ring[0]]), tol);
+  return a.slice(0, -1).concat(b.slice(0, -1));
+}
+
+const ringArea = (r) => {
+  let A = 0;
+  for (let i = 0; i < r.length; i++) {
+    const p = r[i], q = r[(i + 1) % r.length];
+    A += p[0] * q[1] - q[0] * p[1];
+  }
+  return Math.abs(A) / 2;
+};
+
+const riverWater = [];
+const WATER_CLIP = padBounds(WORLD_BOUNDS, 400);
+for (const rel of rawRiverbank) {
+  if (rel.type !== 'relation' || !rel.members) continue;
+  const role = (r) => rel.members.filter((m) => m.type === 'way' && m.role === r && m.geometry).map((m) => m.geometry);
+  const prep = (rings) => rings.map((r) => simplifyRing(clipRing(r, WATER_CLIP), 1))
+    .filter((r) => r.length >= 3 && ringArea(r) > 40);
+  for (const outer of prep(closedRings(role('outer')))) {
+    const inner = prep(closedRings(role('inner')))
+      .filter((r) => r.some((p) => pointInRing(p, outer)));
+    riverWater.push({ osm: rel.id, outer, inner });
+  }
+}
+function pointInRing(p, ring) {
+  let c = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const a = ring[i], b = ring[j];
+    if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c;
+  }
+  return c;
+}
+{
+  const pts = riverWater.reduce((n, w) => n + w.outer.length + w.inner.reduce((m, r) => m + r.length, 0), 0);
+  const area = riverWater.reduce((n, w) => n + ringArea(w.outer) - w.inner.reduce((m, r) => m + ringArea(r), 0), 0);
+  console.log(`water     ${riverWater.length} polygon(s), ${riverWater.reduce((n, w) => n + w.inner.length, 0)} island(s), ${pts} points, ${(area / 1e6).toFixed(2)} km2 of Yamuna`);
+}
 
 /* ------------------------------------------------------------------ *
  * Landmarks — match curated entries to real OSM positions
@@ -579,7 +718,7 @@ writeModule('roads.generated.js',
   `export const ROADS = ${compactJson(roads.map(({ prio, length, ...r }) => r))};\n`);
 
 writeModule('river.generated.js',
-  `export const RIVER = ${compactJson({ points: riverPoints, width: 130, bank: 14 })};\n`);
+  `export const RIVER = ${compactJson({ points: riverPoints, width: 130, bank: 14, water: riverWater })};\n`);
 
 writeModule('parikrama.generated.js',
   `export const PARIKRAMA = ${compactJson({

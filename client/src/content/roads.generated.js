@@ -1346,8 +1346,8 @@ export const ROADS = [
   {
     "id": "r673572958",
     "name": null,
-    "kind": "main",
-    "width": 11,
+    "kind": "gali",
+    "width": 4.8,
     "points": [
       [866.57, -835.73],
       [841.81, -824.48],
@@ -1378,8 +1378,8 @@ export const ROADS = [
   {
     "id": "r1537934884",
     "name": null,
-    "kind": "main",
-    "width": 11,
+    "kind": "gali",
+    "width": 4.8,
     "points": [
       [962.06, -855.19],
       [948.97, -859.8],
@@ -20958,8 +20958,8 @@ export const ROADS = [
   {
     "id": "r1152605199",
     "name": null,
-    "kind": "street",
-    "width": 6.5,
+    "kind": "gali",
+    "width": 4.8,
     "points": [
       [-2393.28, 1472.98],
       [-2414.23, 1454.78]

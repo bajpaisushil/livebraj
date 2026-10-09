@@ -481,8 +481,22 @@ export const LANDMARKS = [
     id: 'keshi-ghat', match: ['Keshi Ghat', 'Kesi Ghat', 'Кеши'],
     name: 'Shri Keshi Ghat', hindi: 'श्री केशी घाट',
     type: 'ghat', deity: null, icon: 'ghat',
-    build: { kind: 'ghat', w: 120, d: 58, h: 15, color: '#b4664a', accent: '#8f4a34', palace: true },
-    rot: Math.PI * 0.15, radius: 56, district: 'ghat-front',
+    /*
+     * The riverfront of palaces (world/KeshiGhat.js): the plan in Sinha &
+     * Dhariwal (ISVS 2024, Fig. 7) laid on the front measured off the
+     * imagery. The frame runs along the south-west run of that front, from
+     * Pandawala Kunj toward the bend — bearing 124 — with +lz into the town;
+     * OSM's node, which the plan calls Pandawala Ghat, is on the steps 5.5 m
+     * out from the palaces. The compound is the palaces and their steps, in
+     * three pieces round Jugal Kishore, whose own compound comes to within
+     * ten metres of the front behind Pandawala Kunj.
+     */
+    build: { kind: 'ghat-keshi', w: 128, d: 40, h: 16, color: '#b39a76', accent: '#8f7a5c', measured: true },
+    rot: -0.591637, radius: 56, district: 'ghat-front',
+    compound: { lx0: -44.5, lx1: -6.0, lz0: -13, lz1: 15.5, ring: false, also: [
+      { lx0: -6.0, lx1: 52.5, lz0: -13, lz1: 34.5 },
+      { lx0: 44.8, lx1: 89.0, lz0: -14, lz1: 37.2 },
+    ] },
     interactions: ['pranam', 'offer', 'story'],
     fallback: [27.58726, 77.69874],
   },

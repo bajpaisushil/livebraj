@@ -578,9 +578,10 @@ export const LOCATIONS = [
     "type": "ghat",
     "district": "ghat-front",
     "grounds": null,
+    "compound": { "lx0": -44.5, "lx1": -6, "lz0": -13, "lz1": 15.5, "ring": false, "also": [{ "lx0": -6, "lx1": 52.5, "lz0": -13, "lz1": 34.5 }, { "lx0": 44.8, "lx1": 89, "lz0": -14, "lz1": 37.2 }] },
     "pos": [813.79, -807.04],
     "geo": [27.587263, 77.698742],
-    "rot": 0.47123889803846897,
+    "rot": -0.591637,
     "radius": 56,
     "icon": "ghat",
     "deity": null,
@@ -590,13 +591,13 @@ export const LOCATIONS = [
       "story"
     ],
     "build": {
-      "kind": "ghat",
-      "w": 120,
-      "d": 58,
-      "h": 15,
-      "color": "#b4664a",
-      "accent": "#8f4a34",
-      "palace": true
+      "kind": "ghat-keshi",
+      "w": 128,
+      "d": 40,
+      "h": 16,
+      "color": "#b39a76",
+      "accent": "#8f7a5c",
+      "measured": true
     },
     "osm": "Keshi Ghat"
   },

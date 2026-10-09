@@ -214,17 +214,8 @@ export class MapSystem {
       g.fill();
     }
 
-    // the Yamuna
-    const r = this.ctx.data.RIVER;
-    g.beginPath();
-    r.points.forEach((p, i) => { const [x, y] = T(p[0], p[1]); i ? g.lineTo(x, y) : g.moveTo(x, y); });
-    g.strokeStyle = '#6fa3a8';
-    g.lineWidth = r.width * ppm;
-    g.lineCap = 'round'; g.lineJoin = 'round';
-    g.stroke();
-    g.strokeStyle = 'rgba(58,110,116,.5)';
-    g.lineWidth = r.width * ppm * 0.82;
-    g.stroke();
+    // the Yamuna, where the world has it
+    this._drawWater(g, T, ppm, 1);
 
     // roads, widest last so the main streets sit on top
     const order = ['path', 'gali', 'street', 'main', 'highway', 'trunk', 'parikrama'];
@@ -722,6 +713,55 @@ export class MapSystem {
       if (zm) zm.textContent = this._mode === 'me' ? '◎' : '⛶';
       this._drawFull();
     });
+  }
+
+  /**
+   * The Yamuna as the world has it, for both maps.
+   *
+   * Both drew a 130 m band on the centreline, which is where the river USED
+   * to be: at Keshi Ghat the map's water began 25 m out from steps the world
+   * now has standing in it — the very complaint the river was moved for,
+   * repeated on paper. So the map asks the terrain, once, over the river's
+   * own extent at 4 m a pixel, and both maps draw that.
+   */
+  _waterMask() {
+    if (this._water !== undefined) return this._water;
+    this._water = null;
+    const w = this.ctx.world, r = this.ctx.data.RIVER;
+    if (!w || !w.isWater || !r || !r.points.length || typeof document === 'undefined') return null;
+    let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+    for (const [x, z] of r.points) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
+    x0 = Math.max(WB.minX, x0 - 260); x1 = Math.min(WB.maxX, x1 + 260);
+    z0 = Math.max(WB.minZ, z0 - 260); z1 = Math.min(WB.maxZ, z1 + 260);
+    const S = 4, W = Math.ceil((x1 - x0) / S), H = Math.ceil((z1 - z0) / S);
+    if (W < 1 || H < 1) return null;
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    if (!g) return null;
+    const img = g.createImageData(W, H), d = img.data;
+    for (let j = 0; j < H; j++) {
+      for (let i = 0; i < W; i++) {
+        if (!w.isWater(x0 + (i + 0.5) * S, z0 + (j + 0.5) * S)) continue;
+        const k = (j * W + i) * 4;
+        d[k] = 0x6f; d[k + 1] = 0xa3; d[k + 2] = 0xa8; d[k + 3] = 255;
+      }
+    }
+    g.putImageData(img, 0, 0);
+    this._water = { c, x0, z0, x1, z1 };
+    return this._water;
+  }
+
+  /** Lay the water mask down under `T`, the world-to-canvas mapping. */
+  _drawWater(g, T, ppm, alpha) {
+    const m = this._waterMask();
+    if (!m) return;
+    const [a, bb] = T(m.x0, m.z0), [c, d] = T(m.x1, m.z1);
+    g.save();
+    g.globalAlpha = alpha;
+    g.imageSmoothingEnabled = true;
+    g.drawImage(m.c, a, bb, c - a, d - bb);
+    g.restore();
   }
 
   /** Tapping empty ground still tells you what road it is. */
@@ -1853,12 +1893,8 @@ export class MapSystem {
     }
 
     // Yamuna
+    this._drawWater(g, T, ppm, 0.85);
     const r = this.ctx.data.RIVER;
-    g.beginPath();
-    r.points.forEach((p, i) => { const [x, y] = T(p[0], p[1]); i ? g.lineTo(x, y) : g.moveTo(x, y); });
-    g.strokeStyle = '#8fbcc0'; g.lineWidth = r.width * ppm; g.lineCap = 'round'; g.lineJoin = 'round';
-    g.stroke();
-    g.strokeStyle = '#5d949a'; g.lineWidth = r.width * ppm * 0.7; g.stroke();
 
     this._drawRoads(g, tier, view, ppm);
 

@@ -405,10 +405,30 @@ export class WorldService {
     return this.terrain ? this.terrain.isWater(x, z) : false;
   }
 
-  /** Water depth at a point, positive when submerged. */
+  /**
+   * Water depth at a point, positive when submerged.
+   *
+   * Measured down to what you would be standing on there, not to the bed.
+   * A ghat's steps are built out over the river, and under every tread the
+   * terrain is the bed of the Yamuna: measured to that, a dry step three
+   * risers above the water read as a metre and a half of it, so "wade, but
+   * never swim" stopped you halfway down Keshi Ghat's flight. The highest
+   * standable surface at the point is what you are on; with nothing built
+   * there it is the terrain, exactly as before.
+   */
   waterDepth(x, z) {
     if (!this.isWater(x, z)) return 0;
-    return Math.max(0, -0.6 - this.groundHeight(x, z));
+    const surface = this.terrain && this.terrain.waterY !== undefined ? this.terrain.waterY : -0.55;
+    let floor = this.groundHeight(x, z);
+    const cell = this._standCells.get(standKey(Math.floor(x / STAND_CELL), Math.floor(z / STAND_CELL)));
+    if (cell) {
+      for (let i = 0; i < cell.length; i++) {
+        const c = cell[i];
+        if (c.soft || c.top <= floor) continue;
+        if (this._overlaps(c, x, z, 0)) floor = c.top;
+      }
+    }
+    return Math.max(0, surface - 0.05 - floor);
   }
 
   /** True inside a narrow lane — the camera pulls in and the crowd thins. */

@@ -81,13 +81,25 @@ function generateTrees() {
 
   // riverbank: kadamb and tamal crowd the Yamuna, palms behind them
   const bank = resample(RIVER.points, 13);
-  for (const [x, z] of bank) {
+  for (let i = 0; i < bank.length; i++) {
+    const [x, z] = bank[i];
+    /*
+     * Out ACROSS the river, along its own normal. This stepped out in z
+     * alone, which is only across the stream where the Yamuna runs east-west:
+     * where it turns north past the western fields, every one of these went
+     * up and down the channel instead — into the water. PropScatter now also
+     * refuses a tree standing in the river, so a bank that moves cannot put
+     * one back in it.
+     */
+    const a = bank[Math.max(0, i - 1)], b = bank[Math.min(bank.length - 1, i + 1)];
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+    const nx = -(b[1] - a[1]) / len, nz = (b[0] - a[0]) / len;
     for (let s = 0; s < 6; s++) {
       const off = RIVER.width * 0.5 + 6 + rng() * 64;
       const side = rng() < 0.62 ? 1 : -1;
       const jitter = (rng() - 0.5) * 22;
       const kind = rng() < 0.42 ? 'kadamb' : rng() < 0.68 ? 'tamal' : rng() < 0.86 ? 'peepal' : 'palm';
-      place(x + jitter, z + off * side, kind, 0.9 + rng() * 0.7, 9);
+      place(x + nz * jitter + nx * off * side, z - nx * jitter + nz * off * side, kind, 0.9 + rng() * 0.7, 9);
     }
   }
 

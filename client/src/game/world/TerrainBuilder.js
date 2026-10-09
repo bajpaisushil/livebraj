@@ -51,8 +51,33 @@ const CELL = WORLD_DETAIL.terrainCell;
 const DIMX = Math.ceil(SPAN_X / CELL) + 1;
 const DIMZ = Math.ceil(SPAN_Z / CELL) + 1;
 
-const WATER_Y = -0.55;
-const RIVER_BED = -3.8;
+/*
+ * The Yamuna's surface, 3.6 m below the town.
+ *
+ * It was 0.55 m below, which made the river a flood lying level with the
+ * streets: no bank anywhere, nothing for a ghat to step down, and wherever
+ * the terrain's relief dipped half a metre the water plane showed through as
+ * a pond — 0.2 km2 of fields across the north-west alone. Vrindavan stands on
+ * a low bluff: the town by Keshi Ghat is at about 167 m, the dry-season river
+ * at 162-163 m (Mathura's danger level is 166 m), so the steps go down four
+ * to five metres to the water most of the year and two in the monsoon.
+ */
+const WATER_Y = -3.6;
+const RIVER_BED = WATER_Y - 3.2;
+/*
+ * How the mapped riverbank and the low-water channel combine; see
+ * _riverSigned. SNAP is how far past the channel the water will run on to
+ * reach the mapped bank; BANK_RUN how far back from the water's edge the
+ * ground takes to rise into the town — a short bank and level ground behind
+ * it, which is the bluff, rather than a long slope the riverside houses
+ * would have to stand on.
+ */
+const SNAP = 30;
+const BANK_RUN = 24;
+/* Ground this close above the water is sand: the bank and the riverbed's flats. */
+const SAND_ABOVE = 2.3;
+const BANK_REACH = 60;
+const ROW = 8;
 const ROAD_LIFT = 0.34;
 
 /** Surface appearance per road kind. */
@@ -90,6 +115,9 @@ class Terrain {
 
     this.segGrid = new SpatialGrid(40);
     this.riverGrid = new SpatialGrid(80);
+    this.bankGrid = new SpatialGrid(40);
+    this.waterRows = null;
+    this._bed = { inside: false, edge: 0 };
   }
 
   /* ================================================================ */
@@ -132,6 +160,10 @@ class Terrain {
       sampleHeight: (x, z) => self.sampleHeight(x, z),
       surfaceAt: (x, z) => self.surfaceAt(x, z),
       isWater: (x, z) => self.isWater(x, z),
+      // metres from the Yamuna's water: negative in it
+      riverSigned: (x, z) => self._riverSigned(x, z, []),
+      // the river's surface
+      waterY: WATER_Y,
       roadDistance: (x, z) => self.roadDistance(x, z),
       update: (dt) => self.update(dt),
     };
@@ -164,6 +196,35 @@ class Terrain {
       this.riverGrid.insert((a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5,
         { ax: a[0], az: a[1], bx: b[0], bz: b[1] });
     }
+    /*
+     * The riverbank as OSM maps it: every edge of every ring, outer and
+     * islands alike. Into a grid in pieces no longer than 16 m, for the
+     * distance to the bank, and into 8 m rows whole, for which side of it a
+     * point is on — an even-odd count of the edges crossing its row, which is
+     * also how the islands come out dry.
+     */
+    if (!r.water || !r.water.length) return;
+    this.waterRows = new Map();
+    for (const poly of r.water) {
+      for (const ring of [poly.outer, ...poly.inner]) {
+        for (let i = 0; i < ring.length; i++) {
+          const a = ring[i], b = ring[(i + 1) % ring.length];
+          const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 16));
+          for (let k = 0; k < n; k++) {
+            const t0 = k / n, t1 = (k + 1) / n;
+            const ax = a[0] + (b[0] - a[0]) * t0, az = a[1] + (b[1] - a[1]) * t0;
+            const bx = a[0] + (b[0] - a[0]) * t1, bz = a[1] + (b[1] - a[1]) * t1;
+            this.bankGrid.insert((ax + bx) * 0.5, (az + bz) * 0.5, { ax, az, bx, bz });
+          }
+          const r0 = Math.floor(Math.min(a[1], b[1]) / ROW), r1 = Math.floor(Math.max(a[1], b[1]) / ROW);
+          for (let row = r0; row <= r1; row++) {
+            let list = this.waterRows.get(row);
+            if (!list) { list = []; this.waterRows.set(row, list); }
+            list.push(a[0], a[1], b[0], b[1]);
+          }
+        }
+      }
+    }
   }
 
   /* ---------------- height field ---------------- */
@@ -191,12 +252,36 @@ class Terrain {
           h = lerp(h, rd.roadH, flat * 0.92);
         }
 
-        // carve the river bed
-        const dr = this._riverDistance(x, z, scratch);
-        if (dr < this.riverHalf + 70) {
-          const t = clamp01((this.riverHalf + 70 - dr) / 70);
-          const bed = lerp(h, RIVER_BED, smoothstep(clamp01((this.riverHalf - dr) / 26 + 0.5)));
-          h = lerp(h, bed, smoothstep(t));
+        // carve the river bed, with the waterline where the water ends
+        const sd = this._riverSigned(x, z, scratch);
+        const run = this._bankRun(x, z);
+        const bed = this._bed;
+        if (sd < 0) {
+          // knee-deep at the edge, the full depth thirty metres out
+          h = lerp(WATER_Y - 0.45, RIVER_BED, smoothstep(clamp01(-sd / 30)));
+        } else if (bed.inside) {
+          /*
+           * The riverbed the low water has left: inside the mapped bank but
+           * out of the channel. Sand flats, a little above the water and
+           * rising away from it — the beach the boats are pulled up on at
+           * the Keshi landing, and the expanse across the river in every
+           * photograph from the ghats, with the fields beyond it.
+           *
+           * Never less than 0.9 m above the water: the camera's depth buffer
+           * cannot tell two surfaces apart that are closer than about
+           * d^2 / 4e6 metres, and at 0.35 m the far bank came out striped
+           * from a kilometre off.
+           */
+          h = Math.min(h, lerp(WATER_Y + 0.9, WATER_Y + 1.9, smoothstep(clamp01(sd / 80))));
+        } else {
+          if (sd < run) {
+            // the bank: just clear of the water at its edge, rising into the land
+            h = lerp(WATER_Y + 0.3, h, smoothstep(sd / run));
+          }
+          if (bed.edge < 15) {
+            // and up off the sand flats, where the riverbed meets the land
+            h = lerp(Math.min(h, WATER_Y + 1.9), h, smoothstep(bed.edge / 15));
+          }
         }
 
         this.height[i] = h;
@@ -246,6 +331,106 @@ class Terrain {
     return best;
   }
 
+  /**
+   * How far a point is from the Yamuna's water: negative in it, positive on
+   * land, in metres.
+   *
+   * The river used to be a constant 130 m band hung on the 30-point
+   * centreline — the right channel, in the wrong place at exactly the ghats.
+   * Measured against OSM's riverbank polygon and the February 2024 imagery,
+   * Keshi Ghat's water began 30 m out from the steps that stand in it, and
+   * Chir and Imli Tala's 20-25 m short of where it really starts.
+   *
+   * The riverbank polygon has the town side right — within 10 m of the
+   * imagery at all five ghats measured — but it is the river at bank-full: on
+   * the far side it runs into the fields, and north-east of Keshi Ghat over
+   * the sand that the boat landing's tracks and the pontoon's approach cross.
+   * The centreline, which OSM draws down the low-water channel, has that part
+   * right. So the water is both: inside the polygon AND in the channel. Where
+   * the channel comes within SNAP of the polygon's bank, as it does on the
+   * outside of the bend at Keshi Ghat, it runs on to that bank rather than
+   * leave a strip of sand that is not there.
+   *
+   * Without a polygon in the data this is the old band, exactly.
+   */
+  _riverSigned(x, z, scratch) {
+    const dcl = this._riverDistance(x, z, scratch);
+    const band = dcl - this.riverHalf;
+    // what the last call found out about the mapped riverbed, for _bakeHeights
+    const bed = this._bed;
+    bed.inside = false; bed.edge = BANK_REACH;
+    let sd = band;
+    if (this.waterRows) {
+      bed.inside = this._inMappedWater(x, z);
+      bed.edge = this._bankDistance(x, z, scratch);
+      const poly = bed.inside ? -bed.edge : bed.edge;
+      const channel = Math.min(band, dcl + bed.edge - (this.riverHalf + SNAP));
+      sd = Math.max(poly, channel);
+    }
+    // a built front the water comes right up to (content/riverbanks.js)
+    const wet = this._wetBank(x, z);
+    if (wet) sd = Math.min(sd, wet.w.edge - wet.n);
+    return sd;
+  }
+
+  /**
+   * The built front (content/riverbanks.js) this point is beside, if any,
+   * and how far out from it toward the river it is (`n`, negative landward):
+   * within `reach` of the line and between its ends — flat ends, so the
+   * exception stops where it was measured to stop.
+   */
+  _wetBank(x, z) {
+    const list = this.data.WET_BANKS;
+    if (!list) return null;
+    let best = null;
+    for (const w of list) {
+      const f = w.front;
+      for (let i = 1; i < f.length; i++) {
+        const ax = f[i - 1][0], az = f[i - 1][1], dx = f[i][0] - ax, dz = f[i][1] - az;
+        const L = Math.hypot(dx, dz);
+        const t = ((x - ax) * dx + (z - az) * dz) / (L * L);
+        // past either end of the whole front, nothing; between segments, the nearer
+        if ((i === 1 && t < 0) || (i === f.length - 1 && t > 1)) continue;
+        if (t < -0.05 || t > 1.05) continue;
+        // the river is on the left going south-west to north-east: (dz, -dx)
+        const n = ((x - ax) * dz - (z - az) * dx) / L;
+        if (Math.abs(n) > w.reach) continue;
+        if (!best || Math.abs(n) < Math.abs(best.n)) best = { w, n };
+      }
+    }
+    return best;
+  }
+
+  /** How far the ground takes to rise out of the water here. */
+  _bankRun(x, z) {
+    const w = this._wetBank(x, z);
+    return w && w.w.bank ? w.w.bank : BANK_RUN;
+  }
+
+  /** Distance to the mapped riverbank, capped at BANK_REACH. */
+  _bankDistance(x, z, scratch) {
+    const cand = this.bankGrid.query(x, z, BANK_REACH, scratch);
+    let best = BANK_REACH;
+    for (let i = 0; i < cand.length; i++) {
+      const s = cand[i];
+      const p = pointSegment(x, z, s.ax, s.az, s.bx, s.bz);
+      if (p.d < best) best = p.d;
+    }
+    return best;
+  }
+
+  /** Inside OSM's riverbank polygon (and not on one of its islands). */
+  _inMappedWater(x, z) {
+    const row = this.waterRows && this.waterRows.get(Math.floor(z / ROW));
+    if (!row) return false;
+    let inside = false;
+    for (let i = 0; i < row.length; i += 4) {
+      const ax = row[i], az = row[i + 1], bx = row[i + 2], bz = row[i + 3];
+      if ((az > z) !== (bz > z) && x < ((bx - ax) * (z - az)) / (bz - az) + ax) inside = !inside;
+    }
+    return inside;
+  }
+
   /* ---------------- public queries ---------------- */
 
   sampleHeight(x, z) {
@@ -283,7 +468,8 @@ class Terrain {
       if (d < half + 0.8) return style.surface;
     }
     const h = this.sampleHeight(x, z);
-    if (h < WATER_Y + 1.6) return 'sand';
+    // the bank and the riverbed's sand flats; the town is a metre and more above
+    if (h < WATER_Y + SAND_ABOVE) return 'sand';
     return d < 24 ? 'dirt' : 'grass';
   }
 
@@ -319,7 +505,7 @@ class Terrain {
       pos.setY(i, h);
 
       const rd = this.roadDistance(x, z);
-      const wet = clamp01((WATER_Y + 1.5 - h) / 1.5);
+      const wet = clamp01((WATER_Y + SAND_ABOVE - h) / 1.5);
       const worn = clamp01((8 - rd) / 8);
 
       // three scales of patchiness: fields, then scrub, then close-up grain
@@ -498,7 +684,9 @@ class Terrain {
      * along it. One source of truth for which way a ghat faces.
      */
     this.ghatFacing = {};
-    const ghats = this.data.LOCATIONS.filter((l) => l.type === 'ghat');
+    // the generic flight, for the ghats that have no builder of their own:
+    // Keshi Ghat lays its own steps (KeshiGhat.js)
+    const ghats = this.data.LOCATIONS.filter((l) => l.type === 'ghat' && l.build.kind === 'ghat');
 
     for (const loc of ghats) {
       const [cx, cz] = loc.pos;
