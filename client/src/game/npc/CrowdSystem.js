@@ -16,6 +16,19 @@ import { PEOPLE, buildStanding } from './Archetypes.js';
 import { rngAt, pick, range, chance } from '../../engine/math/Random.js';
 import { damp, dampAngle, clamp01, TAU } from '../../engine/math/MathUtils.js';
 import { driveStep, AMBIENT } from '../transport/VehicleDrive.js';
+import { busyness } from './CrowdCalendar.js';
+
+/*
+ * THE CROWD FOLLOWS THE CALENDAR (CrowdCalendar.js): how many of the people
+ * the game carries are out at this hour, on this day. Never fewer than
+ * CALENDAR_FLOOR of them — the small hours still have sadhus, chai and
+ * people going home — and changed a few at a time, only out of sight, so
+ * nobody vanishes in front of you or appears from nowhere.
+ */
+const CALENDAR_FLOOR = 0.3;
+const CALENDAR_STEP = 3;          // people sent home or brought out per second
+const OUT_OF_SIGHT = 70;          // metres from you before anyone may come or go
+const AWAY = 1e7;                 // where the people not out right now are kept
 
 const _v = new THREE.Vector3();
 
@@ -134,6 +147,18 @@ export class Crowd {
     this._buildTemplates();
     this._spawn();
     this._acc = 0;
+    /*
+     * On, unless the browser is driven by automation: every check written
+     * before this assumes the whole crowd is out, and a check must not read
+     * differently at three in the morning. The check of the calendar itself
+     * turns it on, with a clock of its own (setCalendar).
+     */
+    this.calendar = {
+      on: !(typeof navigator !== 'undefined' && navigator.webdriver),
+      clock: null, level: 1, because: '', told: false, acc: 1, seconds: 0,
+      // the first pass sets the town to the hour at once, before anything is seen
+      fresh: true,
+    };
     console.info(`[crowd] ${this.counts.people} people, ${this.counts.cows} cows, ${this.counts.vehicles} vehicles`);
   }
 
@@ -287,6 +312,104 @@ export class Crowd {
     return w.standHeightFast(x, z, w.groundHeight(x, z));
   }
 
+  /**
+   * Turn the calendar on or off, or pin its clock: `clock` is a Date whose
+   * local fields read Braj's time (as LiveConditions.vrindavanTime gives
+   * one), or null for the live clock. Off brings everyone out at once.
+   */
+  setCalendar(on, clock = null, atOnce = false) {
+    const c = this.calendar;
+    c.on = !!on; c.clock = clock; c.acc = 1;
+    if (atOnce) c.fresh = true;
+    if (!c.on) for (const a of this.people) if (a.away) this._comeOut(a, null, true);
+  }
+
+  /** How busy the town is now, by the calendar (or full, with it off). */
+  calendarNow(ctx = this.ctx) {
+    const c = this.calendar;
+    if (!c.on) return { level: 1, because: '', festival: null };
+    const live = c.clock || (ctx.live && ctx.live.vrindavanTime
+      && ctx.state.settings.liveTime !== false ? ctx.live.vrindavanTime().date : null);
+    if (!live) return { level: 1, because: '', festival: null };
+    return busyness(live);
+  }
+
+  /**
+   * Once a second: how many should be out, and a few sent home or brought
+   * out toward that — the highest-numbered first home, the lowest first out,
+   * so the people any code finds by number are the last to go. Only people
+   * out of sight change, except in the first second, before anything has
+   * been seen, when the town is set to the hour at once.
+   */
+  _followCalendar(dt, ctx, p) {
+    const c = this.calendar;
+    c.acc += dt; c.seconds += dt;
+    if (c.acc < 1) return;
+    c.acc = 0;
+    const now = this.calendarNow(ctx);
+    c.level = now.level; c.because = now.because;
+    const want = Math.round(this.people.length * Math.max(CALENDAR_FLOOR, c.on ? now.level : 1));
+    let out = 0;
+    for (const a of this.people) if (!a.away) out++;
+    const first = c.fresh;
+    c.fresh = false;
+    let budget = first ? Infinity : CALENDAR_STEP;
+    const unseen = (x, z) => first || Math.hypot(x - p.x, z - p.z) > OUT_OF_SIGHT;
+    if (out > want) {
+      for (let i = this.people.length - 1; i >= 0 && out > want && budget > 0; i--) {
+        const a = this.people[i];
+        if (a.away || !unseen(a.x, a.z)) continue;
+        a.away = { x: a.x, z: a.z };
+        a.x = AWAY; a.z = AWAY; a.walking = false;
+        out--; budget--;
+      }
+    } else if (out < want) {
+      for (let i = 0; i < this.people.length && out < want && budget > 0; i++) {
+        const a = this.people[i];
+        if (!a.away) continue;
+        if (this._comeOut(a, p, first)) { out++; budget--; }
+      }
+    }
+    // say so once, on a day worth saying it about, once you are in the world
+    if (!c.told && c.on && now.because && c.seconds > 4 && ctx.ui && ctx.ui.screen === 'world') {
+      c.told = true;
+      const f = now.festival;
+      if (ctx.bus) {
+        ctx.bus.emit('ui:toast', f
+          ? { title: f.name, sub: `${f.hindi} · ${now.level > 0.8 ? 'the town is full of pilgrims' : 'pilgrims are arriving'}` }
+          : { title: now.because, sub: now.level > 0.8 ? 'the weekend crowd is out' : 'a weekend in Braj' });
+      }
+    }
+  }
+
+  /**
+   * Bring one person back out, out of sight but not so far off that the
+   * walk would recycle them at once — `_stepAgent` moves anyone past 1.15
+   * of the draw distance to a node anywhere within three-quarters of it,
+   * which can be beside you. Where they were, if that is in the band; else
+   * a node that is.
+   */
+  _comeOut(a, p, anywhere) {
+    let x = a.away.x, z = a.away.z;
+    if (!anywhere && p) {
+      const far = this.ctx.quality.drawDistance;
+      const inBand = (qx, qz) => { const d = Math.hypot(qx - p.x, qz - p.z); return d > OUT_OF_SIGHT && d < far * 1.1; };
+      if (!inBand(x, z)) {
+        const nav = this.ctx.nav;
+        let n = null;
+        for (let t = 0; t < 12 && nav && nav.randomNodeNear; t++) {
+          const q = nav.randomNodeNear(p.x, p.z, far * 1.05, Math.random);
+          if (q && inBand(q.x, q.z)) { n = q; break; }
+        }
+        if (!n) return false;
+        x = n.x; z = n.z; a.node = n; a.target = null;
+      }
+    }
+    a.x = x; a.z = z; a.y = this._placedY(x, z);
+    a.away = null;
+    return true;
+  }
+
   _addPerson(rng, i) {
     const typeIdx = i % PEOPLE.length;
     const slot = this.peopleInst[typeIdx];
@@ -352,6 +475,7 @@ export class Crowd {
     if (!p) return;
     const far = ctx.quality.drawDistance;
     const far2 = far * far;
+    this._followCalendar(dt, ctx, p);
 
     /*
      * Which gatherings the walking crowd has to walk AROUND.
@@ -382,6 +506,7 @@ export class Crowd {
     for (const slot of this.peopleInst) {
       let n = 0;
       for (const a of slot.agents) {
+        if (a.away) continue;                       // not out at this hour
         this._stepAgent(a, dt, ctx, p, far);
         const dx = a.x - p.x, dz = a.z - p.z;
         if (dx * dx + dz * dz > far2) continue;
