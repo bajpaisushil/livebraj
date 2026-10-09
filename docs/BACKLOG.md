@@ -3577,3 +3577,24 @@ written, so Madan Mohan was measured and built here, solo.
     ghats and the river, Rangaji's and Shahji's open items, and the new
     temples' loose ends (Sundar Das's chhatri, Madan Mohan's trees and east
     approach, a walk check for Radha Gopinath).
+
+## 2026-10-09 — "continue" (the spend limit had stopped all three workflows)
+
+- **"continue"** — all three workflows had died at the organisation's spend
+  limit: batch 1 (engineering) part way through, batch 2 (places) before it
+  began. Batch 1's worktrees were salvaged by hand — each read, run, fixed
+  where it was wrong, and merged only once green:
+  - item 11, `chatter` / `traffic` / `verges` own the clock — f008e13;
+  - item 17, the crowd on floors — 94f0b05. The worry that it moved the
+    vehicles off their lanes was wall-clock noise: the seeded `verges` reads
+    the same lane numbers with it and without it, at six seeds;
+  - item 9, one walking scheme on screen — 488023e;
+  - item 10, offline on the web — ec37fd4. Its own check caught the worker
+    handing the OLD build to the page after a deploy (Chrome's in-tab memory
+    cache); fixed before the merge;
+  - item 15, honest ride speeds — the worktree was left half done. Next.
+  Full suite on the merged branch: 36/37 green in 45 min, the red one
+  pre-existing (below). Batch 2 runs solo from here.
+- **Found:** `map-search`'s "Start from here" at Radha Raman puts you at
+  terrain level inside the edge of the court floor, against the altar block
+  — 0/8 directions open — since the Radha Raman rebuild (d93a0af). Fixing.

@@ -205,11 +205,27 @@ searching the backlog for it. That is the failure this file exists to stop.*
 8. **"Do proper research online and try to make everything exact."** Not a
    single task — it is the method for every item above, and it extends to the
    town: house interiors, bazaar shops, what is actually inside a Braj home.
-9. **The D-pad sits on top of the virtual stick.** Measured at `left:12
+9. ~~**The D-pad sits on top of the virtual stick.**~~ **DONE 2026-10-09**
+   (488023e). Settings > Movement > "Walk with: Arrows | Stick", the arrows by
+   default; the other control is off the page, and InputManager never starts
+   a stick while the arrows are up. Found on the way: the stick was never
+   moved under the thumb (its last-placed position started as NaN, and
+   `|x - NaN| > 0.4` is never true), so it drew in the top-left corner.
+   `dpad-dir` 30/30, stepped at a fixed 1/30 s. Original notes follow.
+   **The D-pad sits on top of the virtual stick.** Measured at `left:12
    bottom:152, 150x150`, exactly where a thumb rests; `#touch-layer` receives
    nothing there. Was waiting on a decision; the user has since said "fix
    everything yourself", so the call is mine: show one scheme at a time.
-10. **Offline on the web.** No service worker or manifest, so the browser
+10. ~~**Offline on the web.**~~ **DONE 2026-10-09** (ec37fd4). A
+    network-first service worker with no file list (the page reports what it
+    loaded), a manifest and वृ icons; Chrome calls the site installable.
+    `offline.mjs` 31/31: boots offline, shows a deploy on the next load and
+    offline after it, and survives a new worker version. It caught the worker
+    serving the OLD build after a deploy: Chrome's in-tab memory cache handed
+    the page the copies an offline load had used, without asking the worker.
+    Everything the worker hands the page is now marked no-cache. Original
+    notes follow.
+    **Offline on the web.** No service worker or manifest, so the browser
     build dies without a network while the APK does not. Would also make the
     site installable to a home screen.
 11. **Fixed sleeps in the checks** — `chatter`, `dpad-dir`, `traffic` (its
@@ -223,6 +239,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
     `verges` ("no vehicle is standing in somebody", 0.85 m) has missed by
     3-15 cm in some parallel runs since 2026-09-30 and passed 3/3 alone after;
     it now reports WHERE a strike is, so the next one can be looked at.
+    **`chatter`, `traffic`, `verges` done 2026-10-09** (f008e13): the game
+    loop never starts, the check calls `_frame()` at a fixed 1/30 s with
+    Math.random on the game's seeded generator (seed 1, `--seed=N`), and the
+    output is identical alone or three at once. Seed sweeps are in the checks:
+    `verges` holds its lane median under 2 m on 26 of seeds 1-30, `traffic`
+    reads 2 overlaps or fewer on 24. **`dpad-dir` done the same day.** Still
+    on the wall clock, slowest first in the last suite: `gatherings` (977 s),
+    `vehcam` (599 s), `starthere` (274 s), `driving`, and the probe tools.
 
 12. **The ghats stand in town with no river in sight.** Found photographing
     Kaliya Ghat for the arch fix. Research first, per ghat, what is actually
@@ -258,7 +282,16 @@ searching the backlog for it. That is the failure this file exists to stop.*
     single-sided, so from outside you saw the inner faces of the far half, lit
     from the wrong side. Measured on Prem Mandir's shikhara: 254 faces in, 2
     out; now 254 out. Canopies are now capped top and bottom.
-17. **The crowd stands on the terrain, never on a floor.** Every CrowdSystem
+17. ~~**The crowd stands on the terrain, never on a floor.**~~ **DONE
+    2026-10-09** (94f0b05). `standHeightFast` hands the player's own rules
+    (one function, `_standOn`) the one 10 m cell of an index of the
+    standables: 0.028 us a call against 6.84 for the full scan, and the same
+    answer to the bit at 56,360 points. Walkers, cows, waiting rickshaws and
+    seated gatherings stand on what is under them; on Prem Mandir's paving
+    they had stood 40 cm into it, not 17. A HIRED rickshaw keeps the terrain,
+    because RickshawSystem seats its passenger by it: lift both together with
+    item 15. `crowdfloor` 16/16. Original notes follow.
+    **The crowd stands on the terrain, never on a floor.** Every CrowdSystem
     and GatheringSystem agent takes `groundHeight`. Harmless today only
     because they are kept out of landmark footprints; on Prem Mandir's paving
     they would stand 17 cm into it. Needs a grid-indexed `standHeight` —
