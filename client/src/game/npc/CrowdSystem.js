@@ -27,7 +27,8 @@ const _v = new THREE.Vector3();
  */
 const VEHICLES = [
   { id: 'cycle-rickshaw', label: 'Cycle rickshaw', hindi: 'रिक्शा', speed: 3.2, w: 1.2, l: 2.6, h: 1.95, seat: 0.8, body: 0x2f5d5a, canopy: 0xc8452a, hire: { base: 10, perKm: 15, seats: 2 } },
-  { id: 'e-rickshaw', label: 'E-rickshaw', hindi: 'ई-रिक्शा', speed: 4.6, w: 1.4, l: 2.8, h: 1.76, seat: 0.62, body: 0x3f8f6a, canopy: 0xf2ece0, hire: { base: 10, perKm: 12, seats: 6 } },
+  // 1.0 m wide: Saarthi, JSA, Neelam, Ele and E-Ashwa all give 0.95-1.0 (it was 1.4)
+  { id: 'e-rickshaw', label: 'E-rickshaw', hindi: 'ई-रिक्शा', speed: 4.6, w: 1.0, l: 2.8, h: 1.76, seat: 0.62, body: 0x3f8f6a, canopy: 0xf2ece0, hire: { base: 10, perKm: 12, seats: 6 } },
   { id: 'auto', label: 'Auto rickshaw', hindi: 'ऑटो', speed: 5.4, w: 1.3, l: 2.7, h: 1.70, seat: 0.56, body: 0x1d4f3f, canopy: 0xf5d020, hire: { base: 20, perKm: 18, seats: 3 } },
   { id: 'tempo', label: 'Shared tempo', hindi: 'टेम्पो', speed: 4.2, w: 1.6, l: 3.6, h: 1.95, seat: 0.8, body: 0x3a5a8a, canopy: 0xe0d8c0, hire: { base: 10, perKm: 7, seats: 10, shared: true } },
   { id: 'taxi', label: 'Cab', hindi: 'टैक्सी', speed: 6.6, w: 1.75, l: 4.1, h: 1.52, seat: 0.5, body: 0xf0f0ea, canopy: null, hire: { base: 60, perKm: 26, seats: 4 } },

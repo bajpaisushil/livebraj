@@ -31,6 +31,10 @@ const __PORT = server.address().port;   // any free port, so parallel runs never
  * the machine is doing. It is a snapshot of a moving town, and some snapshots
  * catch a vehicle on top of somebody: `--seed=27` has one 0.35 m from a
  * person, 387 m out from Chhatikara Crossing.
+ *
+ * Swept again 2026-10-09 with the e-rickshaw at its real 1.0 m (from 1.4):
+ * over seeds 1-60, 43 green either way. Seed 27's strike went from 0.35 m to
+ * 0.66 m.
  */
 const SEED = Number((process.argv.find((a) => a.startsWith('--seed=')) || '').slice(7)) || 1;
 

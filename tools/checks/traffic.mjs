@@ -46,6 +46,12 @@ const __PORT = server.address().port;   // any free port, so parallel runs never
  * the other dead ahead and its throttle at zero. That is the town. It is also
  * why the old check failed 2 runs in 12, run one at a time, while a parallel
  * suite took the blame. `--seed=7` shows it again.
+ *
+ * Swept again 2026-10-09 when the e-rickshaw went from 1.4 m to its real
+ * 1.0 m: over seeds 1-60, 46 green at 1.0 m against 49 at 1.4 — the same
+ * standoffs reshuffled among the seeds, every failure a head-on pair. They
+ * come from vehicles driving the leg's centreline in both directions; the
+ * fix is keeping left, as India does (queue item 21), not a wider cone.
  */
 const SEED = Number((process.argv.find((a) => a.startsWith('--seed=')) || '').slice(7)) || 1;
 
