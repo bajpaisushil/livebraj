@@ -688,4 +688,49 @@ export const DISTRICTS = [
     minH: 3.5, maxH: 7, density: 0.22,
     poly: [[27.5700, 77.6660], [27.5700, 77.6900], [27.5580, 77.6900], [27.5580, 77.6660]],
   },
+  /*
+   * CHHATIKARA, where everyone starts. The corridor to Vrindavan is fields
+   * and stays fields (BuildingGenerator's `country`); the village at the
+   * highway is not. ESRI z17-z19, measured on the world's 200 m grid: a dense
+   * core of flat-roofed houses between NH 44 and the railway, south-west of
+   * the junction, down to the station; a smaller cluster north-east of the
+   * highway; houses along the first stretch of the Vrindavan road. And shops
+   * lining both service roads under the flyover, the Govardhan road's first
+   * 230 m to the rail over-bridge, and the Vrindavan road's first 220 m.
+   * The player's start is in the middle of it, which the game had as open
+   * grass. Its lots are budgeted on their own (`lots`, shared by `group`),
+   * so building the village takes nothing from Vrindavan's galis.
+   */
+  {
+    id: 'chhatikara', name: 'Chhatikara', kind: 'village',
+    palette: ['#c9b9a0', '#b8ad9c', '#cdb59a', '#a8705a', '#c4b8a8', '#d1b9a6', '#aab3ad'],
+    minH: 3.5, maxH: 8, density: 0.85, group: 'chhatikara', lots: 700,
+    poly: [[27.563023, 77.624347], [27.563502, 77.625947], [27.563312, 77.627659], [27.561787, 77.628509],
+      [27.562076, 77.629684], [27.561507, 77.630109], [27.56074, 77.628935], [27.559982, 77.628297],
+      [27.559224, 77.627659], [27.556373, 77.627446], [27.555994, 77.626372], [27.556093, 77.624347],
+      [27.55732, 77.623283], [27.559224, 77.622433], [27.560361, 77.621795], [27.562076, 77.621683],
+      [27.562455, 77.622757]],
+  },
+  {
+    id: 'chhatikara-highway', name: 'Chhatikara: the highway', kind: 'bazaar',
+    palette: ['#c9b9a0', '#cdb59a', '#d1b9a6', '#b8ad9c', '#c9a98a', '#aab3ad'],
+    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 700,
+    // the service roads are `highway` here, and are lined like streets
+    share: { highway: 1 },
+    poly: [[27.562121, 77.624813], [27.559477, 77.628266], [27.560163, 77.628935], [27.562807, 77.625481]],
+  },
+  {
+    id: 'chhatikara-govardhan-road', name: 'Chhatikara: the Govardhan road', kind: 'bazaar',
+    palette: ['#c9b9a0', '#cdb59a', '#d1b9a6', '#b8ad9c', '#c9a98a', '#aab3ad'],
+    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 700,
+    share: { highway: 1 },
+    poly: [[27.56139, 77.626231], [27.559766, 77.624752], [27.560163, 77.624205], [27.561787, 77.625684]],
+  },
+  {
+    id: 'chhatikara-vrindavan-road', name: 'Chhatikara: the Vrindavan road', kind: 'bazaar',
+    palette: ['#c9b9a0', '#cdb59a', '#d1b9a6', '#b8ad9c', '#c9a98a', '#aab3ad'],
+    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 700,
+    share: { highway: 1 },
+    poly: [[27.560479, 77.627669], [27.561074, 77.629795], [27.56167, 77.629583], [27.561074, 77.627456]],
+  },
 ];

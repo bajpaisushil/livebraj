@@ -71,6 +71,15 @@ const __PORT = server.address().port;   // any free port, so parallel runs never
  * clipped at junctions, and vehicles held among the crowd that gathers round
  * you at the start, which walks through them (seeds 32 and 47: 16-18 s).
  * Queue item 21 keeps the notes.
+ *
+ * Chhatikara was built the next day — the village round the start, which
+ * had been grass — and the traffic there met its lanes and corners: 47 of
+ * 60, an auto taking a village right angle at road speed into a tempo
+ * coming the other way. With vehicles slowing for corners, standing people
+ * stepping out of their way, a way round that keeps everything it has gone
+ * round, and two holding each other giving way in 0.8 s: 51 of 60, and on
+ * NO seed does a pair touch for more than 4.5 s (it had been 16-26 s on
+ * four). Every red is brief touches over the 15 allowed.
  */
 const SEED = Number((process.argv.find((a) => a.startsWith('--seed=')) || '').slice(7)) || 1;
 
@@ -295,8 +304,15 @@ const r = await p.evaluate(() => {
     }
     return true;
   };
-  let overlaps = 0, within15 = 0, samples = 0, stopped = 0, longest = 0;
+  let overlaps = 0, within15 = 0, samples = 0, stopped = 0, longest = 0, worst = null;
   const running = new Map();     // how many samples running each pair has touched
+  // what the two of the longest were doing, so a failure can be found again
+  const what = (q) => ({
+    type: crowd.vehicleTypes[q.ti].id, at: [Math.round(q.a.x), Math.round(q.a.z)],
+    throttle: +(q.a.throttle ?? 1).toFixed(2), gap: Number.isFinite(q.a.aheadAt) ? +q.a.aheadAt.toFixed(2) : null,
+    held: q.a.aheadObj ? (q.a.aheadV ? 'vehicle' : q.a.aheadR === 0.4 ? 'you' : q.a.aheadR === 0.8 ? 'cow' : 'person') : null,
+    round: !!q.a.round, stuck: +(q.a.stuck || 0).toFixed(1),
+  });
   for (let step = 0; step < 30 * 45; step++) {
     crowd.update(1 / 30, ctx);
     if (step % 15) continue;
@@ -314,7 +330,7 @@ const r = await p.evaluate(() => {
           overlaps++;
           const n = (running.get(k) || 0) + 1;
           running.set(k, n);
-          if (n > longest) longest = n;
+          if (n > longest) { longest = n; worst = { at: +(step / 30).toFixed(1), a: what(all[i]), b: what(all[j]) }; }
         } else running.delete(k);
       }
     }
@@ -324,7 +340,7 @@ const r = await p.evaluate(() => {
   crowd._nextRoad = nextRoad;
   return { ok: true, vehicles: all.length,
     junction, committed, queue, passing, clear, lanePass, sameLane, standoff, roundSoon, roundSomebody,
-    overlaps, within15, longest, samples, stalledSamples: stopped, legs, uturns };
+    overlaps, within15, longest, worst, samples, stalledSamples: stopped, legs, uturns };
 });
 
 if (!r.ok) {
@@ -387,7 +403,8 @@ if (!r.ok) {
     r.longest <= 8 && r.overlaps <= 15,
     `${r.overlaps} sample(s) of a pair touching across ${r.samples} samples of `
     + `${r.vehicles} vehicles over 45 s, the longest ${r.longest * 0.5} s at a stretch `
-    + `(${r.within15} with centres within 1.5 m, the old measure)`);
+    + `(${r.within15} with centres within 1.5 m, the old measure)`
+    + (r.longest > 8 || r.overlaps > 15 ? ` | longest: ${JSON.stringify(r.worst)}` : ''));
 
   check('nobody turns round in the road unless the road ends there',
     r.legs > 100 && r.uturns === 0, `${r.uturns} U-turns where the road went on, in ${r.legs} legs driven`);

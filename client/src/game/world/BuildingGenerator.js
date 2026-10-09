@@ -126,6 +126,12 @@ const DISTRICT_BUILD = {
   'raman-reti':     { frontage: 0.14, terrace: false },
   outskirts:        { frontage: 0.09, terrace: false },
   /**
+   * A highway village: Chhatikara. Flat-roofed houses wall to wall down every
+   * lane the map has, built of the town's ordinary brick and plaster (the
+   * residential kit), denser than any colony and plainer than the old town.
+   */
+  village:          { frontage: 0.85, terrace: true },
+  /**
    * Outside every district — the Chhatikara corridor, which is farmland.
    *
    * Low enough that six kilometres of approach road carries the odd farmstead
@@ -321,21 +327,41 @@ class CityFabric {
     const roads = this.data.ROADS.slice().sort((a, b) => b.width - a.width);
     let rows = 0;
 
+    /*
+     * A district may carry a budget of its own (`lots`, shared by every
+     * district of its `group`): Chhatikara's village. Its lots are counted
+     * there and not here, so building it takes nothing from Vrindavan, whose
+     * galis are laid last and already meet the town's ceiling on a phone.
+     * Everything else counts against `budget` exactly as before, in the same
+     * order, so the town's own lots are the lots they were.
+     */
+    let town = 0;
+    const own = new Map();
+    const props = this.ctx.quality.props;
     for (const road of roads) {
-      if (this.lots.length >= budget) break;
+      if (town >= budget && !this.byArea.some((d) => d.lots && (own.get(d.group || d.id) || 0) < d.lots * props)) break;
       const cfg = ROAD_LOT[road.kind] === undefined ? ROAD_LOT.street : ROAD_LOT[road.kind];
       if (!cfg) continue;
       const rng = rngAt(road.id);
 
       for (const run of this._terraces(road)) {
+        const mid = run[Math.floor(run.length / 2)];
+        const d = this._districtAt(mid[0], mid[1]);
+        const key = d && d.lots ? d.group || d.id : null;
+        const cap = key ? Math.round(d.lots * props) : budget;
+        // a district may line a kind of road the town leaves bare
+        const share = d && d.share && d.share[road.kind] !== undefined ? d.share[road.kind] : cfg.share;
         for (const side of [1, -1]) {
-          if (this.lots.length >= budget) break;
-          const mid = run[Math.floor(run.length / 2)];
-          if (!chance(rng, cfg.share * this._worth(mid[0], mid[1], road))) continue;
+          if ((key ? own.get(key) || 0 : town) >= cap) break;
+          if (!chance(rng, share * this._worth(mid[0], mid[1], road))) continue;
+          const before = this.lots.length;
           if (this._row(road, cfg, run, side, rng)) rows++;
+          const n = this.lots.length - before;
+          if (key) own.set(key, (own.get(key) || 0) + n); else town += n;
         }
       }
     }
+    for (const [k, n] of own) console.info(`[buildings] ${n} lots in ${k}, on a budget of its own`);
     console.info('[buildings] ' + this.lots.length + ' in ' + rows + ' rows along '
       + roads.length + ' roads');
   }

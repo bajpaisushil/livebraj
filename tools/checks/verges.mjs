@@ -39,7 +39,9 @@ const __PORT = server.address().port;   // any free port, so parallel runs never
  * And with the vehicles keeping left (queue item 21), with the lane measured
  * from the lane and keeping left asserted: 52 of 60, every red one vehicle
  * within 0.85 m of somebody at the moment of measuring (8 towns; 7 before).
- * Walkers now step round a vehicle rather than stand at its nose.
+ * Walkers now step round a vehicle rather than stand at its nose. With the
+ * village built round the start, and people standing about stepping aside
+ * too: 56 of 60, the four reds one vehicle within 0.7-0.84 m of somebody.
  */
 const SEED = Number((process.argv.find((a) => a.startsWith('--seed=')) || '').slice(7)) || 1;
 

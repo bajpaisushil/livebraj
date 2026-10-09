@@ -159,5 +159,124 @@ export const DISTRICTS = [
       [-49.37, 2435.66],
       [-2419.15, 2435.66]
     ]
+  },
+  {
+    "id": "chhatikara",
+    "name": "Chhatikara",
+    "kind": "village",
+    "palette": [
+      "#c9b9a0",
+      "#b8ad9c",
+      "#cdb59a",
+      "#a8705a",
+      "#c4b8a8",
+      "#d1b9a6",
+      "#aab3ad"
+    ],
+    "minH": 3.5,
+    "maxH": 8,
+    "density": 0.85,
+    "group": "chhatikara",
+    "lots": 700,
+    "poly": [
+      [-6531.99, 1879.05],
+      [-6374.0, 1825.97],
+      [-6204.96, 1847.03],
+      [-6121.03, 2016.02],
+      [-6005.01, 1983.99],
+      [-5963.04, 2047.04],
+      [-6078.97, 2132.04],
+      [-6141.96, 2216.03],
+      [-6204.96, 2300.03],
+      [-6225.99, 2615.96],
+      [-6332.04, 2657.95],
+      [-6531.99, 2646.98],
+      [-6637.05, 2511.02],
+      [-6720.98, 2300.03],
+      [-6783.97, 2174.03],
+      [-6795.03, 1983.99],
+      [-6688.99, 1941.99]
+    ]
+  },
+  {
+    "id": "chhatikara-highway",
+    "name": "Chhatikara: the highway",
+    "kind": "bazaar",
+    "palette": [
+      "#c9b9a0",
+      "#cdb59a",
+      "#d1b9a6",
+      "#b8ad9c",
+      "#c9a98a",
+      "#aab3ad"
+    ],
+    "minH": 4.5,
+    "maxH": 10,
+    "density": 0.95,
+    "group": "chhatikara",
+    "lots": 700,
+    "share": {
+      "highway": 1
+    },
+    "poly": [
+      [-6485.97, 1979.0],
+      [-6145.02, 2271.99],
+      [-6078.97, 2195.98],
+      [-6420.02, 1902.99]
+    ]
+  },
+  {
+    "id": "chhatikara-govardhan-road",
+    "name": "Chhatikara: the Govardhan road",
+    "kind": "bazaar",
+    "palette": [
+      "#c9b9a0",
+      "#cdb59a",
+      "#d1b9a6",
+      "#b8ad9c",
+      "#c9a98a",
+      "#aab3ad"
+    ],
+    "minH": 4.5,
+    "maxH": 10,
+    "density": 0.95,
+    "group": "chhatikara",
+    "lots": 700,
+    "share": {
+      "highway": 1
+    },
+    "poly": [
+      [-6345.96, 2060.01],
+      [-6492.0, 2239.97],
+      [-6546.01, 2195.98],
+      [-6399.97, 2016.02]
+    ]
+  },
+  {
+    "id": "chhatikara-vrindavan-road",
+    "name": "Chhatikara: the Vrindavan road",
+    "kind": "bazaar",
+    "palette": [
+      "#c9b9a0",
+      "#cdb59a",
+      "#d1b9a6",
+      "#b8ad9c",
+      "#c9a98a",
+      "#aab3ad"
+    ],
+    "minH": 4.5,
+    "maxH": 10,
+    "density": 0.95,
+    "group": "chhatikara",
+    "lots": 700,
+    "share": {
+      "highway": 1
+    },
+    "poly": [
+      [-6203.97, 2160.96],
+      [-5994.05, 2095.03],
+      [-6014.98, 2028.98],
+      [-6225.0, 2095.03]
+    ]
   }
 ];
