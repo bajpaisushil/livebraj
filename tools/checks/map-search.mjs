@@ -185,7 +185,9 @@ const rescue = await page.evaluate(async () => {
 
   // can a body actually walk away from where it was put?
   const R = 0.42, STEP_UP = 0.52;
-  const feet = ctx.world.standHeight(after.x, after.z, ctx.world.groundHeight(after.x, after.z));
+  // from where it put you, height and all: on a raised court that is the
+  // court, and the terrain under it is inside the masonry
+  const feet = ctx.player.root.position.y;
   let freeDirs = 0;
   for (let k = 0; k < 8; k++) {
     const a = (k / 8) * Math.PI * 2;

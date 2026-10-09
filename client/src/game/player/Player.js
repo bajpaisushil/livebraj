@@ -840,7 +840,7 @@ export class Player {
   /**
    * The nearest place a body could actually stand, searched outward.
    *
-   * Uses collide() and standHeight() rather than isClear(), because isClear
+   * Uses fits() and standHeight() rather than isClear(), because isClear
    * is feet-blind — it counts a step as solid and would happily report the
    * inside of a staircase as a fine place to stand. That mistake has cost
    * this project three separate wrong diagnoses.
@@ -858,14 +858,15 @@ export class Player {
         const a = (k / 24) * Math.PI * 2 + r * 0.7;
         const x = p.x + Math.cos(a) * r, z = p.z + Math.sin(a) * r;
         if (r === 0 && k > 0) break;              // the centre is one sample
-        const q = { x, y: 0, z };
-        ctx.world.collide(q, RADIUS, feet);
-        if (Math.hypot(q.x - x, q.z - z) > 0.05) continue;      // inside masonry
+        // the body has to fit, not merely be pushed back to where it was:
+        // see WorldService.fits for the sliver this used to accept
+        if (!ctx.world.fits(x, z, RADIUS, feet)) continue;      // inside masonry
         const h = ctx.world.standHeight
           ? ctx.world.standHeight(x, z, feet) : ctx.world.groundHeight(x, z);
         if (h === null || h === undefined) continue;
         if (Math.abs(h - feet) > 2.5) continue;                 // not a cliff
         if (ctx.world.waterDepth(x, z) > 0.5) continue;         // not the river
+        if (!ctx.world.canLeave(x, z, RADIUS, h)) continue;     // not a sealed pocket
         return { x, z, y: h };
       }
     }
@@ -890,7 +891,15 @@ export class Player {
    * @returns {boolean} whether a standable spot was found
    */
   placeAt(ctx, x, z) {
-    const spot = this._wayOut(ctx, { x, z }, 30);
+    // On a floor built over that very spot, if a body can stand there and
+    // walk away — a temple's court is where you asked to be, and the ground
+    // under it is inside the masonry (see WorldService.floorsAt) — and only
+    // then on ground found by searching outward.
+    let spot = null;
+    for (const y of ctx.world.floorsAt ? ctx.world.floorsAt(x, z) : []) {
+      if (ctx.world.canLeave(x, z, RADIUS, y)) { spot = { x, z, y: ctx.world.standHeight(x, z, y) }; break; }
+    }
+    if (!spot) spot = this._wayOut(ctx, { x, z }, 30);
     if (!spot) return false;
     const p = this.root.position;
     p.x = spot.x; p.z = spot.z; p.y = spot.y;

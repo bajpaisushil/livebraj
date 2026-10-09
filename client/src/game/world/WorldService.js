@@ -800,6 +800,96 @@ export class WorldService {
   }
 
   /**
+   * Does a body of `radius` fit here, standing at `feetY`?
+   *
+   * The question `collide()` answers by moving you, asked without moving
+   * anything, by the same rules: a floor you stand on is not in the way, nor
+   * anything low enough to step onto from these feet, and a box is its
+   * rectangle grown by the radius, as collide() pushes out of it.
+   *
+   * Why not "collide() moved it hardly at all": between two walls a body is
+   * too wide for, collide() pushes it out of one, into the other, and back,
+   * and two passes can end where they began. At Radha Raman the court floor's
+   * edge and the altar block stand 5 cm apart; a point in that sliver came
+   * back 3 cm from where it went in, read as open ground, and "Start from
+   * here" put the player in it, with no way out in any of eight directions.
+   */
+  fits(x, z, radius = 0.42, feetY) {
+    const step = feetY === undefined ? null : feetY + STEP_UP;
+    const near = this.grid.query(x, z, radius + 6, _hits);
+    for (let i = 0; i < near.length; i++) {
+      const c = near[i];
+      if (c.standOnly) continue;
+      if (step !== null && c.top !== undefined && c.top <= step) continue;
+      if (c.type === 'circle') {
+        if (Math.hypot(x - c.x, z - c.z) < c.r + radius) return false;
+      } else {
+        const dx = x - c.x, dz = z - c.z;
+        const lx = dx * c.cos - dz * c.sin;
+        const lz = dx * c.sin + dz * c.cos;
+        if (Math.abs(lx) < c.hw + radius && Math.abs(lz) < c.hd + radius) return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * The floors built over a spot, lowest first: the tops of the surfaces there
+   * that are made to be stood on (`floor`, `standOnly`), leaving out the
+   * blanket backstop slabs, which are a safety net and not a place.
+   *
+   * The terrain is not in the list. Where a temple's court is raised over the
+   * ground, the ground under it is inside the masonry, and a search that only
+   * knows the terrain cannot put anybody in the court: "Start from here" at
+   * Radha Raman, asked for its darshan spot on a court 1.2 m up, could only
+   * look for ground at the terrain's height, and the nearest it found was a
+   * sliver beside the altar block that nobody could walk out of.
+   */
+  floorsAt(x, z) {
+    const cell = this._standCells.get(standKey(Math.floor(x / STAND_CELL), Math.floor(z / STAND_CELL)));
+    const tops = [];
+    for (const c of cell || NO_STANDABLES) {
+      if (!(c.floor || c.standOnly) || c.soft) continue;
+      if (!this._overlaps(c, x, z, 0)) continue;
+      if (!tops.includes(c.top)) tops.push(c.top);
+    }
+    return tops.sort((a, b) => a - b);
+  }
+
+  /**
+   * Could a body stand here and LEAVE? It must fit, and be able to walk `minWalk`
+   * metres in a straight line along at least one of eight bearings, a quarter
+   * of a metre at a time, fitting at every step and never facing a rise of
+   * more than a step.
+   *
+   * Fitting is not enough. Behind Radha Raman's altar there is a gap between
+   * the altar block and the west wall that a body fits in and cannot leave:
+   * 1.5 m wide, closed at both ends a metre or so either way. Once `fits` was
+   * asked instead of trusting collide(), that is where "Start from here" put
+   * the player. Three metres is longer than any such pocket and shorter than
+   * any lane.
+   */
+  canLeave(x, z, radius = 0.42, feetY, minWalk = 3) {
+    if (!this.fits(x, z, radius, feetY)) return false;
+    const STEP = 0.25;
+    for (let k = 0; k < 8; k++) {
+      const a = (k / 8) * Math.PI * 2;
+      const cx = Math.cos(a), sz = Math.sin(a);
+      let f = feetY, d = 0;
+      while (d < minWalk - 1e-6) {
+        const nd = Math.min(minWalk, d + STEP);
+        const nx = x + cx * nd, nz = z + sz * nd;
+        if (!this.fits(nx, nz, radius, f)) break;
+        const h = this.standHeight(nx, nz, f);
+        if (h - f > STEP_UP) break;
+        f = h; d = nd;
+      }
+      if (d >= minWalk - 1e-6) return true;
+    }
+    return false;
+  }
+
+  /**
    * Push a point out of anything solid.
    *
    * `feetY` lets a walker step ONTO something low instead of being stopped by
