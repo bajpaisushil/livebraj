@@ -3734,3 +3734,12 @@ E-Ashwa: 0.95-1.0 m), was 1.4. Swept over seeds 1-60: traffic 46 green at
 1.0 m vs 49 at 1.4 (noise: the same head-on standoffs reshuffled), verges 43
 either way. QUEUED as item 21: vehicles drive a leg's centreline both ways,
 which is where every remaining traffic failure comes from; keep left.
+
+## 2026-10-09 — item 21: one-way roads are one way
+
+PARTLY DONE (1a1ecb3). OSM maps NH 44 as two carriageways, oneway=yes, and
+89 ways in all; the importer dropped the tag and every one was driven both
+ways — the cause of the worst traffic standoffs, by Chhatikara where you
+start. Now carried, honoured by ambient traffic, priced for rides. traffic
+52/60 seeds (from 46), verges 52/60 (from 43). The rest of item 21 —
+keeping left on two-way streets — tried, reverted, notes in the queue.

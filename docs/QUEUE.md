@@ -422,14 +422,21 @@ searching the backlog for it. That is the failure this file exists to stop.*
     now is). Narrowing it changes how traffic spaces itself, and so the
     seeded `traffic` and `verges` baselines: a pass of its own, with those
     seeds swept again.
-21. **Vehicles keep left.** Found sweeping item 20: every remaining
-    `traffic` failure, on 14 of 60 seeds, is two vehicles meeting head-on on
-    one leg, each seeing the other dead ahead and stopping for good. They
-    drive the leg's CENTRELINE in both directions (CrowdSystem: pure pursuit
-    on the line), so on any two-way road they are on collision course. India
-    keeps left: hold a left-hand offset scaled to the road's width, check
-    the people on the verges (`verges` asks for 0.85 m) and the lane median
-    `verges` measures against, and sweep the seeds again.
+21. **Vehicles keep left — PARTLY DONE 2026-10-09** (1a1ecb3). Found
+    sweeping item 20: every remaining `traffic` failure, on 14 of 60 seeds,
+    was two vehicles meeting head-on, each seeing the other dead ahead and
+    stopping for good. Probed, the worst were on NH 44 by Chhatikara: OSM
+    maps it as two carriageways, oneway=yes — 89 ways in all, 25 of the 32
+    secondary roads — and the importer dropped the tag, so they were driven
+    both ways. One-way roads are now one way (ambient traffic never goes
+    against; a ride's route may, at 12x the cost): `traffic` 52 of 60 seeds
+    (from 46), `verges` 52 (from 43). STILL OPEN: the four long standoffs left
+    (seeds 40, 43, 56, 60) are true head-on meetings on two-way streets —
+    vehicles drive a leg's centreline both ways. Keeping left was tried and
+    REVERTED: alone it did not help `traffic` (46) and broke `verges`' lane
+    measure; it also needs the node-reach test widened by the lane (a 2.2 m
+    lane never came within 1.6 m of a node) and no lane on dual carriageways.
+    Worth another go now the one-way cause is out of the way.
 
 ## OPEN — reported, not yet reproduced
 
