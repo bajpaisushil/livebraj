@@ -279,9 +279,10 @@ searching the backlog for it. That is the failure this file exists to stop.*
     together under a minute, twice; vehcam no longer flaky. Still on the wall
     clock: `driving` (13 s, fine) and the probe tools.
 
-12. **The ghats stand in town with no river in sight.** **THE RIVER AND KESHI
-    GHAT DONE 2026-10-09** (cba9606), `keshi.mjs` 21/21, mutation-tested four
-    ways; Kaliya Ghat is next. Found photographing Kaliya Ghat for the arch
+12. ~~**The ghats stand in town with no river in sight.**~~ **DONE
+    2026-10-09**: the river and Keshi Ghat (cba9606), `keshi.mjs` 21/21, and
+    Kaliya Ghat as it is now the river has gone (c7ba841), `kaliya.mjs`
+    12/12 — every check mutation-tested. Found photographing Kaliya Ghat for the arch
     fix. Research first, per ghat, what is actually there today — the Yamuna
     has moved away from many of Vrindavan's ghats, so "dry ghat facing a
     floodplain" may be the true picture — then build that.
@@ -298,10 +299,16 @@ searching the backlog for it. That is the failure this file exists to stop.*
     laid on the front measured off the imagery: promenade, fifteen treads
     into the river, eight burjes, five kunjs and two shrines, boats, and the
     aarti on the last dry tread — `docs/research/keshi-ghat.md`.
-    STILL OPEN: Kaliya Ghat (dry, 540 m from the water: the kadamba in OSM
-    node 3417299004, the round Old Kaliya Temple, the sunken court — which
-    wants item 19's basins); the river's south-eastern loop, never in the
-    game; the highway and pontoon bridges, which still drown; seasons.
+    Kaliya Ghat was a 70 m arcade wall with four chhatris across the
+    Parikrama Marg, its flight cut toward a river 540 m off. Now OSM's fenced
+    strip on the marg, the kadamba at OSM's own node, the round Old Kaliya
+    Temple at OSM's round building, and the ghat's floor a dry court 2.2 m
+    down with its chhatri, pillar, lamp tower and Krishna on Kaliya's hoods —
+    `docs/research/kaliya-ghat.md`. Its story now says the river moved.
+    STILL OPEN: the river's south-eastern loop, never in the game; the
+    highway and pontoon bridges, which still drown; seasons; Rani Laxmibai
+    Kunj's court chapel (Growse: "a colonnade of five arches on a high plinth
+    … unusually broad eaves").
 13. ~~**Jaipur Mandir's layout.**~~ **DONE 2026-10-09** (137a53b). It had
     stood 1 km south-west of its own building from the first day: the curated
     pin named OSM way 679447890 and sat at 27.56720 / 77.68190. It is imported
@@ -349,7 +356,13 @@ searching the backlog for it. That is the failure this file exists to stop.*
     summer) — jets and light, with its music; the Satsang Bhavan at its true
     ~87 m and ~187 m; the 87 x 34 m hall north of the fountain; the parterre
     beds. The avenue's line and the fountain's centre are INFERRED.
-19. **Holes in the terrain for sunken things.** The height field is 12 m to
+19. ~~**Holes in the terrain for sunken things.**~~ **DONE 2026-10-09**
+    (c7ba841), first used by Kaliya Ghat's court: a location declares
+    `basin` in its frame; the ground mesh drops the quads it touches and the
+    terrain lays back the very triangles it dropped with the basin cut out of
+    them exactly (same heights, colours, normals, material — no seam, no gap,
+    no lip); the builder draws the basin. `kaliya.mjs` guards it. Kunds and
+    Rangaji's tank can use it next. The height field is 12 m to
     a cell and the ground mesh 22 m to a quad, so nothing can be sunk below
     grade: Rangaji's tank had to go on a terrace. Wanted: a location declares
     a basin, the ground mesh drops the quads it covers, and the builder draws

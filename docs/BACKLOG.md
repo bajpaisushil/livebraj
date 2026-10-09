@@ -3712,3 +3712,17 @@ the river and Keshi Ghat DONE (cba9606), Kaliya Ghat next.
   photographs: see `docs/research/keshi-ghat.md`.
 - **Guarded by** `keshi.mjs` 21/21 (mutations: no wet bank, the old water
   level, depth to the bed, no end flights — each caught); full suite 44/44.
+
+## 2026-10-09 — item 12 done: Kaliya Ghat as it is now; item 19, basins
+
+Status: DONE (c7ba841). Kaliya Ghat was a 70 m arcade wall with four chhatris
+across the Parikrama Marg, its flight cut toward a river 540 m off. Now OSM's
+fenced strip on the marg with the kadamba at OSM's own node, the round Old
+Kaliya Temple at OSM's round building, and the ghat's floor a dry court
+2.2 m down (`docs/research/kaliya-ghat.md`). Item 19 is how: a location
+declares a `basin`, the ground mesh drops the quads it touches and lays back
+the very triangles it dropped with the basin cut out of them exactly.
+`kaliya.mjs` 12/12, mutation-tested three ways. Found on the way and fixed in
+the checks (39406ee): `stairs` took the tread nearest a ghat's pin as the top
+of its flight; `offline` and `map-search` timed out under a parallel suite.
+Full suite 45/45.
