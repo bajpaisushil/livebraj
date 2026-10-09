@@ -44,14 +44,39 @@ const phone = await b.newContext({ ...devices['Pixel 5'] });
 const p = await phone.newPage();
 const errors = [];
 p.on('pageerror', (e) => errors.push(e.message));
+/*
+ * THE CHECK OWNS THE CLOCK, as traffic.mjs does. The taps and the typing are
+ * real; the time between them is the game's own _frame(), stepped here at a
+ * fixed 1/30 s with the drawing reduced to the camera's matrices. It waited
+ * on the browser's animation frames before, five to six minutes of them in a
+ * parallel suite, and how far a ride got in that time depended on the box.
+ */
+await p.addInitScript(() => {
+  let app = null;
+  Object.defineProperty(window, 'vrindavan', {
+    configurable: true,
+    get: () => app,
+    set: (v) => { app = v; if (v) v.start = function held() { this.running = true; }; },
+  });
+});
 await p.goto(`http://localhost:${port}/`, { waitUntil: 'networkidle' });
 await p.waitForFunction(() => window.vrindavan?.ctx?.player && window.vrindavan?.ctx?.ui
   && window.vrindavan?.ctx?.map && window.vrindavan?.ctx?.world?.anchors
   && window.vrindavan?.ctx?.rickshaw && window.vrindavan?.ctx?.crowd?.vehicleInst, null, { timeout: 220000 });
-await p.evaluate(() => window.vrindavan.ctx.ui.show('world'));
+await p.evaluate(() => {
+  const app = window.vrindavan, ctx = app.ctx;
+  ctx.clock.getDelta = () => 1 / 30;
+  ctx.renderer.render = (scene, camera) => {
+    if (scene.matrixWorldAutoUpdate === true) scene.updateMatrixWorld();
+    if (camera.parent === null && camera.matrixWorldAutoUpdate === true) camera.updateMatrixWorld();
+  };
+  ctx.ui._endIntro();
+  ctx.ui.show('world');
+  for (let i = 0; i < 30; i++) app._frame();
+});
 
 const TARGET = 'radha-raman';
-const frames = (n) => p.evaluate(async (k) => { for (let i = 0; i < k; i++) await new Promise((r) => requestAnimationFrame(r)); }, n);
+const frames = (n) => p.evaluate((k) => { for (let i = 0; i < k; i++) window.vrindavan._frame(); }, n);
 const rideState = () => p.evaluate(() => window.vrindavan.ctx.rickshaw.state);
 const fromTarget = () => p.evaluate((id) => {
   const c = window.vrindavan.ctx, a = c.world.anchors[id], q = c.player.position;
@@ -69,6 +94,9 @@ const findAndOpen = async (words) => {
     await q.type(w, { delay: 25 });
   }
   const typed = await q.inputValue();
+  // the search renders 90 ms after the last keystroke, on a real timer: wait
+  // for what it renders, not for a number of frames (they cost no time now)
+  await p.waitForFunction((id) => !!document.querySelector(`#map-hits li[data-id="${id}"]`), TARGET, { timeout: 5000 }).catch(() => {});
   await frames(20);
   const hit = p.locator(`#map-hits li[data-id="${TARGET}"]`);
   const found = await hit.count();
@@ -117,7 +145,7 @@ const boarded = await p.evaluate(async () => {
   r._acc = 99; r.update(0.5, ctx);
   if (!r.target) return 'no hail target';
   r.board();
-  const frame = () => new Promise((res) => requestAnimationFrame(res));
+  const frame = () => { window.vrindavan._frame(); return Promise.resolve(); };
   for (let i = 0; i < 600 && r.state === 'boarding'; i++) await frame();
   const el = document.querySelector('[data-go="iskcon-krishna-balaram"]');
   if (!el) return 'ISKCON not offered';

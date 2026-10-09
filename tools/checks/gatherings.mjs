@@ -41,12 +41,41 @@ const p = await b.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFa
 p.on('console', (m) => { const t = m.text(); if (m.type() === 'error' && !/navigator\.vibrate/.test(t)) errors.push(t); });
 p.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
 
+/*
+ * THE CHECK OWNS THE CLOCK, as traffic.mjs does. This waited on the browser's
+ * animation frames — forty to settle, seventy to arm the camera, six to count
+ * draw calls — and under SwiftShader those come when the compositor can spare
+ * them: fourteen minutes in a parallel suite. Now the game's loop is never
+ * started; every "frame" here is the game's own _frame() with the clock
+ * reading a fixed 1/30 s, drawn only where drawing is what is being measured.
+ */
+await p.addInitScript(() => {
+  let app = null;
+  Object.defineProperty(window, 'vrindavan', {
+    configurable: true,
+    get: () => app,
+    set: (v) => { app = v; if (v) v.start = function held() { this.running = true; }; },
+  });
+});
 const boot = async () => {
   await p.goto(`http://localhost:${PORT}/`, { waitUntil: 'networkidle' });
   await p.waitForFunction(() => window.vrindavan?.ctx?.gatherings && window.vrindavan?.ctx?.player
     && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.world?._ready, null, { timeout: 90000 });
-  await p.evaluate(() => window.vrindavan.ctx.ui.show('world'));
-  await p.waitForTimeout(500);
+  await p.evaluate(() => {
+    const app = window.vrindavan, ctx = app.ctx;
+    ctx.clock.getDelta = () => 1 / 30;
+    // the frame, with or without the drawing: `window.__draw` decides
+    const real = ctx.renderer.render.bind(ctx.renderer);
+    ctx.renderer.render = (scene, camera) => {
+      if (window.__draw) return real(scene, camera);
+      if (scene.matrixWorldAutoUpdate === true) scene.updateMatrixWorld();
+      if (camera.parent === null && camera.matrixWorldAutoUpdate === true) camera.updateMatrixWorld();
+    };
+    window.__frame = () => { app._frame(); return Promise.resolve(); };
+    ctx.ui._endIntro();
+    ctx.ui.show('world');
+    for (let i = 0; i < 15; i++) app._frame();
+  });
 };
 await boot();
 
@@ -134,9 +163,14 @@ check('identical after a reload', identical,
 /* ---- 5. they draw when you are there, and cost nothing when you are not ---- */
 const lod = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, G = ctx.gatherings;
-  const frame = () => new Promise((r) => requestAnimationFrame(r));
+  const frame = window.__frame;
   const settle = async (n) => { for (let i = 0; i < n; i++) await frame(); };
-  const calls = async () => { let c = 0; for (let i = 0; i < 6; i++) { await frame(); c += ctx.renderer.info.render.calls; } return c / 6; };
+  const calls = async () => {
+    window.__draw = true;
+    let c = 0; for (let i = 0; i < 6; i++) { await frame(); c += ctx.renderer.info.render.calls; }
+    window.__draw = false;
+    return c / 6;
+  };
   const drawn = () => { let n = 0; for (const s of G.slots.values()) n += s.mesh.count; return n; };
   // The renderer's own call counter drifts by a few either way in a live scene
   // — the crowd walks in and out of frustum between samples — so what is also
@@ -251,7 +285,7 @@ const anim = await p.evaluate(async () => {
    */
   const g = G.gatherings.find((q) => q.onNow !== false) || G.gatherings[0];
   ctx.player.root.position.set(g.x + 6, ctx.world.groundHeight(g.x + 6, g.z), g.z);
-  const frame = () => new Promise((r) => requestAnimationFrame(r));
+  const frame = window.__frame;
   for (let i = 0; i < 20; i++) await frame();
 
   const slot = [...G.slots.values()].find((s) => s.mesh.count > 0);
@@ -319,7 +353,7 @@ check('you can stand among them undisturbed', solid.nudged < 0.02, 'moved ' + so
 const camera = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, G = ctx.gatherings, w = ctx.world;
   const V = ctx.player.root.position.constructor;
-  const frame = () => new Promise((r) => requestAnimationFrame(r));
+  const frame = window.__frame;
   const armAt = async (x, z) => {
     ctx.player.root.position.set(x, w.groundHeight(x, z), z);
     if (ctx.cameraRig) { ctx.cameraRig._focusInit = false; ctx.cameraRig._posInit = false; }

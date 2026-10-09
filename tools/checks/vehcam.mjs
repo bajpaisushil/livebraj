@@ -46,14 +46,40 @@ const b = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-un
 const p = await b.newPage({ viewport: { width: 640, height: 400 } });
 const errors = [];
 p.on('pageerror', (e) => errors.push(e.message));
+/*
+ * THE CHECK OWNS THE CLOCK, as traffic.mjs does. The ride ran in the real
+ * frame loop and every wait below counted the rig's own seconds, which was
+ * honest about time but not about cost: under SwiftShader a parallel suite
+ * spent ten minutes here waiting for the compositor to hand out frames, and
+ * the lag it measured depended on how many it got. Now the loop is never
+ * started; each frame is the game's own _frame() with the clock reading a
+ * fixed 1/30 s, drawing nothing but the camera's matrices — which is all the
+ * camera's heading needs.
+ */
+await p.addInitScript(() => {
+  let app = null;
+  Object.defineProperty(window, 'vrindavan', {
+    configurable: true,
+    get: () => app,
+    set: (v) => { app = v; if (v) v.start = function held() { this.running = true; }; },
+  });
+});
 await p.goto(`http://localhost:${port}/`, { waitUntil: 'networkidle' });
 await p.waitForFunction(() => window.vrindavan?.ctx?.rickshaw && window.vrindavan?.ctx?.crowd?.vehicleInst
   && window.vrindavan?.ctx?.cameraRig, null, { timeout: 220000 });
 
 const out = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, r = ctx.rickshaw, rig = ctx.cameraRig;
+  const app = window.vrindavan;
+  ctx.clock.getDelta = () => 1 / 30;
+  ctx.renderer.render = (scene, camera) => {
+    if (scene.matrixWorldAutoUpdate === true) scene.updateMatrixWorld();
+    if (camera.parent === null && camera.matrixWorldAutoUpdate === true) camera.updateMatrixWorld();
+  };
+  ctx.ui._endIntro();
   ctx.ui && ctx.ui.show && ctx.ui.show('world');
-  const frame = () => new Promise((res) => requestAnimationFrame(() => res()));
+  const frame = () => { app._frame(); return Promise.resolve(); };
+  for (let i = 0; i < 30; i++) app._frame();
   const angd = (a, c) => { let d = ((a - c) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI; return Math.abs(d); };
 
   // board at Chhatikara, the way the rickshaw check does
