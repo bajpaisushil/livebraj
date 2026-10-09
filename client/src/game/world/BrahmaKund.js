@@ -189,7 +189,7 @@ export function buildBrahmaKund(o) {
       upPoly([sP(e * SC, AS), sP(e * AS * T8, AS), sP(e * A0 * T8, A0), sP(e * SC, A0)], YG, C.RED_TOP);
       vface(sP(e * SC, AS), sP(e * AS * T8, AS), Y1, YG, C.RED_DK, centre);
       vface(sP(e * SC, AS), sP(e * SC, A0), YG - RISE, YG, C.RED_DK, sP(0, (AS + A0) / 2));
-      scol(e * (SC + A0 * T8) / 2, (AS + A0) / 2, A0 * T8 - SC, A0 - AS, YG, 'kund-step');
+      scol(e * (SC + A0 * T8) / 2, (AS + A0) / 2, A0 * T8 - SC, A0 - AS, YG, 'kund-corner');
     }
     // the upper flights
     for (let i = 1; i < RISERS; i++) {
@@ -197,7 +197,8 @@ export function buildBrahmaKund(o) {
       const sOut = SC - (i - 1) * TREAD, sIn = sOut - TREAD;
       for (const e of [-1, 1]) {
         sbox(e * (sOut + sIn) / 2, (AS + A0) / 2, Y1, top, TREAD, A0 - AS, tint(i % 2 ? C.RED_LT : C.RED, 0.97 + 0.05 * hash(k * 31 + i)));
-        scol(e * (sOut + sIn) / 2, (AS + A0) / 2, TREAD, A0 - AS, top, 'kund-step');
+        // a tag per flight: each is a straight stair, and steps.mjs walks it as one
+        scol(e * (sOut + sIn) / 2, (AS + A0) / 2, TREAD, A0 - AS, top, `kund-step:${k}u${e > 0 ? '+' : '-'}`);
       }
     }
     // the bay the two flights come down to
@@ -210,14 +211,14 @@ export function buildBrahmaKund(o) {
     vface(sP(-A1 * T8, A1), sP(A1 * T8, A1), Y2, Y1, C.RED, centre);
     // the lower flights' head, at the mid level
     sbox(0, (AL + A1) / 2, Y2, Y1, SH * 2, A1 - AL, C.RED);
-    scol(0, (AL + A1) / 2, SH * 2, A1 - AL, Y1, 'kund-step');
+    scol(0, (AL + A1) / 2, SH * 2, A1 - AL, Y1, 'kund-head');
     // the lower flights, out to the corners
     for (let i = 1; i < RISERS; i++) {
       const top = Y1 - i * RISE;
       const sIn = SH + (i - 1) * TREAD, sOut = sIn + TREAD;
       for (const e of [-1, 1]) {
         sbox(e * (sOut + sIn) / 2, (AL + A1) / 2, Y2, top, TREAD, A1 - AL, tint(i % 2 ? C.RED_LT : C.RED, 0.97 + 0.05 * hash(k * 17 + i)));
-        scol(e * (sOut + sIn) / 2, (AL + A1) / 2, TREAD, A1 - AL, top, 'kund-step');
+        scol(e * (sOut + sIn) / 2, (AL + A1) / 2, TREAD, A1 - AL, top, `kund-step:${k}l${e > 0 ? '+' : '-'}`);
       }
     }
     // the corners at the water landing's level, where the lower flights arrive
