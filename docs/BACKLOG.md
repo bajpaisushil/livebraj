@@ -3777,3 +3777,22 @@ water (each flight has its own tag now). `brahmakund.mjs` 16/16, mutation-
 tested five ways. Full suite 43/47 with five mutation runs and screenshot
 sessions running beside it; the four re-run alone green (`steps` after the
 tag fix). Next: Rangaji's tank into a basin at its measured place.
+
+## 2026-10-09 — Rangaji's tank sunk into its court; pools that read as water
+
+DONE (cf22d9b). The tank stood on a 2.5 m terrace for want of a basin, and
+8 m west and 6 m north of the tank the imagery shows. Now measured on ESRI
+z19 — which settles the checker's doubt, it is in the NE quadrant — and sunk
+2.8 m into its court from the Gajraj Kund photograph: a flight from the gate
+on the avenue, revetted sides over broad steps, the kiosks on gabled
+pedestals at the west and east edges, flat-roofed. Both pools take the
+river's own material and ripples with a Fresnel sky term: flat green read as
+a lawn. Found photographing it: the pit had no lining where one band's
+revetment stopped at a corner. `rangajitank.mjs` 11/11, mutation-tested.
+QUEUED as item 22: Garud Govind Kund at Chhatikara, 700 m from the start,
+which the game has only as a surveyed point. Full suite 46/48: `gatherings`
+failed by the clock (a suite started at nine at night, when no gathering
+sits) and now pins Braj's clock to 10:00 (80f2979), 29/29; `cheats`' ride
+assertions failed and also fail on the build before today's work (one run in
+three, "moved 1 m with the map up") — the ride still shares the road with
+traffic moving in real time. Next: `cheats` owns the clock.

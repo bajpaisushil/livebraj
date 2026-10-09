@@ -396,7 +396,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
     not a lift to the street; the camera comes down with you (`floorUnder`).
     Basins can be several rectangles. Found on the way: the unstick search
     put you on the pool's water. `brahmakund.mjs` 16/16, mutation-tested five
-    ways; `steps` walks all 66 flights in the world. Rangaji's tank next.
+    ways; `steps` walks all 66 flights in the world. **Rangaji's tank done
+    the same day** (cf22d9b): off its 2.5 m terrace and into a basin, at the
+    place the imagery shows (8 m east, 6 m south of the survey's; the
+    imagery settles the checker's doubt — the NE quadrant), 2.8 m down from
+    its court, the kiosks on their pedestals at the west and east edges,
+    flat-roofed; both pools now in the river's own water material with a
+    Fresnel sky term, because flat green read as a lawn. `rangajitank.mjs`
+    11/11, mutation-tested.
 18. **Every dome, spire and tree was drawn inside out — FIXED 2026-09-30.**
     Found building ISKCON: shikhara(), dome(), ribbedDome() and the tree
     canopy blob() wound their ring quads to face INWARD, and those meshes are
@@ -467,6 +474,23 @@ searching the backlog for it. That is the failure this file exists to stop.*
     measure; it also needs the node-reach test widened by the lane (a 2.2 m
     lane never came within 1.6 m of a node) and no lane on dual carriageways.
     Worth another go now the one-way cause is out of the way.
+
+22. **Garud Govind Kund and its temple, Chhatikara — QUEUED 2026-10-09.**
+    Found looking for the next basin: 700 m from where every player starts,
+    the game has only a surveyed point ("Stepped masonry tank (kund) at
+    Chhatikara") and a walled complex beside it. ESRI z19 shows a tank about
+    49 x 52 m, set diagonally, with paved stepped edges on its north-west and
+    south-west sides, the walled Garud Govind temple against its east side,
+    a second, natural pond north of it and the Shadang van forest round
+    both. The Braj Foundation de-silted it from October 2007 ("upto the brim
+    with clean water ... most of the year"); the temple keeps "a rare and
+    exquisite idol of Krishna seated on a Garud" (brajfoundation.org); the
+    temple itself is plain, no shikhara (vrindavanmathuraguide.com). A
+    brajrasik.org photograph of the kund: vertical rubble-stone walls
+    whitewashed along the top, a red sandstone coping with hexagonal-lattice
+    jali railings, a railed platform out over the water about 2 m down,
+    babool scrub round it. Wants a photograph of the temple before it is
+    built.
 
 ## OPEN — reported, not yet reproduced
 
