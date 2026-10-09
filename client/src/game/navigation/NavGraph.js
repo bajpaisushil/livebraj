@@ -231,6 +231,35 @@ export class NavGraph {
   }
 
   /**
+   * Which connected piece of the network a node belongs to. The import leaves
+   * a few dozen islands — a riverside path that never meets a street, a
+   * courtyard's own lanes — and a destination on one of them can never be
+   * walked to from the town, however close it looks. Labelled once, on the
+   * first question, by a flood fill over all the nodes.
+   */
+  componentOf(node) {
+    if (!node) return -1;
+    if (!this._comp) {
+      const comp = this._comp = new Map();
+      let id = 0;
+      for (const k of this.nodes.keys()) {
+        if (comp.has(k)) continue;
+        const stack = [k];
+        comp.set(k, id);
+        while (stack.length) {
+          const n = this.nodes.get(stack.pop());
+          for (let i = 0; i < n.edges.length; i++) {
+            const to = n.edges[i].to;
+            if (!comp.has(to)) { comp.set(to, id); stack.push(to); }
+          }
+        }
+        id++;
+      }
+    }
+    return this._comp.has(node.k) ? this._comp.get(node.k) : -1;
+  }
+
+  /**
    * The nearest node a vehicle could actually get to and away from.
    *
    * `nearest` answers with the closest node full stop, which in the old town is

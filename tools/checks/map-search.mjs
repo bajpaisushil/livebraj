@@ -88,7 +88,12 @@ check('rows carry a distance', rows.every((r) => r.d && /\d/.test(r.d)), rows[0]
 /* ---- 4. clicking a row flies there and rings it ---- */
 const before = await page.evaluate(() => ({ ...window.vrindavan.ctx.map._pan, zoom: window.vrindavan.ctx.map._zoom }));
 await page.click('#map-hits li:first-child');
-await page.waitForTimeout(1600);
+// the flight eases over the game's own frames: wait for it to land, not for a
+// fixed 1.6 s — five checks in parallel left it unmoved after that long
+await page.waitForFunction((b) => {
+  const m = window.vrindavan.ctx.map;
+  return !m._focusTo && Math.hypot(m._pan.x - b.x, m._pan.z - b.z) > 50;
+}, before, { timeout: 30000 }).catch(() => {});
 const after = await page.evaluate(() => {
   const m = window.vrindavan.ctx.map;
   return { pan: { ...m._pan }, zoom: m._zoom, hl: m._highlight ? m._highlight.name : null,

@@ -427,6 +427,13 @@ export class MapSystem {
   /* ================================================================
    * Destination + routing
    * ================================================================ */
+  /**
+   * Somewhere to walk to. Takes a landmark id as it always has, or any target
+   * the map can name — an OSM place, a road, a locality, the Yamuna's bank —
+   * by id or as the target object itself. The object form matters for the
+   * places whose position depends on where you asked from: a tap on the water
+   * means the bank nearest the tap, not the bank nearest you.
+   */
   setDestination(locId) {
     const ctx = this.ctx;
     if (!locId) {
@@ -436,10 +443,10 @@ export class MapSystem {
       if (this.navReadout) this.navReadout.classList.remove('show');
       return;
     }
-    const loc = ctx.data.LOCATION_BY_ID.get(locId);
-    if (!loc) return;
+    const loc = typeof locId === 'object' ? locId : this._target(locId);
+    if (!loc || !loc.pos) return;
     this.destination = loc;
-    ctx.state.destination = locId;
+    ctx.state.destination = loc.id;
     ctx.save.write();
     this._recomputeRoute();
     ctx.bus.emit('nav:destination', { loc });
@@ -728,24 +735,159 @@ export class MapSystem {
     this._tapTimer = setTimeout(() => this.tapEl.classList.remove("show"), 3200);
   }
 
+  /**
+   * What a tap on the map means.
+   *
+   * Anything the map draws can be picked — the names first, since a name is
+   * what you aim at, then any landmark's icon, then the water. Until
+   * 2026-10-09 a tap only answered for places already visited, while the
+   * icons of the rest were drawn faint on the same map and the whole-town
+   * view names Keshi Ghat and Kaliya Ghat outright: "it shows no option to
+   * walk to yamuna ghat that shows in map". A mark you can see and cannot
+   * tap is a promise the map broke. Visited places keep the wider reach,
+   * being the ones you have reason to aim at.
+   */
   _pick(clientX, clientY) {
     const ppm = this._zoom;
     const wx = (clientX - window.innerWidth / 2) / ppm + this._pan.x;
     const wz = (clientY - window.innerHeight / 2) / ppm + this._pan.z;
-    let best = null, bestD = 60 / ppm;
-    for (const loc of this.ctx.data.LOCATIONS) {
-      if (!this.ctx.state.discovered.has(loc.id)) continue;
-      const d = Math.hypot(loc.pos[0] - wx, loc.pos[1] - wz);
-      if (d < bestD) { bestD = d; best = loc; }
+    const dpr = this.fullDpr || 1;
+    const hx = clientX * dpr, hy = clientY * dpr;
+    let best = null;
+    for (const h of this._labelHits || []) {
+      const b = h.box;
+      if (hx >= b[0] && hx <= b[2] && hy >= b[1] && hy <= b[3]) { best = h.loc; break; }
     }
+    if (!best) {
+      let bestS = 1;
+      for (const loc of this.ctx.data.LOCATIONS) {
+        const reach = this.ctx.state.discovered.has(loc.id) ? 60 : 40;
+        const sc = Math.hypot(loc.pos[0] - wx, loc.pos[1] - wz) * ppm / reach;
+        if (sc < bestS) { bestS = sc; best = loc; }
+      }
+    }
+    const target = best || (this._onRiver(wx, wz) ? this._riverTarget(wx, wz) : null);
     this._selected = best;
-    this._showSel(best);
-    if (!best) this._showTap(wx, wz);
+    this._showSel(target);
+    if (!target) this._showTap(wx, wz);
     this._drawFull();
   }
 
+  /* ================================================================
+   * Targets — everything the map can send you walking to
+   * ================================================================ */
+
+  /** A target by id: a landmark, a search entry, or the river. */
+  _target(id) {
+    if (!id) return null;
+    const loc = this.ctx.data.LOCATION_BY_ID.get(id);
+    if (loc) return loc;
+    if (id === RIVER_ID) return this._riverTarget();
+    const e = this._search && this._search.find((x) => x.id === id);
+    return e ? this._entryTarget(e) : null;
+  }
+
   /**
-   * The panel for a picked landmark.
+   * A search entry as somewhere to stand. Landmarks are themselves; an OSM
+   * place is its point; a locality its middle. A road is the point on it
+   * nearest you, because "walk to Parikrama Marg" means the near end of it,
+   * not the middle of a 10 km ring.
+   */
+  _entryTarget(e) {
+    if (e.loc) return e.loc;
+    if (e.kind === 'river') return this._riverTarget();
+    const base = { id: e.id, name: e.name, hindi: e.poi ? e.poi.hindi : '', kind: e.kind };
+    if (e.kind === 'road') {
+      const p = this.ctx.player ? this.ctx.player.position : { x: e.pos[0], z: e.pos[1] };
+      const at = nearestOnLines(e.roads || [], p.x, p.z) || e.pos;
+      return { ...base, pos: at, blurb: `${e.sub}. Walk here takes you to the nearest stretch of it.` };
+    }
+    if (e.kind === 'area') {
+      return { ...base, pos: e.pos.slice(), blurb: 'Locality. Walk here takes you to the middle of it.' };
+    }
+    return { ...base, pos: e.pos.slice(), blurb: e.sub };
+  }
+
+  /** True when a world point is on the Yamuna. */
+  _onRiver(x, z) {
+    const w = this.ctx.world;
+    if (w && w.isWater && w.isWater(x, z)) return true;
+    const r = this.ctx.data.RIVER;
+    const c = r && nearestOnLines([r], x, z, true);
+    return !!c && c.d < r.width * 0.5;
+  }
+
+  /**
+   * The Yamuna as somewhere to walk to: the water's edge nearest a tap on the
+   * water, or nearest you, that a path from where you stand comes down to.
+   *
+   * Not simply the nearest bank. The river wraps the town on two sides, and
+   * from Chhatikara the nearest bank as the crow flies was 6.2 km of the FAR
+   * bank with no route at all; from Banke Bihari it was a riverside path
+   * 340 m off that never meets a street. So both banks are sampled every
+   * 30 m, and a stretch counts only if a path node lies within 35 m of it on
+   * the same connected piece of the network as you. The edge itself is found
+   * the way you would find it, walking out from midstream until the ground
+   * is dry, then a few metres more so the route ends on sand, not in the river.
+   */
+  _riverTarget(atX, atZ) {
+    const ctx = this.ctx;
+    const r = ctx.data.RIVER;
+    if (!r || !r.points || r.points.length < 2) return null;
+    const w = ctx.world, nav = ctx.nav;
+    const me = ctx.player ? ctx.player.position : { x: 0, z: 0 };
+    const half = r.width * 0.5;
+    const ax = atX ?? me.x, az = atZ ?? me.z;
+    const mine = nav ? nav.componentOf(nav.nearest(me.x, me.z)) : -1;
+
+    let pick = null, bd = Infinity;
+    const p = r.points;
+    for (let i = 1; i < p.length; i++) {
+      const sx = p[i][0] - p[i - 1][0], sz = p[i][1] - p[i - 1][1];
+      const L = Math.hypot(sx, sz);
+      if (!L) continue;
+      for (let t = 0; t < L; t += 30) {
+        const c = { x: p[i - 1][0] + sx * t / L, z: p[i - 1][1] + sz * t / L };
+        for (const side of [1, -1]) {
+          const nx = -sz / L * side, nz = sx / L * side;
+          const bx = c.x + nx * (half + 10), bz = c.z + nz * (half + 10);
+          const d = Math.hypot(bx - ax, bz - az);
+          if (d >= bd) continue;
+          // a path has to come down to it, or "walk here" has nowhere to go
+          if (nav) {
+            const n = nav.nearest(bx, bz);
+            if (!n || Math.hypot(n.x - bx, n.z - bz) > 35) continue;
+            if (nav.componentOf(n) !== mine) continue;
+          }
+          bd = d; pick = { c, nx, nz };
+        }
+      }
+    }
+    if (!pick) {
+      // no path reaches the water anywhere: the bank facing the point asked about
+      const c = nearestOnLines([r], ax, az, true);
+      if (!c) return null;
+      let nx = -c.dz, nz = c.dx;
+      if ((ax - c.x) * nx + (az - c.z) * nz < 0) { nx = -nx; nz = -nz; }
+      pick = { c, nx, nz };
+    }
+
+    const { c, nx, nz } = pick;
+    let out = half + 8;
+    if (w && w.isWater) {
+      for (let d = Math.max(0, half - 30); d < half + 90; d += 2) {
+        if (!w.isWater(c.x + nx * d, c.z + nz * d)) { out = d + 4; break; }
+      }
+    }
+    return {
+      id: RIVER_ID, kind: 'river', name: 'Yamuna', hindi: 'यमुना',
+      pos: [c.x + nx * out, c.z + nz * out],
+      blurb: 'Walk here takes you down to the water\'s edge, at the nearest bank a path reaches.',
+    };
+  }
+
+  /**
+   * The panel for a picked place — a landmark, or any target from _target().
    *
    * The straight-line distance is the honest headline — it is what "how far is
    * it" means when you are looking at a map. Underneath, when the road network
@@ -764,7 +906,7 @@ export class MapSystem {
     this.sel.innerHTML = `
       <div class="nm">${esc(loc.name)}</div>
       <div class="hi">${esc(loc.hindi || '')}</div>
-      <div class="sn">${esc((loc.story && loc.story.short) || '')}</div>
+      <div class="sn">${esc((loc.story && loc.story.short) || loc.blurb || '')}</div>
       ${walk ? `<div class="via">
           <b>${esc(walk.dist)}</b> on foot
           <span class="rd">${walk.via ? '\u00b7 via ' + esc(walk.via) : ''}</span>
@@ -778,7 +920,7 @@ export class MapSystem {
       </div>`;
     this.sel.classList.add('show');
     this.sel.querySelector('[data-walk]').addEventListener('click', () => {
-      this.setDestination(loc.id);
+      this.setDestination(loc);
       if (this.ctx.ui) this.ctx.ui.show('world');
     });
     /*
@@ -820,7 +962,8 @@ export class MapSystem {
         return;
       }
       // arriving somewhere counts as finding it
-      if (ctx.state && ctx.state.discovered && !ctx.state.discovered.has(loc.id)) {
+      if (ctx.state && ctx.state.discovered && ctx.data.LOCATION_BY_ID.has(loc.id)
+          && !ctx.state.discovered.has(loc.id)) {
         ctx.state.discovered.add(loc.id);
       }
       this.sel.classList.remove('show');
@@ -847,7 +990,8 @@ export class MapSystem {
     const nav = this.ctx.nav;
     if (!nav) return null;
     const c = this._walkCache;
-    if (c && c.id === loc.id && Math.hypot(c.x - from.x, c.z - from.z) < 40) return c.out;
+    if (c && c.id === loc.id && c.tx === loc.pos[0] && c.tz === loc.pos[1]
+        && Math.hypot(c.x - from.x, c.z - from.z) < 40) return c.out;
 
     const pts = nav.path(from.x, from.z, loc.pos[0], loc.pos[1]);
     let out = null;
@@ -858,7 +1002,7 @@ export class MapSystem {
       }
       out = { dist: formatDistance(len), via: this._dominantRoad(pts) };
     }
-    this._walkCache = { id: loc.id, x: from.x, z: from.z, out };
+    this._walkCache = { id: loc.id, tx: loc.pos[0], tz: loc.pos[1], x: from.x, z: from.z, out };
     return out;
   }
 
@@ -919,7 +1063,8 @@ export class MapSystem {
         glyph: GLYPH[loc.icon] || GLYPH[loc.type] || '◈',
         pos: loc.pos,
         keys: norm([loc.name, loc.hindi, loc.deity,
-                    loc.id.replace(/-/g, ' '), ALIASES[loc.id] || ''].join(' ')),
+                    loc.id.replace(/-/g, ' '), ALIASES[loc.id] || '',
+                    loc.type === 'ghat' ? 'yamuna ghat' : ''].join(' ')),
       });
     }
 
@@ -946,10 +1091,11 @@ export class MapSystem {
       let e = roads.get(r.name);
       if (!e) {
         e = { kind: 'road', id: 'road:' + r.name, name: r.name, ways: 0, len: 0,
-              pts: [], glyph: '▬', keys: norm(r.name) };
+              pts: [], roads: [], glyph: '▬', keys: norm(r.name) };
         roads.set(r.name, e);
       }
       e.ways++;
+      e.roads.push(r);
       for (let i = 1; i < r.points.length; i++) {
         e.len += Math.hypot(r.points[i][0] - r.points[i - 1][0], r.points[i][1] - r.points[i - 1][1]);
       }
@@ -977,6 +1123,18 @@ export class MapSystem {
         kind: 'area', id: 'area:' + d.id, name: d.name, sub: 'Locality', glyph: '◇',
         pos: [x / d.poly.length, z / d.poly.length],
         extent: 900, keys: norm(d.name + ' ' + d.id.replace(/-/g, ' ')),
+      });
+    }
+
+    // The river is a place too, and the one most people mean by "the ghat".
+    // Its position is the bank nearest you, so it is asked for, not stored.
+    const self = this;
+    if (ctx.data.RIVER) {
+      out.push({
+        kind: 'river', id: RIVER_ID, name: 'Yamuna', sub: 'River \u00b7 to the water\'s edge',
+        glyph: '\u2248', extent: 260,
+        get pos() { const t = self._riverTarget(); return t ? t.pos : [0, 0]; },
+        keys: norm('yamuna jamuna yamunaji yamuna ji river nadi kinare yamuna ghat \u092f\u092e\u0941\u0928\u093e'),
       });
     }
 
@@ -1092,8 +1250,10 @@ export class MapSystem {
     this._focusTo = { x: entry.pos[0], z: entry.pos[1], zoom: want };
     this._mode = 'focus';
     this._highlight = { pos: entry.pos.slice(), name: entry.name, t: 0 };
-    if (entry.loc) { this._selected = entry.loc; this._showSel(entry.loc); }
-    else if (this.sel) { this.sel.classList.remove('show'); this._selected = null; }
+    // every hit opens the panel: a road, an OSM ghat or the river is as much
+    // somewhere to walk to as a landmark
+    this._selected = entry.loc || null;
+    this._showSel(this._entryTarget(entry));
     this._mapDirty = true;
   }
 
@@ -1436,6 +1596,8 @@ export class MapSystem {
     const dpr = this.fullDpr;
     const W = this.full.width, H = this.full.height;
     g.textBaseline = 'middle';
+    // what a tap on a name picks, in canvas pixels; see _pick
+    const hits = this._labelHits = [];
 
     if (tier === 0) {
       const fontPx = Math.max(10, 11 * dpr);
@@ -1450,6 +1612,7 @@ export class MapSystem {
         const box = [sx - wd / 2 - 8 * dpr, sy - fontPx, sx + wd / 2 + 8 * dpr, sy + fontPx];
         if (placed.some((q) => overlaps(box, q))) continue;
         placed.push(box);
+        hits.push({ box: [box[0], box[1] - fontPx * 0.6, box[2], box[3]], loc: a.loc });
         g.beginPath(); g.arc(sx, sy - fontPx * 1.15, 2.6 * dpr, 0, TAU);
         g.fillStyle = 'rgba(138,90,60,.9)'; g.fill();
         g.lineWidth = 4.5 * dpr; g.lineJoin = 'round';
@@ -1492,7 +1655,9 @@ export class MapSystem {
         if (lx < 8 * dpr || lx + wd > W - 8 * dpr) continue;
         if (ly - lineH / 2 < 8 * dpr || ly + lineH / 2 > H - 8 * dpr) continue;
         const box = [lx - 2 * dpr, ly - lineH / 2 - 2 * dpr, lx + wd + 2 * dpr, ly + lineH / 2 + 2 * dpr];
-        if (!placed.some((q) => overlaps(box, q))) { put = [lx, ly]; placed.push(box); break; }
+        if (!placed.some((q) => overlaps(box, q))) {
+          put = [lx, ly]; placed.push(box); hits.push({ box, loc }); break;
+        }
       }
       if (!put) continue;
       budget--;
@@ -1883,7 +2048,37 @@ const GLYPH = {
 };
 
 /** Search ordering between kinds. Lower sorts first. */
-const KIND_WEIGHT = { place: 0, road: 1, area: 2, poi: 3 };
+const KIND_WEIGHT = { place: 0, river: 0, road: 1, area: 2, poi: 3 };
+
+/** The id the Yamuna goes by as a destination. */
+const RIVER_ID = 'river:yamuna';
+
+/**
+ * The nearest point on any of a set of polylines ({points}) to (x, z), as
+ * [x, z] — or, with `full`, {x, z, d, dx, dz} where dx/dz is the unit
+ * direction of the segment it lies on. Null when there are no segments.
+ */
+function nearestOnLines(lines, x, z, full = false) {
+  let best = null, bd = Infinity;
+  for (const l of lines) {
+    const p = l.points;
+    for (let i = 1; i < p.length; i++) {
+      const ax = p[i - 1][0], az = p[i - 1][1];
+      const sx = p[i][0] - ax, sz = p[i][1] - az;
+      const L2 = sx * sx + sz * sz;
+      if (!L2) continue;
+      const t = Math.max(0, Math.min(1, ((x - ax) * sx + (z - az) * sz) / L2));
+      const qx = ax + sx * t, qz = az + sz * t;
+      const d = Math.hypot(x - qx, z - qz);
+      if (d < bd) {
+        const L = Math.sqrt(L2);
+        bd = d; best = { x: qx, z: qz, d, dx: sx / L, dz: sz / L };
+      }
+    }
+  }
+  if (!best) return null;
+  return full ? best : [best.x, best.z];
+}
 
 /** What each POI class is called in a search row, and its glyph. */
 const POI_LABEL = {
