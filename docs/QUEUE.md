@@ -269,7 +269,8 @@ searching the backlog for it. That is the failure this file exists to stop.*
     **Offline on the web.** No service worker or manifest, so the browser
     build dies without a network while the APK does not. Would also make the
     site installable to a home screen.
-11. **Fixed sleeps in the checks** — `chatter`, `dpad-dir`, `traffic` (its
+11. ~~**Fixed sleeps in the checks**~~ **DONE 2026-10-09 for the whole
+    suite.** `chatter`, `dpad-dir`, `traffic` (its
     "vehicles rarely end up in the same place" runs 45 s of wall clock and
     fails under a parallel suite, passes alone) and a dozen probe tools still
     wait on a clock instead of a condition. This class caused every
@@ -288,8 +289,13 @@ searching the backlog for it. That is the failure this file exists to stop.*
     reads 2 overlaps or fewer on 24. **`dpad-dir` done the same day.**
     **`gatherings`, `vehcam`, `starthere` done 2026-10-09** (a184f96): 977 s,
     599 s and 381 s in the slowest suite to 26 s, 6 s and 12 s, the three
-    together under a minute, twice; vehcam no longer flaky. Still on the wall
-    clock: `driving` (13 s, fine) and the probe tools.
+    together under a minute, twice; vehcam no longer flaky. **`driving` done
+    2026-10-09** (04d005b): it owns the clock as well, 5.3 -> 6.4 -> 7.1 m/s
+    every run. And the game no longer asks Open-Meteo anything under
+    automation: a burst of parallel runs had drawn a 429 Too Many Requests
+    that failed `weather`, which now opts back in. No check in the suite
+    waits on the wall clock any more; only the probe tools, which are not in
+    it. Full suite 46/46 green (44 min).
 
 12. ~~**The ghats stand in town with no river in sight.**~~ **DONE
     2026-10-09**: the river and Keshi Ghat (cba9606), `keshi.mjs` 21/21, and

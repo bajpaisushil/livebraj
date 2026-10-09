@@ -3752,3 +3752,11 @@ full at darshan and on weekend evenings, thin in the small hours, full all
 day on a festival. People come and go a few a second, only out of sight. A
 toast says why on a festival or weekend. Off under automation so other
 checks stay deterministic; `crowdcal.mjs` turns it on with its own clock.
+
+## 2026-10-09 — item 11 done: no check waits on the wall clock
+
+DONE (04d005b). `driving` was the last check in the suite still on the wall
+clock; it now holds the game loop and steps every frame itself, like
+`chatter`, `traffic` and `verges`. Under automation the game also stops
+asking Open-Meteo for weather and air: parallel runs had drawn a 429 and
+failed `weather`, which now opts back in. Full suite 46/46 green in 44 min.
