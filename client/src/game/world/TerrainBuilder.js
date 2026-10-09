@@ -16,6 +16,7 @@ import { pointSegment, resample, smoothPolyline } from '../../engine/math/Curves
 import { clamp01, smoothstep, lerp } from '../../engine/math/MathUtils.js';
 import { WORLD } from '../../content/world.generated.js';
 import { isSpan, layoutSpan, buildSpan, spanMesh } from './Bridges.js';
+import { buildRail } from './RailBuilder.js';
 
 /**
  * The ground covers the playable rectangle with a margin, not a square.
@@ -139,6 +140,7 @@ class Terrain {
 
     this.segGrid = new SpatialGrid(40);
     this.riverGrid = new SpatialGrid(80);
+    this.railGrid = new SpatialGrid(40);
     this.bankGrid = new SpatialGrid(40);
     this.waterRows = null;
     this._bed = { inside: false, edge: 0 };
@@ -156,12 +158,14 @@ class Terrain {
   async build() {
     this._indexRoads();
     this._indexRiver();
+    this._indexRail();
     await breathe();
     this._bakeHeights();
     await breathe();
     this._buildGround();
     await breathe();
     this._buildRoads();
+    this._buildRail();
     this._buildGhats();
     await breathe();
     this._buildWater();
@@ -173,7 +177,7 @@ class Terrain {
       water: this.water,
       // the ghat treads, so WorldService can make them solid; and the bridges'
       // decks, parapets and piers (Bridges.js)
-      colliders: [...(this.stepColliders || []), ...(this.bridgeColliders || [])],
+      colliders: [...(this.stepColliders || []), ...(this.bridgeColliders || []), ...(this.railColliders || [])],
       /*
        * Which way each ghat faces, so LandmarkGenerator can put its riverfront
        * arcade BEHIND the flight instead of across it. This is returned rather
@@ -195,11 +199,44 @@ class Terrain {
       inBasin: (x, z) => self.inBasin(x, z),
       groundColor: (x, z) => self._groundColor(x, z, new THREE.Color()).getHex(),
       roadDistance: (x, z) => self.roadDistance(x, z),
+      railDistance: (x, z) => self.railDistance(x, z),
+      railTracks: this.railTracks,
       update: (dt) => self.update(dt),
     };
   }
 
   /* ---------------- spatial indices ---------------- */
+
+  /** The railway's tracks, in pieces, for `railDistance` and the bridges over them. */
+  _indexRail() {
+    this.railTracks = (this.data.RAIL && this.data.RAIL.tracks) || [];
+    for (const t of this.railTracks) {
+      for (let i = 1; i < t.points.length; i++) {
+        const a = t.points[i - 1], b = t.points[i];
+        const L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+        // in pieces no longer than 30 m, so the grid finds them from either end
+        const n = Math.max(1, Math.ceil(L / 30));
+        for (let k = 0; k < n; k++) {
+          const p0 = [a[0] + (b[0] - a[0]) * (k / n), a[1] + (b[1] - a[1]) * (k / n)];
+          const p1 = [a[0] + (b[0] - a[0]) * ((k + 1) / n), a[1] + (b[1] - a[1]) * ((k + 1) / n)];
+          this.railGrid.insert((p0[0] + p1[0]) * 0.5, (p0[1] + p1[1]) * 0.5, { ax: p0[0], az: p0[1], bx: p1[0], bz: p1[1], t });
+        }
+      }
+    }
+  }
+
+  /** How far a point is from the nearest track's centre line (999 if none near). */
+  railDistance(x, z, skip = null) {
+    const near = this.railGrid.query(x, z, 30, this._railScratch || (this._railScratch = []));
+    let best = 999;
+    for (let i = 0; i < near.length; i++) {
+      const s = near[i];
+      if (s.t === skip) continue;
+      const d = pointSegment(x, z, s.ax, s.az, s.bx, s.bz).d;
+      if (d < best) best = d;
+    }
+    return best;
+  }
 
   _indexRoads() {
     this.segs = [];
@@ -770,7 +807,8 @@ class Terrain {
     const spans = [];
     for (const rec of this.segs) {
       if (!isSpan(rec.road)) continue;
-      rec.span = layoutSpan(rec.pts, (x, z) => this.sampleHeight(x, z), (x, z) => this.isWater(x, z), ROAD_LIFT, WATER_Y);
+      rec.span = layoutSpan(rec.pts, (x, z) => this.sampleHeight(x, z), (x, z) => this.isWater(x, z), ROAD_LIFT, WATER_Y,
+        (x, z) => this.railDistance(x, z) < 3);
       let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
       for (const [x, z] of rec.span.dense) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
       spans.push({ rec, x0: x0 - rec.half, x1: x1 + rec.half, z0: z0 - rec.half, z1: z1 + rec.half });
@@ -863,7 +901,7 @@ class Terrain {
         }
       }
 
-      if (span) buildSpan(bridges, span, left, right, half, onOtherDeck(rec), this.bridgeColliders);
+      if (span) buildSpan(bridges, span, left, right, half, onOtherDeck(rec), this.bridgeColliders, (x, z) => this.railDistance(x, z) < 3.2);
 
       ends.push({ p: dense[0], half, style });
       ends.push({ p: dense[dense.length - 1], half, style });
@@ -897,6 +935,17 @@ class Terrain {
     roadMesh.renderOrder = 1;
     this.group.add(roadMesh);
     if (!kerbs.isEmpty) this.group.add(kerbs.toMesh('Kerbs', { receiveShadow: true, doubleSided: true }));
+  }
+
+  /** The railway (RailBuilder.js): track, and the masts and wire over it. */
+  _buildRail() {
+    this.railColliders = [];
+    if (!this.railTracks.length) return;
+    // a mast does not stand on another track: within 2.2 m of its centre line
+    const onOther = (x, z, self) => this.railDistance(x, z, self) < 2.2;
+    const mesh = buildRail(this.railTracks, (x, z) => this.sampleHeight(x, z), onOther, this.railColliders);
+    if (mesh) this.group.add(mesh);
+    console.info(`[terrain] ${this.railTracks.length} railway tracks, ${this.railColliders.length} masts`);
   }
 
   /* ---------------- ghats ---------------- */

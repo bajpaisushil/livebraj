@@ -179,6 +179,10 @@ const rawPoi = readRaw('poi_all').elements;
 // relation(9075838); relation(1423292); out geom; — the Yamuna's water as
 // mapped, the Vrindavan stretch and the next one down toward Mathura
 const rawRiverbank = readRaw('riverbank').elements;
+// way["railway"](bbox); node["railway"~"station|halt"](bbox); out geom; — the
+// New Delhi-Mathura main line through Chhatikara (Vrindaban Road station),
+// and the metre-gauge line from Mathura into Vrindavan
+const rawRail = readRaw('rail').elements;
 
 /* ------------------------------------------------------------------ *
  * Roads
@@ -659,6 +663,57 @@ console.log(`pois      ${pois.length} named places the map can label`);
 console.log('          ' + JSON.stringify(poiKinds));
 
 /* ------------------------------------------------------------------ *
+ * The railways
+ * ------------------------------------------------------------------ */
+/*
+ * Tracks, by what OSM says they are: the main line (usage=main), its loops
+ * and crossovers at the station, and the metre gauge. Each keeps its gauge
+ * and whether it is wired, which is what the builder needs to draw it; run
+ * 60 m past the edge, as the river is, so the world does not stop at a line.
+ */
+/*
+ * A point where the line turns back on itself is a mapping slip, not a track:
+ * the metre gauge's way doubles back 18 m at the Chandrodaya over-bridge
+ * (nodes 10 and 11 of 671814558). Dropped, over and over until none is left.
+ */
+function despike(pts) {
+  let out = pts.slice(), again = true;
+  while (again && out.length > 2) {
+    again = false;
+    for (let i = 1; i < out.length - 1; i++) {
+      const ax = out[i][0] - out[i - 1][0], az = out[i][1] - out[i - 1][1];
+      const bx = out[i + 1][0] - out[i][0], bz = out[i + 1][1] - out[i][1];
+      const la = Math.hypot(ax, az), lb = Math.hypot(bx, bz);
+      if (la < 1e-6 || lb < 1e-6 || (ax * bx + az * bz) / (la * lb) < -0.85) { out.splice(i, 1); again = true; break; }
+    }
+  }
+  return out;
+}
+const rail = [];
+for (const way of rawRail) {
+  if (way.type !== 'way' || !way.geometry) continue;
+  const kind = way.tags?.railway;
+  if (kind !== 'rail' && kind !== 'narrow_gauge') continue;
+  const projected = despike(way.geometry.map((g) => toWorld(g.lat, g.lon)));
+  clipToBounds(projected, padBounds(WORLD_BOUNDS, 60)).forEach((run, ri) => {
+    const pts = simplify(run, 0.6);
+    if (polylineLength(pts) < 20) return;
+    rail.push({
+      id: `t${way.id}${ri ? `-${ri}` : ''}`,
+      kind: way.tags.usage === 'main' ? 'main' : kind === 'narrow_gauge' ? 'metre' : 'loop',
+      gauge: Number(way.tags.gauge || (kind === 'narrow_gauge' ? 1000 : 1676)) / 1000,
+      ...(way.tags.electrified === 'contact_line' ? { electrified: true } : {}),
+      ...(way.tags.name ? { name: way.tags.name } : {}),
+      points: pts,
+    });
+  });
+}
+const stations = rawRail
+  .filter((e) => e.type === 'node' && /^(station|halt)$/.test(e.tags?.railway || ''))
+  .map((e) => ({ id: `s${e.id}`, name: e.tags['name:en'] || e.tags.name || 'Station', pos: toWorld(e.lat, e.lon) }));
+console.log(`rail      ${rail.length} tracks, ${(rail.reduce((n, r) => n + polylineLength(r.points), 0) / 1000).toFixed(2)} km, ${stations.length} stations`);
+
+/* ------------------------------------------------------------------ *
  * Districts -> metres
  * ------------------------------------------------------------------ */
 const districts = DISTRICTS.map((d) => ({
@@ -755,6 +810,8 @@ export const POIS = ${compactJson(pois)};
 writeModule('locations.generated.js',
   `export const LOCATIONS = ${compactJson(locations)};\n`);
 
+writeModule('rail.generated.js',
+  `export const RAIL = ${compactJson({ tracks: rail, stations })};\n`);
 writeModule('districts.generated.js',
   `export const DISTRICTS = ${compactJson(districts)};\n`);
 

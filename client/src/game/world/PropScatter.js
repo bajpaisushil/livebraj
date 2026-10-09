@@ -409,7 +409,8 @@ function buildTrees(ctx, terrain, group) {
   const inTheWay = (x, z) => {
     const surf = terrain.surfaceAt(x, z);
     if (surf === 'road' || surf === 'stone' || surf === 'gali') return true;
-    // and a trunk's worth of clearance beyond the kerb
+    // and a trunk's worth of clearance beyond the kerb — and off the railway
+    if (terrain.railDistance && terrain.railDistance(x, z) < 4.5) return true;
     return terrain.roadDistance(x, z) < TREE_CLEAR;
   };
 
@@ -689,6 +690,8 @@ function buildGroundCover(ctx, terrain, group) {
         // 4.5 m was inside the kerb of anything bigger than a lane: NH 44 is
         // 22 m wide, so its half-width alone is 11
         if (rd < BUSH_CLEAR) continue;
+        // the ballast is no place for grass or a bush (RailBuilder.js)
+        if (terrain.railDistance && terrain.railDistance(x, z) < 3.2) continue;
         const surf = terrain.surfaceAt(x, z);
         if (surf === 'water' || surf === 'stone' || surf === 'road' || surf === 'gali') continue;
 

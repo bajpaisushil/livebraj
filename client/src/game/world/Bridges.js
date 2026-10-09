@@ -38,6 +38,8 @@ import { resample } from '../../engine/math/Curves.js';
 export const BRIDGE_MIN = 60;
 /** A flyover's road surface over the ground mid-span: 5.6 m clear under the girders. */
 export const DECK_H = 7.0;
+/** And over a railway, clear of the contact wire: 7.2 m under the girders. */
+export const DECK_H_RAIL = 8.6;
 /** A pontoon deck's road surface over the water. */
 export const FLOAT = 0.9;
 /** The deck pieces, laid and stood on. */
@@ -46,6 +48,7 @@ export const STEP = 3;
 const GIRDER = 1.4;            // slab and girders under a flyover's road surface
 const GRADE = 0.04;            // a ramp's grade: 4 %, 175 m to the deck
 const ROUND = 7;               // samples either side the grade's corners are rounded over (21 m)
+const MAX_GRADE = 0.07;        // the steepest a rail over-bridge's ramp is let be
 const PIER_EVERY = 30;
 const OPEN_FROM = 4.5;         // deck height over the ground from which it stands on piers, open under
 const PARAPET = 1.0;
@@ -82,7 +85,7 @@ export function isSpan(road) {
  * deck high almost to its foot: no ramp is built like that.) A span too short
  * for two whole ramps peaks lower, as a short over-bridge does.
  */
-export function layoutSpan(pts, ground, isWater, lift, waterY) {
+export function layoutSpan(pts, ground, isWater, lift, waterY, overRail = () => false) {
   const dense = resample(pts, STEP);
   const n = dense.length;
   const cum = [0];
@@ -95,7 +98,23 @@ export function layoutSpan(pts, ground, isWater, lift, waterY) {
     y = g.map((h) => Math.max(h + lift, waterY + FLOAT));
   } else {
     const g0 = g[0] + lift, g1 = g[n - 1] + lift;
-    const rise = cum.map((s) => Math.min(DECK_H, GRADE * Math.min(s, L - s)));
+    /*
+     * A rail over-bridge has its crest over the tracks, clear of the wire
+     * (RailBuilder.js), and a ramp up to it from each end at whatever grade
+     * that takes — where it crosses is rarely the middle of what OSM marks:
+     * the Chandrodaya pair crosses the metre gauge 188 m along a 457 m span,
+     * and laid symmetrically the deck there was 7.9 m. Anything else rises
+     * up the same grade from both ends to DECK_H.
+     */
+    const rails = [];
+    dense.forEach(([x, z], i) => { if (overRail(x, z)) rails.push(cum[i]); });
+    let rise = null;
+    if (rails.length) {
+      const cLo = Math.max(0, rails[0] - 12), cHi = Math.min(L, rails[rails.length - 1] + 12);
+      const crest = Math.min(DECK_H_RAIL, MAX_GRADE * cLo, MAX_GRADE * (L - cHi));
+      if (crest > 4) rise = cum.map((s) => (s < cLo ? crest * (s / cLo) : s > cHi ? crest * ((L - s) / (L - cHi)) : crest));
+    }
+    if (!rise) rise = cum.map((s) => Math.min(rails.length ? DECK_H_RAIL : DECK_H, GRADE * Math.min(s, L - s)));
     // round the grade's corners: a moving average, ROUND samples each way,
     // narrowing to nothing at the ends (a window cut off on one side there
     // lifted the first tread half a metre, more than a step up from the road)
@@ -117,9 +136,10 @@ export function layoutSpan(pts, ground, isWater, lift, waterY) {
  *
  * `left` / `right` are the ribbon's edges at each of `span.dense`;
  * `inOther(x, z)` says whether a point lies on another span's deck (the
- * other carriageway); `colliders` is pushed to.
+ * other carriageway); `colliders` is pushed to; `keepClear(x, z)` is where
+ * no pier may stand (the railway's tracks).
  */
-export function buildSpan(b, span, left, right, half, inOther, colliders) {
+export function buildSpan(b, span, left, right, half, inOther, colliders, keepClear = () => false) {
   const { dense, g, y, river } = span;
   const n = dense.length;
   if (n < 2) return;
@@ -208,6 +228,8 @@ export function buildSpan(b, span, left, right, half, inOther, colliders) {
     next = span.cum[i] + PIER_EVERY;
     const h = y[i] - g[i];
     if (h < OPEN_FROM + 0.4) continue;
+    // a rail over-bridge spans its tracks: no pier stands on one
+    if (keepClear(dense[i][0], dense[i][1])) continue;
     const a = dense[Math.max(0, i - 1)], c = dense[Math.min(n - 1, i + 1)];
     const rot = Math.atan2(c[1] - a[1], c[0] - a[0]);
     const [x, z] = dense[i];

@@ -38,6 +38,7 @@ import { WORLD } from '../../content/world.generated.js';
 import { signAtlas, signUV, SIGN_COUNT, setRealSigns, realSignSlot } from './Signage.js';
 import { lilaAtlas, lilaUV } from './LilaArt.js';
 import { LILA_COUNT } from '../../content/lilas.js';
+import { railHalf } from './RailBuilder.js';
 
 const _rm = new THREE.Matrix4();
 const _rp = new THREE.Vector3();
@@ -287,6 +288,17 @@ class CityFabric {
     for (const road of this.data.ROADS) {
       const half = road.width * 0.5;
       const pts = resample(road.points, 8);
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1], b = pts[i];
+        this.roadGrid.insert((a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5, {
+          ax: a[0], az: a[1], bx: b[0], bz: b[1], half,
+        });
+      }
+    }
+    // and the railway, which nothing is built across (RailBuilder.js)
+    for (const track of (this.data.RAIL && this.data.RAIL.tracks) || []) {
+      const half = railHalf(track);
+      const pts = resample(track.points, 8);
       for (let i = 1; i < pts.length; i++) {
         const a = pts[i - 1], b = pts[i];
         this.roadGrid.insert((a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5, {

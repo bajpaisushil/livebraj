@@ -6965,7 +6965,7 @@ const BUILDERS = {
    *
    * Nothing here is the render. When it is finished, it can be built finished.
    */
-  tower: ({ loc, b, ground, rng }) => {
+  tower: ({ loc, b, ground, rng, terrain }) => {
     const { w, h, color, accent } = loc.build;
     const [x, z] = loc.pos;
     const CONCRETE = 0xb8b4ab, RAW = 0x9c9890, REBAR = 0x8a6a42;
@@ -7031,7 +7031,14 @@ const BUILDERS = {
     }
     // site huts, material stacks and a spoil heap
     for (let i = 0; i < 5; i++) {
-      const px = x - w * 0.5 - 22, pz = z - 16 + i * 7.5;
+      /*
+       * West of the tower — but the old Mathura-Vrindavan metre gauge runs
+       * past that side, and the row as first laid out put the first two huts
+       * on the track. A hut keeps 7 m from it, closer to the tower if it must.
+       */
+      const pz = z - 16 + i * 7.5;
+      let px = x - w * 0.5 - 22;
+      while (terrain && terrain.railDistance && terrain.railDistance(px, pz) < 7 && px < x - w * 0.5 - 6) px += 1;
       b.box(px, ground, pz, 7.0, 2.8, 3.4, [0xd8d2c2, 0x6a8a9a, 0xd8d2c2, 0xc0a878, 0x6a8a9a][i]);
       b.box(px, ground + 2.8, pz, 7.4, 0.25, 3.8, 0x8a8478);
       colliders.push({ type: 'box', x: px, z: pz, w: 7.0, d: 3.4, rot: 0 });
