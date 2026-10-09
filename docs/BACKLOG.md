@@ -3664,3 +3664,28 @@ written, so Madan Mohan was measured and built here, solo.
   campus plainly, and its walls. Street furniture left the walled compounds
   without disturbing a single other pole (a sink keeps the random draws).
   docs/research/prem-mandir.md has the measurements and what is estimated.
+
+## 2026-10-09 — "it shows no option to walk to yamuna ghat that shows in map"
+
+*"it shows no option to walk to yamuna ghat that shows in map fix it"*, then
+*"also"* on its own. Queued as NOW 0f. Status: **DONE** the same day,
+`mapwalk.mjs` 16/16.
+
+What the map did, measured on a fresh save at 390 x 844:
+
+1. **A tap only answered for places already visited.** `_drawPlaceIcons`
+   draws all 34 landmarks (unvisited ones at 24% opacity) and the whole-town
+   view names Keshi Ghat and Kaliya Ghat, but `_pick` skipped anything not in
+   `state.discovered`. Tapping Keshi Ghat's icon produced only the road toast.
+2. **Search opened the panel for landmarks only.** `focusOn` closed it for
+   every other hit — the OSM ghats (Surya, Varaha, Mohan Ter, Pani-ghat), all
+   named roads, the localities — so "Walk here" was unreachable for them.
+3. **The river was not a place.** Neither a tap on the water nor a search for
+   "yamuna" led anywhere you could walk to.
+
+What it does now: any drawn landmark and any drawn name answers a tap; every
+search hit opens "Walk here"; a road means the point of it nearest you; the
+Yamuna is a destination — the nearest stretch of bank that a path from where
+you stand reaches, on the same connected piece of the path network (the import
+leaves 30 islands; the nearest bank to Banke Bihari was on one). Destinations
+of every kind survive a reload.

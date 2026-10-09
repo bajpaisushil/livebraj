@@ -105,6 +105,35 @@ searching the backlog for it. That is the failure this file exists to stop.*
    survey's double quarter turn removed). interior 30/30 walks you in from
    the new door; platforms, stairs, steps and 11 more green.
 
+0f. ~~**The map shows a ghat and offers no way to walk to it.**~~ **DONE
+   2026-10-09**, `mapwalk.mjs` 16/16, mutation-tested. *"it shows no option
+   to walk to yamuna ghat that shows in map fix it"* (2026-10-09; a second
+   message, *"also"*, arrived with nothing after it — waiting for the rest).
+   Reproduced on a fresh save: the map draws every landmark's icon, faint
+   until you have been there, and names KESHI GHAT and KALIYA GHAT across the
+   whole-town view — but a tap only answered for places already visited, so
+   tapping Keshi Ghat's icon gave a "Road by Keshi Ghat" toast and no panel.
+   Search was no better past the landmarks: OSM's Surya, Varaha, Mohan Ter
+   and Pani Ghats, every road and every locality closed the panel instead of
+   opening it, and the Yamuna itself could be neither tapped nor searched.
+   Now a tap picks any landmark the map draws, visited or not (**34 of 34**
+   open with "Walk here"), and the names are buttons too — KESHI GHAT in the
+   whole-town view opens Keshi Ghat. Every search hit opens the panel: an OSM
+   ghat, a road (walking you to the point of it nearest you, 0.00 m off the
+   road), a locality, and the Yamuna — new, found by "yamuna", "jamuna",
+   "yamuna ghat" or यमुना, and by a tap on the water. "The Yamuna" is the
+   water's edge nearest you that a path from where you stand comes down to.
+   Not simply the nearest bank: from Chhatikara that was the FAR bank with no
+   route, and from Banke Bihari a riverside path that never meets a street —
+   one of 30 islands in the path network, which `NavGraph.componentOf` now
+   labels. Measured from Chhatikara, Banke Bihari and Prem Mandir: dry ground
+   6 m from the water, routes ending 0, 22 and 0 m short of it. Mutations
+   caught: visited-only taps (0/34), a landmark-only search panel (all four
+   other kinds fail), no island test (Banke Bihari: no route), no path-node
+   reach (the route from Chhatikara ends 6,233 m short). Found on the way:
+   `map-search` waited a fixed 1.6 s for the map to fly to a hit and failed
+   under a 5-wide parallel run; it now waits for the map to land.
+
 ## NEXT — queued, in this order
 
 0. ~~**ISKCON Krishna Balaram does not look like the real one.**~~ **BUILT
