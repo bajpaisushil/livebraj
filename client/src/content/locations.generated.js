@@ -154,9 +154,11 @@ export const LOCATIONS = [
     "type": "ghat",
     "district": "ghat-front",
     "grounds": null,
+    "compound": { "lx0": -26.5, "lx1": 31, "lz0": -10.5, "lz1": 4.8, "ring": false, "also": [{ "lx0": -26.5, "lx1": -9, "lz0": 4.8, "lz1": 12 }] },
+    "basin": { "lx0": -9.5, "lx1": 3.4, "lz0": -9, "lz1": 2 },
     "pos": [-577.27, 183.06],
     "geo": [27.578328, 77.684654],
-    "rot": 0.6283185307179586,
+    "rot": -0.580977,
     "radius": 36,
     "icon": "ghat",
     "deity": null,
@@ -165,12 +167,13 @@ export const LOCATIONS = [
       "story"
     ],
     "build": {
-      "kind": "ghat",
-      "w": 70,
-      "d": 44,
-      "h": 12,
-      "color": "#cfbd9b",
-      "accent": "#8f5f3c"
+      "kind": "ghat-kaliya",
+      "w": 56,
+      "d": 22,
+      "h": 10,
+      "color": "#a8604a",
+      "accent": "#d99a86",
+      "measured": true
     },
     "osm": "Kaliya Ghata"
   },

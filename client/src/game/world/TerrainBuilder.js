@@ -97,6 +97,29 @@ const ROAD_STYLE = {
 /** Hand the browser a frame, so a long build does not read as a hung tab. */
 const breathe = () => new Promise((r) => requestAnimationFrame(() => r()));
 
+/** The ground mesh's palette; see Terrain._groundColor. */
+const GROUND = {
+  SAND: new THREE.Color(0xe6d3a4), DIRT: new THREE.Color(0xd8bb87),
+  GRASS: new THREE.Color(0x4f9e33), DRY: new THREE.Color(0x6fa63c), CROP: new THREE.Color(0x3d8f2c),
+};
+
+/** Does an axis-aligned rectangle meet a convex polygon? Separating axes. */
+function rectHitsPoly(x0, x1, z0, z1, poly) {
+  const rect = [[x0, z0], [x1, z0], [x1, z1], [x0, z1]];
+  const axes = [[1, 0], [0, 1]];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length];
+    axes.push([-(b[1] - a[1]), b[0] - a[0]]);
+  }
+  for (const [ax, az] of axes) {
+    let r0 = Infinity, r1 = -Infinity, p0 = Infinity, p1 = -Infinity;
+    for (const [x, z] of rect) { const d = x * ax + z * az; r0 = Math.min(r0, d); r1 = Math.max(r1, d); }
+    for (const [x, z] of poly) { const d = x * ax + z * az; p0 = Math.min(p0, d); p1 = Math.max(p1, d); }
+    if (r1 <= p0 || p1 <= r0) return false;
+  }
+  return true;
+}
+
 export async function buildTerrain(ctx) {
   return await new Terrain(ctx).build();
 }
@@ -164,6 +187,9 @@ class Terrain {
       riverSigned: (x, z) => self._riverSigned(x, z, []),
       // the river's surface
       waterY: WATER_Y,
+      // the ground mesh's holes, for the builders whose basins made them
+      holes: this.holes || [],
+      groundColor: (x, z) => self._groundColor(x, z, new THREE.Color()).getHex(),
       roadDistance: (x, z) => self.roadDistance(x, z),
       update: (dt) => self.update(dt),
     };
@@ -493,38 +519,54 @@ class Terrain {
     const colors = new Float32Array(pos.count * 3);
     const c = new THREE.Color();
 
-    const SAND = new THREE.Color(0xe6d3a4);
-    const DIRT = new THREE.Color(0xd8bb87);
-    const GRASS = new THREE.Color(0x4f9e33);
-    const DRY = new THREE.Color(0x6fa63c);
-    const CROP = new THREE.Color(0x3d8f2c);
-
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i), z = pos.getZ(i);
-      const h = this.sampleHeight(x, z);
-      pos.setY(i, h);
-
-      const rd = this.roadDistance(x, z);
-      const wet = clamp01((WATER_Y + SAND_ABOVE - h) / 1.5);
-      const worn = clamp01((8 - rd) / 8);
-
-      // three scales of patchiness: fields, then scrub, then close-up grain
-      const field = this.noise.fbm(x * 0.0016, z * 0.0016, 3) * 0.5 + 0.5;
-      const patch = this.noise.fbm(x * 0.009, z * 0.009, 2) * 0.5 + 0.5;
-      const fine = this.noise.fbm(x * 0.06, z * 0.06, 2) * 0.5 + 0.5;
-
-      c.copy(GRASS).lerp(DRY, patch);
-      c.lerp(CROP, clamp01((field - 0.42) * 2.4) * (1 - worn));   // cultivated strips
-      c.lerp(DIRT, worn * 0.85);
-      c.lerp(SAND, wet);
-      const g = 0.9 + fine * 0.2;
-      colors[i * 3] = c.r * g;
-      colors[i * 3 + 1] = c.g * g;
-      colors[i * 3 + 2] = c.b * g;
+      pos.setY(i, this.sampleHeight(x, z));
+      this._groundColor(x, z, c);
+      colors[i * 3] = c.r;
+      colors[i * 3 + 1] = c.g;
+      colors[i * 3 + 2] = c.b;
     }
 
-    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    /*
+     * BASINS. A place that is sunk below the ground — a kund, a ghat whose
+     * river has gone, a court reached down steps — declares its basin, and
+     * the quads it touches come out of this mesh. The height field cannot
+     * do it: at 12 m a cell, a ten-metre court is a crater twice its size.
+     * The ground round the basin is laid back here, in the holes' exact
+     * complement (_buildBasinGround): the terrain's own heights, the
+     * ground's own colours, normals and material, so the seam is not there
+     * to see. The builder that declared the basin draws the basin itself;
+     * it is handed the holes (`holes`) and the colour rule (`groundColor`)
+     * in case it needs them.
+     */
+    // normals off the whole mesh, before any of it is dropped: a vertex inside
+    // a hole belongs to no triangle left, and would come out with none at all
     geo.computeVertexNormals();
+    const basins = this._basins();
+    this.holes = [];
+    if (basins.length) {
+      const index = geo.getIndex();
+      const keep = [];
+      const stepZ = SPAN_Z / RES_Z;
+      for (let iz = 0; iz < RES_Z; iz++) {
+        for (let ix = 0; ix < RES_X; ix++) {
+          const x0 = MINX + ix * step, z0 = MINZ + iz * stepZ;
+          const hit = basins.find((b) => rectHitsPoly(x0, x0 + step, z0, z0 + stepZ, b.poly));
+          const t = (iz * RES_X + ix) * 6;
+          if (hit) {
+            this.holes.push({ x0, x1: x0 + step, z0, z1: z0 + stepZ, owner: hit.id,
+              tris: [0, 1, 2, 3, 4, 5].map((k) => index.getX(t + k)) });
+            continue;
+          }
+          for (let k = 0; k < 6; k++) keep.push(index.getX(t + k));
+        }
+      }
+      geo.setIndex(keep);
+    }
+    this._basinList = basins;
+
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geo.computeBoundingSphere();
 
     const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ vertexColors: true }));
@@ -533,6 +575,132 @@ class Terrain {
     mesh.matrixAutoUpdate = false;
     mesh.updateMatrix();
     this.group.add(mesh);
+    if (this.holes.length) this._buildBasinGround(geo, mesh.material);
+  }
+
+  /**
+   * The ground back in the basins' holes, everywhere but the basins.
+   *
+   * Not a new piece of ground: the very triangles the ground mesh dropped,
+   * each with the basins cut out of it — a convex triangle minus a convex
+   * basin is, edge by edge of the basin, a run of convex pieces — and every
+   * new corner given the triangle's own height, colour and normal by its
+   * barycentric weights. So it is the same surface the rest of the mesh is,
+   * to the last vertex, and meets the basin's walls with neither a gap
+   * (through which you saw the river, 3.6 m down, between a court's paving
+   * joints) nor a lip poking into the court. A first cut that re-sampled
+   * the terrain finely came out as a lighter rectangle from the air: the
+   * mesh only samples the ground's colour every 22 m.
+   */
+  _buildBasinGround(src, material) {
+    const sp = src.getAttribute('position'), sc = src.getAttribute('color'), sn = src.getAttribute('normal');
+    const pos = [], col = [], nrm = [];
+    const clip = (poly, a, b, keep) => {
+      const out = [];
+      const side = (q) => (b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0]);
+      for (let i = 0; i < poly.length; i++) {
+        const p0 = poly[i], p1 = poly[(i + 1) % poly.length];
+        const s0 = side(p0) * keep, s1 = side(p1) * keep;
+        if (s0 >= 0) out.push(p0);
+        if ((s0 >= 0) !== (s1 >= 0)) {
+          const t = s0 / (s0 - s1);
+          out.push([p0[0] + (p1[0] - p0[0]) * t, p0[1] + (p1[1] - p0[1]) * t]);
+        }
+      }
+      return out;
+    };
+    const area = (poly) => {
+      let A = 0;
+      for (let i = 0; i < poly.length; i++) { const a = poly[i], b = poly[(i + 1) % poly.length]; A += a[0] * b[1] - b[0] * a[1]; }
+      return A;
+    };
+    for (const h of this.holes) {
+      for (let t = 0; t < 6; t += 3) {
+        const v = h.tris.slice(t, t + 3);
+        const X = v.map((k) => sp.getX(k)), Z = v.map((k) => sp.getZ(k));
+        // barycentric weights of a point in this triangle
+        const det = (Z[1] - Z[2]) * (X[0] - X[2]) + (X[2] - X[1]) * (Z[0] - Z[2]);
+        const bary = (x, z) => {
+          const w0 = ((Z[1] - Z[2]) * (x - X[2]) + (X[2] - X[1]) * (z - Z[2])) / det;
+          const w1 = ((Z[2] - Z[0]) * (x - X[2]) + (X[0] - X[2]) * (z - Z[2])) / det;
+          return [w0, w1, 1 - w0 - w1];
+        };
+        const put = (x, z) => {
+          const w = bary(x, z);
+          const mix = (attr, j) => w[0] * attr.getComponent(v[0], j) + w[1] * attr.getComponent(v[1], j) + w[2] * attr.getComponent(v[2], j);
+          pos.push(x, mix(sp, 1), z);
+          col.push(mix(sc, 0), mix(sc, 1), mix(sc, 2));
+          const nx = mix(sn, 0), ny = mix(sn, 1), nz = mix(sn, 2), L = Math.hypot(nx, ny, nz) || 1;
+          nrm.push(nx / L, ny / L, nz / L);
+        };
+        let pieces = [[[X[0], Z[0]], [X[1], Z[1]], [X[2], Z[2]]]];
+        for (const bsn of this._basinList) {
+          const P = bsn.poly, inside = area(P) > 0 ? 1 : -1;
+          const next = [];
+          for (const piece of pieces) {
+            let rest = piece;
+            for (let k = 0; k < P.length && rest.length >= 3; k++) {
+              const a = P[k], b = P[(k + 1) % P.length];
+              next.push(clip(rest, a, b, -inside));       // the part outside this edge
+              rest = clip(rest, a, b, inside);            // the rest goes on to the next edge
+            }
+            // what is inside every edge is the basin, and is dropped
+          }
+          pieces = next.filter((q) => q.length >= 3 && Math.abs(area(q)) > 1e-6);
+        }
+        // the original winding is the ground's, which faces up: keep it
+        const sense = area([[X[0], Z[0]], [X[1], Z[1]], [X[2], Z[2]]]);
+        for (const q of pieces) {
+          const pts = (area(q) > 0) === (sense > 0) ? q : q.slice().reverse();
+          for (let i = 1; i < pts.length - 1; i++) { put(...pts[0]); put(...pts[i]); put(...pts[i + 1]); }
+        }
+      }
+    }
+    if (!pos.length) return;
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setAttribute('normal', new THREE.Float32BufferAttribute(nrm, 3));
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+    geo.computeBoundingSphere();
+    const mesh = new THREE.Mesh(geo, material);
+    mesh.name = 'GroundBasins';
+    mesh.receiveShadow = !!this.ctx.quality.shadows;
+    mesh.matrixAutoUpdate = false;
+    mesh.updateMatrix();
+    this.group.add(mesh);
+  }
+
+  /**
+   * The ground's colour at a point — the one rule the ground mesh is painted
+   * by, so anything that has to stand in for a piece of it matches.
+   */
+  _groundColor(x, z, out) {
+    const h = this.sampleHeight(x, z);
+    const rd = this.roadDistance(x, z);
+    const wet = clamp01((WATER_Y + SAND_ABOVE - h) / 1.5);
+    const worn = clamp01((8 - rd) / 8);
+    // three scales of patchiness: fields, then scrub, then close-up grain
+    const field = this.noise.fbm(x * 0.0016, z * 0.0016, 3) * 0.5 + 0.5;
+    const patch = this.noise.fbm(x * 0.009, z * 0.009, 2) * 0.5 + 0.5;
+    const fine = this.noise.fbm(x * 0.06, z * 0.06, 2) * 0.5 + 0.5;
+    out.copy(GROUND.GRASS).lerp(GROUND.DRY, patch);
+    out.lerp(GROUND.CROP, clamp01((field - 0.42) * 2.4) * (1 - worn));   // cultivated strips
+    out.lerp(GROUND.DIRT, worn * 0.85);
+    out.lerp(GROUND.SAND, wet);
+    return out.multiplyScalar(0.9 + fine * 0.2);
+  }
+
+  /** Every declared basin, as a world polygon: `basin` is in its location's box frame. */
+  _basins() {
+    const out = [];
+    for (const l of this.data.LOCATIONS) {
+      const q = l.basin;
+      if (!q) continue;
+      const cs = Math.cos(l.rot), sn = Math.sin(l.rot);
+      const P = (lx, lz) => [l.pos[0] + lx * cs - lz * sn, l.pos[1] + lx * sn + lz * cs];
+      out.push({ id: l.id, poly: [P(q.lx0, q.lz0), P(q.lx1, q.lz0), P(q.lx1, q.lz1), P(q.lx0, q.lz1)] });
+    }
+    return out;
   }
 
   /** A flat ring beyond the playable area so the horizon never shows an edge. */

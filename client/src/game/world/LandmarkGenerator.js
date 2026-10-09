@@ -23,6 +23,7 @@ import { buildJugalKishoreMandir } from './JugalKishoreMandir.js';
 import { buildRadhaGopinathMandir } from './RadhaGopinathMandir.js';
 import { buildJaipurMandir } from './JaipurMandir.js';
 import { buildKeshiGhat } from './KeshiGhat.js';
+import { buildKaliyaGhat } from './KaliyaGhat.js';
 import { buildPremMandirSetting } from './PremMandirSetting.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV, campusSign } from './Signage.js';
@@ -87,7 +88,7 @@ export function buildLandmarks(ctx, terrain) {
      * floods run to 166.68 m, so the Keshi Ghat steps and the road go under
      * most monsoons. BrajPalette carries the separate ramp and the silt line.
      */
-    const river = kind === 'ghat' || kind === 'kund' || kind === 'ghat-keshi';
+    const river = kind === 'ghat' || kind === 'kund' || kind === 'ghat-keshi' || kind === 'ghat-kaliya';
     b.weather((y) => vMul(y - ground, wh, river));
 
     /*
@@ -6643,6 +6644,30 @@ const BUILDERS = {
     const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
     const colliders = [];
     const r = buildKeshiGhat({ b, loc, ground, terrain, colliders, h: { cuspedArch, tint, chhatri, dome } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    return {
+      altarY: r.altar.y - ground,
+      noCollider: true,
+      colliders,
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.floor,
+      },
+    };
+  },
+
+  /**
+   * Kaliya Ghat, as it is now the river has gone: the enclosure on the
+   * Parikrama Marg, the dry sunken court and its flight, the round Old
+   * Kaliya Temple, the kadamba — see KaliyaGhat.js.
+   */
+  'ghat-kaliya': ({ loc, b, ground, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const r = buildKaliyaGhat({ b, loc, ground, terrain, colliders, h: { cuspedArch, tint, dome } });
     const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
     return {
       altarY: r.altar.y - ground,

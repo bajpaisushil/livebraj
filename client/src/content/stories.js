@@ -95,9 +95,9 @@ export const STORIES = {
     source: 'Bhagavata Purana, Canto 10; local tradition.',
   },
   'kaliya-ghat': {
-    short: 'Associated with the subduing of the serpent Kaliya.',
-    long: `By tradition this stretch of the river is linked to Kaliya Daha, the pool where the serpent Kaliya lived and poisoned the water, until Krishna danced upon his hoods and sent him away. It is one of the episodes most often painted on Braj temple walls.`,
-    source: 'Bhagavata Purana, Canto 10; local tradition.',
+    short: 'Where Krishna leapt from the kadamba to subdue Kaliya. The river has since moved away.',
+    long: `By tradition this was Kaliya Daha, the pool where the serpent Kaliya lived and poisoned the water, until Krishna climbed the kadamba, leapt in, and danced upon his hoods. Growse in 1883 still found the Yamuna here — "the Kali-mardan Ghat with the kadamb tree from which Krishna plunged into the water" — but the river has moved half a kilometre north, and the ghat's steps now go down to a dry court. The kadamba still stands, old and hollow and still growing, with clay pots and threads tied in its branches.`,
+    source: 'Bhagavata Purana, Canto 10; F. S. Growse, Mathura: A District Memoir (1883); local tradition.',
   },
   'yugal-ghat': {
     short: 'A small working ghat on the Yamuna.',

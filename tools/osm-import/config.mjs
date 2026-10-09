@@ -513,8 +513,17 @@ export const LANDMARKS = [
     id: 'kaliya-ghat', match: ['Kaliya Ghat', 'Kaliya Ghata', 'Калия'],
     name: 'Shri Kaliya Ghat', hindi: 'श्री कालीय घाट',
     type: 'ghat', deity: null, icon: 'ghat',
-    build: { kind: 'ghat', w: 70, d: 44, h: 12, color: '#cfbd9b', accent: '#8f5f3c' },
-    rot: Math.PI * 0.2, radius: 36, district: 'ghat-front',
+    /*
+     * Dry: the Yamuna is 540 m north now (world/KaliyaGhat.js). The frame
+     * runs along OSM's enclosure (way 334669919), north-east with the
+     * Parikrama Marg on its north-west side; the compound is that fence and
+     * the basin the sunken court — the ghat's own floor, 2.2 m down, which
+     * the ground mesh opens for (TerrainBuilder's basins).
+     */
+    build: { kind: 'ghat-kaliya', w: 56, d: 22, h: 10, color: '#a8604a', accent: '#d99a86', measured: true },
+    rot: -0.580977, radius: 36, district: 'ghat-front',
+    compound: { lx0: -26.5, lx1: 31.0, lz0: -10.5, lz1: 4.8, ring: false, also: [{ lx0: -26.5, lx1: -9.0, lz0: 4.8, lz1: 12.0 }] },
+    basin: { lx0: -9.5, lx1: 3.4, lz0: -9.0, lz1: 2.0 },
     interactions: ['pranam', 'story'],
     fallback: [27.58490, 77.69590],
   },

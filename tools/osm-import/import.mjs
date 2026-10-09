@@ -478,6 +478,8 @@ for (const lm of LANDMARKS) {
     // a walled campus's keep-out, in the builder's own frame (`also` for
     // parts that stand apart) — read by BuildingGenerator and PropScatter
     ...(lm.compound ? { compound: lm.compound } : {}),
+    // a sunken court the ground mesh opens for (TerrainBuilder's basins)
+    ...(lm.basin ? { basin: lm.basin } : {}),
     pos,
     geo: [round6(lat), round6(lon)],
     rot: lm.rot,
