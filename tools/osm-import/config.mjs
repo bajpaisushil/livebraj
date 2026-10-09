@@ -358,6 +358,8 @@ export const LANDMARKS = [
     build: { kind: 'temple-gopuram', w: 135, d: 236, h: 35, color: '#ae8a54', accent: '#ddd3be', measured: true },
     rot: 89.3 * Math.PI / 180, radius: 46, district: 'temple-quarter',
     compound: { lx0: -68.5, lx1: 68.5, lz0: -120, lz1: 170 },
+    // the tank's pit, measured on ESRI z19 (RangajiMandir.js)
+    basin: { lx0: -57.3, lx1: -12.2, lz0: -106.5, lz1: -61.3 },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
     fallback: [27.57530, 77.69160],
   },

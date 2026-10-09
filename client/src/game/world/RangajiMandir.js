@@ -43,7 +43,7 @@ const C = {
   GOLD: 0xc9a03c,
   SAFFRON: 0xe8891f,
   TANK_PLASTER: 0xb79a88, TANK_PINK: 0xb4a28c, TANK_MAROON: 0x775443,
-  WATER: 0x8c9982,       // "opaque green ... algal, not blue"
+  WATER: 0x66844a,       // "opaque green ... algal, not blue": the photograph's olive (#8C9982, sampled in glare, rendered as concrete)
   TURQUOISE: 0x3aa6a0,   // the axis pool, "turquoise-tiled" (hex INFERRED)
   INSCRIPTION: 0xa8281e, // "long painted Devanagari inscription bands in RED"
   LAWN: 0x5f8a3e,
@@ -52,7 +52,8 @@ const C = {
 
 export function buildRangaji(o) {
   const { b, loc, ground, terrain, colliders, rng } = o;
-  const { cuspedArch, ribbedDome, tint } = o.h;
+  const { cuspedArch, ribbedDome, tint, MeshBuilder } = o.h;
+  const meshes = [];
   const [x, z] = loc.pos;
   const rot = loc.rot;
   const cs = Math.cos(rot), sn = Math.sin(rot);
@@ -109,8 +110,10 @@ export function buildRangaji(o) {
     }
   };
   // the courts, all but the tank's terrace and the garden, which have their own ground
+  // (the tank's pit is the location's basin; the tank draws its own rim to it)
   pave(P1.lx0, P1.lx1, P1.lz0, P1.lz1, 4.0, C.FLAG, 'rangaji-flags',
-    (lx, lz) => (lz < P2.lz0 - 12 && lz > P2.lz0 - 66 && Math.abs(lx) > 15));
+    (lx, lz) => (lz < P2.lz0 - 12 && lz > P2.lz0 - 66 && lx > 15)
+      || (Math.abs(lx + 34.75) < 24.55 && Math.abs(lz + 83.9) < 24.6));
 
   /* ---------------------------------------------------------------
    * THE PRAKARA WALLS, with gates on the axis
@@ -649,88 +652,184 @@ export function buildRangaji(o) {
    * four-square geometry. Built as measured, and flagged.
    */
   {
-    const TZ = -77, TX = -40, y = COURT;
+    const y = COURT;
     /*
-     * ON A TERRACE, which the real one is not. The ground here is a height
-     * field 12 m to a cell and its mesh 22 m to a quad, so a pit 2.8 m deep
-     * cannot be cut into it — the terrain would draw straight over the steps
-     * and the water. So the tank court is raised 2.5 m and the ghats go down
-     * inside it to water that sits above the terrain: from within the court it
-     * reads as the sunken tank; from outside it shows a plinth. Holes in the
-     * terrain for basins like this are queued.
+     * SUNK, as it is. It stood on a 2.5 m terrace for want of a way to cut a
+     * pit into a ground 12 m to a cell; the location's basin opens the ground
+     * for it now (TerrainBuilder's basins), the courts' flags run to its rim,
+     * and the ghats go down 2.8 m to the water — "devotees sit on the steps
+     * leading down to it" (vrindavanmathuraguide.com).
+     *
+     * MEASURED on ESRI z19, which settles the checker's doubt: the stone tank
+     * IS in the north-east quadrant, the garden south of it and the turquoise
+     * pool on the axis between them. The water 32.4 x 32.7 m; the stepped
+     * band round it 5.3-7.2 m; the pit 45 m square, 6 m east and 7 m south of
+     * where the survey had it; its own court walled 52 m square, the pit's
+     * south edge against that court's south wall, a gate in the wall's middle
+     * from the avenue. From the Gajraj Kund photograph: a full flight down one
+     * side (the south, by the gate — INFERRED); on the others a plastered
+     * revetment with a pink string course and a maroon band at its foot, over
+     * broad steps; the two kiosks on gabled pedestals with an arched niche,
+     * west and east where the imagery has them, flat-roofed, not domed.
      */
-    const TW = 45, TD = 48, TOP = y + 2.5, STEPS = 6, DROP = (TOP - (y + 0.08)) / STEPS, RUN = 1.0;
-    const WATER_W = 30, WATER_D = 32, PW = WATER_W + STEPS * RUN * 2, PD = WATER_D + STEPS * RUN * 2;
-    // the terrace round the pit, as four strips, solid from the courts
-    for (const [lx, lz, w, d] of [[TX - (TW + PW) / 4, TZ, (TW - PW) / 2, TD], [TX + (TW + PW) / 4, TZ, (TW - PW) / 2, TD],
-      [TX, TZ - (TD + PD) / 4, PW, (TD - PD) / 2], [TX, TZ + (TD + PD) / 4, PW, (TD - PD) / 2]]) {
-      box(lx, y - 0.3, lz, w, TOP - y + 0.3, d, C.TANK_PLASTER);
-      solid(lx, lz, w, d, 0, { top: TOP, tag: 'rangaji-tank-court', floor: true });
+    const PIT = { lx0: -57.3, lx1: -12.2, lz0: -106.5, lz1: -61.3 };
+    const WAT = { lx0: -50.4, lx1: -18.0, lz0: -101.2, lz1: -68.5 };
+    const CT = { lx0: -63.1, lx1: -11.6, lz0: -109.2, lz1: -57.6 };   // the tank court's walls
+    const RIM = Math.max(topOf(PIT.lx0 - 4, PIT.lx1 + 4, PIT.lz0 - 4, PIT.lz1 + 4, 8) + 0.04, G + 0.04);
+    const YW = RIM - 2.8, REV = 1.4, FLOOR = YW - 1.0;
+    // the apron: the courts' flags stop a cell short of the pit (see `pave`); this
+    // is the ground from there to its rim, at the rim's height
+    for (const [ax0, ax1, az0, az1] of [[-59.5, PIT.lx0, -110, -58], [PIT.lx1, -11.5, -110, -58],
+      [PIT.lx0, PIT.lx1, PIT.lz1, -58], [PIT.lx0, PIT.lx1, -110, PIT.lz0]]) {
+      box((ax0 + ax1) / 2, RIM - 0.45, (az0 + az1) / 2, ax1 - ax0, 0.45, az1 - az0, C.FLAG);
+      solid((ax0 + ax1) / 2, (az0 + az1) / 2, ax1 - ax0, az1 - az0, 0, { top: RIM, tag: 'rangaji-flags', standOnly: true });
     }
-    // the ghats, down all four sides to the water
-    for (let s2 = 0; s2 < STEPS; s2++) {
-      const w = WATER_W + (STEPS - s2) * RUN * 2, d = WATER_D + (STEPS - s2) * RUN * 2, top = TOP - (s2 + 1) * DROP;
-      const col = s2 === STEPS - 1 ? C.TANK_MAROON : s2 % 2 ? C.TANK_PLASTER : tint(C.TANK_PLASTER, 0.94);
-      // each course a ring: four strips, one run wide
-      for (const [lx, lz, ww, dd] of [[TX - w / 2 + RUN / 2, TZ, RUN, d], [TX + w / 2 - RUN / 2, TZ, RUN, d],
-        [TX, TZ - d / 2 + RUN / 2, w - RUN * 2, RUN], [TX, TZ + d / 2 - RUN / 2, w - RUN * 2, RUN]]) {
-        box(lx, y - 0.3, lz, ww, top - y + 0.3, dd, col);
-        solid(lx, lz, ww, dd, 0, { top, tag: 'temple-step', standOnly: true });
+    // the pit's lining, just outside its edge from the floor to the rim: where
+    // one band's revetment stops at a corner, it is what you see, not a hole
+    for (const [lx0, lx1, lz0, lz1] of [[PIT.lx0 - 0.3, PIT.lx0, PIT.lz0 - 0.3, PIT.lz1 + 0.3], [PIT.lx1, PIT.lx1 + 0.3, PIT.lz0 - 0.3, PIT.lz1 + 0.3],
+      [PIT.lx0, PIT.lx1, PIT.lz1, PIT.lz1 + 0.3], [PIT.lx0, PIT.lx1, PIT.lz0 - 0.3, PIT.lz0]]) {
+      box((lx0 + lx1) / 2, FLOOR - 0.3, (lz0 + lz1) / 2, lx1 - lx0, RIM - 0.02 - FLOOR + 0.3, lz1 - lz0, C.TANK_PLASTER);
+    }
+    // the floor under the water, which you see into
+    box((WAT.lx0 + WAT.lx1) / 2, FLOOR - 0.3, (WAT.lz0 + WAT.lz1) / 2, WAT.lx1 - WAT.lx0, 0.3, WAT.lz1 - WAT.lz0, 0x3e4630);
+    /*
+     * North, west and east: the revetment, a pink string course near its top
+     * and the maroon band at its foot; a ledge; six broad steps; the seventh
+     * riser into the water. `side` runs from the pit's edge in to the water.
+     */
+    const band = (alongLx, edge, water, a0, a1) => {
+      const dir = Math.sign(water - edge), span = Math.abs(water - edge);
+      const at = (d0, d1, top, col, tag) => {
+        const c = edge + dir * (d0 + d1) / 2, w = d1 - d0;
+        const [lx, lz, ww, dd] = alongLx ? [(a0 + a1) / 2, c, a1 - a0, w] : [c, (a0 + a1) / 2, w, a1 - a0];
+        box(lx, FLOOR - 0.3, lz, ww, top - FLOOR + 0.3, dd, col);
+        if (tag) solid(lx, lz, ww, dd, 0, tag);
+      };
+      at(0, 0.6, RIM, C.TANK_PLASTER, { top: RIM, tag: 'rangaji-revetment' });
+      // the string course and the band, proud of the revetment's face
+      const face = edge + dir * 0.62;
+      for (const [yy, hh, col] of [[RIM - 0.45, 0.16, C.TANK_PINK], [RIM - REV, 0.45, C.TANK_MAROON]]) {
+        const [lx, lz, ww, dd] = alongLx ? [(a0 + a1) / 2, face, a1 - a0, 0.06] : [face, (a0 + a1) / 2, 0.06, a1 - a0];
+        box(lx, yy, lz, ww, hh, dd, col);
+      }
+      const T = (span - 1.6) / 6;
+      at(0.6, 1.6, RIM - REV, tint(C.TANK_PLASTER, 0.95), { top: RIM - REV, tag: 'rangaji-ghat', standOnly: true });
+      for (let k = 1; k <= 6; k++) {
+        at(1.6 + (k - 1) * T, 1.6 + k * T, RIM - REV - k * 0.2, k === 6 ? C.TANK_MAROON : k % 2 ? C.TANK_PLASTER : tint(C.TANK_PLASTER, 0.94),
+          { top: RIM - REV - k * 0.2, tag: 'rangaji-ghat', standOnly: true });
+      }
+    };
+    band(false, PIT.lx0, WAT.lx0, PIT.lz0, PIT.lz1);                 // north, full width
+    band(true, PIT.lz1, WAT.lz1, WAT.lx0, PIT.lx1);                  // west, to the south edge
+    band(true, PIT.lz0, WAT.lz0, WAT.lx0, PIT.lx1);                  // east
+    // the south: one flight from the rim to the water between the two
+    {
+      const n = 14, run = (PIT.lx1 - WAT.lx1) / (n - 0.5);
+      for (let i = 1; i < n; i++) {
+        const lx1 = PIT.lx1 - (i - 1) * run, lx0 = lx1 - run, top = RIM - i * 0.2;
+        box((lx0 + lx1) / 2, FLOOR - 0.3, (WAT.lz0 + WAT.lz1) / 2, run, top - FLOOR + 0.3, WAT.lz1 - WAT.lz0, i % 2 ? C.TANK_PLASTER : tint(C.TANK_PLASTER, 0.94));
+        solid((lx0 + lx1) / 2, (WAT.lz0 + WAT.lz1) / 2, run, WAT.lz1 - WAT.lz0, 0, { top, tag: 'rangaji-ghat', standOnly: true });
+      }
+      // its cheek walls against the west and east bands
+      for (const lz of [WAT.lz1 + 0.2, WAT.lz0 - 0.2]) {
+        box((WAT.lx1 + PIT.lx1) / 2, FLOOR - 0.3, lz, PIT.lx1 - WAT.lx1, RIM - FLOOR + 0.3, 0.4, C.TANK_PLASTER);
+        solid((WAT.lx1 + PIT.lx1) / 2, lz, PIT.lx1 - WAT.lx1, 0.4, 0, { top: RIM, tag: 'rangaji-revetment' });
       }
     }
-    // the pink string course round the pit's edge — a band, not a lid
-    for (const [lx, lz, w, d] of [[TX - PW / 2, TZ, 0.14, PD + 0.2], [TX + PW / 2, TZ, 0.14, PD + 0.2],
-      [TX, TZ - PD / 2, PW + 0.2, 0.14], [TX, TZ + PD / 2, PW + 0.2, 0.14]]) box(lx, TOP - 0.3, lz, w, 0.16, d, C.TANK_PINK);
-    box(TX, y + 0.02, TZ, WATER_W + 0.1, 0.06, WATER_D + 0.1, C.WATER);
-    // you may walk down the ghats, but not into the water
-    solid(TX, TZ, WATER_W, WATER_D, 0, { top: y + 1.2, tag: 'rangaji-tank' });
-    // "a long NORTH INDIAN arcade of cusped multifoil arches" round the court
-    // (the checker, from the Gajraj Kund photograph), standing on the terrace
-    for (const [a2, c2, fixed, alongZ] of [[TZ - TD / 2, TZ + TD / 2, TX - TW / 2 + 0.4, true], [TZ - TD / 2, TZ + TD / 2, TX + TW / 2 - 0.4, true],
-      [TX - TW / 2, TX + TW / 2, TZ - TD / 2 + 0.4, false], [TX - TW / 2, TX + TW / 2, TZ + TD / 2 - 0.4, false]]) {
+    // the water: green and glossy, a mesh of its own (matt, a pool reads as a lawn)
+    {
+      const wb = MeshBuilder ? new MeshBuilder() : b;
+      const c4 = [p(WAT.lx0 - 0.3, WAT.lz0 - 0.3), p(WAT.lx0 - 0.3, WAT.lz1 + 0.3), p(WAT.lx1 + 0.3, WAT.lz1 + 0.3), p(WAT.lx1 + 0.3, WAT.lz0 - 0.3)];
+      let A = 0;
+      for (let k = 0; k < 4; k++) { const u = c4[k], v = c4[(k + 1) % 4]; A += u[0] * v[1] - v[0] * u[1]; }
+      const q = A < 0 ? c4 : c4.slice().reverse();
+      // UVs in world metres at the river plane's scale, for its ripples
+      const uv = (v) => [v[0] / 360, v[1] / 360];
+      wb.tri(q[0][0], YW, q[0][1], q[1][0], YW, q[1][1], q[2][0], YW, q[2][1], C.WATER, [...uv(q[0]), ...uv(q[1]), ...uv(q[2])]);
+      wb.tri(q[0][0], YW, q[0][1], q[2][0], YW, q[2][1], q[3][0], YW, q[3][1], C.WATER, [...uv(q[0]), ...uv(q[2]), ...uv(q[3])]);
+      if (wb !== b) {
+        const cq = p((WAT.lx0 + WAT.lx1) / 2, (WAT.lz0 + WAT.lz1) / 2);
+        meshes.push({ name: 'RangajiTankWater', builder: wb, x: cq[0], z: cq[1], r: 40, gloss: { shininess: 80, specular: 0x4f5a48, opacity: 0.86, ripple: true } });
+      }
+      // you may walk down the ghats, but not into the water: knee-high, so
+      // the unstick search never finds the pool a place to stand either
+      solid((WAT.lx0 + WAT.lx1) / 2, (WAT.lz0 + WAT.lz1) / 2, WAT.lx1 - WAT.lx0 - 0.1, WAT.lz1 - WAT.lz0 - 0.1, 0, { top: RIM - REV - 1.2 + 0.9, tag: 'rangaji-tank' });
+    }
+    // the parapet round the rim on the three revetted sides, open at the kiosks
+    const KW = { lx0: -40.6, lx1: -33.1, lz: PIT.lz1 }, KE = { lx0: -37.8, lx1: -31.6, lz: PIT.lz0 };
+    const parapet = (lx0, lz0, lx1, lz1) => {
+      const L = Math.hypot(lx1 - lx0, lz1 - lz0), ang = Math.atan2(lz1 - lz0, lx1 - lx0);
+      if (L < 0.2) return;
+      box((lx0 + lx1) / 2, RIM, (lz0 + lz1) / 2, L, 0.55, 0.35, C.TANK_PLASTER, ang);
+      box((lx0 + lx1) / 2, RIM + 0.55, (lz0 + lz1) / 2, L + 0.05, 0.08, 0.45, C.TANK_PINK, ang);
+      solid((lx0 + lx1) / 2, (lz0 + lz1) / 2, L, 0.35, ang, { top: RIM + 0.63, tag: 'rangaji-parapet' });
+    };
+    parapet(PIT.lx0 + 0.18, PIT.lz0, PIT.lx0 + 0.18, PIT.lz1);
+    parapet(PIT.lx0, PIT.lz1 - 0.18, KW.lx0, PIT.lz1 - 0.18);
+    parapet(KW.lx1, PIT.lz1 - 0.18, PIT.lx1, PIT.lz1 - 0.18);
+    parapet(PIT.lx0, PIT.lz0 + 0.18, KE.lx0, PIT.lz0 + 0.18);
+    parapet(KE.lx1, PIT.lz0 + 0.18, PIT.lx1, PIT.lz0 + 0.18);
+    /*
+     * "Two projecting chhatri kiosks on gabled pedestals over the water" —
+     * the pedestal in four stepped tiers with an arched niche toward the
+     * water, the kiosk on it at the court's level: four pillars, a flat slab
+     * with a deep eave and a low parapet, as the photograph has them.
+     */
+    for (const [K, toWater, depth] of [[KW, -1, 4.3], [KE, 1, 5.0]]) {
+      const cx = (K.lx0 + K.lx1) / 2, W0 = K.lx1 - K.lx0, cz = K.lz + toWater * depth / 2;
+      const tiers = 4, th = (RIM - YW + 0.3) / tiers;
+      for (let t2 = 0; t2 < tiers; t2++) {
+        const w = W0 - t2 * (W0 - 3.6) / (tiers - 1);
+        box(cx, YW - 0.3 + t2 * th, cz, w, th, depth, t2 % 2 ? C.TANK_PLASTER : tint(C.TANK_PLASTER, 1.04));
+        solid(cx, cz, w, depth, 0, { top: YW - 0.3 + (t2 + 1) * th, tag: 'rangaji-kiosk' });
+      }
+      // a low balustrade round the platform, open toward the court
+      const zw = K.lz + toWater * depth;
+      for (const [ax, az, bx2, bz2] of [[cx - 1.8, zw, cx + 1.8, zw], [cx - 1.8, K.lz, cx - 1.8, zw], [cx + 1.8, K.lz, cx + 1.8, zw]]) {
+        const L = Math.hypot(bx2 - ax, bz2 - az), ang = Math.atan2(bz2 - az, bx2 - ax);
+        box((ax + bx2) / 2, RIM, (az + bz2) / 2, L, 0.6, 0.15, C.STUCCO, ang);
+        solid((ax + bx2) / 2, (az + bz2) / 2, L, 0.2, ang, { top: RIM + 0.6, tag: 'rangaji-parapet' });
+      }
+      const nq = p(cx, K.lz + toWater * (depth + 0.02));
+      cuspedArch(b, nq[0], YW + 0.15, nq[1], 1.1, 1.6, 0.25, rot, C.TANK_PLASTER, 5, 0x2a2018);
+      const kz = K.lz + toWater * 1.9;
+      box(cx, RIM - 0.05, kz, 3.6, 0.2, 3.6, C.STUCCO);
+      for (const [ox, oz] of [[-1.45, -1.45], [1.45, -1.45], [1.45, 1.45], [-1.45, 1.45]]) {
+        box(cx + ox, RIM + 0.15, kz + oz, 0.32, 2.35, 0.32, C.STUCCO);
+        post(cx + ox, kz + oz, 0.22, { top: RIM + 2.5 });
+      }
+      box(cx, RIM + 2.5, kz, 3.7, 0.25, 3.7, C.STUCCO);
+      box(cx, RIM + 2.42, kz, 4.5, 0.1, 4.5, tint(C.STUCCO, 0.92));
+      box(cx, RIM + 2.75, kz, 3.5, 0.3, 3.5, tint(C.STUCCO, 1.03));
+    }
+    // "a long NORTH INDIAN arcade of cusped multifoil arches" (the checker, from
+    // the Gajraj Kund photograph) along the tank court's north, west and east walls
+    for (const [a2, c2, fixed, alongZ] of [[CT.lz0, CT.lz1, CT.lx0 + 0.4, true],
+      [CT.lx0, CT.lx1 - 0.6, CT.lz1 - 0.4, false], [CT.lx0, CT.lx1 - 0.6, CT.lz0 + 0.4, false]]) {
       const n = Math.round((c2 - a2) / 3.2);
       for (let k = 0; k <= n; k++) {
         const t = a2 + k * (c2 - a2) / n;
         const [lx, lz] = alongZ ? [fixed, t] : [t, fixed];
-        box(lx, TOP, lz, 0.6, 3.4, 0.6, C.TANK_PLASTER);
-        post(lx, lz, 0.35, { top: TOP + 3.4 });
+        box(lx, RIM - 0.6, lz, 0.6, 4.0, 0.6, C.TANK_PLASTER);
+        post(lx, lz, 0.35, { top: RIM + 3.4 });
         if (k < n) {
           const tm = a2 + (k + 0.5) * (c2 - a2) / n;
           const [mx, mz] = alongZ ? [fixed, tm] : [tm, fixed];
           const q = p(mx, mz);
-          cuspedArch(b, q[0], TOP, q[1], (c2 - a2) / n - 0.6, 3.4, 0.6, alongZ ? rot + Math.PI / 2 : rot, C.TANK_PLASTER, 9, null);
+          cuspedArch(b, q[0], RIM, q[1], (c2 - a2) / n - 0.6, 3.4, 0.6, alongZ ? rot + Math.PI / 2 : rot, C.TANK_PLASTER, 9, null);
         }
       }
       const L = c2 - a2, mid = (a2 + c2) / 2;
       const [mx, mz] = alongZ ? [fixed, mid] : [mid, fixed];
-      box(mx, TOP + 3.4, mz, alongZ ? 0.8 : L, 0.5, alongZ ? L : 0.8, C.TANK_PLASTER);
-      box(mx, TOP + 3.9, mz, alongZ ? 0.9 : L, 0.18, alongZ ? L : 0.9, C.TANK_PINK);
+      box(mx, RIM + 3.4, mz, alongZ ? 0.8 : L, 0.5, alongZ ? L : 0.8, C.TANK_PLASTER);
+      box(mx, RIM + 3.9, mz, alongZ ? 0.9 : L, 0.18, alongZ ? L : 0.9, C.TANK_PINK);
     }
-    // and a flight up to the terrace from the avenue
-    {
-      const N = 6, R2 = (TOP - y) / N, TR = 0.5, lzF = TZ;
-      for (let i = 0; i < N; i++) {
-        const lx = TX + TW / 2 + (N - i) * TR - TR / 2;
-        box(lx, y - 0.05 + i * R2, lzF, TR, R2 + 0.05, 5.0, C.TANK_PLASTER);
-        solid(lx, lzF, TR, 5.0, 0, { top: y + (i + 1) * R2, tag: 'temple-step-tank', standOnly: true });
-      }
-      for (const sd of [-1, 1]) {
-        box(TX + TW / 2 + N * TR / 2, y - 0.05, lzF + sd * 2.8, N * TR, TOP - y + 0.9, 0.5, C.TANK_PLASTER);
-        solid(TX + TW / 2 + N * TR / 2, lzF + sd * 2.8, N * TR, 0.5, 0, { top: TOP + 0.9, tag: 'temple-rail' });
-      }
-    }
-    // "two projecting chhatri kiosks on gabled pedestals over the water"
-    for (const sd of [-1, 1]) {
-      const kx = TX, kz = TZ + sd * 9;
-      box(kx, y + 0.08, kz, 2.4, TOP - y - 0.3, 2.4, C.TANK_PLASTER);
-      const q = p(kx, kz), ky = TOP - 0.2;
-      for (let k = 0; k < 4; k++) {
-        const a = (k / 4) * TAU + Math.PI / 4;
-        b.box(q[0] + Math.cos(a) * 0.95, ky, q[1] + Math.sin(a) * 0.95, 0.2, 2.2, 0.2, C.TANK_PLASTER);
-      }
-      b.box(q[0], ky + 2.2, q[1], 2.8, 0.2, 2.8, C.TANK_PINK, rot);
-      ribbedDome(b, q[0], ky + 2.4, q[1], 1.2, 1.3, C.TANK_PLASTER, tint(C.TANK_PLASTER, 0.9), 12);
-    }
+    // the court's south wall against the avenue, and the gate in its middle
+    // onto the head of the flight
+    wallRun(CT.lx1, CT.lz0, CT.lx1, -85.8, 2.4, 0.5, C.STONE, C.STONE_SH);
+    wallRun(CT.lx1, -81.6, CT.lx1, CT.lz1, 2.4, 0.5, C.STONE, C.STONE_SH);
+    for (const lz of [-85.8, -81.6]) { box(CT.lx1, y, lz, 0.8, 3.2, 0.8, C.STONE); post(CT.lx1, lz, 0.45); }
+    box(CT.lx1, y + 3.2, -83.7, 0.9, 0.4, 5.0, C.STONE_SH);
     // the garden: green, with trees, the only greenery inside the walls
     const GX = 40, GZ = -77, GW = 45, GD = 48;
     const gy = topOf(GX - GW / 2, GX + GW / 2, GZ - GD / 2, GZ + GD / 2, 4) + 0.04;
@@ -827,7 +926,7 @@ export function buildRangaji(o) {
   }
 
   return {
-    altar: altarAt, darshan: darshanAt, hall,
+    altar: altarAt, darshan: darshanAt, hall, meshes,
     compound: { lx0: P1.lx0 - 1, lx1: P1.lx1 + 1, lz0: P1.lz0 - 2, lz1: P1.lz1 + 52 },
   };
 }

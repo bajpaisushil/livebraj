@@ -255,3 +255,27 @@ Confidence: HIGH on everything re-derived from primary files, MEDIUM on the colo
 - Sri Rangji Temple Trust (the temple's own site), 'Temple History and Architecture': five concentric rectangular enclosures, western gopuram seven storeys, eastern five storeys, 50 ft gold-plated Dhwaja Stambha, 50 ft wooden chariot west of the gate, 'yamuna swarupini pushkarini', stone gates carved in Jaipur style east and west, Sri Goda-Rangamannar the presiding deity, Trust Board founded 1873. https://www.srirangjimandir.org/templehistoryandarchitecture
 - UP Tourism / TourMyIndia, 'Sri Rangaji Temple Vrindavan' - five concentric enclosures, two Jaipur-style stone gates, pushkarni between the two gopurams in the outer enclosure. https://www.tourmyindia.com/states/uttarpradesh/sri-rangaji-temple-vrindavan.html and https://uptourism.gov.in/en/post/rangaji-temple
 - Vrindavan Today, 'Splendid architecture of Shri Rangnath temple' - claims eight gopurams and a Garuda Stambha 'over sixty feet'; cited here only as the source of the conflicting gopuram count. https://vrindavantoday.in/splendid-architecture-of-shri-rangnath-temple/
+
+## The tank, measured and sunk (2026-10-09)
+
+MEASURED on ESRI z19 at 0.265 m/px, on a 1 m grid in the game's frame
+(`tools/checks/rangajitank.mjs` guards it): the stone tank is in the NORTH-EAST
+quadrant, as the survey had it — the checker's doubt is settled by the
+imagery, which shows the water, the four-square garden south of it and the
+turquoise pool on the axis between, all three plainly. The water 32.4 x 32.7 m,
+centred (1296.1, -296.5), 6 m east and 7 m south of where the survey put it;
+the stepped band round it 6.9 m north, 5.8 m south, 7.2 m west, 5.3 m east; the
+pit 45 m square; its own court walled about 52 m square, the pit's south edge
+against that court's south wall, with a small structure in the wall's middle
+toward the avenue (a gate). The two kiosk pedestals are on the WEST and EAST
+sides, at the water's edge — not standing in the water, which is where the
+terrace build had them.
+
+From the Gajraj Kund photograph (Aliva Sahoo, 19 April 2026, CC BY-SA): the
+water about 2.8 m below its court, a full flight down one side, plastered
+revetments with a pink string course and a maroon band over broad steps on the
+others; the kiosks on gabled pedestals with an arched niche toward the water,
+flat-roofed with a deep eave — not domed. Which side carries the full flight is
+not certain from the photograph; it is built on the south, by the gate. Since
+the location's basin (TerrainBuilder) the tank is sunk into its court as it
+is; it stood on a 2.5 m terrace before for want of a way to cut the ground.

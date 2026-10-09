@@ -648,6 +648,12 @@ export const LOCATIONS = [
     "district": "temple-quarter",
     "grounds": null,
     "compound": { "lx0": -68.5, "lx1": 68.5, "lz0": -120, "lz1": 170 },
+    "basin": {
+      "lx0": -57.3,
+      "lx1": -12.2,
+      "lz0": -106.5,
+      "lz1": -61.3
+    },
     "pos": [1212, -261.24],
     "geo": [27.582338, 77.702775],
     "rot": 1.5585790891540153,

@@ -51,7 +51,7 @@ const C = {
   PINK: 0xe996ae, PINK_LT: 0xf2adc2, PINK_DK: 0xc77a92, PINK_LINE: 0xd88aa1,  // the painted walls
   RED: 0xbd6158, RED_LT: 0xcf776b, RED_DK: 0x9a4b45, RED_TOP: 0xd2857a,       // the octagon: red sandstone
   BRICK: 0xa26a50, BRICK_DK: 0x8a5842, BRICK_LT: 0xb67c5e,                    // the old bastions, left as found
-  WATER: 0x4d6a3c, MUD: 0x2c3520,                                             // green, as every photograph has it
+  WATER: 0x5f873c, MUD: 0x2c3520,   // olive, as bright as the river's teal under the same material                                             // green, as every photograph has it
   HEDGE: 0x3c6528, HEDGE2: 0x4a7a31, GRASS: 0x6d8a3c, GRASS2: 0x5f7d34,
   PAVE: 0xc98274, PAVE2: 0xbb7467,
   MARBLE: 0xf3efe6, MARBLE_SH: 0xd9d3c6, GOLD: 0xd6a632, GOLD_DK: 0xb08422,
@@ -295,8 +295,12 @@ export function buildBrahmaKund(o) {
     const R3 = A3 / Math.cos(Math.PI / 8);
     const w8 = [];
     for (let k = 0; k < 8; k++) { const a = Math.PI / 8 + k * Math.PI / 4; w8.push(p(R3 * Math.cos(a), R3 * Math.sin(a))); }
-    for (let k = 1; k < 7; k++) wb.tri(w8[0][0], YW, w8[0][1], w8[k + 1][0], YW, w8[k + 1][1], w8[k][0], YW, w8[k][1], C.WATER);
-    if (wb !== b) meshes.push({ name: 'BrahmaKundWater', builder: wb, x, z, r: 30, gloss: { shininess: 90, specular: 0x4a5640, opacity: 0.84 } });
+    // UVs in world metres at the river plane's scale (its ripple texture repeats 90 times over 360 m tiles)
+    const uv = (q) => [q[0] / 360, q[1] / 360];
+    for (let k = 1; k < 7; k++) {
+      wb.tri(w8[0][0], YW, w8[0][1], w8[k + 1][0], YW, w8[k + 1][1], w8[k][0], YW, w8[k][1], C.WATER, [...uv(w8[0]), ...uv(w8[k + 1]), ...uv(w8[k])]);
+    }
+    if (wb !== b) meshes.push({ name: 'BrahmaKundWater', builder: wb, x, z, r: 30, gloss: { shininess: 90, specular: 0x4a5640, opacity: 0.84, ripple: true } });
     /*
      * The pool is solid to a body, knee-high like its edge: a surface you
      * could stand on here was somewhere the unstick search could put you,

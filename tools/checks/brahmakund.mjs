@@ -110,6 +110,11 @@ const out = await p.evaluate(async () => {
    */
   const pix = (() => {
     const N = 48, rt = new THREE.WebGLRenderTarget(N, N);
+    // by day, and without the pool's own water: what is asked is whether the
+    // river's plane shows, and a glossy pool at night shows the moon
+    if (ctx.time && ctx.time.setPhase) { ctx.time.setPhase('day', true); if (ctx.time._apply) ctx.time._apply(ctx.data.TIME_OF_DAY.day, true); }
+    const own = [];
+    ctx.scene.traverse((o) => { if (o.isMesh && o.name === 'BrahmaKundWater' && o.visible) { o.visible = false; own.push(o); } });
     const [cx, cz] = P(-1, 0);
     const cam = new THREE.PerspectiveCamera(40, 1, 0.5, 400);
     cam.position.set(cx, street + 70, cz + 0.01);
@@ -121,6 +126,7 @@ const out = await p.evaluate(async () => {
     ctx.renderer.readRenderTargetPixels(rt, 0, 0, N, N, buf);
     ctx.renderer.setRenderTarget(null);
     rt.dispose();
+    for (const o of own) o.visible = true;
     // the middle of the frame, which is the pit at this height (±15 m)
     let teal = 0, n = 0, sr = 0, sb = 0;
     for (let y = 11; y < 37; y++) {

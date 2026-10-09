@@ -416,13 +416,45 @@ export function buildLandmarks(ctx, terrain) {
       ...(e.map ? { map: e.map(ctx) } : {}),
     });
     extraTris += e.builder.triangleCount;
-    // water that has to look wet: the town's matt material makes a pool a lawn
+    /*
+     * Water that has to look wet: in the town's matt material a pool reads as
+     * a lawn. A rippled one is the river's own material — the same ripples,
+     * shared so they drift as the river's do, the same sheen — in its own
+     * colour; the builder gives it world UVs at the river plane's scale.
+     */
     if (e.gloss) {
       m.material.dispose();
-      m.material = new THREE.MeshPhongMaterial({ vertexColors: true,
-        shininess: e.gloss.shininess || 60, specular: e.gloss.specular || 0x555555,
-        transparent: e.gloss.opacity !== undefined, opacity: e.gloss.opacity === undefined ? 1 : e.gloss.opacity,
-        depthWrite: e.gloss.opacity === undefined });
+      const ripple = e.gloss.ripple && ctx.textures && ctx.textures.map ? ctx.textures.map.get('water-ripple') || null : null;
+      const see = e.gloss.opacity !== undefined;
+      m.material = ripple
+        ? new THREE.MeshStandardMaterial({ vertexColors: true, map: ripple, roughness: 0.08, metalness: 0.32,
+          transparent: see, opacity: see ? e.gloss.opacity : 1, depthWrite: !see })
+        : new THREE.MeshPhongMaterial({ vertexColors: true,
+          shininess: e.gloss.shininess || 60, specular: e.gloss.specular || 0x555555,
+          transparent: see, opacity: see ? e.gloss.opacity : 1, depthWrite: !see });
+      /*
+       * And the sky in it. What makes the photographs' green water read as
+       * water is what it reflects: seen across, from its steps, it is mostly
+       * sky; looking down into it, its own colour. Without a reflection pass
+       * that is a Fresnel term toward the fog's colour, which TimeOfDay keeps
+       * as the sky's at the horizon, at dawn, noon and night alike.
+       */
+      if (ripple) {
+        m.material.onBeforeCompile = (sh) => {
+          sh.fragmentShader = sh.fragmentShader.replace('#include <fog_fragment>', `
+            {
+              float facing = abs(dot(normalize(vNormal), normalize(vViewPosition)));
+              float fres = pow(1.0 - facing, 4.0);
+              #ifdef USE_FOG
+                vec3 skyTint = fogColor;
+              #else
+                vec3 skyTint = vec3(0.72, 0.78, 0.8);
+              #endif
+              gl_FragColor.rgb = mix(gl_FragColor.rgb, skyTint, clamp(fres * 0.8, 0.0, 0.8));
+            }
+            #include <fog_fragment>`);
+        };
+      }
       m.renderOrder = 1;
     }
     group.add(m);
@@ -6348,12 +6380,13 @@ const BUILDERS = {
     const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
     const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
     const colliders = [];
-    const r = buildRangajiCity({ b, loc, ground, terrain, colliders, rng, h: { cuspedArch, ribbedDome, tint } });
+    const r = buildRangajiCity({ b, loc, ground, terrain, colliders, rng, h: { cuspedArch, ribbedDome, tint, MeshBuilder } });
     const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
     const V = p(r.hall.lx, r.hall.lz), door = p(r.hall.door[0], r.hall.door[1]);
     return {
       altarY: r.altar.y - ground,
       colliders,
+      meshes: r.meshes,
       interior: {
         altar: [A[0], r.altar.y, A[1]],
         darshan: [D[0], D[1]],
