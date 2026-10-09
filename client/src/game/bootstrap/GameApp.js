@@ -28,6 +28,7 @@ import content from '../../content/index.js';
 import { WorldService } from '../world/WorldService.js';
 import { TimeOfDay } from '../world/TimeOfDay.js';
 import { Curtains } from '../devotion/Curtain.js';
+import { FountainShow } from '../world/FountainShow.js';
 import { LiveConditions } from '../world/LiveConditions.js';
 import { InteriorSystem } from '../world/InteriorSystem.js';
 import { NavGraph } from '../navigation/NavGraph.js';
@@ -183,6 +184,7 @@ export class GameApp {
     ctx.deities    = this._safe('Deities',  () => new DeityImages(ctx));
     // after the world, because it finds its leaves by name in the built scene
     ctx.curtains   = this._safe('Curtains', () => new Curtains(ctx));
+    ctx.shows      = this._safe('FountainShow', () => new FountainShow(ctx));
     ctx.cheats     = this._safe('Cheats',   () => new CheatCodes(ctx));
     ctx.dialogue   = this._safe('Dialogue', () => new DialogueSystem(ctx));
     ctx.narration  = this._safe('Narration', () => new Narration(ctx));
@@ -528,6 +530,7 @@ export class GameApp {
     if (ctx.cameraRig) ctx.cameraRig.update(dt, ctx);
     if (ctx.time) ctx.time.update(dt, ctx);
     if (ctx.curtains) ctx.curtains.update(dt, ctx);
+    if (ctx.shows) ctx.shows.update(dt, ctx);
     if (ctx.live) ctx.live.update(dt, ctx);
     if (ctx.interior) ctx.interior.update(dt, ctx);
     if (ctx.route) ctx.route.update(dt, ctx);

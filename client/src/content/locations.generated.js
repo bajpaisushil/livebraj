@@ -722,9 +722,24 @@ export const LOCATIONS = [
     "hindi": "प्रेम मंदिर",
     "type": "temple",
     "district": "raman-reti",
-    "grounds": 140,
-    "pos": [-1823.02, 874.08],
-    "geo": [27.572092, 77.672037],
+    "grounds": null,
+    "compound": {
+      "lx0": -238,
+      "lx1": 57,
+      "lz0": -164,
+      "lz1": 124,
+      "ring": false,
+      "also": [
+        {
+          "lx0": 57,
+          "lx1": 98,
+          "lz0": -48,
+          "lz1": 48
+        }
+      ]
+    },
+    "pos": [-1834.12, 875.08],
+    "geo": [27.572083, 77.671925],
     "rot": 0,
     "radius": 52,
     "icon": "temple",

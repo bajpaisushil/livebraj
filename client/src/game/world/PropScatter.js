@@ -939,6 +939,16 @@ function buildStreetFurniture(ctx, terrain, group, colliders) {
   /** [from, to] pairs for the thin wires that peel off to each building. */
   const drop = [];
 
+  /*
+   * NOT INSIDE A WALLED COMPOUND. A campus lights itself, and the town's
+   * lamp posts and electric poles followed OSM's footpaths into Prem Mandir's
+   * and put a pole with its wires on the Prem Bhavan's plaza. A post inside a
+   * compound is still MADE — into a sink nobody draws, with colliders and
+   * poles nobody keeps — so the random sequence every other post in the town
+   * is drawn from comes out exactly as it did.
+   */
+  const inCompound = compoundTest(ctx);
+  const sink = new MeshBuilder(), sinkC = [], sinkP = [], sinkD = [];
   for (const road of ctx.data.ROADS) {
     if (road.kind === 'path') continue;
     const spacing = road.kind === 'gali' ? 46 : road.kind === 'street' ? 40 : 30;
@@ -957,14 +967,17 @@ function buildStreetFurniture(ctx, terrain, group, colliders) {
       const px = x - dz * off * side, pz = z + dx * off * side;
       const y = terrain.sampleHeight(px, pz);
       if (y < 0.3) continue;
+      const inside = inCompound(px, pz);
+      const bb = inside ? sink : b, bl = inside ? sink : bulbs;
+      const cc = inside ? sinkC : colliders, pp = inside ? sinkP : poles, dd = inside ? sinkD : drop;
 
       if (chance(rng, 0.55)) {
         // lamp post
-        b.box(px, y, pz, 0.16, 4.2, 0.16, 0x4a4238);
-        b.box(px, y + 4.2, pz, 0.55, 0.16, 0.55, 0x4a4238);
-        bulbs.box(px, y + 3.95, pz, 0.36, 0.30, 0.36, 0xffd9a0);
-        colliders.push({ type: 'circle', x: px, z: pz, r: 0.35 });
-        poles.push([px, y, pz]);
+        bb.box(px, y, pz, 0.16, 4.2, 0.16, 0x4a4238);
+        bb.box(px, y + 4.2, pz, 0.55, 0.16, 0.55, 0x4a4238);
+        bl.box(px, y + 3.95, pz, 0.36, 0.30, 0.36, 0xffd9a0);
+        cc.push({ type: 'circle', x: px, z: pz, r: 0.35 });
+        pp.push([px, y, pz]);
       } else if (chance(rng, 0.78)) {
         /*
          * The electric pole, and it should be COMMON.
@@ -976,16 +989,16 @@ function buildStreetFurniture(ctx, terrain, group, colliders) {
          * about one site in six, which is a lane with the occasional wire
          * rather than a lane under a net.
          */
-        b.box(px, y, pz, 0.22, 7.5, 0.22, 0x6a5a48);
-        b.box(px, y + 7.0, pz, 1.6, 0.14, 0.14, 0x5a4a38);
-        b.box(px, y + 6.4, pz, 1.2, 0.12, 0.12, 0x5a4a38);
+        bb.box(px, y, pz, 0.22, 7.5, 0.22, 0x6a5a48);
+        bb.box(px, y + 7.0, pz, 1.6, 0.14, 0.14, 0x5a4a38);
+        bb.box(px, y + 6.4, pz, 1.2, 0.12, 0.12, 0x5a4a38);
         // the tangle: a junction box and a coil of slack, on about half
         if (chance(rng, 0.5)) {
-          b.box(px + 0.2, y + 5.1, pz, 0.34, 0.5, 0.26, 0x33302a);
-          b.box(px - 0.18, y + 5.8, pz, 0.30, 0.34, 0.30, 0x24221d);
+          bb.box(px + 0.2, y + 5.1, pz, 0.34, 0.5, 0.26, 0x33302a);
+          bb.box(px - 0.18, y + 5.8, pz, 0.30, 0.34, 0.30, 0x24221d);
         }
-        colliders.push({ type: 'circle', x: px, z: pz, r: 0.35 });
-        poles.push([px, y + 7.0, pz]);
+        cc.push({ type: 'circle', x: px, z: pz, r: 0.35 });
+        pp.push([px, y + 7.0, pz]);
         /*
          * SERVICE DROPS. The bundle crossing the lane is only half of it —
          * what makes an Indian street read is the thinner wires peeling off
@@ -996,7 +1009,7 @@ function buildStreetFurniture(ctx, terrain, group, colliders) {
         for (let k = 0; k < drops; k++) {
           const outw = off + range(rng, 2.2, 5.0);
           const along = range(rng, -3.5, 3.5);
-          drop.push([
+          dd.push([
             [px, y + 6.4 + rng() * 0.5, pz],
             [x - dz * outw * side + dx * along, y + range(rng, 3.4, 4.8),
               z + dx * outw * side + dz * along],
@@ -1004,13 +1017,13 @@ function buildStreetFurniture(ctx, terrain, group, colliders) {
         }
       } else if (chance(rng, 0.5)) {
         // low stone bench
-        b.box(px, y, pz, 1.8, 0.45, 0.6, 0xbfae8b, Math.atan2(dx, dz));
-        colliders.push({ type: 'circle', x: px, z: pz, r: 0.8 });
+        bb.box(px, y, pz, 1.8, 0.45, 0.6, 0xbfae8b, Math.atan2(dx, dz));
+        cc.push({ type: 'circle', x: px, z: pz, r: 0.8 });
       } else {
         // hand pump
-        b.box(px, y, pz, 0.5, 0.5, 0.5, 0x9a9a92);
-        b.box(px, y + 0.5, pz, 0.16, 1.0, 0.16, 0x3f4a4a);
-        b.box(px + 0.3, y + 1.4, pz, 0.7, 0.12, 0.12, 0x3f4a4a);
+        bb.box(px, y, pz, 0.5, 0.5, 0.5, 0x9a9a92);
+        bb.box(px, y + 0.5, pz, 0.16, 1.0, 0.16, 0x3f4a4a);
+        bb.box(px + 0.3, y + 1.4, pz, 0.7, 0.12, 0.12, 0x3f4a4a);
       }
     }
   }

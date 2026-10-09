@@ -428,7 +428,25 @@ export const LANDMARKS = [
      * see buildPremMandir.
      */
     build: { kind: 'temple-marble', w: 61, d: 41, h: 38, color: '#f8f6f0', accent: '#eae4d4' },
-    rot: 0, radius: 52, district: 'raman-reti', grounds: 140,
+    /*
+     * SURVEYED: the centre of the building's outline, OSM way 673573044. The
+     * name match finds the PLATFORM (way 491803653), whose centre is 11.1 m
+     * east and 1.0 m north of the building's — and buildPremMandir lays the
+     * building out round its origin and the platform 11.05 m east of it, so
+     * the whole temple stood 11 m east of itself, as Krishna Balaram once
+     * stood 29 m off on its compound's pin.
+     */
+    at: [27.5720831, 77.6719249],
+    rot: 0, radius: 52, district: 'raman-reti',
+    /*
+     * The walled campus (PremMandirSetting.js, z19 imagery): west wall to the
+     * gate on the road, the north wall to the town on the east; and the
+     * platform's eastern bow, which the town comes up against.
+     */
+    compound: {
+      lx0: -238.0, lx1: 57.0, lz0: -164.0, lz1: 124.0, ring: false,
+      also: [{ lx0: 57.0, lx1: 98.0, lz0: -48.0, lz1: 48.0 }],
+    },
     interactions: ['darshan', 'offer', 'pranam', 'story'],
     fallback: [27.56740, 77.67590],
   },

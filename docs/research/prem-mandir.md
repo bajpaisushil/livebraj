@@ -304,3 +304,52 @@ Nothing is running in the background - all fetches, the OSM pulls, the tile stit
 - Wikipedia, 'Carrara marble' — https://en.wikipedia.org/wiki/Carrara_marble — Carrara is 'white or blue-grey'; only Statuario is the near-white grade; no measured reflectance data available in the article.
 - Light/fountain show timings corroborated across vrindavanmathuratourism.com, vrindavanmathura.com and thedevlok.com: 19:00–19:30 winter, 19:30–20:00 summer, free entry, water choreographed to bhajans.
 - NOT USABLE, stated for completeness: F. S. Growse, 'Mathura: A District Memoir' (1883) contains nothing on this building and cannot — the foundation stone was laid on 14 January 2001. Also flagged: the Commons files titled 'Prem Mandir Vrindavan 2022 01–13' are MISLABELLED and depict other Vrindavan temples; do not use them.
+
+## 2026-10-09 — the campus measured, and the temple 11 m east of itself
+
+*ESRI World Imagery z18/z19 (0.265 m/px, measurement only), OSM ways 673573044
+(the building) and 491803653 (the platform) from the OSM API, and a search
+for the Prem Bhavan's dimensions.*
+
+- **THE TEMPLE STOOD 11 m EAST OF ITS OWN BUILDING.** The importer's name
+  match found the platform's way, whose centre is 11.1 m east and 1.0 m north
+  of the building's; the builder lays the building out round its origin and
+  the platform 11.05 m east of it. The origin is now the building outline's
+  centre (27.5720831 / 77.6719249), surveyed, as Krishna Balaram's was.
+  [MEASURED]
+- **The imagery sits about 3 m west of OSM here**, measured on the platform;
+  everything below is relative to the building, in its frame (+x east, +z
+  south), and squared with OSM. [MEASURED, +-1.5 m]
+  - **The Prem Bhavan** (the Satsang Bhavan): a ribbed dome **85 m** across
+    (about 24 ribs, a stepped crown, a gold finial) centred at (-164.6,
+    -88.5), on a **94 m** square base with its corners cut, porticos on all
+    four sides (two curved, red-roofed, on the west), in a paved plaza about
+    131 x 125 m; two parterres to its east.
+  - **The hall north of the fountain**: 86 x 34.4 m at x -44.9..41.1, z
+    -156.7..-122.3, a white vaulted roof.
+  - **The fountain**: a red-paved vesica, its points at x -43.9 and 40.1,
+    18 m half-width; a white elliptical basin 41 x 22.5 m centred at (-1.9,
+    -87.3); an inner pool 30 x 17 m; green ornamental ground round it; on its
+    north side a rocky tableau, read as the **Govardhan leela** by its form
+    alone. [the identification INFERRED]
+  - **The south garden**: not one 22 m avenue but **two red avenues, 12 m and
+    9.6 m wide, between three beds**, 52 m from the plaza to the gate.
+  - **The gate**: its arch at x -18.9..8.5, z 108..118, on the road.
+  - **The Kaliya Naag pool**: peanut-shaped, 44 x 23 m, centred (-109.9,
+    99.5), with a red-orange figure at its waist — the "Kaliya Naag sthali"
+    the checker suspected. A smaller oval pool with a dark red centrepiece in
+    the garden's west bed is unidentified.
+  - Three white guest blocks south-west (z 25..84), a low building and a lawn
+    south of the Prem Bhavan.
+- **THE PREM BHAVAN'S SIZE AND DATE** [SOURCED]: 73,000 sq ft, pillarless,
+  dome-shaped, for 25,000; inaugurated 14 January 2018. One account calls it
+  "270 feet high" — **that is its diameter mislabelled** (270 ft = 82 m; the
+  dome measures 85 m). [DERIVED]
+- **ITS HEIGHT IS NOT PUBLISHED.** The temple spire's shadow (38 m) puts the
+  sun at about 39 degrees from the south-east in the tile; at that angle a
+  tall dome would throw its shadow across its own base's roof, and none does,
+  so the dome is shallow. Built 22 m over a 9 m base, the finial at about
+  35 m — just under the temple. [ESTIMATE]
+- **The show's hours** (unchanged, SOURCED): 19:00-19:30 in winter, 19:30-20:00
+  in summer. Which months count as summer is not given; April to September
+  is assumed. [INFERRED]

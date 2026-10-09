@@ -22,6 +22,7 @@ import { buildRadhaDamodarMandir } from './RadhaDamodarMandir.js';
 import { buildJugalKishoreMandir } from './JugalKishoreMandir.js';
 import { buildRadhaGopinathMandir } from './RadhaGopinathMandir.js';
 import { buildJaipurMandir } from './JaipurMandir.js';
+import { buildPremMandirSetting } from './PremMandirSetting.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV, campusSign } from './Signage.js';
 import { altarFor } from '../../content/altars.js';
@@ -417,6 +418,7 @@ export function buildLandmarks(ctx, terrain) {
     // has to know which way its temple faces
     if (e.open) m.userData.openBy = e.open;
     if (e.vesh) m.userData.vesh = e.vesh;
+    if (e.show) m.userData.show = e.show;
     /*
      * TWO SYSTEMS MUST NOT OWN ONE `visible` FLAG.
      *
@@ -437,7 +439,7 @@ export function buildLandmarks(ctx, terrain) {
      * which is exactly when you would be looking at it.
      */
     const owned = e.name.startsWith('Night:') || e.name.startsWith('Vesh:')
-      || e.name.startsWith('Curtain:');
+      || e.name.startsWith('Curtain:') || e.name.startsWith('Show:');
     if (!owned) interiorMeshes.push({ mesh: m, x: e.x, z: e.z, r: e.r });
   }
 
@@ -4053,21 +4055,6 @@ function buildPremMandir({ loc, b, ground, rng, terrain }) {
       }
     }
   }
-  /* ---- the processional avenue from the south gate ---- */
-  {
-    // "a ~22 m wide red-paved processional avenue run ~70 m from the
-    // platform to the main gate on the road" — its line across the platform
-    // is not measured; on the platform's centre is the INFERRED choice. The
-    // gate itself is queued: it has its own survey to come.
-    const from = PZ + PAVE_D / 2 - 0.5, to = PZ + PB + 70;
-    const q = p(PX, (from + to) / 2);
-    const AG = highest(PX, (from + to) / 2, 22, to - from, 8) + 0.05;
-    const top = Math.min(AG, PLZ);
-    b.box(q[0], top - 0.6, q[1], 22, 0.6, to - from, PAVE, rot);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: 22, d: to - from, rot,
-      top, tag: 'prem-plaza', standOnly: true });
-  }
-
   /* ---- the jagati: a moulded edge you cannot walk into, a bow, one broad flight ---- */
   {
     const q = p(PX, PZ);
@@ -4359,87 +4346,10 @@ function buildPremMandir({ loc, b, ground, rng, terrain }) {
     b.box(f[0], FL + 35.4, f[1], 0.1, 1.4, 2.6, 0xe8891f, rot);
   }
 
-  /* ---- the Satsang Bhavan's dome, west, where it was ---- */
-  /*
-   * Kept at its earlier position and size. The checker measures it at about
-   * 87 m across, ~187 m from the platform centre — both larger and further
-   * than this. Queued rather than moved: at that size it needs its own
-   * keep-out and its own survey before it goes into a town.
-   */
-  {
-    const q = p(PX - PL - 24, PZ);
-    b.box(q[0], ground + 0.2, q[1], 42, 1.0, 38, 0xe4ded0, rot);
-    ribbedDome(b, q[0], ground + 1.2, q[1], 20, 13.5, MARBLE, SHADOW, 20);
-    colliders.push({ type: 'box', x: q[0], z: q[1], w: 40, d: 36, rot });
-  }
-
-  /* ---- the musical fountain, north ---- */
-  /*
-   * There is ONE fountain, and it is not where the three before this stood
-   * (north, south and east of the platform, 17-20 m out — none of them in
-   * the survey). "THE MUSICAL FOUNTAIN. MEASURED, ~64 m NORTH of the
-   * platform's north edge. It is an OVAL/vesica, not a circle: outer
-   * ornamental oval ~116 x 70 m, with pointed triangular terminations east
-   * and west; white elliptical basin ~49 x 30 m; inner rectangular pool
-   * ~32 x 19 m." The 64 m is taken to its centre and its east-west line to
-   * the platform's centre: both INFERRED. The show, 19:00-19:30 in winter
-   * and 19:30-20:00 in summer, is queued.
-   */
-  {
-    const FX = PX, FZ = PZ - PB - 64;
-    const VL = 58, VW = 35;
-    // a vesica is two arcs; with half-length VL and half-width VW their
-    // centres sit `ev` either side of the long axis
-    const ev = (VL * VL - VW * VW) / (2 * VW), Rv = ev + VW;
-    const halfW = (u) => Math.max(0, Math.sqrt(Math.max(0, Rv * Rv - u * u)) - ev);
-    const FG = highest(FX, FZ, VL * 2, VW * 2, 10) + 0.05;
-    const NV = 58;
-    for (let i = 0; i < NV; i++) {
-      const u0 = (i / NV) * 2 * VL - VL, u1 = ((i + 1) / NV) * 2 * VL - VL;
-      const hw = halfW((u0 + u1) / 2);
-      if (hw < 0.3) continue;
-      const c = p(FX + (u0 + u1) / 2, FZ);
-      b.box(c[0], FG - 0.6, c[1], u1 - u0 + 0.02, 0.6, hw * 2, PAVE, rot);
-      colliders.push({ type: 'box', x: c[0], z: c[1], w: u1 - u0 + 0.02, d: hw * 2, rot,
-        top: FG, tag: 'prem-plaza', standOnly: true });
-    }
-    // the white elliptical basin: a rim you walk round, water inside it,
-    // and the rectangular pool in the middle. Drawn as true ellipses; its
-    // collider is strips, all inside the drawn rim.
-    const BA = 24.5, BB = 15.0, RIM = 1.0, NE = 64;
-    const ell = (ra, rb, th, y) => { const q = p(FX + ra * Math.cos(th), FZ + rb * Math.sin(th)); return [q[0], y, q[1]]; };
-    const WATER = FG + 0.42, RTOP = FG + 0.62;
-    const ctr = p(FX, FZ);
-    for (let k = 0; k < NE; k++) {
-      const t0 = (k / NE) * Math.PI * 2, t1 = t0 - (Math.PI * 2) / NE;   // top faces wind this way
-      // water
-      const w0 = ell(BA - RIM, BB - RIM, t0, WATER), w1 = ell(BA - RIM, BB - RIM, t1, WATER);
-      b.tri(ctr[0], WATER, ctr[1], w0[0], w0[1], w0[2], w1[0], w1[1], w1[2], 0x2f5f63);
-      // the rim's top, its outer face down to the paving, its inner face down to the water
-      const o0 = ell(BA, BB, t0, RTOP), o1 = ell(BA, BB, t1, RTOP);
-      const i0 = ell(BA - RIM, BB - RIM, t0, RTOP), i1 = ell(BA - RIM, BB - RIM, t1, RTOP);
-      b.quad(o0, o1, i1, i0, MARBLE);
-      const ob0 = ell(BA, BB, t0, FG - 0.05), ob1 = ell(BA, BB, t1, FG - 0.05);
-      b.quad(ob1, o1, o0, ob0, SHADOW);
-      const ib0 = ell(BA - RIM, BB - RIM, t0, WATER), ib1 = ell(BA - RIM, BB - RIM, t1, WATER);
-      b.quad(ib0, i0, i1, ib1, SHADOW);
-    }
-    {
-      b.box(ctr[0], WATER - 0.02, ctr[1], 32.8, 0.08, 19.8, MARBLE, rot);  // the inner pool's coping
-      b.box(ctr[0], WATER - 0.01, ctr[1], 32.0, 0.08, 19.0, 0x264f55, rot); // and its deeper water
-    }
-    // Solid round the rim, in chords along its centre line: 64 of them keep
-    // within 5 cm of the drawn curve. The rim is higher than a step, so the
-    // water inside needs no collider of its own.
-    for (let k = 0; k < NE; k++) {
-      const t0 = (k / NE) * Math.PI * 2, t1 = ((k + 1) / NE) * Math.PI * 2;
-      const a0 = [FX + (BA - RIM / 2) * Math.cos(t0), FZ + (BB - RIM / 2) * Math.sin(t0)];
-      const a1 = [FX + (BA - RIM / 2) * Math.cos(t1), FZ + (BB - RIM / 2) * Math.sin(t1)];
-      const m = p((a0[0] + a1[0]) / 2, (a0[1] + a1[1]) / 2);
-      colliders.push({ type: 'box', x: m[0], z: m[1], w: Math.hypot(a1[0] - a0[0], a1[1] - a0[1]) + 0.1,
-        d: RIM, rot: rot + Math.atan2(a1[1] - a0[1], a1[0] - a0[0]), top: RTOP, tag: 'prem-fountain' });
-    }
-  }
+  /* ---- the campus: the Prem Bhavan, the hall, the fountain and its show,
+   *      the south garden and gate, the Kaliya pool (PremMandirSetting.js) ---- */
+  const setting = buildPremMandirSetting({ b, loc, terrain, colliders,
+    h: { cuspedArch, tint, MeshBuilder } });
 
   /* ---- where the Deities are, and where you stand to see them ---- */
   // the ground-floor sanctum is under the shikhara at the WEST end, so you
@@ -4450,6 +4360,7 @@ function buildPremMandir({ loc, b, ground, rng, terrain }) {
     altarY: FLI + 1.4 - ground,
     colliders,
     mesh: { name: 'PremMandirLilas', builder: lilaB, x, z, r: Math.max(HL, HB) + 4, map: lilaAtlas },
+    meshes: setting.meshes,
     interior: {
       altar: [altar[0], FLI + 1.4, altar[1]],
       darshan: [darsh[0], darsh[1]],
