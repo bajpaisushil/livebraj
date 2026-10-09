@@ -244,9 +244,11 @@ searching the backlog for it. That is the failure this file exists to stop.*
     Math.random on the game's seeded generator (seed 1, `--seed=N`), and the
     output is identical alone or three at once. Seed sweeps are in the checks:
     `verges` holds its lane median under 2 m on 26 of seeds 1-30, `traffic`
-    reads 2 overlaps or fewer on 24. **`dpad-dir` done the same day.** Still
-    on the wall clock, slowest first in the last suite: `gatherings` (977 s),
-    `vehcam` (599 s), `starthere` (274 s), `driving`, and the probe tools.
+    reads 2 overlaps or fewer on 24. **`dpad-dir` done the same day.**
+    **`gatherings`, `vehcam`, `starthere` done 2026-10-09** (a184f96): 977 s,
+    599 s and 381 s in the slowest suite to 26 s, 6 s and 12 s, the three
+    together under a minute, twice; vehcam no longer flaky. Still on the wall
+    clock: `driving` (13 s, fine) and the probe tools.
 
 12. **The ghats stand in town with no river in sight.** Found photographing
     Kaliya Ghat for the arch fix. Research first, per ghat, what is actually
@@ -279,7 +281,21 @@ searching the backlog for it. That is the failure this file exists to stop.*
     into one altar. Re-run the missing five agents when the limit resets
     (the workflow resumes from cache: run wf_7ae47b98-f89). Build murtis only
     from the checked group until then.
-16. **Prem Mandir's setting, still to come.** The south gate (ornate marble,
+16. ~~**Prem Mandir's setting.**~~ **DONE 2026-10-09** (954e815). Measured off
+    z19 imagery first, which found the temple itself 11 m east of its own
+    building (the importer's name match had found the platform's pin): its
+    origin is the building's OSM outline now, surveyed. Then, in
+    `PremMandirSetting.js`: the Prem Bhavan at its true 85 m and place, the
+    86 x 34 m hall, the fountain moved and resized with its SHOW — jets that
+    rise, glow and keep the bhajan's beat 19:00-19:30 in winter and 19:30-
+    20:00 in summer by the clock in Braj, in the evening phase otherwise
+    (`FountainShow.js`) — the south garden's two avenues and three beds, the
+    gate (red soffit band, blue grilles, peacocks, gold gates), the Kaliya
+    Naag pool, guest blocks, parterres and walls. The town's lamp posts and
+    poles no longer follow footpaths into walled compounds. `premsetting`
+    15/15. Heights are estimates (none published): flagged in the research.
+    Original notes follow.
+    **Prem Mandir's setting, still to come.** The south gate (ornate marble,
     cusped arch, peacocks, gold gates, neon at night — partly paint, per the
     checker); the musical fountain's show (19:00-19:30 winter, 19:30-20:00
     summer) — jets and light, with its music; the Satsang Bhavan at its true

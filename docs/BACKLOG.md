@@ -3651,3 +3651,16 @@ written, so Madan Mohan was measured and built here, solo.
   salmon where the imagery has grey concrete, a passage with no floor.
 - `jaipur.mjs` 13/13; `halls` asked for a threshold before each altar, which
   the sanctums now have.
+
+## 2026-10-09 — Prem Mandir's campus; the slow checks own their clock
+
+- **Item 11 — a184f96.** gatherings, vehcam and starthere held the game loop and
+  stepped it themselves: 25 minutes of the suite to under one.
+- **Item 16 — 954e815.** Measuring the campus off the imagery found the temple
+  11 m east of its own building; fixed at the origin. Then the Prem Bhavan
+  (85 m ribbed dome; one source's "270 feet high" is its diameter), the hall,
+  the fountain where it is with its evening show, the south garden as two
+  avenues and three beds, the gate, the Kaliya Naag pool, the rest of the
+  campus plainly, and its walls. Street furniture left the walled compounds
+  without disturbing a single other pole (a sink keeps the random draws).
+  docs/research/prem-mandir.md has the measurements and what is estimated.
