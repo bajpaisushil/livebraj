@@ -52,13 +52,25 @@ const steer = await p.evaluate(async () => {
     const before = { x: car.x, z: car.z, yaw: car.yaw };
     ctx.input.walk = walk; ctx.input.strafe = strafe;
     ctx.input.move.y = walk; ctx.input.move.x = strafe;
-    for (let i=0;i<n;i++) r.update(1/30, ctx);
+    /*
+     * The turn is added up a step at a time. It was the difference between
+     * the first heading and the last, folded into ±180°, which only works
+     * while a run turns less than half a circle: at a vehicle's real pace in
+     * a lane, three seconds of full lock is more than that, and a hard left
+     * of 268° read as a right of 92°.
+     */
+    let turned = 0, was = car.yaw;
+    for (let i=0;i<n;i++) {
+      r.update(1/30, ctx);
+      turned += Math.atan2(Math.sin(car.yaw - was), Math.cos(car.yaw - was));
+      was = car.yaw;
+    }
     ctx.input.walk = 0; ctx.input.strafe = 0; ctx.input.move.x = 0; ctx.input.move.y = 0;
     const dx = car.x - before.x, dz = car.z - before.z;
     // forward is the car's own nose at the moment it started
     const fx = Math.sin(before.yaw), fz = Math.cos(before.yaw);
     return { moved:+Math.hypot(dx,dz).toFixed(2), along:+(dx*fx+dz*fz).toFixed(2),
-             turned:+(((car.yaw - before.yaw + Math.PI*3) % (Math.PI*2)) - Math.PI).toFixed(3) };
+             turned:+turned.toFixed(3) };
   };
   const fwd = run(1, 0);
   const left = run(1, -1);

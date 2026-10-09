@@ -16,7 +16,8 @@ import { formatDistance, clamp } from '../../engine/math/MathUtils.js';
 import { DriverTalk } from './DriverTalk.js';
 import { NavGraph } from '../navigation/NavGraph.js';
 import { resample } from '../../engine/math/Curves.js';
-import { driveStep, pathLimit, HIRED, DRIVEN } from './VehicleDrive.js';
+import { driveStep, pathLimit, routeSeconds, HIRED, DRIVEN } from './VehicleDrive.js';
+import { speedOn, topSpeed, pullAway, asked, roadKindAt, roadKindsAlong } from './RoadSpeeds.js';
 import { TiltSteer } from './TiltSteer.js';
 
 const HAIL_RANGE = 7.5;
@@ -36,42 +37,54 @@ const ALWAYS_KNOWN = new Set([
 ]);
 const BASE_FARE = 10;          // rupees
 const PER_KM = 12;             // rupees
-const RIDE_SPEED = 7.5;        // m/s — fallback when the vehicle has no speed
-
 /**
- * The longest a ride may take in real seconds.
- *
- * The world is 1:1, so Chhatikara to ISKCON is 5.6 km of real road. A cycle
- * rickshaw covers that at 3.2 m/s, which is twenty-nine minutes of sitting and
- * watching — long enough that you conclude the ride is broken and get out,
- * which is exactly what happened. The fare and the quoted duration stay honest
- * about the real journey; only the watching is compressed, and never below the
- * vehicle's own speed, so a short hop still runs at a rickshaw's pace.
+ * What a hired vehicle is quoted at before its route is known, in m/s: the
+ * town speed the traffic itself keeps (CrowdSystem), which for an e-rickshaw
+ * is 4.6 m/s, about 17 km/h — where the 100-trip GPS study of e-rickshaws put
+ * their average (17.4-18.3 km/h; docs/research/vehicle-speeds.md).
  */
-const RIDE_TARGET_S = 55;
+const TOWN_SPEED = 4.6;
 
 /**
- * No ride may take longer than this, anywhere in the world.
+ * The longest a ride may take in real seconds, anywhere in the world.
  *
  * Asked for directly: "it should be maximum of 5mins in e-rickshaw anywhere".
- * The pace is whatever meets it, floored at the vehicle's own speed so a short
- * hop still ambles, and ceilinged so it never stops looking like a road
- * vehicle. The longest route in this world is about 7.8 km, which fits.
+ * It used to be kept by driving faster: a pace planned up to 26 m/s and
+ * allowed to 34 — an e-rickshaw at 94 km/h, and later 122, when a battery
+ * e-rickshaw is built not to pass 25 (CMVR rule 2(cb)). Now the vehicle keeps
+ * the speed it really has on each road (RoadSpeeds), and a journey longer
+ * than this is shown as a TIME-LAPSE instead: the whole world runs faster
+ * together (GameApp, `ctx.timeScale`), and the ride bar says by how much.
  */
 const RIDE_MAX_S = 300;
 
 /**
- * The fastest a ride may ever look, in m/s.
- *
- * RIDE_TARGET_S alone was a mistake. Chhatikara to ISKCON is 5.6 km, so
- * compressing it into 55 seconds meant 102 m/s — 367 km/h — and at that speed
- * the rickshaw does not read as following the road at all. It skims through
- * walls and people because it crosses three metres between frames. 12 m/s is
- * about 43 km/h: brisk for an auto, generous for a cycle rickshaw, and slow
- * enough that you can see it turning with the street. A long ride is simply a
- * long ride now, and STOP is always there.
+ * What a long ride is planned to fit, in real seconds: a minute inside the
+ * promise, because traffic, cows and corners always cost more than the plan,
+ * and what is left over is kept by `catchup` below.
  */
-const RIDE_MAX_SPEED = 26;
+const RIDE_BUDGET_S = 240;
+
+/**
+ * The rates a ride may be shown at, and the fastest.
+ *
+ * Round numbers, because the ride bar says them out loud. Twelve is the
+ * fastest the world is run: past that a town stops reading as a town, and it
+ * is as much as the frame loop's sixteen steps keep at 45 fps. The slowest
+ * long ride there is, a cycle rickshaw across the whole world, needs it.
+ */
+const LAPSES = [1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12];
+const LAPSE_MAX = 12;
+
+/** The smallest rate that fits a journey of `honest` seconds into the budget. */
+function lapseFor(honest) {
+  for (const k of LAPSES) if (honest / k <= RIDE_BUDGET_S) return k;
+  return LAPSE_MAX;
+}
+
+/** A rate as the ride bar writes it: x5, x1.5, x2.6. */
+const lapseText = (k) => '\u00d7' + (k >= 10 || Math.abs(k - Math.round(k)) < 0.05
+  ? String(Math.round(k)) : k.toFixed(1));
 
 /** What "jaldi chaliye" and "aaram se" actually do to the pace. */
 const PACE_MIN = 0.5;
@@ -80,35 +93,26 @@ const PACE_MIN = 0.5;
  * How far "jaldi chaliye" can stack.
  *
  * It compounds, so each press is a real step up rather than a switch you have
- * already flipped: 1.0, 1.6, 2.6, 4.1, 5.0. Five useful presses instead of the
- * two that 2.2 allowed.
+ * already flipped: 1.0, 1.6, 2.6, 4.1, 5.0. Each press does two things, both
+ * said on the ride bar. The driver leans toward the most the road allows
+ * (RoadSpeeds.asked: half of what is left on the first press, nothing left by
+ * the fourth), and the time-lapse runs by the same factor, up to LAPSE_MAX —
+ * which is what a passenger in a hurry actually wants, without the vehicle
+ * ever going faster than it can.
  */
 const PACE_MAX = 5.0;
 
 /**
- * How much the driver may quietly find to keep inside RIDE_MAX_S.
+ * How far the time-lapse may quietly be raised to keep inside RIDE_MAX_S.
  *
- * Only ever used to honour the five-minute cap when the measured average says
- * the ride will overrun it. Bounded, because a rickshaw that arrives early by
- * teleporting is a worse lie than one that arrives late.
+ * Only ever used when the measured ride says it will overrun the promise —
+ * traffic, a cow, a long wait at a junction. Bounded, and it is the RATE that
+ * rises, never the vehicle's speed: the ride bar shows the rate as it is.
  */
-const CATCHUP_MAX = 2.4;
+const CATCHUP_MAX = 2;
 
 /** Seconds — how far back the ride's "what am I making now" average looks. */
 const EMA_TAU = 15;
-
-/**
- * The absolute ceiling on how fast a ride may go, in m/s, whatever the
- * multipliers say.
- *
- * Without this the stack multiplies the pace, which is already up to
- * RIDE_MAX_SPEED for a long route — five presses on the Chhatikara run would
- * ask for 130 m/s, which is 468 km/h and would put the rickshaw through a wall
- * every second. 34 m/s is about 122 km/h: absurd for an e-rickshaw and that is
- * rather the point of a cheat, but still a speed the steering and the collision
- * pass can actually keep up with.
- */
-const RIDE_CEILING = 34;
 
 /** What holding RUN does to the pace while you are a passenger. */
 const URGE_PACE = 1.7;
@@ -136,20 +140,6 @@ const CAPTURE_PER_SPEED = 0.34;
  */
 const LOOK_MIN = 7;
 const LOOK_PER_SPEED = 0.95;
-
-/**
- * The tightest bend, in metres, the hired vehicle is expected to hold at the
- * pace it agreed to.
- *
- * A ride's pace is a deliberate compression — 5.6 km of real road inside five
- * minutes, which is the one thing about a ride that is not 1:1 — and no real
- * grip will hold a Vrindavan corner at 26 m/s. So the grip is compressed by
- * exactly the same amount and no more: enough to stay on the road at the pace
- * that was quoted. What is NOT compressed is the collision. The vehicle is
- * pushed out of everything solid at full radius whatever speed it is doing,
- * which is the whole point of the exercise.
- */
-const TRACK_R = 20;
 
 /** How near the last waypoint counts as arrived. */
 const ARRIVE_M = 5;
@@ -188,28 +178,18 @@ const RETRY_S = 9;
 const NEARLY_THERE = 4;
 
 /**
- * Taking the wheel yourself.
- *
- * `TOP_MULT` turns a vehicle's cruising-in-traffic speed into its flat-out
- * speed — an e-rickshaw cruises at 4.6 m/s and will do about 25 km/h with the
- * handle wound open, which is the 1.9 below. `EASY` is what a plain press of
- * forward gives you, so that holding RUN still means something. There is no
- * penalty anywhere in here: you cannot crash, you cannot fail, and the worst
- * that happens is a wall stops you.
- */
-/**
  * Driving it yourself.
  *
- * These were tuned so gently that an e-rickshaw cruised at 4.6 * 1.9 * 0.68 =
- * 5.9 m/s — barely above a run, which is why taking the wheel felt like walking
- * with a rickshaw attached. A vehicle should feel like a vehicle: quicker than
- * you can run without holding anything down, and quicker again if you do.
+ * A plain press of forward gives the vehicle's own unhurried pace for the road
+ * it is on (RoadSpeeds `cruise`) — an e-rickshaw does 16-20 km/h on a street
+ * and 8-12 in a gali, as they do — and jaldi leans that toward the road's
+ * `max`, as it does for a driver you have hired. Holding RUN winds the handle
+ * open to the most the vehicle can do at all: 25 km/h for an e-rickshaw, 50
+ * for an auto, the legal ceilings for the rest. These were once the traffic
+ * speed times 2.8, which put an e-rickshaw at 46 km/h on a plain press and
+ * jaldi took it to 122. There is no penalty anywhere in here: you cannot crash,
+ * you cannot fail, and the worst that happens is a wall stops you.
  */
-const TOP_MULT = 2.8;
-const TOP_MAX = 24;
-
-/** Cruise without holding RUN. Not a crawl; just not flat out. */
-const EASY = 0.82;
 const REVERSE_MULT = 0.3;
 
 /** How far the steering is thrown over at full lock, in radians. */
@@ -360,11 +340,12 @@ export class RickshawSystem {
     if (!el) return;
     this._syncRideHudState(el);
 
-    const cruise = (this.vehicle && this.vehicle.speed) || RIDE_SPEED;
-    const base = (this.ride && this.ride.pace) || cruise;
+    const cruise = (this.vehicle && this.vehicle.speed) || TOWN_SPEED;
     const left = el.querySelector('.rh-left');
 
-    // waiting: he has the fare and the route, and is holding for you
+    // waiting: he has the fare and the route, and is holding for you. The
+    // minutes are the journey's, at the vehicle's own speed — what the ride
+    // takes in the town, not what it will take to watch
     if (this.state === 'waiting' && this.pending) {
       const d = this.pending;
       const mins = Math.max(1, Math.round(d.metres / cruise / 60));
@@ -385,8 +366,10 @@ export class RickshawSystem {
         left.textContent = Math.round(kmh) + ' km/h'
           + (dr.d ? ' · ' + formatDistance(away) + ' away' : ' · wherever you like');
       }
+      // the bar is the handle: full is as fast as this vehicle goes at all
       const bar0 = el.querySelector('.rh-bar i');
-      if (bar0) bar0.style.width = Math.min(100, (kmh / 50) * 100).toFixed(1) + '%';
+      const most = topSpeed(this.vehicle && this.vehicle.id) * 3.6;
+      if (bar0) bar0.style.width = Math.min(100, (kmh / most) * 100).toFixed(1) + '%';
       return;
     }
 
@@ -397,7 +380,6 @@ export class RickshawSystem {
     if (bar) bar.style.width = (frac * 100).toFixed(1) + '%';
     if (left) {
       const remain = Math.max(0, r.total - r.metres);
-      const mins = Math.max(1, Math.round(remain / cruise / 60));
       // show the stack, so pressing it again is visibly worth doing
       const m = r.paceMult || 1;
       const steps = m > 1.15 ? Math.round(Math.log(m) / Math.log(1.6)) : 0;
@@ -412,34 +394,33 @@ export class RickshawSystem {
         fast.textContent = capped ? 'JALDI · MAX' : 'JALDI';
       }
       /*
-       * Quote the measurement, not the plan.
-       *
-       * For the first second and a half there is nothing measured yet, so it
-       * falls back to the plan; after that `r.mps` is what the ride is really
-       * doing and the countdown converges on the truth instead of running out.
-       */
-      /*
-       * ...weighted by how much of the journey the measurement has seen.
+       * Quote the measurement, not the plan — weighted by how much of the
+       * journey the measurement has seen.
        *
        * Twenty seconds into the Chhatikara run he has covered six per cent of
        * 5.5 km, most of it the crawl out of the crossing, and quoting that as
-       * the whole ride promised five minutes for a journey that took three and
-       * a bit — rickshaw.mjs's "countdown is not a work of fiction", which then
-       * passed or failed on where the traffic happened to stand. What he has
-       * done describes the rest of the ride in proportion to how much of it is
-       * behind him; until then the pace he is actually being driven at (the
-       * agreed pace, jaldi and any catching up) is the better evidence.
+       * the whole ride promised a time the rest of the road does not keep —
+       * rickshaw.mjs's "countdown is not a work of fiction", which then passed
+       * or failed on where the traffic happened to stand. What he has done
+       * describes the rest of the ride in proportion to how much of it is
+       * behind him; until then the PLAN is the better evidence, and the plan
+       * is now the road itself: `r.after[i]` is how long the rest of this
+       * route takes at the vehicle's own speed on each stretch of it, from
+       * the point he is steering for.
        */
-      const planned = Math.min(RIDE_CEILING, base * m * (r.catchup || 1));
+      const planned = this._plannedRest(r);
       const seen = r.total > 0 ? Math.min(1, (r.metres / r.total) * 2.5) : 1;
-      const rate = r.mps && r.t > 1.5 ? seen * r.mps + (1 - seen) * planned : base * m;
+      const simRest = r.mps && r.t > 1.5
+        ? seen * (remain / Math.max(0.5, r.mps)) + (1 - seen) * planned
+        : planned;
       /*
-       * Never quote longer than the promise. `RIDE_MAX_S` is enforced — the
-       * driver finds more pace when the measurement says he will overrun — so
-       * a countdown reading beyond it is describing a ride that cannot happen.
+       * In the time you will sit through, which is the world's time over the
+       * rate it is being shown at — and never longer than the promise, which
+       * the rate rises to keep (`catchup`), so a countdown beyond it would
+       * describe a ride that cannot happen.
        */
-      const secs = Math.min(remain / Math.max(0.5, rate),
-        Math.max(20, RIDE_MAX_S - r.t));
+      const lapse = this._lapse(r);
+      const secs = Math.min(simRest / lapse, Math.max(20, RIDE_MAX_S - r.real));
       /*
        * Under a minute, say so rather than rounding up to one.
        *
@@ -450,8 +431,33 @@ export class RickshawSystem {
        */
       const when = secs < 45 ? 'arriving'
         : 'about ' + Math.round(secs / 60) + ' min';
-      left.textContent = formatDistance(remain) + ' to go · ' + when + pace;
+      // and the rate, whenever the world is being run faster than it is
+      const shown = lapse > 1.02 ? ' · time-lapse ' + lapseText(lapse) : '';
+      left.textContent = formatDistance(remain) + ' to go · ' + when + shown + pace;
     }
+  }
+
+  /**
+   * The rate this ride is being shown at, now: the one its length called for,
+   * times what a passenger in a hurry has asked for, times whatever has been
+   * found to keep the five-minute promise — never past LAPSE_MAX.
+   */
+  _lapse(r) {
+    return Math.min(LAPSE_MAX,
+      (r.lapse || 1) * Math.max(1, r.paceMult || 1) * (r.catchup || 1));
+  }
+
+  /**
+   * Seconds of the world's time the rest of the ride should take: the road's
+   * own answer from the point he is steering for (`r.after`), plus the run to
+   * that point, at whatever the passenger has asked the driver for.
+   */
+  _plannedRest(r) {
+    const i = Math.min(r.i, r.pts.length - 1);
+    const sp = r.speeds[i];
+    const lean = asked(sp, (r.paceMult || 1) * (r.urge || 1), PACE_MAX) / Math.max(0.1, sp.cruise);
+    const toNext = r.car ? Math.hypot(r.pts[i][0] - r.car.x, r.pts[i][1] - r.car.z) / Math.max(0.5, sp.cruise) : 0;
+    return (r.after[i] + toNext) / Math.max(0.3, lean);
   }
 
   _hideRideHud() {
@@ -532,7 +538,7 @@ export class RickshawSystem {
       // will not take one as a through-road
       const path = ctx.nav ? ctx.nav.path(p.x, p.z, set[0], set[1], true) : null;
       const metres = path ? NavGraph.length(path) : Math.hypot(set[0] - p.x, set[1] - p.z);
-      const cruise = (this.vehicle && this.vehicle.speed) || RIDE_SPEED;
+      const cruise = (this.vehicle && this.vehicle.speed) || TOWN_SPEED;
       return {
         loc: l, set, metres, path,
         fare: fareFor(metres, this.hire),
@@ -803,13 +809,22 @@ export class RickshawSystem {
     for (let i = 1; i < pts.length; i++) {
       total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
     }
-    const cruise = (this.vehicle && this.vehicle.speed) || RIDE_SPEED;
-    // aim for RIDE_TARGET_S, never exceed RIDE_MAX_S, never crawl below the
-    // vehicle's own pace, never outrun RIDE_MAX_SPEED
-    const pace = Math.min(
-      RIDE_MAX_SPEED,
-      Math.max(cruise, total / RIDE_TARGET_S, total / RIDE_MAX_S),
-    );
+    /*
+     * THE ROAD SETS THE SPEED.
+     *
+     * Every stretch of the route takes the speed this vehicle really keeps on
+     * that kind of road (RoadSpeeds): an e-rickshaw 20-25 km/h on the
+     * Chhatikara road, 16-20 on a street, 8-12 in a gali. From those, the
+     * corners and the vehicle's own pull-away comes the honest length of the
+     * journey — the same physics the drive loop runs, laid end to end — and
+     * from that the rate it is shown at: none for a short hop, more for a long
+     * one, whatever fits RIDE_BUDGET_S. Read once, here, because the road under
+     * fourteen hundred points is fourteen hundred nav lookups.
+     */
+    const type = this.vehicle ? this.vehicle.id : null;
+    const speeds = roadKindsAlong(ctx.nav, pts).map((k) => speedOn(type, k));
+    const lim = new Float32Array(pts.length);
+    for (let k = 0; k < pts.length; k++) lim[k] = speeds[k].cruise;
 
     // he stops being a vehicle and starts being a man with an opinion
     if (!this.talk) this.talk = new DriverTalk(ctx);
@@ -820,23 +835,43 @@ export class RickshawSystem {
     if (car) { car.chartered = true; car.throttle = 1; }
 
     // Built once, here, because the drive loop must not allocate: a slow phone
-    // runs it eight times a frame.
+    // runs it eight times a frame — sixteen under a time-lapse. Nothing in it
+    // is scaled to a pace any more: the grip is the hired vehicle's own, and
+    // it pulls away as that vehicle does (RoadSpeeds.pullAway), not at the
+    // half a g every vehicle used to.
     const prof = {
-      accel: Math.max(HIRED.accel, pace * 0.35),
-      brake: Math.max(HIRED.brake, pace * 0.45),
-      lat: Math.max(HIRED.lat, (pace * pace) / TRACK_R),
+      accel: pullAway(type),
+      brake: HIRED.brake,
+      lat: HIRED.lat,
       turnMax: HIRED.turnMax,
       agents: HIRED.agents,
     };
+    const after = new Float32Array(pts.length);
+    const honest = routeSeconds(pts, lim, prof, after);
 
     // `i` is the waypoint being steered TO, not a fraction along a segment —
     // the vehicle carries its own position now, and the route is only a list of
     // places to go past.
+    //
+    // `t` is the world's time on this ride and `real` the passenger's: they
+    // part company by the rate. `pace` is the honest average the road allows,
+    // which DriverTalk compares the measured one with to know a jam.
     this.ride = {
-      d, pts, i: 0, t: 0, metres: 0, total, pace, paceMult: 1, car, prof,
+      d, pts, i: 0, t: 0, real: 0, metres: 0, total, car, prof,
+      speeds, after, honest, pace: total / Math.max(1, honest),
+      lapse: lapseFor(honest), paceMult: 1, urge: 1, roadAt: null,
       mps: 0, ema: 0, emaW: 0, catchup: 1,
       was: 0, stall: 0, lost: 0, skips: 0, stopping: false,
     };
+    /*
+     * What the road allows at point k, at what the passenger has asked for:
+     * read by pathLimit to brake for a gali before reaching it, as it brakes
+     * for a corner. Made once, here; it reads the ride as it stands each time.
+     */
+    const r0 = this.ride;
+    r0.roadAt = (k) => asked(r0.speeds[Math.min(k, r0.speeds.length - 1)],
+      (r0.paceMult || 1) * (r0.urge || 1), PACE_MAX);
+    ctx.timeScale = r0.lapse;
     if (car) {
       // start it under you rather than wherever it was idling, pointing the way
       // the route sets off, and from rest
@@ -978,6 +1013,8 @@ export class RickshawSystem {
     this.ride = null;
     this.drive = null;
     this.state = 'idle';
+    // out of the vehicle, the world runs at its own pace again
+    ctx.timeScale = 1;
 
     this._freeze(ctx, false);
     if (ctx.player.cancelAction) ctx.player.cancelAction();
@@ -999,6 +1036,9 @@ export class RickshawSystem {
     if (this.state !== 'riding' && this.state !== 'driving' && ctx.cameraRig) {
       ctx.cameraRig.vehicleHeading = null;
     }
+    // and only a ride in progress may run the world fast: whatever ended it,
+    // and whichever path that took, the clock is put back here as well
+    if (this.state !== 'riding' && ctx.timeScale !== 1) ctx.timeScale = 1;
     if (this.state === 'boarding') { this._stepBoarding(dt, ctx); return; }
     if (this.state === 'riding') {
       // Holding RUN as a passenger means the same as saying jaldi: the button
@@ -1206,7 +1246,15 @@ export class RickshawSystem {
     const sx = a.x - Math.sin(a.yaw) * back;
     const sz = a.z - Math.cos(a.yaw) * back;
     const y = ctx.world.groundHeight(sx, sz);
-    ctx.player.position.set(sx, y + 0.62, sz);
+    /*
+     * The HIPS go on the seat. The player's root is the soles of a standing
+     * body, and sitting folds the legs without lowering the hips, so putting
+     * the root 0.62 m up sat the hips at 1.5 m and the head through the roof.
+     * Each vehicle says where a passenger's hips are (CrowdSystem `seat`).
+     */
+    const seat = (this.vehicle && this.vehicle.seat) || 0.78;
+    const hips = ctx.player.bones && ctx.player.bones.hips ? ctx.player.bones.hips.position.y : 0.92;
+    ctx.player.position.set(sx, y + seat - hips, sz);
     ctx.player.setYaw(a.yaw);
   }
 
@@ -1270,6 +1318,12 @@ export class RickshawSystem {
      * they had always been.
      */
     r.t += dt;
+    // ...and how long the passenger has sat through it: the world's time over
+    // the rate it is being shown at, which is also asserted here every frame,
+    // so whatever else has touched the clock, a ride in progress runs at its own
+    const lapse = this._lapse(r);
+    r.real += dt / lapse;
+    ctx.timeScale = lapse;
 
     const dEndNow = Math.hypot(pts[last][0] - car.x, pts[last][1] - car.z);
 
@@ -1357,52 +1411,54 @@ export class RickshawSystem {
     const wantYaw = Math.atan2(pts[aim][0] - car.x, pts[aim][1] - car.z);
 
     /*
-     * What he is ACTUALLY making, as opposed to what was agreed.
+     * What he is ACTUALLY making, as opposed to what was planned.
      *
-     * `r.pace` is a plan, and the road does not care about plans: `pathLimit`
-     * slows him for every bend, `prof.lat` holds him down through them, traffic
-     * stops him, and he brakes for the last few waypoints. On the Chhatikara
-     * run the plan is 26 m/s and the measured average is nearer 11, so a ride
-     * quoted at a minute takes three or four. Reported exactly that way — "it's
-     * been 1 min but not yet reached iskcon temple as it showed erlier".
-     *
-     * So the ride measures itself. `r.mps` is the real average, and everything
-     * that talks about time uses it instead of the plan.
+     * The plan is the road's own (`r.after`), but the road does not care about
+     * plans: traffic stops him, a cow stands in the gali, and the measured
+     * average comes in under it. Reported once exactly that way — "it's been
+     * 1 min but not yet reached iskcon temple as it showed erlier" — so the
+     * ride measures itself, and everything that talks about time uses the
+     * measurement as soon as there is one.
      */
     /*
-     * And the five-minute promise is kept rather than assumed.
+     * And the five-minute promise is kept rather than assumed — by the RATE.
      *
-     * If the measured average says this ride will overrun RIDE_MAX_S, he is
-     * asked for more — up to the ceiling, and no further. This is separate from
-     * `paceMult` on purpose: jaldi is the passenger leaning forward and the HUD
-     * reports it, and it would be dishonest to show a jaldi the passenger never
-     * asked for.
+     * If the measured ride says it will run past RIDE_MAX_S of the passenger's
+     * time, the time-lapse is raised, a little at a time, up to CATCHUP_MAX;
+     * once comfortably inside it, it eases back. The vehicle's speed is never
+     * touched: that was the 94 km/h. Kept apart from `paceMult` on purpose,
+     * because jaldi is the passenger asking and the ride bar reports it, and
+     * it would be dishonest to show a jaldi nobody asked for — the rate it
+     * shows is the rate it runs, catching up or not.
      */
-    if (r.mps && r.t > 5) {
-      const projected = r.t + (r.total - r.metres) / Math.max(0.5, r.mps);
+    if (r.mps && r.t > 20) {
+      const projected = r.real + (r.total - r.metres) / Math.max(0.5, r.mps) / lapse;
       const need = projected / RIDE_MAX_S;
       /*
-       * ...and eases off again once he is comfortably inside it.
+       * ...and eases off again once he is comfortably inside it, rather than
+       * keeping the extra for the rest of the journey — which once made a ride
+       * quoted at seven minutes take under three. Letting it decay means the
+       * ride SETTLES near the budget instead of overshooting it, and the
+       * countdown agrees with the ride because both describe the same thing.
        *
-       * This only ever went UP, so once traffic forced it on he kept the extra
-       * pace for the rest of the journey and arrived well early — measured, a
-       * ride quoted at seven minutes took under three, which is the original
-       * complaint with the sign flipped. Letting it decay means the ride
-       * SETTLES near the budget instead of overshooting it, and the countdown
-       * agrees with the ride because both are describing the same thing.
+       * Paced in the PASSENGER's seconds, at most 4% a second up and 10% down.
+       * It was 2% a step, and a step was a thirtieth of a second when the
+       * world ran at one speed; under a time-lapse of x5 that is a hundred and
+       * fifty steps a second, and a crawl out of a busy crossing put the rate
+       * from x5 to x6.7 before the ride had properly begun. Nor does it start
+       * before the measurement has settled (`r.t > 20`, the same twenty
+       * seconds of the town's time the measurement leans on the plan for).
        */
+      const dReal = dt / lapse;
       const now = r.catchup || 1;
       r.catchup = need > 1.02
-        ? Math.min(CATCHUP_MAX, now * (1 + Math.min(0.02, (need - 1) * 0.02)))
-        : need < 0.9 ? Math.max(1, now * 0.994) : now;
+        ? Math.min(CATCHUP_MAX, now * (1 + Math.min(0.04, (need - 1) * 0.2) * dReal))
+        : need < 0.9 ? Math.max(1, now * (1 - 0.1 * dReal)) : now;
     }
 
-    // the agreed pace, what he has been asked for, and what the road allows
-    const cruise = Math.min(
-      RIDE_CEILING,
-      (r.pace || RIDE_SPEED) * (r.paceMult || 1) * (r.urge || 1) * (r.catchup || 1),
-    );
-    let want = pathLimit(pts, r.i, car.x, car.z, prof, cruise);
+    // what the road allows here and ahead, at what he has been asked for, and
+    // never past what the vehicle can do at all
+    let want = pathLimit(pts, r.i, car.x, car.z, prof, topSpeed(this.vehicle && this.vehicle.id), r.roadAt);
 
     // and he pulls up rather than arriving at speed
     if (r.i >= last - NEARLY_THERE) {
@@ -1446,10 +1502,11 @@ export class RickshawSystem {
      *
      * Not out of optimism: for the first few seconds he is genuinely still
      * accelerating out of a standing start, so no measurement of what he has
-     * done so far describes the journey. The agreed pace is the best evidence
-     * there is until there is some. It fades out as the measurement arrives.
+     * done so far describes the journey. The road's own answer for the rest of
+     * it is the best evidence there is until there is some. It fades out as
+     * the measurement arrives.
      */
-    const planned = (r.pace || RIDE_SPEED) * (r.paceMult || 1) * (r.catchup || 1);
+    const planned = Math.max(0, r.total - r.metres) / Math.max(1, this._plannedRest(r));
     const warm = Math.min(1, r.t / 20);
     r.mps = Math.max(0.5,
       warm * Math.max(recent, avg * 0.6) + (1 - warm) * planned);
@@ -1457,7 +1514,9 @@ export class RickshawSystem {
 
     this._seat(ctx, car);
     this._updateRideHud(ctx);
-    if (this.talk) this.talk.update(dt, r);
+    // he talks in the passenger's time, not the world's: at x8 a line every
+    // 22 s of the world would be one every three seconds of yours
+    if (this.talk) this.talk.update(dt / lapse, r);
 
     // the journey still counts as ground covered, and still discovers places
     ctx.bus.emit('player:moved', { pos: ctx.player.position, delta: Math.max(0, made) });
@@ -1526,12 +1585,9 @@ export class RickshawSystem {
     car.vel = car.vel || 0;
     car.stuck = 0;
 
-    const type = this.vehicle;
-    this.drive = {
-      car, d,
-      top: Math.min(TOP_MAX, ((type && type.speed) || RIDE_SPEED) * TOP_MULT),
-      metres: 0,
-    };
+    // you cannot steer a time-lapse: the world goes back to its own pace
+    ctx.timeScale = 1;
+    this.drive = { car, d, metres: 0, kind: null, kindT: 0 };
 
     // put yourself in it, facing the way it faces
     car.x = ctx.player.position.x;
@@ -1627,11 +1683,23 @@ export class RickshawSystem {
     steer = clamp(steer, -1, 1);
     throttle = clamp(throttle, -1, 1);
 
-    const boost = input && input.running ? 1 : EASY;
-    const top = Math.min(RIDE_CEILING, dr.top * (dr.paceMult || 1));
+    /*
+     * The road under you, read four times a second rather than every frame:
+     * a plain press gives this vehicle's own pace for it, jaldi leans that
+     * toward the road's most, and RUN opens it right up to the vehicle's own
+     * ceiling (see "Driving it yourself" above REVERSE_MULT).
+     */
+    dr.kindT -= dt;
+    if (dr.kindT <= 0) {
+      dr.kindT = 0.25;
+      dr.kind = roadKindAt(ctx.nav, car.x, car.z, Math.sin(car.yaw), Math.cos(car.yaw)) || dr.kind || 'street';
+    }
+    const type = this.vehicle && this.vehicle.id;
+    const easy = asked(speedOn(type, dr.kind || 'street'), dr.paceMult || 1, PACE_MAX);
+    const top = input && input.running ? topSpeed(type) : easy;
     const want = throttle >= 0
-      ? top * throttle * boost
-      : top * throttle * REVERSE_MULT;
+      ? top * throttle
+      : easy * throttle * REVERSE_MULT;
 
     // steering is lock, not a bearing: holding it over keeps turning, which is
     // how a handle works and what the grip limit in VehicleDrive expects

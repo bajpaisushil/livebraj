@@ -596,9 +596,18 @@ export class CameraRig {
     // Auto-align: only while walking, and only once the look control has
     // been left alone. 2.5 s time constant, so it never yanks.
     const inVehicle = this.vehicleHeading !== null && this.vehicleHeading !== undefined;
+    /*
+     * In a vehicle, the view comes round on the WORLD's clock. A long ride is
+     * shown as a time-lapse (ctx.timeScale, RickshawSystem), and a vehicle
+     * shown at x5 takes a corner in a fifth of the real time; easing toward
+     * its heading at a real-time rate left the view looking at the side of
+     * the road through every bend — vehcam measured a 90th-percentile lag of
+     * 43 degrees. Everything else here, your own look included, stays real.
+     */
+    const vdt = inVehicle ? dt * Math.max(1, ctx.timeScale || 1) : dt;
     if (this.mode === 'follow' && inVehicle) {
       if (this._lookIdle > VEH_IDLE) {
-        this.yawTarget = wrapAngle(dampAngle(this.yawTarget, this.vehicleHeading, 1 / VEH_TAU, dt));
+        this.yawTarget = wrapAngle(dampAngle(this.yawTarget, this.vehicleHeading, 1 / VEH_TAU, vdt));
       }
     } else if (this.mode === 'follow' && this._lookIdle > ALIGN_IDLE) {
       const thr = this.walkSpeed * ALIGN_SPEED_FRAC;
@@ -609,7 +618,10 @@ export class CameraRig {
     }
 
     const kLook = reduce ? 20 : 12;
-    this.yaw = wrapAngle(dampAngle(this.yaw, this.yawTarget, kLook, dt));
+    // the yaw follows its target on the same clock the target is moving on;
+    // while you are looking out of the side, it is your hand that moves it,
+    // and that is real time
+    this.yaw = wrapAngle(dampAngle(this.yaw, this.yawTarget, kLook, this._lookIdle > VEH_IDLE ? vdt : dt));
     this.pitch = damp(this.pitch, this.pitchTarget, kLook, dt);
 
     // Distance: user choice, tightened in narrow lanes and when looking down.

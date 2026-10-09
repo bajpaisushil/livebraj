@@ -198,8 +198,9 @@ const trip = await p.evaluate(async () => {
   const start = { x: ctx.player.position.x, z: ctx.player.position.z };
   const startD = Math.hypot(dest.pos[0] - start.x, dest.pos[1] - start.z);
 
-  // drive it to completion, with a generous frame budget
-  for (let i = 0; i < 20000 && r.ride; i++) r.update(1 / 30, ctx);
+  // drive it to completion, with a generous frame budget: fifty minutes of the
+  // world's time, which a cycle rickshaw at its own 12 km/h does not need all of
+  for (let i = 0; i < 30 * 3000 && r.ride; i++) r.update(1 / 30, ctx);
 
   const end = { x: ctx.player.position.x, z: ctx.player.position.z };
   return {
@@ -239,7 +240,10 @@ const seated = await p.evaluate(async () => {
 
   const car = r.ride.car;
   const gaps = [];
-  for (let i = 0; i < 300; i++) {
+  // thirty seconds of the world's time: a cycle rickshaw pulls away at its own
+  // 0.7 m/s² to its own 12 km/h, so ten seconds — all this was when every
+  // vehicle launched at half a g toward 26 m/s — is barely out of the crossing
+  for (let i = 0; i < 900; i++) {
     r.update(1 / 30, ctx);
     if (!r.ride) break;
     if (i % 40 === 0) {
@@ -392,6 +396,12 @@ check('saying stop ends it', beat.ok && (beat.stopped || beat.endState === 'idle
  * machine's load instead of the game — which is exactly why `driving.mjs` reads
  * 8.4 m/s on a quiet box and 0.2 on a busy one. 1/30 of simulated time is the
  * same on any machine.
+ *
+ * TWO CLOCKS. The ride keeps its vehicle's real speed now, and a journey too
+ * long to sit through is shown as a time-lapse (`ctx.timeScale`, which the ride
+ * sets and the frame loop runs the whole world at). So each step here is 1/30 s
+ * of the WORLD's time and 1/30 over the rate of the passenger's, and the five
+ * minutes, and every promise the countdown makes, are the passenger's.
  * ================================================================ */
 const eta = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, r = ctx.rickshaw;
@@ -416,11 +426,15 @@ const eta = await p.evaluate(async () => {
 
   const dt = 1 / 30;
   const quoted = [];                  // what the HUD promised, and when
-  let t = 0, done = false, total = r.ride ? r.ride.total : 0;
-  for (let i = 0; i < 30 * 900 && !done; i++) {
+  let t = 0, done = false, total = r.ride ? r.ride.total : 0, rate = 1, vmax = 0;
+  const honest = r.ride ? r.ride.honest : 0, lapse0 = r.ride ? r.ride.lapse : 1;
+  const top = r.vehicle ? r.vehicle.id : null;
+  for (let i = 0; i < 30 * 3000 && !done; i++) {
+    rate = ctx.timeScale || 1;        // the rate this step is shown at
     r.update(dt, ctx);
-    t += dt;
+    t += dt / rate;                   // ...and so the passenger's share of it
     if (!r.ride) { done = true; break; }
+    vmax = Math.max(vmax, Math.abs(r.ride.car.vel || 0));
     // sample the promise at a few points along the way
     if (i % 300 === 0 && r.ride.t > 2) {
       const txt = (document.querySelector('#ride-hud .rh-left') || {}).textContent || '';
@@ -445,16 +459,17 @@ const eta = await p.evaluate(async () => {
     return err > a.err ? { err, e } : a;
   }, { err: 0, e: null });
 
-  return { ok: true, arrived: done, seconds: Math.round(t), total: Math.round(total), errs, worst };
+  return { ok: true, arrived: done, seconds: Math.round(t), total: Math.round(total), errs, worst,
+    honest: Math.round(honest), lapse0, vmax, type: top };
 });
 
 if (!eta.ok) {
   check('a long ride arrives', false, eta.why);
 } else {
   check('a long ride actually arrives', eta.arrived,
-    `${eta.total} m in ${eta.seconds} s of ride time`);
+    `${eta.total} m by ${eta.type}: ${Math.round(eta.honest / 60)} min of the town's time, shown at x${eta.lapse0}`);
   check('and inside the five minutes it promises', eta.arrived && eta.seconds <= 300,
-    `${eta.seconds} s, cap 300 s`);
+    `${eta.seconds} s of yours, cap 300 s`);
   check('the countdown is not a work of fiction',
     eta.worst.e !== null && eta.worst.err <= 1,
     eta.worst.e
@@ -494,17 +509,20 @@ const talk = await p.evaluate(async () => {
   if (!el) return { ok: false, why: 'ISKCON not offered' };
   el.click();
 
-  // listen in on the bubble
+  // listen in on the bubble — timed in the passenger's seconds, which is what
+  // "quiet in between" is about: a gap of 22 s of the world's time is three of
+  // yours at x8, and that would be a driver who never stops
   const heard = [];
   const orig = ctx.ui.say ? ctx.ui.say.bind(ctx.ui) : null;
   ctx.ui.say = (text, who) => {
-    heard.push({ t: r.ride ? r.ride.t : 0, text, onDriver: who === (r.ride && r.ride.car) });
+    heard.push({ t: r.ride ? r.ride.real : 0, text, onDriver: who === (r.ride && r.ride.car) });
     return orig ? orig(text, who) : undefined;
   };
 
   if (!r.startRide()) return { ok: false, why: 'would not start' };
   const dt = 1 / 30;
-  for (let i = 0; i < 30 * 600 && r.ride; i++) r.update(dt, ctx);
+  // the whole journey, however long the town's clock says it is
+  for (let i = 0; i < 30 * 3000 && r.ride; i++) r.update(dt, ctx);
   if (orig) ctx.ui.say = orig;
 
   let minGap = Infinity;

@@ -90,23 +90,63 @@ const pace = await p.evaluate(async ()=>{
    */
   for (let i=0;i<150;i++) r.update(1/30,ctx);
   const m0 = r.ride.paceMult;
-  const leg = () => { const a = r.ride.metres; for (let i=0;i<600 && r.ride;i++) r.update(1/30,ctx); return r.ride ? (r.ride.metres - a) / 20 : 0; };
-  const slowRun = leg();
+  /*
+   * Two answers from each stretch: metres per second of the TOWN's time, which
+   * is the driver leaning on it, and metres per second of YOURS, which is that
+   * and the time-lapse the ride is shown at together (`ctx.timeScale`).
+   */
+  const leg = () => {
+    const a = r.ride.metres; let mine = 0;
+    for (let i=0;i<600 && r.ride;i++) { const k = ctx.timeScale || 1; r.update(1/30,ctx); mine += (1/30) / k; }
+    return r.ride ? { town: (r.ride.metres - a) / 20, yours: (r.ride.metres - a) / mine, rate: ctx.timeScale } : { town: 0, yours: 0, rate: 1 };
+  };
+  /*
+   * The SAME twenty seconds of road, twice: once as agreed, then put back
+   * exactly where it was and driven again after a jaldi. Two different
+   * stretches compared the bends in them as much as the driver — with a
+   * cycle rickshaw at its own 12 km/h, more than the driver. Nothing else
+   * moves here: only the ride is stepped.
+   */
+  const car = r.ride.car;
+  const R = r.ride;
+  const keys = ['i','metres','t','real','was','stall','lost','skips','mps','ema','emaW','catchup','paceMult','urge'];
+  const snap = { car: { x: car.x, z: car.z, yaw: car.yaw, vel: car.vel, stuck: car.stuck }, ride: {} };
+  for (const k of keys) snap.ride[k] = R[k];
+  const slow = leg();
+  if (!r.ride) return { ok:false, why:'the ride ended inside the first stretch' };
+  Object.assign(car, snap.car);
+  Object.assign(r.ride, snap.ride);
+  // what he aims for on the road under him, asked and then asked to hurry
+  const aim0 = r.ride.roadAt(r.ride.i);
   const okFast = r.setPace(1.6);
-  const fastRun = leg();
-  return { ok:true, m0, mult:r.ride ? r.ride.paceMult : 0, okFast, slowRun:+slowRun.toFixed(1), fastRun:+fastRun.toFixed(1) };
+  const aim1 = r.ride.roadAt(r.ride.i);
+  const fast = leg();
+  return { ok:true, m0, mult:r.ride ? r.ride.paceMult : 0, okFast,
+    aim0:+(aim0*3.6).toFixed(1), aim1:+(aim1*3.6).toFixed(1),
+    slowRun:+slow.town.toFixed(1), fastRun:+fast.town.toFixed(1),
+    slowYours:+slow.yours.toFixed(1), fastYours:+fast.yours.toFixed(1),
+    rate0:+(slow.rate||1).toFixed(2), rate1:+(fast.rate||1).toFixed(2) };
 });
 /*
- * A tenth faster over twenty seconds of real road. Not the 1.6 the button
- * asks for, and it cannot be: on this run he is already catching up to the
- * five-minute promise near RIDE_CEILING (34 m/s against a 26 m/s plan), the
- * catching-up eases off as jaldi puts him inside it, and every bend caps him
- * whatever he is asked. Over two-second windows this read anywhere from 0.7x
- * to 2x; over twenty it is a steady 1.14-1.3x.
+ * Not the 1.6 the button asks for, and it cannot be: the driver leans toward
+ * the most the road allows (RoadSpeeds), which for a cycle rickshaw on the
+ * Chhatikara road is 12 km/h to 16 and on a street 11 to 13 — half of what
+ * there is on the first ask, so +9% on a street — and the bends and his own
+ * slow pull-away take some of that back. So what is held to account is what
+ * he AIMS for on this road, which must really rise (5% is less than any road
+ * gives a first jaldi), and that he then covers the same road faster.
  */
 check('asking the driver to hurry actually speeds him up',
-  pace.ok && pace.okFast && pace.fastRun > pace.slowRun * 1.1,
-  pace.ok ? `${pace.slowRun} m -> ${pace.fastRun} m per second, mult ${pace.mult}` : pace.why);
+  pace.ok && pace.okFast && pace.aim1 > pace.aim0 * 1.05 && pace.fastRun > pace.slowRun,
+  pace.ok ? `aims for ${pace.aim0} -> ${pace.aim1} km/h; ${pace.slowRun} -> ${pace.fastRun} m per second of the town's time on the same road, mult ${pace.mult}` : pace.why);
+/*
+ * ...and the ride takes less of YOUR time by much more than that, because the
+ * rate it is shown at goes up by the same 1.6. That is where a hurry goes now,
+ * rather than into a rickshaw at 94 km/h.
+ */
+check('and the ride takes less of your time: the time-lapse runs faster too',
+  pace.ok && pace.rate1 > pace.rate0 && pace.fastYours > pace.slowYours * 1.5,
+  pace.ok ? `${pace.slowYours} -> ${pace.fastYours} m per second of yours, shown at x${pace.rate0} -> x${pace.rate1}` : pace.why);
 
 /* the talk buttons exist on the bar */
 const btns = await p.evaluate(()=>['ride-start','ride-fast','ride-slow','ride-stop'].filter(id=>!!document.getElementById(id)));

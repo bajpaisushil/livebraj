@@ -438,8 +438,14 @@ body:not([data-screen="world"]) #ride-hud{ display:none !important; }
   margin:10px 0 9px; overflow:hidden; }
 #ride-hud .rh-bar i{ display:block; height:100%; width:0%; border-radius:2px;
   background:linear-gradient(90deg,#c9a03c,#e8891f); transition:width .2s linear; }
-#ride-hud .rh-foot{ display:flex; align-items:center; gap:10px; }
-#ride-hud .rh-left{ flex:1; font-size:calc(12px * var(--ui-scale)); color:var(--ink-soft);
+/* The status gets a line of its own and the buttons sit under it, right-aligned.
+   They shared one row, and on a 390 px phone four buttons left the status about
+   forty pixels: "5.4 km to go · about 3 min" stood one word to a line, nine
+   lines tall, and a bar that tall covered the arrows you steer with when you
+   take the wheel yourself. */
+#ride-hud .rh-foot{ display:flex; align-items:center; gap:8px 10px; flex-wrap:wrap;
+  justify-content:flex-end; }
+#ride-hud .rh-left{ flex:1 1 100%; font-size:calc(12px * var(--ui-scale)); color:var(--ink-soft);
   font-variant-numeric:tabular-nums; }
 #ride-hud .rh-stop{
   flex:none; border:0; cursor:pointer; padding:9px 17px; border-radius:11px;

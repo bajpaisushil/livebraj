@@ -56,6 +56,16 @@ const SUB_STEP = 1 / 30;
 const MAX_STEP = 0.05;
 const CATCH_UP = 0.25;
 
+/**
+ * How many fixed steps one frame may take: STEPS in ordinary play, LAPSE_STEPS
+ * while the world is being shown as a time-lapse (`ctx.timeScale`, see _frame).
+ * Eight steps is 0.27 s of world a frame, which a time-lapse of x8 at 30 fps
+ * already needs all of; sixteen lets x12 keep its pace at 45 fps and degrade
+ * gracefully below that, never spiral.
+ */
+const STEPS = 8;
+const LAPSE_STEPS = 16;
+
 export class GameApp {
   constructor() {
     this.ctx = null;
@@ -121,6 +131,12 @@ export class GameApp {
       rngAt: (seed) => makeRng(typeof seed === 'number' ? seed : hashSeed(seed)),
       textures: new TextureCache(),
       app: this,
+      // how much faster than real time the world is being run: 1 except
+      // while a long ride is shown as a time-lapse (RickshawSystem), which
+      // writes it and says so on the ride bar. `timeScaleNow` is what the
+      // last frame actually managed, which a slow device can make less.
+      timeScale: 1,
+      timeScaleNow: 1,
     };
     this.ctx = ctx;
 
@@ -470,9 +486,23 @@ export class GameApp {
       // walk the frame in fixed steps so a slow device loses smoothness, never
       // pace: two 40 ms steps rather than one 80 ms leap, or one clamped 50 ms
       // step that quietly throws the other 30 ms away
-      let left = raw;
+      /*
+       * A TIME-LAPSE RUNS THE WHOLE WORLD FASTER, NOT ONE VEHICLE.
+       *
+       * A long ride used to be made bearable by driving the rickshaw at up to
+       * 94 km/h past people walking at 5. Now the rickshaw keeps its real
+       * speed and, for a long ride, everything here simply takes more of the
+       * same fixed steps a frame: the walkers, the traffic, the cows and the
+       * ride itself, all together, as a film run fast does. The ride bar says
+       * by how much. The camera, the sky and the screens below stay on the
+       * real clock, because they are about you watching, not the world.
+       */
+      const scale = ctx.timeScale > 1 ? ctx.timeScale : 1;
+      const want = raw * scale;
+      let left = want;
       let guard = 0;
-      while (left > 1e-4 && guard++ < 8) {
+      const steps = scale > 1 ? LAPSE_STEPS : STEPS;
+      while (left > 1e-4 && guard++ < steps) {
         const dt = Math.min(left, left > MAX_STEP ? SUB_STEP : left);
         left -= dt;
         ctx.__simAccum = (ctx.__simAccum || 0) + dt;
@@ -488,6 +518,8 @@ export class GameApp {
         if (ctx.dialogue) ctx.dialogue.update(dt, ctx);
         if (ctx.parikrama) ctx.parikrama.update(dt, ctx);
       }
+      // what this frame managed, so nobody quotes a pace the device cannot keep
+      if (raw > 1e-4) ctx.timeScaleNow = (want - Math.max(0, left)) / raw;
     }
 
     const dt = Math.min(raw, MAX_STEP);

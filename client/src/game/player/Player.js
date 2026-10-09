@@ -606,6 +606,25 @@ export class Player {
     if (!a) return;
     a.t += dt / a.duration;
 
+    /*
+     * A timeline that ENDS on a hold stays where it ended until something
+     * cancels it. Sitting down is the one there is, and nothing honoured its
+     * hold: 1.4 s into every ride the passenger stood back up, with a head
+     * through the canopy for the rest of the journey — under a time-lapse of
+     * x5, a third of a second in. The promise still resolves on time, for
+     * anyone waiting on the sitting-down; getting out cancels it, and with it
+     * the pose, as every way out of a vehicle already does.
+     */
+    const last = a.timeline[a.timeline.length - 1];
+    if (a.t >= 1 && last.hold) {
+      a.t = 1;
+      if (!a.held) { a.held = true; a.resolve(); }
+      const p = POSES[last.pose] || POSES.idle;
+      this._blendPose(p, p, 1);
+      this._hipDrop = p._drop || 0;
+      return;
+    }
+
     if (a.t >= 1) {
       const { resolve } = a;
       this._action = null;

@@ -26,13 +26,13 @@ const _v = new THREE.Vector3();
  * Vrindavan travels.
  */
 const VEHICLES = [
-  { id: 'cycle-rickshaw', label: 'Cycle rickshaw', hindi: 'रिक्शा', speed: 3.2, w: 1.2, l: 2.6, body: 0x2f5d5a, canopy: 0xc8452a, hire: { base: 10, perKm: 15, seats: 2 } },
-  { id: 'e-rickshaw', label: 'E-rickshaw', hindi: 'ई-रिक्शा', speed: 4.6, w: 1.4, l: 2.8, body: 0x3f8f6a, canopy: 0xf2ece0, hire: { base: 10, perKm: 12, seats: 6 } },
-  { id: 'auto', label: 'Auto rickshaw', hindi: 'ऑटो', speed: 5.4, w: 1.3, l: 2.7, body: 0x1d4f3f, canopy: 0xf5d020, hire: { base: 20, perKm: 18, seats: 3 } },
-  { id: 'tempo', label: 'Shared tempo', hindi: 'टेम्पो', speed: 4.2, w: 1.6, l: 3.6, body: 0x3a5a8a, canopy: 0xe0d8c0, hire: { base: 10, perKm: 7, seats: 10, shared: true } },
-  { id: 'taxi', label: 'Cab', hindi: 'टैक्सी', speed: 6.6, w: 1.75, l: 4.1, body: 0xf0f0ea, canopy: null, hire: { base: 60, perKm: 26, seats: 4 } },
-  { id: 'car', speed: 6.2, w: 1.7, l: 4.0, body: 0xbfc4c8, canopy: null },
-  { id: 'bike', speed: 6.8, w: 0.7, l: 1.9, body: 0x3a3a42, canopy: null },
+  { id: 'cycle-rickshaw', label: 'Cycle rickshaw', hindi: 'रिक्शा', speed: 3.2, w: 1.2, l: 2.6, h: 1.95, seat: 0.8, body: 0x2f5d5a, canopy: 0xc8452a, hire: { base: 10, perKm: 15, seats: 2 } },
+  { id: 'e-rickshaw', label: 'E-rickshaw', hindi: 'ई-रिक्शा', speed: 4.6, w: 1.4, l: 2.8, h: 1.76, seat: 0.62, body: 0x3f8f6a, canopy: 0xf2ece0, hire: { base: 10, perKm: 12, seats: 6 } },
+  { id: 'auto', label: 'Auto rickshaw', hindi: 'ऑटो', speed: 5.4, w: 1.3, l: 2.7, h: 1.70, seat: 0.56, body: 0x1d4f3f, canopy: 0xf5d020, hire: { base: 20, perKm: 18, seats: 3 } },
+  { id: 'tempo', label: 'Shared tempo', hindi: 'टेम्पो', speed: 4.2, w: 1.6, l: 3.6, h: 1.95, seat: 0.8, body: 0x3a5a8a, canopy: 0xe0d8c0, hire: { base: 10, perKm: 7, seats: 10, shared: true } },
+  { id: 'taxi', label: 'Cab', hindi: 'टैक्सी', speed: 6.6, w: 1.75, l: 4.1, h: 1.52, seat: 0.5, body: 0xf0f0ea, canopy: null, hire: { base: 60, perKm: 26, seats: 4 } },
+  { id: 'car', speed: 6.2, w: 1.7, l: 4.0, h: 1.5, seat: 0.48, body: 0xbfc4c8, canopy: null },
+  { id: 'bike', speed: 6.8, w: 0.7, l: 1.9, h: 1.24, seat: 0.95, body: 0x3a3a42, canopy: null },
 ];
 
 /** How many of a given kind you should expect to see. */
@@ -167,17 +167,30 @@ export class Crowd {
     }
     this.dogGeo = dog.build();
 
+    /*
+     * `h` is each vehicle's real overall height, and the roof goes there. It was
+     * 1.47 m for everything with a canopy, and a passenger sitting under it put
+     * head and shoulders through the top. Measured: an e-rickshaw stands
+     * 1.725-1.87 m (Saarthi, JSA, Neelam, Ele, E-Ashwa specifications; 1.76 is
+     * the middle of them), a Bajaj RE auto 1.70, a Dzire-sized cab 1.52; the
+     * cycle rickshaw's hood and the tempo are estimates. `seat` is where a
+     * seated passenger's hips are (RickshawSystem._seat), set so the avatar —
+     * 0.99 m from hips to crown — clears the roof by 3 cm: an e-rickshaw's rear
+     * bench about half a metre up, an auto's lower, a cab's lower still, as
+     * they are. tools/checks/seated.mjs measures it.
+     */
     this.vehicleGeo = VEHICLES.map((v) => {
       const b = new MeshBuilder();
+      const H = v.h || 1.47;
       b.box(0, 0.32, 0, v.w, 0.5, v.l, v.body);
-      if (v.id === 'taxi') b.box(0, 1.28, -v.l * 0.2, 0.5, 0.16, 0.24, 0xf5d020);
+      if (v.id === 'taxi') b.box(0, H, -v.l * 0.2, 0.5, 0.16, 0.24, 0xf5d020);
       if (v.canopy) {
-        b.box(0, 1.35, -v.l * 0.12, v.w + 0.12, 0.12, v.l * 0.62, v.canopy);
+        b.box(0, H - 0.12, -v.l * 0.12, v.w + 0.12, 0.12, v.l * 0.62, v.canopy);
         for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
-          b.box(sx * v.w * 0.42, 0.82, sz * v.l * 0.24, 0.06, 0.56, 0.06, 0x5a5a52);
+          b.box(sx * v.w * 0.42, 0.82, sz * v.l * 0.24, 0.06, H - 0.94, 0.06, 0x5a5a52);
         }
       } else {
-        b.box(0, 0.82, -v.l * 0.05, v.w * 0.86, 0.42, v.l * 0.55, 0x8fa8b8);
+        b.box(0, 0.82, -v.l * 0.05, v.w * 0.86, H - 0.82, v.l * 0.55, 0x8fa8b8);
       }
       // wheels
       for (const sx of [-1, 1]) for (const sz of [-1, 1]) {

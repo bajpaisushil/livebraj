@@ -306,11 +306,19 @@ export function driveStep(a, dt, ctx, wantYaw, wantSpeed, prof, solid = true) {
  * still brake down to that in time. Reads about fifteen waypoints on a 4 m
  * spacing, allocates nothing, and is the reason a rickshaw arrives at a bend
  * already slow rather than discovering it halfway round.
+ *
+ * `roadAt(k)`, when given, is the speed the ROAD allows at point k (see
+ * RoadSpeeds) and is braked for exactly as a corner is: a driver coming off
+ * the Chhatikara road into a gali is already slow on reaching it, rather
+ * than finding out at the mouth of the lane.
  */
-export function pathLimit(pts, i, x, z, prof, cap) {
+export function pathLimit(pts, i, x, z, prof, cap, roadAt = null) {
   const n = pts.length;
-  if (n < 3 || i >= n) return cap;
+  if (i >= n) return cap;
   let limit = cap;
+  // the road under the vehicle now: the stretch leading to the waypoint ahead
+  if (roadAt) limit = Math.min(limit, roadAt(Math.max(0, i - 1)));
+  if (n < 3) return limit;
   let ahead = Math.hypot(pts[i][0] - x, pts[i][1] - z);
 
   for (let k = Math.max(1, i); k < n - 1 && ahead < LOOK_M && k - i < LOOK_PTS; k++) {
@@ -318,20 +326,80 @@ export function pathLimit(pts, i, x, z, prof, cap) {
     const ax = b[0] - a[0], az = b[1] - a[1];
     const bx = c[0] - b[0], bz = c[1] - b[1];
     const la = Math.hypot(ax, az), lb = Math.hypot(bx, bz);
+    let hold = roadAt ? roadAt(k) : Infinity;
     if (la > 1e-3 && lb > 1e-3) {
       const turn = Math.abs(angleDelta(Math.atan2(ax, az), Math.atan2(bx, bz)));
       if (turn > 0.05) {
         // the radius of the arc that fits this corner, and the speed it holds
         const r = Math.min(la, lb) / (2 * Math.sin(Math.min(turn, 3) / 2));
-        const hold = Math.sqrt(prof.lat * Math.max(r, 0.6));
-        // ...then how fast you may be going now and still brake down to it
-        const now = Math.sqrt(hold * hold + 2 * prof.brake * ahead);
-        if (now < limit) limit = now;
+        hold = Math.min(hold, Math.sqrt(prof.lat * Math.max(r, 0.6)));
       }
+    }
+    if (hold < limit) {
+      // ...then how fast you may be going now and still brake down to it
+      const now = Math.sqrt(hold * hold + 2 * prof.brake * ahead);
+      if (now < limit) limit = now;
     }
     ahead += lb;
   }
   return limit;
+}
+
+/**
+ * How long a route really takes to drive, in seconds, from rest to rest.
+ *
+ * The same physics `pathLimit` and `driveStep` apply, run once over the whole
+ * route instead of a frame at a time: every point is held to the speed its
+ * road allows (`lim[k]`, m/s) and the speed its corner holds; a pass forward
+ * then limits each point to what the vehicle could have reached from the last
+ * one at its acceleration, and a pass back to what it could still brake down
+ * from in time for the next. What is left is a speed profile a driver could
+ * actually drive, and its time is the honest length of the journey — the
+ * figure the fare quote says out loud and the time-lapse is chosen from.
+ *
+ * It knows nothing of traffic, cows or the vehicle in front, so it is the best the
+ * road allows and the ride's own measurement takes over once there is one.
+ * Allocates two arrays a call, and is only ever called when a route is laid.
+ * Pass `after` (length n) to have it filled with the time left from each point.
+ */
+export function routeSeconds(pts, lim, prof, after = null) {
+  const n = pts.length;
+  if (n < 2) { if (after && n) after[0] = 0; return 0; }
+  const v = new Float32Array(n);
+  const seg = new Float32Array(n);             // seg[k]: metres from k to k+1
+  for (let k = 0; k < n - 1; k++) {
+    seg[k] = Math.hypot(pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1]);
+  }
+  for (let k = 0; k < n; k++) {
+    let hold = lim[Math.min(k, lim.length - 1)];
+    if (k > 0 && k < n - 1 && seg[k - 1] > 1e-3 && seg[k] > 1e-3) {
+      const a = pts[k - 1], b = pts[k], c = pts[k + 1];
+      const turn = Math.abs(angleDelta(Math.atan2(b[0] - a[0], b[1] - a[1]),
+        Math.atan2(c[0] - b[0], c[1] - b[1])));
+      if (turn > 0.05) {
+        const r = Math.min(seg[k - 1], seg[k]) / (2 * Math.sin(Math.min(turn, 3) / 2));
+        hold = Math.min(hold, Math.sqrt(prof.lat * Math.max(r, 0.6)));
+      }
+    }
+    v[k] = hold;
+  }
+  v[0] = 0;                                    // from rest
+  v[n - 1] = 0;                                // ...to rest, to set you down
+  for (let k = 1; k < n; k++) {
+    v[k] = Math.min(v[k], Math.sqrt(v[k - 1] * v[k - 1] + 2 * prof.accel * seg[k - 1]));
+  }
+  for (let k = n - 2; k >= 0; k--) {
+    v[k] = Math.min(v[k], Math.sqrt(v[k + 1] * v[k + 1] + 2 * prof.brake * seg[k]));
+  }
+  // `after[k]`, when asked for, is the time from point k to the end: what is
+  // left of the journey, honestly, from wherever the vehicle has got to
+  let t = 0;
+  if (after) after[n - 1] = 0;
+  for (let k = n - 2; k >= 0; k--) {
+    t += seg[k] / Math.max(0.3, (v[k] + v[k + 1]) * 0.5);
+    if (after) after[k] = t;
+  }
+  return t;
 }
 
 /**
