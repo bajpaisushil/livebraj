@@ -235,8 +235,11 @@ searching the backlog for it. That is the failure this file exists to stop.*
    and the 2026-27 festival dates (`CrowdCalendar.js` cites them). People
    come and go a few a second and only out of sight; a toast says why on a
    festival or a weekend. STILL OPEN: embedding the official live darshan
-   stream (allowed, but needs a network and a screen to put it on); vehicles
-   do not thin yet. Original notes follow.
+   stream (allowed, but needs a network and a screen to put it on).
+   **The traffic too, 2026-10-09** (87c3070): a quarter of it in the small
+   hours, all of it on a Sunday evening or a festival, two vehicles a second
+   on or off the road and only out of sight; a ride you are on is never
+   taken off; `crowdcal.mjs` 17/17, mutation-tested. Original notes follow.
    **Live data.** *"can we have live data like crowd show here from iskcon
    vrindavan youtube channel or somewhat?"* Feasibility logged 2026-09-30:
    the official live darshan can be EMBEDDED (allowed); counting people out
@@ -289,7 +292,13 @@ searching the backlog for it. That is the failure this file exists to stop.*
     reads 2 overlaps or fewer on 24. **`dpad-dir` done the same day.**
     **`gatherings`, `vehcam`, `starthere` done 2026-10-09** (a184f96): 977 s,
     599 s and 381 s in the slowest suite to 26 s, 6 s and 12 s, the three
-    together under a minute, twice; vehcam no longer flaky. **`driving` done
+    together under a minute, twice; vehcam no longer flaky. **`cheats` owns
+    the clock too, 2026-10-09** (ab12734): its rides were stepped but the town
+    ran on in real time between the steps, and "the ride keeps going while
+    the map is open" failed one run in three on the build before as after;
+    and `gatherings` pins Braj's clock to 10:00 (80f2979) — it failed when
+    the suite ran after nine at night, when no gathering sits. Full suite
+    48/48 in 38 min. **`driving` done
     2026-10-09** (04d005b): it owns the clock as well, 5.3 -> 6.4 -> 7.1 m/s
     every run. And the game no longer asks Open-Meteo anything under
     automation: a burst of parallel runs had drawn a 429 Too Many Requests
@@ -484,13 +493,17 @@ searching the backlog for it. That is the failure this file exists to stop.*
     a second, natural pond north of it and the Shadang van forest round
     both. The Braj Foundation de-silted it from October 2007 ("upto the brim
     with clean water ... most of the year"); the temple keeps "a rare and
-    exquisite idol of Krishna seated on a Garud" (brajfoundation.org); the
-    temple itself is plain, no shikhara (vrindavanmathuraguide.com). A
-    brajrasik.org photograph of the kund: vertical rubble-stone walls
-    whitewashed along the top, a red sandstone coping with hexagonal-lattice
-    jali railings, a railed platform out over the water about 2 m down,
-    babool scrub round it. Wants a photograph of the temple before it is
-    built.
+    exquisite idol of Krishna seated on a Garud" (brajfoundation.org).
+    brajrasik.org's gallery (24 photographs, March 2024) has what a build
+    needs: the kund's vertical rubble-stone walls whitewashed along the top,
+    red sandstone coping with hexagonal-lattice jali railings, a railed
+    platform out over the water about 2 m down, ghats with small chhatris at
+    the far corners, a paved walk round it with sandstone benches and a big
+    tree on its platform, a Shiva lingam; the temple painted lime green with
+    a small white shikhara (not plain, as one guide has it), a white-flagged
+    courtyard with a pillared veranda and a small white shrine, a blue wall
+    mural of Garuda seizing a snake (the Kaliya boon), a white scalloped-arch
+    gateway; Govind on Garuda in the sanctum; babool scrub all round.
 
 ## OPEN — reported, not yet reproduced
 

@@ -3796,3 +3796,18 @@ sits) and now pins Braj's clock to 10:00 (80f2979), 29/29; `cheats`' ride
 assertions failed and also fail on the build before today's work (one run in
 three, "moved 1 m with the map up") — the ride still shares the road with
 traffic moving in real time. Next: `cheats` owns the clock.
+
+## 2026-10-09 — the traffic keeps the same day; cheats and gatherings off the clock
+
+DONE (87c3070, ab12734, 80f2979). The calendar now thins the traffic as it
+does the people: a quarter of it at three in the morning, all of it on a
+Sunday evening, two vehicles a second and only out of sight, never a ride
+you are on (`crowdcal.mjs` 17/17, mutation-tested — without the step loop's
+skip every parked vehicle is swept straight back onto the road). `cheats`
+owns the clock: its "map is open" ride failed one run in three on the build
+before today's work as on this one, the town moving in real time between
+the check's steps; held, the noise gone, it showed two faults of its own (a
+frozen cow on the ride's line; a menu word measured from where a time-lapse
+had carried you from) and both are fixed. `gatherings` pins Braj's clock to
+10:00: after nine at night nothing sits and it failed by the hour it ran.
+Full suite 48/48 in 38 min.
