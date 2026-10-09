@@ -3629,3 +3629,25 @@ written, so Madan Mohan was measured and built here, solo.
 - Player.js carries the other session's uncommitted work; both changes to it
   here (`_wayOut` / `placeAt`, the held pose) were committed by laying only
   these hunks into it, and their edits are byte-for-byte as they were.
+
+## 2026-10-09 — Jaipur Mandir, on its real site, the gate on the east
+
+- **Item 13 — 137a53b.** Starting on its layout turned up something larger: the
+  temple had stood 1 km from its building since the first commit. Its curated
+  pin named OSM way 679447890 and sat at 27.56720 / 77.68190; the way's centre
+  is 27.57222 / 77.69036. Imported from OSM now — only its own entry added to
+  the generated files, which a fresh import would otherwise reformat and nudge
+  (hand-tuned positions elsewhere by centimetres); its stray map pin removed.
+- The survey left the orientation unresolved; ESRI z19 imagery settles it
+  EAST, and gives the plan: block and terrace, the walled core, the ranges'
+  depths, the courts, the forecourt, the office, the goshala's sheds. Written
+  into docs/research/jaipur-mandir.md.
+- Built new in JaipurMandir.js (the old 'temple-fort-palace' builder is gone):
+  everything listed under item 13. Photographed from the air against the
+  imagery, from the drive, the court, the terrace, inside the hall, on the
+  roof; fixed on the way: horizontal quads facing the wrong way (the hall's
+  chequer floor and the shed roofs were invisible from above), arches drawn
+  on solid walls (now cut through, spandrels and soffits filled), roofs drawn
+  salmon where the imagery has grey concrete, a passage with no floor.
+- `jaipur.mjs` 13/13; `halls` asked for a threshold before each altar, which
+  the sanctums now have.

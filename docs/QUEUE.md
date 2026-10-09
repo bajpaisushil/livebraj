@@ -252,7 +252,21 @@ searching the backlog for it. That is the failure this file exists to stop.*
     Kaliya Ghat for the arch fix. Research first, per ghat, what is actually
     there today — the Yamuna has moved away from many of Vrindavan's ghats, so
     "dry ghat facing a floodplain" may be the true picture — then build that.
-13. **Jaipur Mandir's layout.** Its survey places the temple block at the WEST
+13. ~~**Jaipur Mandir's layout.**~~ **DONE 2026-10-09** (137a53b). It had
+    stood 1 km south-west of its own building from the first day: the curated
+    pin named OSM way 679447890 and sat at 27.56720 / 77.68190. It is imported
+    from that way now, and rebuilt in `JaipurMandir.js` to the survey and the
+    plan measured off z19 imagery: the gate faces EAST (the drive meets the
+    middle of the east range, coaches on the forecourt, the axial path), the
+    shrine block in the west of a 124 x 74 m walled core, its terrace and five
+    risers, the great arch with the altar glowing through it, the dark
+    hypostyle hall (16 columns, one pier paired, plain arches, the central bay
+    vaulted higher, a chequer floor) and three sanctums, the roof kiosk with
+    its barrel roof and two domes, cloister ranges, the two-storey street
+    range and its gateway, the formal court, the narrow court's single tree,
+    the ragged court, the forecourt, the goshala's blue sheds. `jaipur.mjs`
+    13/13 walks in from the drive to darshan. Original notes follow.
+    **Jaipur Mandir's layout.** Its survey places the temple block at the WEST
     of its enclosures with the open ground EAST, and takes an east entrance as
     the working assumption (flagged unresolved). Our builder puts the gate in
     a long south range. Apply the survey's site plan.
