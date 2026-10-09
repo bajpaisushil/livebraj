@@ -17,6 +17,11 @@
  * tracked by their own identifiers, so walking and looking never fight. The
  * left stick floats — it is born wherever the thumb lands, which is the whole
  * difference between a phone control that feels right and one that does not.
+ *
+ * The stick and the D-pad are two schemes for the same thumb, and only one is
+ * live at a time (settings.moveControl). With the D-pad chosen, no stick is
+ * ever born and a left-half touch off the arrows looks around, as the right
+ * thumb does; with the stick chosen, the D-pad is off the page entirely.
  */
 
 import * as THREE from 'three';
@@ -98,8 +103,13 @@ class VirtualStick {
     this.mag = 0;             // 0..1 after dead zone and response curve
     this.cx = 0;              // base centre, client coords
     this.cy = 0;
-    this._bx = NaN; this._by = NaN;
-    this._kx = NaN; this._ky = NaN;
+    // Where base and knob were last put, so _place only writes styles that
+    // changed. "Never placed" has to read as far away, hence Infinity. These
+    // were NaN, and `Math.abs(x - NaN) > 0.4` is false for every x — so the
+    // first write never happened, nor any after it, and the stick drew in the
+    // top-left corner behind the menu button however well it steered.
+    this._bx = Infinity; this._by = Infinity;
+    this._kx = Infinity; this._ky = Infinity;
   }
 
   attach(layer) {
@@ -248,6 +258,8 @@ export class InputManager {
     this._lookIds = [];           // look-role identifiers, oldest first
     this._pinchPrev = 0;
     this._stick = new VirtualStick();
+    this._stickOn = false;        // the stick is the chosen scheme; see _applySettings
+    this._dpad = null;            // the D-pad's held directions, once it is bound
     this._runHold = 0;
     this._runLatch = false;
 
@@ -385,6 +397,19 @@ export class InputManager {
     this._invert = s.invertY ? -1 : 1;
     if (this._stickReady) this._stick.setScale(this._scale);
     this._rectDirty = true;
+
+    // One way to walk on screen at a time — UISystem._applyMoveScheme has the
+    // story. This runs on EVERY settings change, the volume slider included,
+    // so both lines below are no-ops unless the scheme has just been switched
+    // away from a control that is still being held.
+    const stickOn = s.moveControl === 'stick';
+    // A stick put away mid-walk stops walking. Its touch stays a 'move' record
+    // that now does nothing, and is dropped as usual when the thumb lifts.
+    if (!stickOn && this._stick.active) this._stick.end();
+    // A D-pad taken off the page cannot be left holding a direction, or the
+    // RUN toggle, that nobody can see any more to let go of.
+    if (stickOn && this._dpad) this._clearDpad();
+    this._stickOn = stickOn;
   }
 
   _addPrompt(p) {
@@ -493,7 +518,10 @@ export class InputManager {
         }
       }
 
-      if (leftHalf && !this._stick.active && this._touches.size === 0) {
+      // Only while the stick is the chosen scheme. With the D-pad chosen this
+      // touch is a look, wherever on the left it lands — a stick born here
+      // would be drawn straight over the D-pad, which is the bug this ends.
+      if (leftHalf && this._stickOn && !this._stick.active && this._touches.size === 0) {
         rec.role = 'move';
         this._stick.begin(t.clientX, t.clientY, rect);
       } else {
@@ -787,9 +815,11 @@ export class InputManager {
    * Per-frame composition
    * ---------------------------------------------------------------- */
   /**
-   * The D-pad. Up and down walk, left and right turn, centre toggles running.
-   * Someone who has never held a game controller can navigate with this; the
-   * floating stick stays available for anyone who prefers it.
+   * The D-pad. Up and down walk, left and right step sideways, centre toggles
+   * running. Someone who has never held a game controller can navigate with
+   * this, which is why it is the default scheme; the floating stick is the
+   * other one, for anyone who prefers it, and Settings shows one or the other
+   * — never both, because they want the same patch of screen.
    */
   _bindDpad() {
     const pad = document.getElementById("dpad");
@@ -812,6 +842,14 @@ export class InputManager {
       btn.addEventListener("pointercancel", up);
       btn.addEventListener("contextmenu", (e) => e.preventDefault());
     });
+  }
+
+  /** Let go of every D-pad direction and the RUN toggle, and say so on the buttons. */
+  _clearDpad() {
+    const d = this._dpad;
+    d.up = d.down = d.left = d.right = d.run = false;
+    const pad = document.getElementById("dpad");
+    if (pad) pad.querySelectorAll(".dp.held").forEach((b) => b.classList.remove("held"));
   }
 
 

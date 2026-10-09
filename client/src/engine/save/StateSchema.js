@@ -50,6 +50,12 @@ export function defaultState() {
       largeText: false,
       reduceMotion: false,
       tapToMove: false,
+      // How you walk on a touch screen: 'dpad' or 'stick', and only ever one
+      // of them on screen. The D-pad is the default because it is there
+      // before you touch anything; the floating stick is invisible until a
+      // thumb lands, which nobody who has not played games would discover.
+      // Anything else an old or hand-edited save holds reads as the D-pad.
+      moveControl: 'dpad',
       // lean the phone to steer, while you are at the wheel and nowhere else.
       // On by default because the sensor is simply absent on a desktop, where
       // it then costs nothing.

@@ -610,6 +610,17 @@ body:not([data-screen="world"]) #ride-hud{ display:none !important; }
   left:calc(51px * var(--ui-scale)); top:calc(51px * var(--ui-scale));
   font-size:calc(9.5px * var(--ui-scale)); letter-spacing:.12em; border-radius:50%;
 }
+/* ---------- one way to walk on screen, never two ----------
+   The D-pad and the floating stick both want the lower left, because that is
+   where a left thumb rests. Shown together, the D-pad (left:12 bottom:152,
+   150x150) sat exactly where the stick is born: a thumb meant for the stick
+   pressed RUN, and #touch-layer underneath received nothing. Settings picks
+   one, UISystem writes it to body[data-move], and the other is display:none,
+   so it neither draws nor takes a touch. InputManager also refuses to start
+   a stick while the D-pad is the choice, so this is not the only guard. */
+body[data-move="stick"] #dpad{ display:none !important; }
+body[data-move="dpad"] #stick-base,
+body[data-move="dpad"] #stick-knob{ display:none; }
 
 /* ---------- map zoom ---------- */
 #map-zoom{

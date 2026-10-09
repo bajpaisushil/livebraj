@@ -52,6 +52,7 @@ export class UI {
       'place-readout', 'place-road', 'place-area', 'dpad', 'map-zoom', 'map-tap',
     ]) this.el[id] = document.getElementById(id);
 
+    this._applyMoveScheme();       // before any screen shows either control
     this._wireChrome();
     this._buildSettings();
     this._buildAvatar();
@@ -389,6 +390,23 @@ export class UI {
     if (this.miniWrap) this.miniWrap.classList.toggle('off', s.showMinimap === false);
   }
 
+  /**
+   * One way to walk on screen, never two.
+   *
+   * The D-pad and the floating stick both belong in the lower left, because
+   * that is where a left thumb rests, and with both live the D-pad sat on the
+   * exact spot the stick is born: the thumb pressed RUN and the touch layer
+   * underneath never heard of it. So Settings chooses one. This only writes
+   * the choice where the stylesheet can see it — the CSS takes the other one
+   * off the page entirely (display:none: nothing drawn, no touch taken) and
+   * InputManager reads the same setting to stop a stick being born at all.
+   * `show()` still decides whether the D-pad is up for the current screen.
+   */
+  _applyMoveScheme() {
+    const s = this.ctx.state.settings;
+    document.body.dataset.move = s.moveControl === 'stick' ? 'stick' : 'dpad';
+  }
+
   _wireEvents() {
     const bus = this.ctx.bus;
     this._off = [
@@ -700,9 +718,11 @@ export class UI {
       const r = row(g, label, hint);
       const seg = document.createElement('div');
       seg.className = 'seg';
+      seg.id = `set-${key}`;          // as the sliders and toggles are
       options.forEach(([val, text]) => {
         const b = document.createElement('button');
         b.className = `ui-interactive${s[key] === val ? ' sel' : ''}`;
+        b.dataset.val = val;
         b.textContent = text;
         b.addEventListener('click', () => {
           s[key] = val;
@@ -721,12 +741,21 @@ export class UI {
     slider(g1, 'Effects', 'sfxVolume', 0, 1, 0.05);
 
     const g2 = group('Movement');
+    // Whatever an old or hand-edited save holds, anything but 'stick' is the
+    // D-pad to the input and the stylesheet, so it is the D-pad that shows
+    // as chosen here — never a row with nothing selected.
+    if (s.moveControl !== 'stick') s.moveControl = 'dpad';
+    // "Arrows", not "D-pad": the arrows are the default precisely for people
+    // who have never held a game controller, and D-pad is that controller's
+    // word. It also broke at its hyphen in this row on a 390 px phone.
+    segment(g2, 'Walk with', 'moveControl', [['dpad', 'Arrows'], ['stick', 'Stick']],
+      'Arrows that stay on screen, or a stick that appears wherever your left thumb lands');
     slider(g2, 'Camera speed', 'sensitivity', 0.3, 2.5, 0.1);
     slider(g2, 'Walking speed', 'moveSpeed', 0.6, 1.8, 0.1);
     slider(g2, 'Camera further back', 'cameraDistance', 2.5, 12, 0.5,
       'Slide right to pull the camera back and see more of the street. Left brings it over the shoulder');
     toggle(g2, 'Invert look', 'invertY');
-    toggle(g2, 'Tap to walk', 'tapToMove', 'Tap where you want to go instead of using the stick');
+    toggle(g2, 'Tap to walk', 'tapToMove', 'Tap where you want to go instead of using the arrows or the stick');
 
     const g3 = group('The Dham');
     segment(g3, 'Time of day', 'timeOfDay', [
@@ -777,6 +806,7 @@ export class UI {
   _commit() {
     const s = this.ctx.state.settings;
     this._applyHudVisibility();
+    this._applyMoveScheme();
     this.ctx.save.write();
     this.ctx.bus.emit('settings:changed', { settings: s });
   }
