@@ -478,7 +478,34 @@ searching the backlog for it. That is the failure this file exists to stop.*
     now is). Narrowing it changes how traffic spaces itself, and so the
     seeded `traffic` and `verges` baselines: a pass of its own, with those
     seeds swept again.
-21. **Vehicles keep left — PARTLY DONE 2026-10-09** (1a1ecb3). Found
+21. ~~**Vehicles keep left.**~~ **DONE 2026-10-10** (3f916c1). Probed, the
+    standoffs were not only head-on meetings: a vehicle chose its next leg
+    among every edge out of a node, the one it had just driven included, and
+    with a node every 8 m it turned round in the road about one leg in three
+    (51 of 163 on seed 1), in front of whoever was following. Now: no U-turn
+    unless the road ends (or nothing else a vehicle fits down leaves the
+    node — NavGraph's `_edgeOpen`, which only the hired routes used), and no
+    leg into a dead end where there is a way on; a lane — a little left of
+    the middle on a street (0.6 m, the walkers being 2.6 m out), moving over
+    only as far as what is coming needs, a lane each on the wider roads, the
+    middle of a one-way carriageway; arrival level with the node AND near the
+    lane (level alone let a vehicle that swung wide never come back); what is
+    ahead measured as the gap from the nose by real lengths (the stop was
+    3.2 m centre to centre and a cab is 4.1 m long, so cabs queued a metre
+    into each other); held by something going nowhere, a vehicle waits a
+    moment and goes round it — overtaking on the right, pulling in for what
+    is coming, driving on past what is across its path — and of two holding
+    each other, one goes, by a fixed order; walkers step round a vehicle
+    instead of standing at its nose; recycled vehicles land on roads, not in
+    the galis. `traffic` now counts two BODIES that touch (the old count,
+    centres within 1.5 m, missed every one of those queued cabs: measured as
+    bodies, the traffic before had a pair inside each other for 36-45 s on 16
+    of 60 seeds) and asserts lanes pass, standoffs clear and U-turns are
+    forced; `verges` measures from the lane and asserts keeping left. Over
+    seeds 1-60: `traffic` 51 green (the old traffic, measured the same way:
+    44), `verges` 52 (52); each new assertion mutation-tested. Full suite
+    49/49. What is left is item 23. Original notes follow.
+    **Vehicles keep left — PARTLY DONE 2026-10-09** (1a1ecb3). Found
     sweeping item 20: every remaining `traffic` failure, on 14 of 60 seeds,
     was two vehicles meeting head-on, each seeing the other dead ahead and
     stopping for good. Probed, the worst were on NH 44 by Chhatikara: OSM
@@ -517,6 +544,21 @@ searching the backlog for it. That is the failure this file exists to stop.*
     courtyard with a pillared veranda and a small white shrine, a blue wall
     mural of Garuda seizing a snake (the Kaliya boon), a white scalloped-arch
     gateway; Govind on Garuda in the sanctum; babool scrub all round.
+
+23. **Vehicles held in the crowd round you; corners clipped at junctions —
+    QUEUED 2026-10-10.** Left by item 21, measured: on 9 of 60 seeds a pair
+    of vehicles still touches for more than 4 s, or more than 15 half-second
+    samples in 45 s. The long ones (seeds 32 and 47, 16-18 s) are vehicles
+    by the start held by walker after walker at the bumper — the crowd is
+    thickest round you, and an ambient walker passes THROUGH a vehicle (no
+    collision between the two), so one stands in its stop zone for as long
+    as it takes to walk through it — with the next vehicle queued into it.
+    The short ones are corners clipped at junctions: a vehicle turning onto
+    its next leg finds one stopped across it (it now looks down the line it
+    is steering for, for vehicles), and `_crossYield` does not see a merge
+    once the two are within 40 degrees. What would fix it: walkers solid to
+    vehicles and vehicles creeping through a crowd as they do here (people
+    part for a horn), and one vehicle at a time through a junction's stitch.
 
 ## OPEN — reported, not yet reproduced
 

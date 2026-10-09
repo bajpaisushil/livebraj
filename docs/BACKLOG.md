@@ -3831,3 +3831,39 @@ garudgovind green after it. ISKCON: the walk under the arch had blank marble whe
 towers open in cusped arches; now it has them. Left in item 0a, with the
 reasons: the 3 m porch OSM puts against the samadhi and museum, and the
 museum room, whose contents are undocumented.
+
+## 2026-10-10 — Vehicles keep left, and go round what will not move
+
+DONE (3f916c1). Item 21, finished. The four standoffs left after the one-way
+roads were not all head-on meetings: probed, a vehicle chose its next leg
+among every edge out of the node, the one just driven included, and with a
+node every 8 m turned round in the road a third of the time — in front of
+whoever followed (seed 56: an e-rickshaw and an auto 0.88 m apart, each with
+the other dead ahead). Fixed: U-turns only where the road ends; no leg into a
+dead end where there is a way on; edges a vehicle fits down
+(NavGraph `_edgeOpen`). Keeping left was done the second time with what the
+first attempt lacked: arrival measured along the leg, no lane on a one-way
+carriageway, and — the sweep's lesson — a street lane that is only 0.6 m,
+moving over for what comes: a full 1.05 m lane put every vehicle 1.55 m from
+the walkers on its side, and with the "ahead" corridor narrowed to match it
+a sweep had a vehicle standing in somebody in 27 towns of 60 against 7.
+Going round: a vehicle held by something going nowhere waits 2 s (6 s
+behind a queue) and goes round it; of two holding each other one goes, by a
+fixed order. The count that started it again whenever somebody walked
+between a standoff now runs down instead. Walkers step round a vehicle — a
+walker pushed straight away from one stood at its nose, push and pull
+cancelling, and held it for good (seed 17).
+
+Measured honestly: `traffic` counted a collision as two centres within
+1.5 m. As bodies, each its real size, the traffic before had cabs queued a
+metre into each other — the stop was 3.2 m centre to centre, a cab 4.1 m
+long — for 36-45 s on 16 of 60 seeds. The check now counts bodies, asserts
+no pair touches for more than 4 s and at most 15 samples in 45 s, and that
+two in their lanes pass, a standoff clears, a person standing in the road
+is gone round, and no U-turn is unforced. `verges` measures lane-holding
+from the lane, for vehicles driving along their leg, and asserts keeping
+left over 20 s of samples. Seeds 1-60: `traffic` 51 (44 for the old traffic
+on the same measure), `verges` 52 (52). Every new assertion mutation-tested
+(U-turns back: 158 unforced; no lanes: 55% on the left; both of a standoff
+going; the oncoming corridor wide again; never going round). Full suite
+49/49 in 32 min. Item 23 keeps what is left.
