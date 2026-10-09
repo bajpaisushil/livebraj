@@ -1228,6 +1228,28 @@ export function buildIskconCampus(o) {
     face(Z0, true);
     // the springing blocks, from the paving to the curve, against each pier
     for (const sd of [-1, 1]) box(AXX + sd * (half - 0.2), y0, AZ, 0.4, SPRING - y0, D, C.MARBLE);
+    /*
+     * ...and in each, at the foot, the tower's loggia. The photographs of the
+     * walk under the arch (kbfollow c_arch_left, c_arch_right) show no blank
+     * wall either side: each tower opens onto the path in a cusped arch
+     * between carved pillars, a band of jali over it, dark behind — where
+     * these blocks stood plain marble for seven metres.
+     */
+    for (const sd of [-1, 1]) {
+      const fx = AXX + sd * (half - 0.42);                    // the face toward the path
+      for (const lz of [Z0 + 0.32, Z1 - 0.32]) {
+        box(fx - sd * 0.04, y0, lz, 0.12, 3.95, 0.46, C.MARBLE_SH);         // the pillar, proud
+        box(fx - sd * 0.06, y0 + 0.9, lz, 0.16, 0.12, 0.56, C.MARBLE);       // its rings
+        box(fx - sd * 0.06, y0 + 2.6, lz, 0.16, 0.12, 0.56, C.MARBLE);
+        box(fx - sd * 0.08, y0 + 3.95, lz, 0.2, 0.3, 0.62, C.MARBLE);        // its capital
+      }
+      const q = p(fx, AZ);
+      cuspedArch(b, q[0], y0 + 0.12, q[1], D - 1.1, 3.75, 0.3, rot + Math.PI / 2, C.MARBLE, 7, 0x2a241c);
+      // the jali band over the opening, and its lintel
+      box(fx - sd * 0.05, y0 + 4.25, AZ, 0.1, 0.08, D - 0.4, C.MARBLE);
+      for (let k = 0; k <= 8; k++) box(fx - sd * 0.04, y0 + 4.33, Z0 + 0.45 + k * (D - 0.9) / 8, 0.08, 0.62, 0.1, C.MARBLE_SH);
+      box(fx - sd * 0.05, y0 + 4.95, AZ, 0.12, 0.1, D - 0.4, C.MARBLE);
+    }
     // the applied fringe of pendant cusps, on both faces, and the archivolt
     for (let i = 1; i < 12; i++) {
       const a = Math.PI * (i / 12);
