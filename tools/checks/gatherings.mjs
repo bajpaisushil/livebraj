@@ -64,6 +64,18 @@ const boot = async () => {
   await p.evaluate(() => {
     const app = window.vrindavan, ctx = app.ctx;
     ctx.clock.getDelta = () => 1 / 30;
+    /*
+     * Ten in the morning in Braj, whenever this runs. Gatherings keep hours —
+     * havan 5 to 11:30, katha 9 to 6, kirtan 3 to 9 — and from nine at night
+     * to five in the morning nothing is sitting, so "stand at one that is
+     * sitting" found an empty patch of ground and the check failed by the
+     * clock it ran at (2026-10-09, a suite started at nine at night).
+     */
+    if (ctx.live && ctx.live.vrindavanTime) {
+      const real = ctx.live.vrindavanTime.bind(ctx.live);
+      ctx.live.vrindavanTime = () => real(new Date(Date.UTC(2026, 9, 13, 4, 30)));
+      if (ctx.gatherings) ctx.gatherings._hoursInit = false;
+    }
     // the frame, with or without the drawing: `window.__draw` decides
     const real = ctx.renderer.render.bind(ctx.renderer);
     ctx.renderer.render = (scene, camera) => {
