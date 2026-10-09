@@ -36,7 +36,8 @@ page.on('console', (m) => { const t = m.text(); if (m.type() === 'error' && !/na
 page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
 
 await page.goto(URL, { waitUntil: 'networkidle' });
-await page.waitForFunction(() => window.vrindavan?.ctx?.map && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.player, null, { timeout: 60000 });
+// as long as every other check allows: six browsers booting at once took this past 60 s
+await page.waitForFunction(() => window.vrindavan?.ctx?.map && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.player, null, { timeout: 220000 });
 
 // skip the intro and reveal everything so search has a full corpus
 await page.evaluate(() => {
@@ -135,7 +136,7 @@ check('Walk here builds a route', nav.ok && nav.route > 1, `${nav.dest}: ${nav.r
  * against typing and the UI's own one did not.
  */
 await page.evaluate(() => window.vrindavan.ctx.ui.show('map'));
-await page.waitForFunction(() => window.vrindavan.ctx.ui.screen === 'map', null, { timeout: 8000 });
+await page.waitForFunction(() => window.vrindavan.ctx.ui.screen === 'map', null, { timeout: 30000 });
 await page.focus('#map-q');
 // clear what earlier steps left in the field, or this asserts on their text
 await page.fill('#map-q', '');
