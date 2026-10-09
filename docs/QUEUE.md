@@ -546,7 +546,19 @@ searching the backlog for it. That is the failure this file exists to stop.*
     gateway; Govind on Garuda in the sanctum; babool scrub all round.
 
 23. **Vehicles held in the crowd round you; corners clipped at junctions —
-    QUEUED 2026-10-10.** Left by item 21, measured: on 9 of 60 seeds a pair
+    PARTLY DONE 2026-10-10** (5285982). Building Chhatikara (item 24) put the
+    traffic among lanes and corners and made it plain: an auto took a village
+    right angle at road speed into a tempo coming the other way, and a cab
+    waited 26 s for two people standing at its bumper. Now vehicles pick
+    their next leg 9 m out and slow for a sharp turn; people standing about
+    step out of a vehicle's way; a way round keeps everything it has gone
+    round; two holding each other give way in 0.8 s; a wedged vehicle backing
+    to try again no longer counts as moving. On no seed of 60 does a pair
+    touch for more than 4.5 s (16-26 s on four before); `traffic` 51 of 60,
+    every red brief touches over the 15 allowed; `verges` 56 of 60. Still
+    open: walkers still pass through vehicles (no collision between the two),
+    and brief clips at junctions. Original notes follow. Left by item 21,
+    measured: on 9 of 60 seeds a pair
     of vehicles still touches for more than 4 s, or more than 15 half-second
     samples in 45 s. The long ones (seeds 32 and 47, 16-18 s) are vehicles
     by the start held by walker after walker at the bumper — the crowd is
@@ -559,6 +571,32 @@ searching the backlog for it. That is the failure this file exists to stop.*
     once the two are within 40 degrees. What would fix it: walkers solid to
     vehicles and vehicles creeping through a crowd as they do here (people
     part for a horn), and one vehicle at a time through a junction's stitch.
+
+24. **Chhatikara, where everyone starts — THE VILLAGE DONE 2026-10-10**
+    (5285982); **the flyover, the rail over-bridge, the railway QUEUED.**
+    Photographed before: open grass and scattered trees round the start, the
+    farmland rule for the corridor (BuildingGenerator's `country`) covering
+    the village at the highway too. ESRI z17-z19 on the world's 200 m grid:
+    a dense core of flat-roofed houses between NH 44 and the railway, a
+    cluster north-east of the highway, shops on both service roads, the
+    Govardhan road to the rail over-bridge, the first stretch of the
+    Vrindavan road — and the start pin in the middle of it. Built: four
+    districts (`village` kind and three bazaar bands, which line the service
+    roads), 598 lots at mid quality on a budget of their own, so Vrindavan's
+    lots are untouched. QUEUED, measured: **the NH 44 flyover** — OSM ways
+    973946074/5, 587-589 m, layer 1; z19 shows the central carriageways on a
+    deck about 29 m wide with a parapet line and a shadow, the service roads
+    at grade on both sides and the Vrindavan road's traffic passing under;
+    today it is drawn flat, and NavGraph would join a deck to the road under
+    it (it snaps nodes within 3 m and stitches within 9). **The Govardhan
+    road's rail over-bridge** (671541219, 841 m) and **the railway** under it
+    (the Delhi-Mathura line, with Chhatikara station), not in the game. The
+    village's roofs take the town's bright palette; Chhatikara's are grey
+    concrete with blue water tanks. The Yamuna: of 27 bridge ways in the
+    import, two cross water — 670922315 (166 m, the pontoon north-east of
+    town) and 972756778 (102 m, not imported) — and the river's south-eastern
+    loop is dropped because the importer keeps only the longest stretch of
+    the waterway inside the world (its riverbank polygon, 1423292, is there).
 
 ## OPEN — reported, not yet reproduced
 

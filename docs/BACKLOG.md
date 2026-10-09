@@ -3867,3 +3867,31 @@ on the same measure), `verges` 52 (52). Every new assertion mutation-tested
 (U-turns back: 158 unforced; no lanes: 55% on the left; both of a standoff
 going; the oncoming corridor wide again; never going round). Full suite
 49/49 in 32 min. Item 23 keeps what is left.
+
+## 2026-10-10 — Chhatikara: the village round the start
+
+DONE (5285982). Looking at the bridges (queue item 12's "drown"), the first
+photograph of the start was open grass: the corridor into town is fields,
+and BuildingGenerator's `country` rule had taken the village at the highway
+with it. Measured on ESRI z17-z19 against the world's 200 m grid, Chhatikara
+is a dense village of flat-roofed houses between NH 44 and the railway, with
+shops along both service roads, and every player starts in the middle of it.
+Four districts now (a `village` kind, terraced, the residential kit; three
+bazaar bands that line the service roads, which a `highway` road otherwise
+is not), 598 lots at mid quality on a budget of their own (`lots`, `group`)
+so not one of Vrindavan's lots moved (4917 before; the town's own the same).
+Building triangles 1,495k -> 1,699k.
+
+The traffic met the village (traffic 47 of 60): an auto took a right angle
+at 5.8 m/s into a tempo coming the other way (seed 4, traced sample by
+sample); a cab waited 26 s for two people standing at its bumper, going
+round one and then the other (seed 59); a cab waited 25 s behind a rickshaw
+whose backing-and-trying read as moving (seed 8). Fixed each: the next leg is
+chosen 9 m out and a sharp turn taken slowly (CORNER_V: 2 m/s at a right
+angle); people standing about step out of a vehicle's way; a way round keeps
+what it has gone round; two holding each other give way in 0.8 s; "moving"
+means moving on. traffic 51 of 60 and no pair touching more than 4.5 s on
+any seed; verges 56 of 60. traffic now prints its worst pair when it fails.
+Full suite 49/49 in 32 min. Queued in item 24: the flyover (measured), the
+rail over-bridge and the railway, the roofs, the river's bridges and its
+south-eastern loop.
