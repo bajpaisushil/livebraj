@@ -862,6 +862,69 @@ export const LOCATIONS = [
     "osm": null
   },
   {
+    "id": "garud-govind",
+    "name": "Shri Garud Govind Ji",
+    "hindi": "श्री गरुड़ गोविंद जी",
+    "type": "temple",
+    "district": "outskirts",
+    "grounds": null,
+    "compound": {
+      "lx0": -73.5,
+      "lx1": -19.5,
+      "lz0": -85.5,
+      "lz1": 4.1,
+      "ring": false,
+      "also": [
+        {
+          "lx0": -19.5,
+          "lx1": 28,
+          "lz0": -34,
+          "lz1": 28
+        },
+        {
+          "lx0": -4,
+          "lx1": 10,
+          "lz0": 28,
+          "lz1": 31
+        }
+      ]
+    },
+    "basin": {
+      "lx0": -67.5,
+      "lx1": -22.5,
+      "lz0": -79.5,
+      "lz1": 0.5
+    },
+    "pos": [
+      -6168.43,
+      1444.33
+    ],
+    "geo": [
+      27.566946,
+      77.628029
+    ],
+    "rot": -0.866,
+    "radius": 40,
+    "icon": "temple",
+    "deity": "Shri Govind on Garuda",
+    "interactions": [
+      "darshan",
+      "offer",
+      "pranam",
+      "story"
+    ],
+    "build": {
+      "kind": "temple-garud-govind",
+      "w": 48,
+      "d": 62,
+      "h": 14,
+      "color": "#c4d168",
+      "accent": "#f1efe8",
+      "measured": true
+    },
+    "osm": null
+  },
+  {
     "id": "chhatikara-crossing",
     "name": "Chhatikara Crossing",
     "hindi": "छटीकरा चौराहा",

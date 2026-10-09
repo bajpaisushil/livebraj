@@ -25,6 +25,7 @@ import { buildJaipurMandir } from './JaipurMandir.js';
 import { buildKeshiGhat } from './KeshiGhat.js';
 import { buildKaliyaGhat } from './KaliyaGhat.js';
 import { buildBrahmaKund } from './BrahmaKund.js';
+import { buildGarudGovind } from './GarudGovind.js';
 import { buildPremMandirSetting } from './PremMandirSetting.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV, campusSign } from './Signage.js';
@@ -6746,6 +6747,33 @@ const BUILDERS = {
         darshan: [D[0], D[1]],
         facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
         floor: r.floor,
+      },
+    };
+  },
+
+  /**
+   * Shri Garud Govind Ji at Chhatikara: the temple of Govind seated on Garuda
+   * and its kund, sunk in its basin (GarudGovind.js, docs/research/garud-govind.md).
+   */
+  'temple-garud-govind': ({ loc, b, ground, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const r = buildGarudGovind({ b, loc, ground, terrain, colliders, h: { cuspedArch, tint, dome, MeshBuilder } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    const H = r.hall;
+    const V = p((H.lx0 + H.lx1) / 2, (H.lz0 + H.lz1) / 2);
+    return {
+      altarY: r.altar.y - ground,
+      noCollider: true,
+      colliders,
+      meshes: r.meshes,
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.floor,
+        volume: { x: V[0], z: V[1], hw: (H.lx1 - H.lx0) / 2, hd: (H.lz1 - H.lz0) / 2, rot, door: p(H.door[0], H.door[1]) },
       },
     };
   },

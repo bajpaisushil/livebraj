@@ -133,6 +133,13 @@ export const ALTARS = {
     note: 'One Deity, worshipped as the consort of Radha, a yugal jodi with the long braid read as Radha\'s. No separate Radha image — a crown stands for her. Material, colour, height and the crown\'s side are not documented.',
   },
 
+  'garud-govind': {
+    // drawn by GarudGovind.js, which builds the figure on Garuda; buildDeities
+    // has no form for it and is not called there
+    form: 'garuda',
+    note: 'Govind — Krishna in His Narayana form — seated on Garuda (brajfoundation.org: "a rare and exquisite idol of Krishna seated on a Garud"); by some accounts twelve-armed, with Lakshmi, Satyabhama and Rukmini (vrindavanmathuraguide.com). The photograph shows Him in yellow and gold before a mirror-worked backdrop; the figure here is four-armed and its size is INFERRED.',
+  },
+
   'govind-dev': {
     form: 'figures',
     // NOT Govind Dev — He is in the City Palace, Jaipur. What Growse documents

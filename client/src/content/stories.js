@@ -124,6 +124,11 @@ export const STORIES = {
     long: `The commercial spine of the old town. Flower garlands hang in sheets across the shopfronts, brass and bell metal stacked to the ceiling, poshak for the deities, peda by the kilo. It is the loudest, most crowded and most ordinary place in Vrindavan, and no visit works without walking through it.`,
     source: 'Local observation; OpenStreetMap.',
   },
+  'garud-govind': {
+    short: 'Govind seated on Garuda, and the kund beside Him, on the road from Chhatikara.',
+    long: `Krishna's chhati pujan, the sixth-day rite after His birth, was held here, and that is how Chhatikara has its name. Here the boy Krishna climbed a friend's shoulders and played that he was Garuda; and here He granted Kaliya that snakes need not fear Garuda — so people come for the Kaal Sarp pujan. In the sanctum is Govind, Krishna in His Narayana form, seated on Garuda: "a rare and exquisite idol of Krishna seated on a Garud". The kund beside the temple had silted up; the Braj Foundation dug it out from October 2007, deeper than it was, spread the soil in the forest round it — the Shadang van — and joined it to the Vrindavan Minor canal, and it is "upto the brim with clean water and remains so during most of the year".`,
+    source: 'The Braj Foundation; vrindavanmathuraguide.com; brajrasik.org (photographs, 2024).',
+  },
   'chhatikara-crossing': {
     short: 'The crossing on the highway where the road to Vrindavan turns off.',
     long: `Almost everyone arrives through Chhatikara. The highway from Delhi and Mathura runs past, and here the road turns off toward Vrindavan — a crossing of buses, autos and e-rickshaws, a line of tea stalls, and the arch that tells you Braj has begun. It is unremarkable and it is where the journey starts.`,

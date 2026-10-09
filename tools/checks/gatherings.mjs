@@ -125,10 +125,17 @@ const sites = await p.evaluate(() => {
       const o = G.gatherings[j];
       if (Math.hypot(g.x - o.x, g.z - o.z) < 210) bad.gap.push(i + '/' + j);
     }
-    // nobody buried in a hillside or hovering over one
+    /*
+     * Nobody buried in a hillside or hovering over one — measured from what
+     * they sit on, as GatheringSystem seats them (`_seatY`: the floor under
+     * the spot, asked from the terrain). Measured from the bare terrain, a
+     * katha on Prem Mandir's paved avenue, 0.2 m up, put its speaker's 0.42 m
+     * dais at 0.62 and failed this — the day a new landmark reshuffled the
+     * seeded draw onto the paving.
+     */
     for (const m of g.members) {
-      const lift = m.pose === 'seated' ? 0 : 0;
-      const dy = m.y - w.groundHeight(m.x, m.z);
+      const under = w.standHeightFast ? w.standHeightFast(m.x, m.z, w.groundHeight(m.x, m.z)) : w.groundHeight(m.x, m.z);
+      const dy = m.y - under;
       if (dy < -0.02 || dy > 0.5) bad.sunk.push(i + ':' + dy.toFixed(2));
     }
   }
