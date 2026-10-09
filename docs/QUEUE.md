@@ -81,6 +81,16 @@ searching the backlog for it. That is the failure this file exists to stop.*
    both side doors, the road gate and GATE:2 as photographed, the peepal
    east of the gate; see the backlog. Still to come: the swan staircases'
    true run, the towers' openings under the arch, the museum room.
+   **The towers' openings under the arch done 2026-10-09** (23dfaac): each
+   opens onto the path in a cusped arch between carved pillars, jali over,
+   where the arch's springing blocks stood seven metres of plain marble.
+   The swan staircases were done in 0b. Left, and why: the temple block's
+   35.3 m is OSM's main block (32.3 m, as built) and a 3 m porch 17 m wide
+   on the road side that OSM sets against both the samadhi and the museum —
+   the little court with Prabhupada's door, rebuilt at your word, is there,
+   and it wants checking against the photographs before anything moves;
+   the museum as a room: what is in it is not documented past "dioramas,
+   rare artefacts and a photo timeline" (iskconvrindavan.com, vcm.org.in).
    **Added the same turn:** *"there is a small door on both left and right
    sides of deities room of iskcon temple allowing to walk in out of corridor
    alos"* — (c) a small door in EACH side wall of the deities room, so you can
@@ -484,7 +494,10 @@ searching the backlog for it. That is the failure this file exists to stop.*
     lane never came within 1.6 m of a node) and no lane on dual carriageways.
     Worth another go now the one-way cause is out of the way.
 
-22. **Garud Govind Kund and its temple, Chhatikara — QUEUED 2026-10-09.**
+22. ~~**Garud Govind Kund and its temple, Chhatikara.**~~ **DONE 2026-10-09**
+    (ea7d0cd), `garudgovind.mjs` 11/11; every check that walks all temples
+    takes it in. `docs/research/garud-govind.md`. Original notes follow.
+    **Garud Govind Kund and its temple, Chhatikara — QUEUED 2026-10-09.**
     Found looking for the next basin: 700 m from where every player starts,
     the game has only a surveyed point ("Stepped masonry tank (kund) at
     Chhatikara") and a walled complex beside it. ESRI z19 shows a tank about

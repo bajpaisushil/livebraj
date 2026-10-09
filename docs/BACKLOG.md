@@ -3811,3 +3811,23 @@ frozen cow on the ride's line; a menu word measured from where a time-lapse
 had carried you from) and both are fixed. `gatherings` pins Braj's clock to
 10:00: after nine at night nothing sits and it failed by the hour it ran.
 Full suite 48/48 in 38 min.
+
+## 2026-10-09 — Shri Garud Govind Ji, Chhatikara; ISKCON's towers open under the arch
+
+DONE (ea7d0cd, 23dfaac). Item 22: the temple of Govind seated on Garuda and
+its kund, seven hundred metres from the start on the road the first ride
+takes — the kund sunk in its basin with its railing, platform and ghat, the
+lime-green compound with its white court, the sanctum under the small white
+shikhara (1.5 m from where the imagery shows it), Govind on Garuda
+(`docs/research/garud-govind.md`, `garudgovind.mjs` 11/11). Found on the
+way: the water's knee-high solid stood over the railed platform and held you
+0.2 m above it; `gatherings` measured from the bare terrain and failed a
+katha the reshuffled draw put on Prem Mandir's paving (it measures from what
+they sit on now); and `temples` caught the hall declared round the sanctum
+AND its open mandapa as a third open — the hall is the sanctum, the door's
+corona stays at the mandapa steps. Full suite 46/48 before that fix, the
+other red a `save` load timeout (15/15 alone); temples, halls and
+garudgovind green after it. ISKCON: the walk under the arch had blank marble where the
+towers open in cusped arches; now it has them. Left in item 0a, with the
+reasons: the 3 m porch OSM puts against the samadhi and museum, and the
+museum room, whose contents are undocumented.
