@@ -15,6 +15,92 @@
 }
 </script>
 <title>Vrindavan Dham</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+<script>
+/* ============================================================
+   OFFLINE ON THE WEB — the page's half. sw.js is the other half,
+   and says why it works the way it does.
+
+   After one visit online the game opens with the network off, as the
+   APK does. The worker cannot see what this page loaded before it was
+   installed — on a first visit, all of it — so the page tells it. A
+   PerformanceObserver, set up here before anything has been fetched,
+   sees each resource as it completes, and every same-origin URL that
+   did NOT come through the worker is posted to it to keep. Watching
+   from the first byte is the point: the Resource Timing buffer holds
+   250 entries and then drops the rest, and an observer is not limited
+   by it. The game is about 140 files and gaining several a week.
+
+   Not registered:
+   - in the APK, which carries its files on the device already;
+   - under automation (navigator.webdriver) unless the URL says ?sw.
+     Every check boots a fresh profile, and a worker installing and
+     copying five megabytes beside each boot is exactly the moving part
+     that makes a timing check lie. tools/checks/offline.mjs opts in;
+   - where there is no navigator.serviceWorker: an http:// LAN address,
+     which is not a secure context, or an old browser. Nothing changes
+     there at all.
+   ============================================================ */
+(() => {
+  const sw = navigator.serviceWorker;
+  if (!sw || window.Capacitor) return;
+  if (navigator.webdriver && !/[?&]sw\b/.test(location.search)) return;
+
+  const seen = new Set();
+  const pending = [];
+  let reg = null;
+  let timer = 0;
+
+  const flush = () => {
+    timer = 0;
+    if (reg && reg.active && pending.length) {
+      reg.active.postMessage({ type: 'keep', urls: pending.splice(0) });
+    }
+  };
+  const want = (href, base) => {
+    let url;
+    try { url = new URL(href, base || location.href); } catch { return; }
+    if (url.origin !== location.origin) return;
+    url.search = '';
+    url.hash = '';
+    if (seen.has(url.href)) return;
+    seen.add(url.href);
+    pending.push(url.href);
+    // batched: a boot completes a hundred files in a few bursts
+    if (reg && !timer) timer = setTimeout(flush, 400);
+  };
+
+  try {
+    new PerformanceObserver((list) => {
+      // workerStart is 0 for a request the worker never saw
+      for (const e of list.getEntries()) if (!e.workerStart) want(e.name);
+    }).observe({ type: 'resource', buffered: true });
+  } catch { /* no Resource Timing: the worker still keeps what passes through it */ }
+
+  addEventListener('load', () => {
+    // every face the stylesheets declare, drawn yet or not — a panel first
+    // opened offline should not fall back to Georgia
+    for (const sheet of document.styleSheets) {
+      let rules;
+      try { rules = sheet.cssRules; } catch { continue; }   // another origin's sheet
+      for (const r of rules) {
+        if (r.type !== CSSRule.FONT_FACE_RULE) continue;
+        for (const m of r.style.getPropertyValue('src').matchAll(/url\(\s*(['"]?)(.*?)\1\s*\)/g)) {
+          want(m[2], sheet.href);
+        }
+      }
+    }
+    sw.addEventListener('message', (e) => {
+      const m = e.data;
+      if (m && m.type === 'kept' && m.wrote) console.info(`[offline] ${m.files} files kept for offline play`);
+    });
+    sw.register('./sw.js').catch((err) => console.info('[offline] unavailable here —', err && err.message));
+    sw.ready.then((r) => { reg = r; flush(); });
+  });
+})();
+</script>
 <link rel="stylesheet" href="./vendor/fonts/fonts.css">
 
 <style>
