@@ -298,13 +298,35 @@ searching the backlog for it. That is the failure this file exists to stop.*
     the player's version walks every standable in the world per call, which
     is fine once a frame and far too slow for a crowd.
 
-15. **E-rickshaws doing 94 km/h.** Seen in the vehicle-camera trace: 26 m/s
+15. ~~**E-rickshaws doing 94 km/h.**~~ **DONE 2026-10-09** (6e8bd3f). The hired
+    vehicle and the one you drive keep the speed each really has on each kind
+    of road (`RoadSpeeds.js`; sources in `docs/research/vehicle-speeds.md`:
+    CMVR rule 2(cb) caps an e-rickshaw at 25 km/h, S.O. 1522(E) of 2018 the
+    rest, and a 100-trip GPS study puts e-rickshaws at 17.4-18.3 km/h). A
+    journey too long to sit through is a TIME-LAPSE of the whole town, said on
+    the ride bar ("time-lapse x5"), never a faster vehicle: Chhatikara to
+    ISKCON is 17 min of the town's time by e-rickshaw, shown at x5 in 3.4 min,
+    and never above 20 km/h. Jaldi leans the driver toward the road's most
+    and raises the rate; the five-minute promise is kept by the rate. Found
+    on the way and fixed: every passenger stood up through the roof 1.4 s into
+    every ride (the sitting-down's hold was never honoured, the seat height
+    was applied to the feet, and the roofs were 0.3-0.4 m low); and on a phone
+    the ride bar's status stood one word to a line. `timelapse` 11/11,
+    `seated` 10/10 (mutation-tested), `rickshaw` 31/31, `cheats` 12/12,
+    `driving` 9/9. Original notes follow.
+    **E-rickshaws doing 94 km/h.** Seen in the vehicle-camera trace: 26 m/s
     on a ride from Chhatikara. Ride pacing speeds the vehicle up to arrive
     inside a time cap. A real e-rickshaw in these lanes does roughly 15-25
     km/h. Research real speeds per vehicle type and road, then decide how a
     5 km ride stays bearable without driving through town at highway speed —
     the honest options are a faster vehicle class on the highway stretch, or
     a shorter world (the old queue's 12 km question), not a rickshaw at 94.
+
+20. **The e-rickshaw is 1.4 m wide; real ones are 0.95-1.0 m** (Saarthi,
+    JSA, Neelam, Ele and E-Ashwa specifications, all 2.7-2.8 m long and
+    1.73-1.87 m tall, which the model now is). Narrowing it changes how
+    traffic spaces itself, and so the seeded `traffic` and `verges` baselines:
+    a pass of its own, with those seeds swept again.
 
 ## OPEN — reported, not yet reproduced
 

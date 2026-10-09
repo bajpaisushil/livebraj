@@ -3598,3 +3598,34 @@ written, so Madan Mohan was measured and built here, solo.
 - **Found:** `map-search`'s "Start from here" at Radha Raman puts you at
   terrain level inside the edge of the court floor, against the altar block
   — 0/8 directions open — since the Radha Raman rebuild (d93a0af). Fixing.
+
+## 2026-10-09 — honest ride speeds; "Start from here" at Radha Raman; a passenger in the roof
+
+- **Item 15, honest ride speeds — 6e8bd3f.** The salvaged worktree had the speed
+  table and a road-aware path limit and nothing using them; finished here.
+  Each vehicle now keeps its real speed on each kind of road, sourced in
+  `docs/research/vehicle-speeds.md`, and a ride longer than four minutes is
+  shown as a time-lapse of the whole town at a stated rate (GameApp runs every
+  system on `ctx.timeScale`; the camera and screens stay on real time). The
+  five-minute promise ("maximum of 5mins in e-rickshaw anywhere") is kept by
+  the rate, never the speed: e-rickshaw 17 min shown at x5 (3.4 min), cycle
+  rickshaw 28 min at x8, auto 11 min at x3, cab 9 min at x3; a 714 m hop is
+  not sped up at all. Taking the wheel always runs at x1, a plain press gives
+  the road's own pace, RUN the vehicle's legal or design top. The cheat words
+  (CheatCodes.js, the other session's file, untouched) reach the new meaning
+  through `setPace`.
+- **Found while photographing it:** every passenger had stood up through the
+  roof 1.4 s into every ride. Three faults: the sitting-down's `hold` was
+  never honoured, so the pose ended; the seat height was applied to the feet;
+  and every canopy was 1.47 m, where an e-rickshaw is 1.73-1.87 m and a Bajaj
+  RE 1.70. Each vehicle now has its real height and a seat that puts the hips
+  where a passenger's are (`seated.mjs`, 10/10, fails with the hold undone).
+  And on a phone the ride bar's status had stood one word to a line beside
+  four buttons, tall enough to cover the arrows you steer with.
+- **"Start from here" — 76c13e8.** It had put the player in a 5 cm sliver under
+  Radha Raman's court since its rebuild, and `starthere` only passed by
+  landing in it too. Now a spot must fit the body and let it walk away, and a
+  floor built over the spot asked for (a temple court) is tried first.
+- Player.js carries the other session's uncommitted work; both changes to it
+  here (`_wayOut` / `placeAt`, the held pose) were committed by laying only
+  these hunks into it, and their edits are byte-for-byte as they were.
