@@ -261,6 +261,14 @@ for (const way of rawRoads) {
       // one way, in the way's own order: NH 44's two carriageways, and most
       // of the secondary roads, are mapped as a pair of these
       ...(['yes', '1', 'true'].includes(way.tags?.oneway) ? { oneway: true } : {}),
+      /*
+       * Carried on a bridge: NH 44's flyover at Chhatikara, the rail
+       * over-bridges, the pontoon over the Yamuna. A short one over a drain
+       * is a culvert, laid on the ground like any road (TerrainBuilder's
+       * BRIDGE_MIN), so only the span's own way is marked and the road
+       * either side of it stays the road it was.
+       */
+      ...(way.tags?.bridge && way.tags.bridge !== 'no' ? { bridge: true } : {}),
       prio: cls.prio,
       length: Math.round(len),
       points: pts,

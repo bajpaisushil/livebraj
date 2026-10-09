@@ -23,6 +23,8 @@ import { pointSegment, pointInPolygon } from '../../engine/math/Curves.js';
  * takes both comfortably and still leaves a garden wall a wall.
  */
 const STEP_UP = 0.52;
+/** A body's height, for what passes over it: a flyover's parapet, a bridge deck. */
+const BODY_UP = 2.2;
 
 /**
  * The slack a standable surface holds you with, in metres.
@@ -237,6 +239,8 @@ export class WorldService {
         // terrain under the collider drifts wherever the ground slopes.
         if (c.top != null) norm.top = c.top;
         else if (c.h != null) norm.top = this.groundHeight(c.x, c.z) + c.h;
+        // a bridge deck or its parapet: solid only between `base` and `top` (Bridges.js)
+        if (c.base != null) norm.base = c.base;
         this.colliders.push(norm);
         this._index(norm);
         if (norm.top !== undefined) { this.standables.push(norm); this._fileStandable(norm); }
@@ -244,6 +248,8 @@ export class WorldService {
         const norm = { type: 'circle', x: c.x, z: c.z, r: c.r || 0.5, tag: c.tag, standOnly: !!c.standOnly, soft: !!c.soft, floor: !!c.floor, over: !!c.over };
         if (c.top != null) norm.top = c.top;
         else if (c.h != null) norm.top = this.groundHeight(c.x, c.z) + c.h;
+        // a bridge deck or its parapet: solid only between `base` and `top` (Bridges.js)
+        if (c.base != null) norm.base = c.base;
         this.colliders.push(norm);
         this._index(norm);
         if (norm.top !== undefined) { this.standables.push(norm); this._fileStandable(norm); }
@@ -357,6 +363,8 @@ export class WorldService {
        */
       if (c.standOnly || c.floor) continue;
       if (skipTag && c.tag === skipTag) continue;
+      // overhead, like a flyover's parapet: not in the way of anything put down here
+      if (c.base !== undefined && c.base > this.groundHeight(x, z) + 2.5) continue;
       if (c.type === 'circle') {
         if (dist(x, z, c.x, c.z) < c.r + r) return false;
       } else {
@@ -871,6 +879,18 @@ export class WorldService {
    * back 3 cm from where it went in, read as open ground, and "Start from
    * here" put the player in it, with no way out in any of eight directions.
    */
+  /**
+   * Is this collider over the head of a body standing here? Only what carries
+   * a `base` can be: a flyover's deck and parapets (Bridges.js), which stop
+   * what is on the bridge and nothing on the road under it. With no feet to
+   * go by — a vehicle's step, an object put down — it is overhead when its
+   * base is more than BODY_UP over the ground.
+   */
+  _overhead(c, x, z, feetY) {
+    if (c.base === undefined) return false;
+    return feetY === undefined ? c.base > this.groundHeight(x, z) + BODY_UP : feetY + BODY_UP < c.base;
+  }
+
   fits(x, z, radius = 0.42, feetY) {
     const step = feetY === undefined ? null : feetY + STEP_UP;
     const near = this.grid.query(x, z, radius + 6, _hits);
@@ -878,6 +898,7 @@ export class WorldService {
       const c = near[i];
       if (c.standOnly) continue;
       if (step !== null && c.top !== undefined && c.top <= step) continue;
+      if (this._overhead(c, x, z, feetY)) continue;
       if (c.type === 'circle') {
         if (Math.hypot(x - c.x, z - c.z) < c.r + radius) return false;
       } else {
@@ -973,6 +994,8 @@ export class WorldService {
         if (c.standOnly) continue;
         // low enough to walk up onto rather than be stopped by
         if (step !== null && c.top !== undefined && c.top <= step) continue;
+        // or high enough to walk under: a flyover's parapet over the road
+        if (this._overhead(c, x, z, feetY)) continue;
         if (c.type === 'circle') {
           const dx = x - c.x, dz = z - c.z;
           const d = Math.hypot(dx, dz);
@@ -1032,6 +1055,8 @@ export class WorldService {
       // the camera is the only thing that asks this question above the ground,
       // and it is allowed over anything that declared how tall it is
       if (c.top !== undefined && y > c.top) continue;
+      // and under anything that declared where it starts: a bridge deck
+      if (c.base !== undefined && y < c.base - 0.2) continue;
       if (c.type === 'circle') {
         if (dist(x, z, c.x, c.z) < c.r + radius) return true;
       } else {

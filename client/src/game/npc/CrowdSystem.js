@@ -1233,13 +1233,14 @@ export class Crowd {
         }
         if (a.chartered) {
           /*
-           * Still the terrain, unlike every other agent here, because this one
-           * is not ours to lift. RickshawSystem owns a chartered vehicle's
-           * height and seats its passenger by `groundHeight`; standing the deck
-           * on a floor while the seat stays on the terrain would sink whoever
-           * is riding into it. Both move together or neither does.
+           * Not ours to lift: RickshawSystem owns a chartered vehicle's height
+           * and seats its passenger by it. Both stand on whatever is underfoot
+           * from where the vehicle was — the terrain, or a bridge deck it has
+           * climbed onto (RickshawSystem `_surface`) — and it is the same
+           * question asked twice, so the seat and the vehicle agree. Lifting
+           * one and not the other would sink whoever is riding into it.
            */
-          a.y = ctx.world.groundHeight(a.x, a.z);
+          a.y = ctx.world.standHeightFast(a.x, a.z, a.y);
           if (n < slot.capacity) this._writeMatrix(slot.mesh, n++, a, 1, 0);
           continue;
         }

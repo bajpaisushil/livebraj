@@ -84,6 +84,9 @@ const out = await p.evaluate(() => {
        * a parapet the arch rises clear of, judged as its wall at 45 degrees.
        */
       if (c.top !== undefined && c.top < a.y + Math.max(0.5, 0.52 * (a.h || 0))) continue;
+      // ...and nothing that starts above it: a flyover's parapet seven metres
+      // over a gate beside the road is not the gate's wall (Bridges.js)
+      if (c.base !== undefined && c.base > a.y + (a.h || 3)) continue;
       const long = Math.max(c.hw, c.hd), thin = Math.min(c.hw, c.hd);
       if (long * 2 < 1.6 || long < thin * 2.5) continue;
       const cr = Math.cos(c.rot), sr = Math.sin(c.rot);

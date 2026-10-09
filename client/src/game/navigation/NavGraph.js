@@ -16,6 +16,7 @@ import { resample } from '../../engine/math/Curves.js';
 import { dist2 } from '../../engine/math/MathUtils.js';
 import { BinaryHeap } from '../../engine/math/BinaryHeap.js';
 import { VEHICLE_R as DRIVE_R } from '../transport/VehicleDrive.js';
+import { isSpan } from '../world/Bridges.js';
 
 /** Sampling interval along each road, in metres. */
 const SAMPLE = 8;
@@ -164,11 +165,19 @@ export class NavGraph {
 
   _key(x, z) { return `${Math.round(x / SNAP)},${Math.round(z / SNAP)}`; }
 
-  _node(x, z) {
-    const k = this._key(x, z);
+  /**
+   * `deck`: a point on a span's deck, up off the ground (Bridges.js). It has
+   * a key of its own, so it never becomes the node of the road it passes
+   * over: snapped together, NH 44's flyover and the Vrindavan road under it
+   * were one junction, and traffic would turn off the deck onto the street
+   * seven metres down.
+   */
+  _node(x, z, deck = false) {
+    const k = deck ? `${this._key(x, z)}:d` : this._key(x, z);
     let n = this.nodes.get(k);
     if (!n) {
       n = { k, x, z, edges: [] };
+      if (deck) n.deck = true;
       this.nodes.set(k, n);
       this.grid.insert(x, z, n);
       this._list.push(n);
@@ -202,9 +211,11 @@ export class NavGraph {
 
     for (const road of roads) {
       const pts = resample(road.points, SAMPLE);
+      // a span's own points are on its deck, all but the two it lands on
+      const span = isSpan(road);
       let prev = null;
       for (let i = 0; i < pts.length; i++) {
-        const n = this._node(pts[i][0], pts[i][1]);
+        const n = this._node(pts[i][0], pts[i][1], span && i > 0 && i < pts.length - 1);
         if (prev) this._link(prev, n, road.kind, !!road.name, !!road.oneway);
         prev = n;
       }
@@ -218,6 +229,8 @@ export class NavGraph {
       for (let i = 0; i < near.length; i++) {
         const m = near[i];
         if (m === n) continue;
+        // a deck and the ground under it are not a junction
+        if (!!m.deck !== !!n.deck) continue;
         const d2 = dist2(n.x, n.z, m.x, m.z);
         if (d2 > 0.01 && d2 < STITCH * STITCH && !n.edges.some((e) => e.to === m.k)) {
           this._link(n, m, 'stitch');
@@ -230,6 +243,12 @@ export class NavGraph {
   /* ---------------- queries ---------------- */
 
   /** Nearest graph node to a world point. */
+  /*
+   * Every "where on the network is this point" below answers from the
+   * GROUND: somebody standing under the flyover is on the road under it, and
+   * a route or a placement starting on the deck overhead would begin seven
+   * metres up with no way onto it.
+   */
   nearest(x, z) {
     const out = [];
     for (let r = 24; r <= 400; r *= 2) {
@@ -237,6 +256,7 @@ export class NavGraph {
       if (out.length) {
         let best = null, bestD = Infinity;
         for (let i = 0; i < out.length; i++) {
+          if (out[i].deck) continue;
           const d = dist2(x, z, out[i].x, out[i].z);
           if (d < bestD) { bestD = d; best = out[i]; }
         }
@@ -291,6 +311,7 @@ export class NavGraph {
       let best = null, bestD = Infinity;
       for (let i = 0; i < out.length; i++) {
         const n = out[i];
+        if (n.deck) continue;
         let open = false;
         for (let j = 0; j < n.edges.length && !open; j++) {
           const e = n.edges[j];
@@ -309,7 +330,8 @@ export class NavGraph {
 
   randomNode(rng) {
     if (!this._list.length) return null;
-    return this._list[Math.floor((rng ? rng() : Math.random()) * this._list.length) % this._list.length];
+    const n = this._list[Math.floor((rng ? rng() : Math.random()) * this._list.length) % this._list.length];
+    return n.deck ? this.nearest(n.x, n.z) : n;
   }
 
   /** A node within `radius` of a point, chosen at random. Used for crowd spawning. */
@@ -317,7 +339,8 @@ export class NavGraph {
     const out = [];
     this.grid.query(x, z, radius, out);
     if (!out.length) return this.nearest(x, z);
-    return out[Math.floor((rng ? rng() : Math.random()) * out.length) % out.length];
+    const n = out[Math.floor((rng ? rng() : Math.random()) * out.length) % out.length];
+    return n.deck ? this.nearest(n.x, n.z) : n;
   }
 
   /**
@@ -425,6 +448,9 @@ export class NavGraph {
     const w = this.ctx && this.ctx.world;
     if (!w || !w.isClear) { e.open = true; return true; }
     const m = this.nodes.get(e.to);
+    // along a deck the question is asked of the ground under it — the piers —
+    // and the deck is open by being built (Bridges.js)
+    if (node.deck && m && m.deck) { e.open = true; return true; }
     const open = m ? this._segClear(w, node.x, node.z, m.x, m.z) : false;
     e.open = open;
     // the twin edge is the same stretch of road walked the other way

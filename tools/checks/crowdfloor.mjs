@@ -456,7 +456,9 @@ const seen = await p.evaluate(() => {
     worstPerson, worstCow, deepest, shallowest,
     drawnY, drawnTheirs, idx, sole, soleMinY: geo.boundingBox.min.y, terrainHere, personY: person.y,
     cabY: cab.y, cabTerrain: w.groundHeight(cab.x, cab.z), cabOn: onPlaza(cab.x, cab.z),
-    bookedY: booked.y, bookedTerrain: w.groundHeight(booked.x, booked.z),
+    bookedY: booked.y, bookedTerrain: w.groundHeight(booked.x, booked.z), bookedOn: onPlaza(booked.x, booked.z),
+    // what the ride seats its passenger by, asked the way it asks
+    bookedSeat: ctx.rickshaw && ctx.rickshaw._surface ? ctx.rickshaw._surface(ctx, booked.x, booked.z, booked.y) : null,
     sitterY: sitter.y, sitterTerrain: w.groundHeight(sitter.x, sitter.z),
   };
 
@@ -488,13 +490,17 @@ if (!seen.ok) {
   check('a rickshaw waiting on it sits on it', seen.cabOn && Math.abs(seen.cabY - seen.plazaTop) < 1e-9,
     `${seen.cabY.toFixed(3)} m on paving at ${seen.plazaTop.toFixed(3)}, terrain ${seen.cabTerrain.toFixed(3)}`);
   /*
-   * The one agent that stays on the terrain, deliberately: RickshawSystem
-   * owns a hired vehicle's height and seats its passenger by `groundHeight`.
-   * Pinned here so that changes together with the ride, never by accident.
+   * A hired vehicle stands on what is underfoot, as every other does, and
+   * RickshawSystem seats its passenger by the same question (`_surface`).
+   * Both were the terrain — "the one agent that stays on the terrain,
+   * deliberately" — until a ride over NH 44's flyover went along the ground
+   * under the deck, through the piers (Bridges.js). Pinned so the vehicle and
+   * the seat change together, never one alone.
    */
-  check('a hired one stays on the terrain its passenger is seated by',
-    seen.bookedY === seen.bookedTerrain,
-    `${seen.bookedY.toFixed(3)} m, terrain ${seen.bookedTerrain.toFixed(3)}`);
+  check('a hired one stands on what is underfoot, and its passenger is seated by the same',
+    seen.bookedOn && Math.abs(seen.bookedY - seen.plazaTop) < 1e-9 && seen.bookedSeat !== null && Math.abs(seen.bookedSeat - seen.bookedY) < 1e-9,
+    `${seen.bookedY.toFixed(3)} m on paving at ${seen.plazaTop.toFixed(3)} (terrain ${seen.bookedTerrain.toFixed(3)}); `
+    + `the seat's surface ${seen.bookedSeat === null ? 'unknown' : seen.bookedSeat.toFixed(3)}`);
   check('somebody sitting down on it sits on it', Math.abs(seen.sitterY - seen.plazaTop) < 1e-9,
     `GatheringSystem places them at ${seen.sitterY.toFixed(3)} m, terrain ${seen.sitterTerrain.toFixed(3)}`);
 }

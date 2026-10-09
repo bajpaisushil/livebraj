@@ -15,6 +15,7 @@ import { SpatialGrid } from '../../engine/math/SpatialGrid.js';
 import { pointSegment, resample, smoothPolyline } from '../../engine/math/Curves.js';
 import { clamp01, smoothstep, lerp } from '../../engine/math/MathUtils.js';
 import { WORLD } from '../../content/world.generated.js';
+import { isSpan, layoutSpan, buildSpan, spanMesh } from './Bridges.js';
 
 /**
  * The ground covers the playable rectangle with a margin, not a square.
@@ -170,8 +171,9 @@ class Terrain {
     return {
       group: this.group,
       water: this.water,
-      // the ghat treads, so WorldService can make them solid
-      colliders: this.stepColliders || [],
+      // the ghat treads, so WorldService can make them solid; and the bridges'
+      // decks, parapets and piers (Bridges.js)
+      colliders: [...(this.stepColliders || []), ...(this.bridgeColliders || [])],
       /*
        * Which way each ghat faces, so LandmarkGenerator can put its riverfront
        * arcade BEHIND the flight instead of across it. This is returned rather
@@ -756,11 +758,38 @@ class Terrain {
     const surface = new MeshBuilder();
     const kerbs = new MeshBuilder();
     const junctions = new MeshBuilder();
+    const bridges = new MeshBuilder();
     const ends = [];
+
+    /*
+     * The spans first (Bridges.js): each laid out once, so its road surface
+     * and its structure agree, and so a carriageway can ask whether the edge
+     * of its deck lies on the other one's.
+     */
+    this.bridgeColliders = [];
+    const spans = [];
+    for (const rec of this.segs) {
+      if (!isSpan(rec.road)) continue;
+      rec.span = layoutSpan(rec.pts, (x, z) => this.sampleHeight(x, z), (x, z) => this.isWater(x, z), ROAD_LIFT, WATER_Y);
+      let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+      for (const [x, z] of rec.span.dense) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
+      spans.push({ rec, x0: x0 - rec.half, x1: x1 + rec.half, z0: z0 - rec.half, z1: z1 + rec.half });
+    }
+    const onOtherDeck = (self) => (x, z) => {
+      for (const o of spans) {
+        if (o.rec === self || x < o.x0 || x > o.x1 || z < o.z0 || z > o.z1) continue;
+        const d = o.rec.span.dense;
+        for (let i = 1; i < d.length; i++) {
+          if (pointSegment(x, z, d[i - 1][0], d[i - 1][1], d[i][0], d[i][1]).d < o.rec.half - 0.4) return true;
+        }
+      }
+      return false;
+    };
 
     for (const rec of this.segs) {
       const { pts, style, half } = rec;
-      const dense = resample(pts, 9);
+      const span = rec.span || null;
+      const dense = span ? span.dense : resample(pts, 9);
       if (dense.length < 2) continue;
 
       // Offset both edges along the segment normal, mitring at each joint so a
@@ -788,14 +817,19 @@ class Terrain {
         right.push([dense[i][0] - nx * o, dense[i][1] - nz * o]);
       }
 
-      const y = (x, z) => this.sampleHeight(x, z) + ROAD_LIFT;
+      const ground = (x, z) => this.sampleHeight(x, z) + ROAD_LIFT;
+      // on a span, the deck's height at that sample, across the whole width
+      const yAt = span ? (i) => span.y[i] : null;
+      const yL = (i) => (span ? yAt(i) : ground(left[i][0], left[i][1]));
+      const yR = (i) => (span ? yAt(i) : ground(right[i][0], right[i][1]));
+      const y = (x, z) => ground(x, z);
       for (let i = 1; i < dense.length; i++) {
         const l0 = left[i - 1], l1 = left[i], r0 = right[i - 1], r1 = right[i];
         surface.quad(
-          [l0[0], y(l0[0], l0[1]), l0[1]],
-          [l1[0], y(l1[0], l1[1]), l1[1]],
-          [r1[0], y(r1[0], r1[1]), r1[1]],
-          [r0[0], y(r0[0], r0[1]), r0[1]],
+          [l0[0], yL(i - 1), l0[1]],
+          [l1[0], yL(i), l1[1]],
+          [r1[0], yR(i), r1[1]],
+          [r0[0], yR(i - 1), r0[1]],
           style.color,
         );
 
@@ -805,16 +839,18 @@ class Terrain {
           let dx = m1[0] - m0[0], dz = m1[1] - m0[1];
           const l = Math.hypot(dx, dz) || 1; dx /= l; dz /= l;
           const nx = -dz * w, nz = dx * w;
+          const ym0 = span ? yAt(i - 1) : y(m0[0], m0[1]), ym1 = span ? yAt(i) : y(m1[0], m1[1]);
           surface.quad(
-            [m0[0] + nx, y(m0[0], m0[1]) + 0.014, m0[1] + nz],
-            [m1[0] + nx, y(m1[0], m1[1]) + 0.014, m1[1] + nz],
-            [m1[0] - nx, y(m1[0], m1[1]) + 0.014, m1[1] - nz],
-            [m0[0] - nx, y(m0[0], m0[1]) + 0.014, m0[1] - nz],
+            [m0[0] + nx, ym0 + 0.014, m0[1] + nz],
+            [m1[0] + nx, ym1 + 0.014, m1[1] + nz],
+            [m1[0] - nx, ym1 + 0.014, m1[1] - nz],
+            [m0[0] - nx, ym0 + 0.014, m0[1] - nz],
             0xd8cdb2,
           );
         }
 
-        if (style.kerb) {
+        // a span has parapets for kerbs (Bridges.js)
+        if (style.kerb && !span) {
           for (const side of [left, right]) {
             const a = side[i - 1], b = side[i];
             const ya = y(a[0], a[1]), yb = y(b[0], b[1]);
@@ -827,9 +863,14 @@ class Terrain {
         }
       }
 
+      if (span) buildSpan(bridges, span, left, right, half, onOtherDeck(rec), this.bridgeColliders);
+
       ends.push({ p: dense[0], half, style });
       ends.push({ p: dense[dense.length - 1], half, style });
     }
+    const bm = spanMesh(bridges);
+    if (bm) this.group.add(bm);
+    if (spans.length) console.info(`[terrain] ${spans.length} spans carried clear of the ground, ${this.bridgeColliders.length} colliders`);
 
     // Junction caps: a disc at every road end hides the seam where ways meet.
     for (const e of ends) {

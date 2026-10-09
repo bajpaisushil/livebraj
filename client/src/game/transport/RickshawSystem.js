@@ -505,7 +505,7 @@ export class RickshawSystem {
     const sz = b.car.z - Math.cos(b.car.yaw) * back;
     const x = b.from.x + (sx - b.from.x) * k;
     const z = b.from.z + (sz - b.from.z) * k;
-    const y = ctx.world.groundHeight(x, z);
+    const y = this._surface(ctx, x, z, b.car.y);
     ctx.player.position.set(x, y + 0.62 * k, z);
     ctx.player.setYaw(b.car.yaw);
 
@@ -1006,8 +1006,8 @@ export class RickshawSystem {
       // the kerb is not always clear, and stepping out into a wall is exactly
       // the sort of thing this whole change is about
       _out.x = ox; _out.z = oz;
-      if (ctx.world.collide) ctx.world.collide(_out, PLAYER_R);
-      ctx.player.position.set(_out.x, ctx.world.groundHeight(_out.x, _out.z), _out.z);
+      if (ctx.world.collide) ctx.world.collide(_out, PLAYER_R, car.y);
+      ctx.player.position.set(_out.x, this._surface(ctx, _out.x, _out.z, car.y), _out.z);
     }
 
     this.ride = null;
@@ -1240,12 +1240,25 @@ export class RickshawSystem {
    * placed on it every frame, a little back from the middle and a little above
    * the deck, facing the way it faces.
    */
+  /**
+   * The surface a ride is on: the terrain, or a bridge deck it has driven up
+   * onto (Bridges.js) — whichever is underfoot from where it was, as every
+   * other vehicle stands (CrowdSystem). It was the terrain alone, so a ride
+   * over NH 44's flyover went along the ground under the deck, through the
+   * piers, with its passenger seated in the road below.
+   */
+  _surface(ctx, x, z, near) {
+    const w = ctx.world;
+    if (!w.standHeightFast || near === undefined || !Number.isFinite(near)) return w.groundHeight(x, z);
+    return w.standHeightFast(x, z, near);
+  }
+
   _seat(ctx, a) {
     const L = (this.vehicle && this.vehicle.l) || 2.8;
     const back = L * 0.22;
     const sx = a.x - Math.sin(a.yaw) * back;
     const sz = a.z - Math.cos(a.yaw) * back;
-    const y = ctx.world.groundHeight(sx, sz);
+    const y = this._surface(ctx, sx, sz, a.y);
     /*
      * The HIPS go on the seat. The player's root is the soles of a standing
      * body, and sitting folds the legs without lowering the hips, so putting
@@ -1387,7 +1400,7 @@ export class RickshawSystem {
       const i = Math.min(last, r.i + 1);
       car.x = pts[i][0];
       car.z = pts[i][1];
-      car.y = ctx.world.groundHeight(car.x, car.z);
+      car.y = this._surface(ctx, car.x, car.z, car.y);
       car.vel = 0;
       if (i < last) car.yaw = Math.atan2(pts[i + 1][0] - car.x, pts[i + 1][1] - car.z);
       r.i = i; r.was = i;
@@ -1510,7 +1523,7 @@ export class RickshawSystem {
     const warm = Math.min(1, r.t / 20);
     r.mps = Math.max(0.5,
       warm * Math.max(recent, avg * 0.6) + (1 - warm) * planned);
-    car.y = ctx.world.groundHeight(car.x, car.z);
+    car.y = this._surface(ctx, car.x, car.z, car.y);
 
     this._seat(ctx, car);
     this._updateRideHud(ctx);
@@ -1706,7 +1719,7 @@ export class RickshawSystem {
     const made = driveStep(car, dt, ctx, car.yaw + steer * STEER_LOCK, want, DRIVEN);
     this._aimCameraAtTravel(ctx, car, dr);
     dr.metres += Math.abs(made);
-    car.y = ctx.world.groundHeight(car.x, car.z);
+    car.y = this._surface(ctx, car.x, car.z, car.y);
 
     this._seat(ctx, car);
     this._updateRideHud(ctx);

@@ -60,6 +60,7 @@ export const ROADS = [
     "kind": "trunk",
     "width": 22,
     "oneway": true,
+    "bridge": true,
     "points": [
       [-6362.5, 2018.7],
       [-6226.71, 2126.4],
@@ -74,6 +75,7 @@ export const ROADS = [
     "kind": "trunk",
     "width": 22,
     "oneway": true,
+    "bridge": true,
     "points": [
       [-5929.98, 2412.86],
       [-5951.23, 2388.53],
@@ -421,6 +423,7 @@ export const ROADS = [
     "name": "Chhatikara-Govardan Road",
     "kind": "highway",
     "width": 14,
+    "bridge": true,
     "points": [
       [-6518.79, 2218.32],
       [-6543.65, 2244.43],
@@ -439,6 +442,7 @@ export const ROADS = [
     "name": null,
     "kind": "highway",
     "width": 14,
+    "bridge": true,
     "points": [
       [1689.92, 1555.47],
       [2072.01, 1907.72]
@@ -450,6 +454,7 @@ export const ROADS = [
     "kind": "highway",
     "width": 14,
     "oneway": true,
+    "bridge": true,
     "points": [
       [-869.73, 1978.74],
       [-987.9, 1874.4],
@@ -464,6 +469,7 @@ export const ROADS = [
     "kind": "highway",
     "width": 14,
     "oneway": true,
+    "bridge": true,
     "points": [
       [-1219.81, 1685.16],
       [-1104.07, 1768.54],
@@ -1352,6 +1358,7 @@ export const ROADS = [
     "name": null,
     "kind": "main",
     "width": 11,
+    "bridge": true,
     "points": [
       [1209.73, -1053.08],
       [1193.44, -1108.53],
@@ -25945,6 +25952,7 @@ export const ROADS = [
     "name": null,
     "kind": "path",
     "width": 2.6,
+    "bridge": true,
     "points": [
       [-6701.26, 2661.26],
       [-6675.83, 2642.02],
@@ -25956,6 +25964,7 @@ export const ROADS = [
     "name": null,
     "kind": "path",
     "width": 2.6,
+    "bridge": true,
     "points": [
       [-6669.26, 2651.07],
       [-6645.12, 2631.61]
@@ -25966,6 +25975,7 @@ export const ROADS = [
     "name": null,
     "kind": "path",
     "width": 2.2,
+    "bridge": true,
     "points": [
       [-6685.47, 2682.12],
       [-6701.26, 2661.26]
