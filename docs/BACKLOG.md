@@ -3760,3 +3760,20 @@ clock; it now holds the game loop and steps every frame itself, like
 `chatter`, `traffic` and `verges`. Under automation the game also stops
 asking Open-Meteo for weather and air: parallel runs had drawn a 429 and
 failed `weather`, which now opts back in. Full suite 46/46 green in 44 min.
+
+## 2026-10-09 — Brahma Kund, and what a basin 9 m deep asks of the world
+
+DONE (c30a484, c20c6f2). It was a 46 m square of stacked boxes under the
+terrain, 5 m off the real tank. Now the Braj Foundation's restoration as the
+2014-2017 photographs show it, measured on ESRI z19: the walled pit 6 m below
+its street, painted pink, the saints on their ledge between two bastions, 39
+plaques; the octagon of stepwell flights to green water; Brahma on the lotus;
+the way in from the lane past the gatehouse (`docs/research/brahma-kund.md`).
+The river's plane showed through the basin as a flooded tank, a ledge down
+there lifted you to the street, and the camera would not go below the street
+— all three fixed for every basin. Found on the way: the unstick search put
+you on the pool; `steps` read the octagon as one flight centred on the
+water (each flight has its own tag now). `brahmakund.mjs` 16/16, mutation-
+tested five ways. Full suite 43/47 with five mutation runs and screenshot
+sessions running beside it; the four re-run alone green (`steps` after the
+tag fix). Next: Rangaji's tank into a basin at its measured place.

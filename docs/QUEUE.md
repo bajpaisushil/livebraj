@@ -385,6 +385,18 @@ searching the backlog for it. That is the failure this file exists to stop.*
     grade: Rangaji's tank had to go on a terrace. Wanted: a location declares
     a basin, the ground mesh drops the quads it covers, and the builder draws
     the exact complement — the same will serve every kund in Braj.
+    **Brahma Kund done the same day** (c30a484, c20c6f2), the second basin
+    and the first deep one: the Braj Foundation's restoration, measured on
+    the imagery — the walled pit 6 m below its street, the octagon of
+    stepwell flights 3.2 m further to green water, Brahma on the lotus, the
+    saints, the 39 plaques, the way in past the gatehouse
+    (`docs/research/brahma-kund.md`). A basin that deep taught the world
+    three things, now true of every basin: the river's plane (under the
+    whole map at -3.6 m) is not drawn in one; down in one a ledge is a drop,
+    not a lift to the street; the camera comes down with you (`floorUnder`).
+    Basins can be several rectangles. Found on the way: the unstick search
+    put you on the pool's water. `brahmakund.mjs` 16/16, mutation-tested five
+    ways; `steps` walks all 66 flights in the world. Rangaji's tank next.
 18. **Every dome, spire and tree was drawn inside out — FIXED 2026-09-30.**
     Found building ISKCON: shikhara(), dome(), ribbedDome() and the tree
     canopy blob() wound their ring quads to face INWARD, and those meshes are
