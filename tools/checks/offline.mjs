@@ -280,10 +280,18 @@ const walk = () => page.evaluate(async () => {
   const up = document.querySelector('#dpad .dp.up');
   if (!up) return -1;
   const p0 = c.player.position.clone();
+  const moved = () => Math.hypot(c.player.position.x - p0.x, c.player.position.z - p0.z);
   up.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 7 }));
-  await new Promise((r) => setTimeout(r, 2500));
+  /*
+   * Until the player has gone somewhere, not for 2.5 s of wall clock: in a
+   * parallel suite the game loop got so few frames in that time that a
+   * working build walked 0.23 m of the 0.25 asked for. A broken one still
+   * walks nowhere in twenty seconds.
+   */
+  const t0 = Date.now();
+  while (moved() < 0.6 && Date.now() - t0 < 20000) await new Promise((r) => setTimeout(r, 100));
   up.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, pointerId: 7 }));
-  return Math.hypot(c.player.position.x - p0.x, c.player.position.z - p0.z);
+  return moved();
 });
 
 /** Network off: the context offline, and the server gone, because setOffline does not reach the worker. */
@@ -370,7 +378,7 @@ try {
   check('no page errors, no console errors, no file missing', !pageErrors.length && !consoleErrors.length
     && !failed.length, [...pageErrors, ...consoleErrors, ...failed].slice(0, 3).join(' | ') || 'clean');
   const metres = offBoot ? await walk() : -1;
-  check('and plays: the player walks', metres > 0.25, `${metres.toFixed(2)} m in 2.5 s`);
+  check('and plays: the player walks', metres > 0.25, `${metres.toFixed(2)} m on the arrow`);
 
   /* -------------------------------------------------------------- *
    * 4. A deploy.

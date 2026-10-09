@@ -225,10 +225,11 @@ check('and you can walk away from where it put you',
 /* ---- 7. shots across zoom ---- */
 await page.evaluate(() => { const m = window.vrindavan.ctx.map; m.fitWorld(); m._mapDirty = true; m._drawFull(true); });
 await page.waitForTimeout(500);
-await page.screenshot({ path: 'docs/shots/map-search-world.png' });
+// for the docs, not a test: never let a slow frame under load fail the run
+await page.screenshot({ path: 'docs/shots/map-search-world.png', timeout: 90000 }).catch(() => {});
 await page.fill('#map-q', 'prem');
 await page.waitForTimeout(300);
-await page.screenshot({ path: 'docs/shots/map-search-open.png' });
+await page.screenshot({ path: 'docs/shots/map-search-open.png', timeout: 90000 }).catch(() => {});
 
 console.log('');
 const bad = results.filter((r) => !r.pass);

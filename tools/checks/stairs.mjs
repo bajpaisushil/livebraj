@@ -50,8 +50,14 @@ await p.evaluate(() => {
   const ctx = window.vrindavan.ctx, w = ctx.world;
 
   window.__flight = (loc) => {
+    /*
+     * Top tread first, by HEIGHT. This took the tread nearest the ghat's pin
+     * as the top, which held while every flight was TerrainBuilder's, cut
+     * from the pin toward the water. Kaliya Ghat's pin stands beside the
+     * middle of its court's flight, and nearest-first read it sideways.
+     */
     const near = w.colliders.filter(c => c.tag === 'ghat-step' && Math.hypot(c.x - loc.pos[0], c.z - loc.pos[1]) < 25)
-      .sort((a, b) => Math.hypot(a.x - loc.pos[0], a.z - loc.pos[1]) - Math.hypot(b.x - loc.pos[0], b.z - loc.pos[1]));
+      .sort((a, b) => (b.top - a.top) || (Math.hypot(a.x - loc.pos[0], a.z - loc.pos[1]) - Math.hypot(b.x - loc.pos[0], b.z - loc.pos[1])));
     if (near.length < 2) return null;
     const c0 = near[0], c1 = near[1], last = near[near.length - 1];
     const d = Math.hypot(c1.x - c0.x, c1.z - c0.z);
