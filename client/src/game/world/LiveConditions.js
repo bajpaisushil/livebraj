@@ -51,6 +51,17 @@ const PUBLISH_SKEW_MS = 20 * 1000;   // models land a little after the stamp
 const MAX_SLEEP_MS = 15 * 60 * 1000;
 const CACHE_MAX_AGE_MS = 4 * 60 * 60 * 1000;
 
+/*
+ * Not under automation, unless the page asks (`window.__liveFetch`, which the
+ * weather check sets against its own stub). Every other check booted the game
+ * and called the real service, and on a day of a few thousand boots it began
+ * answering 429 Too Many Requests — a console error that failed whichever
+ * check happened to be counting them. Offline is a path the game already
+ * takes quietly; under test it simply takes it every time.
+ */
+const automated = () => typeof navigator !== 'undefined' && navigator.webdriver === true
+  && !(typeof window !== 'undefined' && window.__liveFetch);
+
 /**
  * Open-Meteo does not weight a call by how much you ask for — a call is a call.
  * So asking for three variables and asking for sixteen cost exactly the same,
@@ -243,6 +254,7 @@ export class LiveConditions {
    */
   async _refreshAir() {
     if (Date.now() < this._nextAirAt) return;
+    if (automated()) return;
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 6000);
@@ -322,6 +334,7 @@ export class LiveConditions {
     if (now - this.fetchedAt < RETRY_MS) return this.weather;   // hard floor
     if (typeof fetch !== 'function') return this.weather;
     if (navigator && navigator.onLine === false) return this.weather;
+    if (automated()) return this.weather;
     if (this._inflight) return this._inflight;   // one request at a time
     this._inflight = this._fetchNow();
     try { return await this._inflight; } finally { this._inflight = null; }

@@ -90,6 +90,9 @@ await p.route('**/api.open-meteo.com/**', async (route) => {
   });
 });
 
+// the game leaves the live service alone under automation; this check is
+// the one that wants it, against the mock above
+await p.addInitScript(() => { window.__liveFetch = true; });
 await p.goto(`http://localhost:${PORT}/`, { waitUntil: 'domcontentloaded' });
 
 const make = () => p.evaluate(async () => {

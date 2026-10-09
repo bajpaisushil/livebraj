@@ -22,10 +22,34 @@ const b = await chromium.launch({ args:['--use-angle=swiftshader','--enable-unsa
 const p = await b.newPage({ viewport:{width:390,height:844}, hasTouch:true });
 p.on('pageerror', e=>errors.push(e.message));
 p.on('console', m=>{const t=m.text(); if(m.type()==='error' && !/vibrate/.test(t)) errors.push(t);});
+/*
+ * THE CHECK OWNS THE CLOCK, as starthere and traffic do. The ride was already
+ * stepped at 1/30 s, but the town's own loop ran on the wall clock between
+ * the steps: under a parallel suite the traffic stood somewhere else on the
+ * test road when the car got there, and the cruise read 3.1 m/s against
+ * more than 4 alone. Nothing moves now but what this steps.
+ */
+await p.addInitScript(() => {
+  let app = null;
+  Object.defineProperty(window, 'vrindavan', {
+    configurable: true, get: () => app,
+    set: (v) => { app = v; if (v) v.start = function held() { this.running = true; }; },
+  });
+});
 await p.goto(`http://localhost:${__PORT}/`,{waitUntil:'networkidle'});
-await p.waitForFunction(()=>window.vrindavan?.ctx?.rickshaw && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.cameraRig,null,{timeout:90000});
-await p.evaluate(()=>window.vrindavan.ctx.ui.show('world'));
-await p.waitForTimeout(800);
+await p.waitForFunction(()=>window.vrindavan?.ctx?.rickshaw && window.vrindavan?.ctx?.ui && window.vrindavan?.ctx?.cameraRig,null,{timeout:220000});
+await p.evaluate(()=>{
+  const app = window.vrindavan, ctx = app.ctx;
+  ctx.clock.getDelta = () => 1 / 30;
+  ctx.renderer.render = (scene, camera) => {
+    if (scene.matrixWorldAutoUpdate === true) scene.updateMatrixWorld();
+    if (camera.parent === null && camera.matrixWorldAutoUpdate === true) camera.updateMatrixWorld();
+  };
+  Math.random = ctx.rngAt(1);
+  ctx.ui._endIntro();
+  ctx.ui.show('world');
+  for (let i = 0; i < 24; i++) app._frame();
+});
 
 /* get into a vehicle and take the wheel */
 const took = await p.evaluate(async () => {
@@ -36,7 +60,7 @@ const took = await p.evaluate(async () => {
   r._acc=99; r.update(0.5,ctx);
   if (!r.board()) return { ok:false, why:'could not get in' };
   for (let i=0;i<60;i++) r.update(1/30,ctx);
-  await new Promise(s=>setTimeout(s,200));
+  for (let i = 0; i < 6; i++) window.vrindavan._frame();
   const ok = r.takeWheel();
   return { ok, state: r.state, hasDrive: !!r.drive, inputOn: ctx.input ? ctx.input._enabled !== false : null };
 });
@@ -171,7 +195,7 @@ check('driving does not go through solids', solid.ok && Number(solid.pct) < 3,
 const back = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, r = ctx.rickshaw;
   const ok = r.handBack ? r.handBack() : false;
-  await new Promise(s=>setTimeout(s,200));
+  for (let i = 0; i < 6; i++) window.vrindavan._frame();
   return { ok, state: r.state, frozen: ctx.player.frozen === true };
 });
 check('you can hand the wheel back', back.ok && back.state !== 'driving',
@@ -194,7 +218,7 @@ const pace = await p.evaluate(async () => {
    */
   const findMine = () => { for (const sl of ctx.crowd.vehicleInst) for (const a of sl.agents) if (a.personal) return a; return null; };
   let mine = null;
-  for (let i = 0; i < 300 && !(mine = findMine()); i++) await new Promise((s) => requestAnimationFrame(() => s()));
+  for (let i = 0; i < 300 && !(mine = findMine()); i++) window.vrindavan._frame();
   if (!mine) return { ok:false, why:'no personal vehicle' };
   ctx.player.position.set(mine.x-2, ctx.player.position.y, mine.z);
   r._acc=99; r.update(0.5,ctx);
