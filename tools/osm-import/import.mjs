@@ -258,6 +258,9 @@ for (const way of rawRoads) {
       name,
       kind: isParikrama ? 'parikrama' : cls.kind,
       width: isParikrama ? Math.max(cls.width, 9) : cls.width,
+      // one way, in the way's own order: NH 44's two carriageways, and most
+      // of the secondary roads, are mapped as a pair of these
+      ...(['yes', '1', 'true'].includes(way.tags?.oneway) ? { oneway: true } : {}),
       prio: cls.prio,
       length: Math.round(len),
       points: pts,

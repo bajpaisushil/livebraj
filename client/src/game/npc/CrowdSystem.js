@@ -870,13 +870,15 @@ export class Crowd {
   _nextRoad(a, nav) {
     const edges = a.node && a.node.edges;
     if (!nav || !edges || !edges.length) return null;
+    // a drivable edge, and not against a one-way road's traffic (NavGraph)
+    const ok = (e) => DRIVABLE.has(e.kind) && !e.against;
     let n = 0;
-    for (let i = 0; i < edges.length; i++) if (DRIVABLE.has(edges[i].kind)) n++;
+    for (let i = 0; i < edges.length; i++) if (ok(edges[i])) n++;
     // nothing drivable out of here: take anything rather than sit in the gali
     // for ever, and the steering will get it back out
     let pick = Math.floor(Math.random() * (n || edges.length));
     for (let i = 0; i < edges.length; i++) {
-      if (n && !DRIVABLE.has(edges[i].kind)) continue;
+      if (n && !ok(edges[i])) continue;
       if (pick-- === 0) return nav.nodes.get(edges[i].to) || null;
     }
     return null;

@@ -90,6 +90,12 @@ const DRIVE_COST = { gali: 4.0, path: 3.5, stitch: 1.4 };
  * a driver does.
  */
 const BLOCKED_COST = 30;
+/*
+ * Driving the wrong way up a one-way carriageway: possible, for a route that
+ * has no other way out, but priced so a ride never chooses it when there is
+ * a right way round. Ambient traffic does not take it at all (CrowdSystem).
+ */
+const AGAINST_COST = 12;
 
 /** How often the clearance walk samples an edge, in metres. */
 const BLOCK_STEP = 2.5;
@@ -170,13 +176,21 @@ export class NavGraph {
     return n;
   }
 
-  _link(a, b, kind, named) {
+  _link(a, b, kind, named, oneway = false) {
     if (a === b) return;
     if (a.edges.some((e) => e.to === b.k)) return;
     const mult = (KIND_COST[kind] ?? 1) * (named ? NAMED_BONUS : 1);
     const w = Math.sqrt(dist2(a.x, a.z, b.x, b.z)) * mult;
     a.edges.push({ to: b.k, w, kind, named: !!named });
-    b.edges.push({ to: a.k, w, kind, named: !!named });
+    /*
+     * A one-way road (OSM's oneway=yes, in the way's own order) is still
+     * walked both ways, so the reverse edge stays — but it is marked as
+     * AGAINST the traffic, which no vehicle takes. NH 44 is two such
+     * carriageways, and with both driven both ways every standoff the
+     * traffic check ever found was two vehicles meeting head-on on one of
+     * them, by Chhatikara where you start.
+     */
+    b.edges.push({ to: a.k, w, kind, named: !!named, ...(oneway ? { against: true } : {}) });
     this._edgeCount++;
   }
 
@@ -189,7 +203,7 @@ export class NavGraph {
       let prev = null;
       for (let i = 0; i < pts.length; i++) {
         const n = this._node(pts[i][0], pts[i][1]);
-        if (prev) this._link(prev, n, road.kind, !!road.name);
+        if (prev) this._link(prev, n, road.kind, !!road.name, !!road.oneway);
         prev = n;
       }
     }
@@ -342,6 +356,7 @@ export class NavGraph {
         if (closed.has(e.to)) continue;
         const tentative = curG + (drivable
           ? e.w * (DRIVE_COST[e.kind] || 1) * (this._edgeOpen(cur, e) === false ? BLOCKED_COST : 1)
+            * (e.against ? AGAINST_COST : 1)
           : e.w);
         if (tentative < (g.get(e.to) ?? Infinity)) {
           from.set(e.to, curKey);

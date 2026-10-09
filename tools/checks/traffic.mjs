@@ -49,9 +49,14 @@ const __PORT = server.address().port;   // any free port, so parallel runs never
  *
  * Swept again 2026-10-09 when the e-rickshaw went from 1.4 m to its real
  * 1.0 m: over seeds 1-60, 46 green at 1.0 m against 49 at 1.4 — the same
- * standoffs reshuffled among the seeds, every failure a head-on pair. They
- * come from vehicles driving the leg's centreline in both directions; the
- * fix is keeping left, as India does (queue item 21), not a wider cone.
+ * standoffs reshuffled among the seeds, every failure a head-on pair.
+ *
+ * And again the same day once one-way roads were one way: 52 of 60. Seed 7's
+ * pair, probed, was an auto and a cab nose to nose on NH 44 by Chhatikara —
+ * a carriageway OSM maps oneway=yes that the game drove both ways. The four
+ * long standoffs left (seeds 40, 43, 56, 60) are true head-on meetings on
+ * two-way streets: vehicles drive a leg's centreline in both directions
+ * (queue item 21, keeping left).
  */
 const SEED = Number((process.argv.find((a) => a.startsWith('--seed=')) || '').slice(7)) || 1;
 
