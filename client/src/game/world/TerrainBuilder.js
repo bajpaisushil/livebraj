@@ -189,6 +189,8 @@ class Terrain {
       waterY: WATER_Y,
       // the ground mesh's holes, for the builders whose basins made them
       holes: this.holes || [],
+      // in a basin, the terrain's height is the street above you
+      inBasin: (x, z) => self.inBasin(x, z),
       groundColor: (x, z) => self._groundColor(x, z, new THREE.Color()).getHex(),
       roadDistance: (x, z) => self.roadDistance(x, z),
       update: (dt) => self.update(dt),
@@ -690,17 +692,49 @@ class Terrain {
     return out.multiplyScalar(0.9 + fine * 0.2);
   }
 
-  /** Every declared basin, as a world polygon: `basin` is in its location's box frame. */
+  /**
+   * Every declared basin, as a world polygon: `basin` is in its location's box
+   * frame, one rectangle or several — a kund's walled pit and the flight cut
+   * down into it from the street are two.
+   */
   _basins() {
     const out = [];
     for (const l of this.data.LOCATIONS) {
-      const q = l.basin;
-      if (!q) continue;
+      if (!l.basin) continue;
       const cs = Math.cos(l.rot), sn = Math.sin(l.rot);
       const P = (lx, lz) => [l.pos[0] + lx * cs - lz * sn, l.pos[1] + lx * sn + lz * cs];
-      out.push({ id: l.id, poly: [P(q.lx0, q.lz0), P(q.lx1, q.lz0), P(q.lx1, q.lz1), P(q.lx0, q.lz1)] });
+      for (const q of Array.isArray(l.basin) ? l.basin : [l.basin]) {
+        const poly = [P(q.lx0, q.lz0), P(q.lx1, q.lz0), P(q.lx1, q.lz1), P(q.lx0, q.lz1)];
+        const xs = poly.map((v) => v[0]), zs = poly.map((v) => v[1]);
+        out.push({ id: l.id, poly,
+          x0: Math.min(...xs), x1: Math.max(...xs), z0: Math.min(...zs), z1: Math.max(...zs) });
+      }
     }
     return out;
+  }
+
+  /**
+   * Is this point in a basin — where the ground mesh was cut away and the
+   * terrain's height is the street above, not anything you could stand on?
+   * WorldService asks, so that down in a kund a ledge is a drop to the next
+   * surface and not a lift back up to the street, and so the camera can follow
+   * you down. Every basin is a convex quad, so inside is inside every edge.
+   */
+  inBasin(x, z) {
+    const list = this._basinList;
+    if (!list || !list.length) return false;
+    for (const bsn of list) {
+      if (x < bsn.x0 || x > bsn.x1 || z < bsn.z0 || z > bsn.z1) continue;
+      const P = bsn.poly;
+      let pos = 0, neg = 0;
+      for (let k = 0; k < P.length; k++) {
+        const a = P[k], b = P[(k + 1) % P.length];
+        const side = (b[0] - a[0]) * (z - a[1]) - (b[1] - a[1]) * (x - a[0]);
+        if (side > 0) pos++; else if (side < 0) neg++;
+      }
+      if (!pos || !neg) return true;
+    }
+    return false;
   }
 
   /** A flat ring beyond the playable area so the horizon never shows an edge. */
@@ -978,6 +1012,46 @@ class Terrain {
       opacity: 0.82,
       map: tex,
     });
+
+    /*
+     * NOT IN A BASIN. The river is one plane under the whole map, hidden by
+     * the ground everywhere but the channel — and a basin is a hole in the
+     * ground. Brahma Kund's garden is 6 m down, 2.6 m under this plane, and
+     * from the street the whole pit read as a flooded tank. So the plane is
+     * not drawn inside any basin: whatever is down there, its builder draws.
+     */
+    const quads = (this._basinList || []).slice(0, 8);
+    if (quads.length) {
+      const pts = [];
+      for (const q of quads) for (const v of q.poly) pts.push(new THREE.Vector2(v[0], v[1]));
+      while (pts.length < 32) pts.push(new THREE.Vector2(1e9, 1e9));
+      mat.onBeforeCompile = (sh) => {
+        sh.uniforms.uBasin = { value: pts };
+        sh.uniforms.uBasins = { value: quads.length };
+        sh.vertexShader = sh.vertexShader
+          .replace('#include <common>', '#include <common>\nvarying vec2 vBasinXZ;')
+          .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBasinXZ = (modelMatrix * vec4(transformed, 1.0)).xz;');
+        sh.fragmentShader = sh.fragmentShader
+          .replace('#include <common>', `#include <common>
+varying vec2 vBasinXZ;
+uniform vec2 uBasin[32];
+uniform int uBasins;
+bool inBasin(vec2 q) {
+  for (int b = 0; b < 8; b++) {
+    if (b >= uBasins) break;
+    bool pos = false, neg = false;
+    for (int k = 0; k < 4; k++) {
+      vec2 a = uBasin[b * 4 + k], c = uBasin[b * 4 + (k + 1) % 4];
+      float s = (c.x - a.x) * (q.y - a.y) - (c.y - a.y) * (q.x - a.x);
+      if (s > 0.0) pos = true; else if (s < 0.0) neg = true;
+    }
+    if (!(pos && neg)) return true;
+  }
+  return false;
+}`)
+          .replace('void main() {', 'void main() {\n  if (inBasin(vBasinXZ)) discard;');
+      };
+    }
 
     this.water = new THREE.Mesh(geo, mat);
     this.water.position.y = WATER_Y;

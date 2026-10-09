@@ -537,11 +537,23 @@ export const LANDMARKS = [
     fallback: [27.58154, 77.69108],
   },
   {
+    /*
+     * The octagon's centre, measured on ESRI z19 imagery: OSM's water circle
+     * (way 671678179) is 11 m north of it, on the north garden, while OSM's
+     * enclosure (way 671678180) fits the walls — the frame is turned to it.
+     * The pit and the flight down into it are the basin; the forecourt to the
+     * lane is in the compound so the town leaves the way in open.
+     * docs/research/brahma-kund.md.
+     */
     id: 'brahma-kund', match: ['Brahma Kund'],
     name: 'Brahma Kund', hindi: 'ब्रह्म कुंड',
     type: 'kund', deity: null, icon: 'kund',
-    build: { kind: 'kund', w: 46, d: 46, h: 5, color: '#c9b895', accent: '#6f8f7a' },
-    rot: 0, radius: 28, district: 'old-town',
+    build: { kind: 'kund-brahma', w: 39, d: 56, h: 6, color: '#e996ae', accent: '#bd6158', measured: true },
+    at: [27.583364, 77.701397],
+    rot: -0.0125, radius: 24, district: 'old-town',
+    compound: { lx0: -20.0, lx1: 18.5, lz0: -22.0, lz1: 15.5, ring: false,
+      also: [{ lx0: -7.9, lx1: 7.6, lz0: 15.5, lz1: 34.0 }, { lx0: -8.5, lx1: 8.5, lz0: 34.0, lz1: 38.5 }] },
+    basin: [{ lx0: -20.0, lx1: 18.5, lz0: -22.0, lz1: 15.5 }, { lx0: -7.9, lx1: 7.6, lz0: 15.5, lz1: 34.0 }],
     interactions: ['pranam', 'story'],
     fallback: [27.58060, 77.69300],
   },

@@ -554,10 +554,45 @@ export const LOCATIONS = [
     "type": "kund",
     "district": "old-town",
     "grounds": null,
-    "pos": [1075.48, -370.03],
-    "geo": [27.583319, 77.701392],
-    "rot": 0,
-    "radius": 28,
+    "compound": {
+      "lx0": -20,
+      "lx1": 18.5,
+      "lz0": -22,
+      "lz1": 15.5,
+      "ring": false,
+      "also": [
+        {
+          "lx0": -7.9,
+          "lx1": 7.6,
+          "lz0": 15.5,
+          "lz1": 34
+        },
+        {
+          "lx0": -8.5,
+          "lx1": 8.5,
+          "lz0": 34,
+          "lz1": 38.5
+        }
+      ]
+    },
+    "basin": [
+      {
+        "lx0": -20,
+        "lx1": 18.5,
+        "lz0": -22,
+        "lz1": 15.5
+      },
+      {
+        "lx0": -7.9,
+        "lx1": 7.6,
+        "lz0": 15.5,
+        "lz1": 34
+      }
+    ],
+    "pos": [1075.98, -374.99],
+    "geo": [27.583364, 77.701397],
+    "rot": -0.0125,
+    "radius": 24,
     "icon": "kund",
     "deity": null,
     "interactions": [
@@ -565,12 +600,13 @@ export const LOCATIONS = [
       "story"
     ],
     "build": {
-      "kind": "kund",
-      "w": 46,
-      "d": 46,
-      "h": 5,
-      "color": "#c9b895",
-      "accent": "#6f8f7a"
+      "kind": "kund-brahma",
+      "w": 39,
+      "d": 56,
+      "h": 6,
+      "color": "#e996ae",
+      "accent": "#bd6158",
+      "measured": true
     },
     "osm": "Brahma Kund"
   },

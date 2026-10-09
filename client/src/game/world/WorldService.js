@@ -807,7 +807,44 @@ export class WorldService {
     }
     if (best === -Infinity && soft > -Infinity) { best = soft; cut = softCut; }
     if (cut) return best;
+    /*
+     * IN A BASIN THE TERRAIN IS NOT A FLOOR.
+     *
+     * Where a place declared a basin the ground mesh is cut away, and what
+     * the terrain reports there is the street above. Brahma Kund's garden is
+     * 6 m below its street and its pool a further 3.2 m, down stepwell
+     * flights with open sides: step off one and the rule above — no surface
+     * within a step, so stand on the terrain — lifted you 7 m back up to the
+     * street through the masonry. Down there a drop is a drop: you land on
+     * the highest thing built under you. Over a gap in what was built you
+     * keep your height rather than fly up out of it.
+     */
+    if (this.terrain && this.terrain.inBasin && this.terrain.inBasin(x, z)) {
+      if (best > -Infinity) return best;
+      return Number.isFinite(feetY) ? feetY : terrain;
+    }
     return best > terrain ? best : terrain;
+  }
+
+  /**
+   * How low the camera may go at a point: the ground, or in a basin whatever
+   * is built under `y` — the camera's "never under the street" held it 6 m
+   * above anyone walking in Brahma Kund's garden, looking straight down.
+   * Open air over nothing built in a basin is -Infinity: no floor to keep off.
+   */
+  floorUnder(x, z, y) {
+    const t = this.terrain;
+    if (!t || !t.inBasin || !t.inBasin(x, z)) return this.groundHeight(x, z);
+    let best = -Infinity;
+    const cell = this._standCells.get(standKey(Math.floor(x / STAND_CELL), Math.floor(z / STAND_CELL)));
+    if (cell) {
+      for (let i = 0; i < cell.length; i++) {
+        const c = cell[i];
+        if (c.soft || !(c.top <= y + 0.5) || c.top <= best) continue;
+        if (this._overlaps(c, x, z, 0)) best = c.top;
+      }
+    }
+    return best;
   }
 
   /** Is this point within a collider's footprint, with a little slack? */
@@ -988,7 +1025,7 @@ export class WorldService {
   }
 
   _blocked(x, z, y, radius) {
-    if (y < this.groundHeight(x, z) + 0.25) return true;
+    if (y < this.floorUnder(x, z, y) + 0.25) return true;
     const near = this.grid.query(x, z, radius + 4, _hits);
     for (let i = 0; i < near.length; i++) {
       const c = near[i];

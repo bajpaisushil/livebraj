@@ -115,9 +115,9 @@ export const STORIES = {
     source: 'Braj tradition; temple custom.',
   },
   'brahma-kund': {
-    short: 'A stepped tank in the old town.',
-    long: `One of Vrindavan's kunds — the stepped stone tanks that once supplied the town and still hold rainwater. Braj is dotted with them, and many carry their own story; a kund is usually the oldest surviving structure in any part of this landscape.`,
-    source: 'OpenStreetMap; local record.',
+    short: 'The Brahma Sthan of Vrindavan: a deep walled kund, an octagon of steps, Brahma on a lotus.',
+    long: `On the northern edge of Rangaji's temple, and counted the Brahma Sthan — the sanctum — of Vrindavan. Some say it was formed from Brahma's tears when he understood whose calves and cowherd boys he had stolen. Here Vrinda Devi bathed Narada and he rose a gopi, so that he could see the rasa; here Rupa Goswami found her deity, which is now at Kamyavan. By the 2000s it had been a dump for the town's rubbish carts for decades, built over on all four sides, one ghat turned into a house. The Braj Foundation dug it out from 2006 — thirty months — until the old aquifers opened and filled it with sweet water, and laid the silt round it as a garden. They built the octagon of steps with fish and turtles carved on them, set an eight-foot Brahma on a thirteen-foot lotus in the middle, each petal a fountain, and put the Brahma Samhita on the walls in thirty-nine stone plaques. One old pillar was left as it was found, to show how old the kund is.`,
+    source: 'The Braj Foundation; brajrasik.org; India Water Portal (2017); Down To Earth (2014).',
   },
   'loi-bazar': {
     short: 'The market street. Garlands, brass, sweets, cloth, and the rest of it.',

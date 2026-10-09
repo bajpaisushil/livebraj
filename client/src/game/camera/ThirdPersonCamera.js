@@ -804,10 +804,14 @@ export class CameraRig {
     const cam = this.camera;
     if (!cam) return;
 
-    // Never let the rig dip under the street.
+    // Never let the rig dip under the street — or, down in a basin where the
+    // street is overhead, under whatever is built beneath it
     const world = ctx.world;
     if (world && world.groundHeight) {
-      const g = world.groundHeight(this._camPos.x, this._camPos.z) + 0.45;
+      const floor = world.floorUnder
+        ? world.floorUnder(this._camPos.x, this._camPos.z, this._camPos.y)
+        : world.groundHeight(this._camPos.x, this._camPos.z);
+      const g = floor + 0.45;
       if (this._camPos.y < g) this._camPos.y = g;
     }
 
@@ -907,7 +911,9 @@ export class CameraRig {
         const cx = _tmpA.x - _dir.x * back + _right.x * L;
         const cz = _tmpA.z - _dir.z * back + _right.z * L;
         let cy = _tmpA.y + camH - PIVOT_H + 0.55;
-        if (world && world.groundHeight) cy = Math.max(cy, world.groundHeight(cx, cz) + 1.35);
+        if (world && world.groundHeight) {
+          cy = Math.max(cy, (world.floorUnder ? world.floorUnder(cx, cz, cy) : world.groundHeight(cx, cz)) + 1.35);
+        }
 
         const aP = Math.atan2(_tmpA.x - cx, _tmpA.z - cz);
         const aT = Math.atan2(target.x - cx, target.z - cz);

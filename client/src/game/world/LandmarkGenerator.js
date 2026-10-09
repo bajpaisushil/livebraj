@@ -24,6 +24,7 @@ import { buildRadhaGopinathMandir } from './RadhaGopinathMandir.js';
 import { buildJaipurMandir } from './JaipurMandir.js';
 import { buildKeshiGhat } from './KeshiGhat.js';
 import { buildKaliyaGhat } from './KaliyaGhat.js';
+import { buildBrahmaKund } from './BrahmaKund.js';
 import { buildPremMandirSetting } from './PremMandirSetting.js';
 import { buildRangaji as buildRangajiCity } from './RangajiMandir.js';
 import { signAtlas, signUV, campusSign } from './Signage.js';
@@ -415,6 +416,15 @@ export function buildLandmarks(ctx, terrain) {
       ...(e.map ? { map: e.map(ctx) } : {}),
     });
     extraTris += e.builder.triangleCount;
+    // water that has to look wet: the town's matt material makes a pool a lawn
+    if (e.gloss) {
+      m.material.dispose();
+      m.material = new THREE.MeshPhongMaterial({ vertexColors: true,
+        shininess: e.gloss.shininess || 60, specular: e.gloss.specular || 0x555555,
+        transparent: e.gloss.opacity !== undefined, opacity: e.gloss.opacity === undefined ? 1 : e.gloss.opacity,
+        depthWrite: e.gloss.opacity === undefined });
+      m.renderOrder = 1;
+    }
     group.add(m);
     // a moving part carries the direction it moves in, so nothing downstream
     // has to know which way its temple faces
@@ -6673,6 +6683,31 @@ const BUILDERS = {
       altarY: r.altar.y - ground,
       noCollider: true,
       colliders,
+      interior: {
+        altar: [A[0], r.altar.y, A[1]],
+        darshan: [D[0], D[1]],
+        facing: Math.atan2(A[0] - D[0], A[1] - D[1]),
+        floor: r.floor,
+      },
+    };
+  },
+
+  /**
+   * Brahma Kund as the Braj Foundation restored it: the old walled pit, 6 m
+   * below its street, the octagon of stepwell flights sunk in its garden, and
+   * Brahma on the lotus in the middle (BrahmaKund.js, the location's basin).
+   */
+  'kund-brahma': ({ loc, b, ground, terrain }) => {
+    const rot = loc.rot, cs = Math.cos(rot), sn = Math.sin(rot);
+    const p = (lx, lz) => [loc.pos[0] + lx * cs - lz * sn, loc.pos[1] + lx * sn + lz * cs];
+    const colliders = [];
+    const r = buildBrahmaKund({ b, loc, ground, terrain, colliders, h: { cuspedArch, tint, dome, MeshBuilder } });
+    const A = p(r.altar.lx, r.altar.lz), D = p(r.darshan.lx, r.darshan.lz);
+    return {
+      altarY: r.altar.y - ground,
+      noCollider: true,
+      colliders,
+      meshes: r.meshes,
       interior: {
         altar: [A[0], r.altar.y, A[1]],
         darshan: [D[0], D[1]],
