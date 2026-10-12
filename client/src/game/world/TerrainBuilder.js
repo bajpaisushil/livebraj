@@ -12,7 +12,7 @@ import { WORLD_DETAIL } from '../../content/tuning.js';
 import { MeshBuilder } from '../../engine/render/MeshBuilder.js';
 import { makeNoise2D } from '../../engine/math/Noise.js';
 import { SpatialGrid } from '../../engine/math/SpatialGrid.js';
-import { pointSegment, resample, smoothPolyline } from '../../engine/math/Curves.js';
+import { pointSegment, resample, smoothPolyline, pointInPolygon } from '../../engine/math/Curves.js';
 import { clamp01, smoothstep, lerp } from '../../engine/math/MathUtils.js';
 import { WORLD } from '../../content/world.generated.js';
 import { isSpan, layoutSpan, buildSpan, spanMesh } from './Bridges.js';
@@ -101,6 +101,8 @@ const ROAD_STYLE = {
 const breathe = () => new Promise((r) => requestAnimationFrame(() => r()));
 
 /** The ground mesh's palette; see Terrain._groundColor. */
+/** Over how many metres inside its edge a district's own ground comes in. */
+const GROUND_EDGE = 25;
 const GROUND = {
   SAND: new THREE.Color(0xe6d3a4), DIRT: new THREE.Color(0xd8bb87),
   GRASS: new THREE.Color(0x4f9e33), DRY: new THREE.Color(0x6fa63c), CROP: new THREE.Color(0x3d8f2c),
@@ -559,6 +561,9 @@ class Terrain {
     const h = this.sampleHeight(x, z);
     // the bank and the riverbed's sand flats; the town is a metre and more above
     if (h < WATER_Y + SAND_ABOVE) return 'sand';
+    // bare earth where a district says so, though it be far from a road
+    const own = this._groundOf(x, z);
+    if (own && own.k > 0.5) return 'dirt';
     return d < 24 ? 'dirt' : 'grass';
   }
 
@@ -749,8 +754,41 @@ class Terrain {
     out.copy(GROUND.GRASS).lerp(GROUND.DRY, patch);
     out.lerp(GROUND.CROP, clamp01((field - 0.42) * 2.4) * (1 - worn));   // cultivated strips
     out.lerp(GROUND.DIRT, worn * 0.85);
+    // a district's own ground, where it says what that is: Chhatikara's bare earth
+    const own = this._groundOf(x, z);
+    if (own) out.lerp(own.color, 0.85 * own.k);
     out.lerp(GROUND.SAND, wet);
     return out.multiplyScalar(0.9 + fine * 0.2);
+  }
+
+  /**
+   * The ground a district declares (`ground`, config.mjs), and how much of it
+   * (`k`), or null. Measured, like its roofs: the open ground of Chhatikara
+   * is trodden earth on ESRI, and drawn as the fields' grass it read as a lawn
+   * the village stood on. It fades in over GROUND_EDGE inside the polygon —
+   * a village thins into its fields, it does not stop at a line.
+   */
+  _groundOf(x, z) {
+    if (!this._grounds) {
+      this._grounds = (this.data.DISTRICTS || []).filter((d) => d.ground).map((d) => {
+        const xs = d.poly.map((p) => p[0]), zs = d.poly.map((p) => p[1]);
+        return { poly: d.poly, color: new THREE.Color(d.ground),
+          x0: Math.min(...xs), x1: Math.max(...xs), z0: Math.min(...zs), z1: Math.max(...zs) };
+      });
+    }
+    let best = null;
+    for (const g of this._grounds) {
+      if (x < g.x0 || x > g.x1 || z < g.z0 || z > g.z1) continue;
+      if (!pointInPolygon(x, z, g.poly)) continue;
+      let edge = Infinity;
+      for (let i = 0; i < g.poly.length; i++) {
+        const a = g.poly[i], b = g.poly[(i + 1) % g.poly.length];
+        edge = Math.min(edge, pointSegment(x, z, a[0], a[1], b[0], b[1]).d);
+      }
+      const k = clamp01(edge / GROUND_EDGE);
+      if (!best || k > best.k) best = { color: g.color, k };
+    }
+    return best;
   }
 
   /**

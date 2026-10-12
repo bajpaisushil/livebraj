@@ -55,7 +55,7 @@ const _ry = new THREE.Vector3(0, 1, 0);
  * would have taken someone else's work out with them; move them when it is
  * quiet.
  */
-const TOWN = {
+export const TOWN = {
   /**
    * Clear ground in any gap between two buildings, in metres.
    *
@@ -502,6 +502,42 @@ class CityFabric {
         t += Math.max(TOWN.laneMin, range(rng, cfg.gap[0], cfg.gap[1]));
         held = 0;
       }
+    }
+
+    /*
+     * Rows behind the row, where a district is built that deep (`rows`).
+     * Chhatikara's core is a carpet of flat roofs between its roads, the
+     * houses behind the street's reached down galis OSM does not map; with
+     * the street's row alone the village was a fringe of houses round open
+     * ground. Each back row is the front row's frame again, a gali further
+     * back, laid and fitted the same way — the lane rule keeps its galis.
+     */
+    const deep = (inside && inside.rows) || 1;
+    let back = line + row.depth * 1.12;
+    for (let k = 1; k < deep; k++) {
+      back += TOWN.laneMin + range(rng, TOWN.galiExtra[0], TOWN.galiExtra[1]);
+      const rowDepth = range(rng, cfg.depth[0], cfg.depth[1]);
+      let s = range(rng, 0.5, 4), run = 0, until = range(rng, TOWN.terraceRun[0], TOWN.terraceRun[1]);
+      while (s < L - 1) {
+        const frontage = range(rng, cfg.front[0], cfg.front[1]);
+        if (s + frontage > L - 0.5) break;
+        const depth = rowDepth * range(rng, 0.9, 1.12);
+        const off = back + depth * 0.5;
+        const cx = a[0] + dx * (s + frontage * 0.5) + nx * off;
+        const cz = a[1] + dz * (s + frontage * 0.5) + nz * off;
+        if (this._districtAt(cx, cz) && this._fits(cx, cz, frontage, depth, rot)) {
+          this._addLot(cx, cz, frontage, depth, rot, district, rng, road, row);
+          placed++;
+        }
+        s += frontage;
+        run += frontage;
+        if (run >= until) {
+          s += TOWN.laneMin + range(rng, TOWN.galiExtra[0], TOWN.galiExtra[1]);
+          run = 0;
+          until = range(rng, TOWN.terraceRun[0], TOWN.terraceRun[1]);
+        }
+      }
+      back += rowDepth * 1.12;
     }
     return placed > 0;
   }
@@ -1025,7 +1061,8 @@ class CityFabric {
     console.info('[buildings] ' + this.interiors.length + ' you can walk into ('
       + Object.entries(tally).map(([k, v]) => v + ' ' + k).join(', ') + ') in '
       + byKind.size + ' cullable groups');
-    return { group, colliders: this.colliders, interiors: this.interiors };
+    // the lots too, so a check can ask what was laid where (village.mjs)
+    return { group, colliders: this.colliders, interiors: this.interiors, lots: this.lots };
   }
 }
 
@@ -1051,7 +1088,7 @@ function polyArea(poly) {
   return Math.abs(a) * 0.5;
 }
 
-function obb(x, z, w, d, rot, out) {
+export function obb(x, z, w, d, rot, out) {
   const cs = Math.cos(rot), sn = Math.sin(rot);
   out.x = x; out.z = z;
   out.ux = cs; out.uz = -sn;
@@ -1084,7 +1121,7 @@ function segPointDist(px, pz, ax, az, bx, bz) {
  * are known apart, the closest pair of features on two rectangles is always a
  * corner against an edge, so the exact distance is the smallest of those.
  */
-function obbGap(a, b) {
+export function obbGap(a, b) {
   let sep = -Infinity;
   for (let k = 0; k < 4; k++) {
     const r = k < 2 ? a : b;

@@ -716,7 +716,14 @@ export const DISTRICTS = [
   {
     id: 'chhatikara', name: 'Chhatikara', kind: 'village',
     palette: ['#c9b9a0', '#b8ad9c', '#cdb59a', '#a8705a', '#c4b8a8', '#d1b9a6', '#aab3ad'],
-    minH: 3.5, maxH: 8, density: 0.85, group: 'chhatikara', lots: 700,
+    minH: 3.5, maxH: 8, density: 0.85, group: 'chhatikara', lots: 1400,
+    /*
+     * Three rows deep behind every street (BuildingGenerator): the core is a
+     * carpet of flat roofs between its roads, reached down galis OSM does not
+     * map. And its ground is bare trodden earth, not grass: #9a8166, the
+     * middle of its open ground on ESRI z17.
+     */
+    rows: 3, ground: '#9a8166',
     // roofs measured on ESRI z19 over the village: greige and tan concrete, no paint
     roofs: ['#c0bba8',  '#cdbfa6',  '#b8ad94',  '#a99c84',  '#d2cdbd',  '#9d907a',  '#c3b195'],
     poly: [[27.563023, 77.624347], [27.563502, 77.625947], [27.563312, 77.627659], [27.561787, 77.628509],
@@ -728,7 +735,7 @@ export const DISTRICTS = [
   {
     id: 'chhatikara-highway', name: 'Chhatikara: the highway', kind: 'bazaar',
     palette: ['#c9b9a0', '#cdb59a', '#d1b9a6', '#b8ad9c', '#c9a98a', '#aab3ad'],
-    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 700,
+    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 1400, rows: 2, ground: '#9a8166',
     // roofs measured on ESRI z19 over the village: greige and tan concrete, no paint
     roofs: ['#c0bba8',  '#cdbfa6',  '#b8ad94',  '#a99c84',  '#d2cdbd',  '#9d907a',  '#c3b195'],
     // the service roads are `highway` here, and are lined like streets
@@ -738,7 +745,7 @@ export const DISTRICTS = [
   {
     id: 'chhatikara-govardhan-road', name: 'Chhatikara: the Govardhan road', kind: 'bazaar',
     palette: ['#c9b9a0', '#cdb59a', '#d1b9a6', '#b8ad9c', '#c9a98a', '#aab3ad'],
-    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 700,
+    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 1400, rows: 2, ground: '#9a8166',
     // roofs measured on ESRI z19 over the village: greige and tan concrete, no paint
     roofs: ['#c0bba8',  '#cdbfa6',  '#b8ad94',  '#a99c84',  '#d2cdbd',  '#9d907a',  '#c3b195'],
     share: { highway: 1 },
@@ -747,7 +754,7 @@ export const DISTRICTS = [
   {
     id: 'chhatikara-vrindavan-road', name: 'Chhatikara: the Vrindavan road', kind: 'bazaar',
     palette: ['#c9b9a0', '#cdb59a', '#d1b9a6', '#b8ad9c', '#c9a98a', '#aab3ad'],
-    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 700,
+    minH: 4.5, maxH: 10, density: 0.95, group: 'chhatikara', lots: 1400, rows: 2, ground: '#9a8166',
     // roofs measured on ESRI z19 over the village: greige and tan concrete, no paint
     roofs: ['#c0bba8',  '#cdbfa6',  '#b8ad94',  '#a99c84',  '#d2cdbd',  '#9d907a',  '#c3b195'],
     share: { highway: 1 },

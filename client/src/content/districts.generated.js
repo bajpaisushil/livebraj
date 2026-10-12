@@ -177,7 +177,9 @@ export const DISTRICTS = [
     "maxH": 8,
     "density": 0.85,
     "group": "chhatikara",
-    "lots": 700,
+    "lots": 1400,
+    "rows": 3,
+    "ground": "#9a8166",
     "roofs": [
       "#c0bba8",
       "#cdbfa6",
@@ -223,7 +225,9 @@ export const DISTRICTS = [
     "maxH": 10,
     "density": 0.95,
     "group": "chhatikara",
-    "lots": 700,
+    "lots": 1400,
+    "rows": 2,
+    "ground": "#9a8166",
     "roofs": [
       "#c0bba8",
       "#cdbfa6",
@@ -259,7 +263,9 @@ export const DISTRICTS = [
     "maxH": 10,
     "density": 0.95,
     "group": "chhatikara",
-    "lots": 700,
+    "lots": 1400,
+    "rows": 2,
+    "ground": "#9a8166",
     "roofs": [
       "#c0bba8",
       "#cdbfa6",
@@ -295,7 +301,9 @@ export const DISTRICTS = [
     "maxH": 10,
     "density": 0.95,
     "group": "chhatikara",
-    "lots": 700,
+    "lots": 1400,
+    "rows": 2,
+    "ground": "#9a8166",
     "roofs": [
       "#c0bba8",
       "#cdbfa6",
