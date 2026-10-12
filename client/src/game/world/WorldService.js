@@ -974,9 +974,16 @@ export class WorldService {
    * it. Passed as undefined — which is what every existing caller does — every
    * collider is solid to its full height, exactly as before.
    */
-  collide(pos, radius = 0.42, feetY) {
+  /**
+   * `stepUp`: how much higher than the feet a top may be and still be walked
+   * onto rather than stopped by. A body steps STEP_UP; a vehicle steps
+   * nothing much — but what is wholly below it never stops it, which is what
+   * its height is for: on NH 44's flyover the piers under the deck pushed the
+   * traffic sideways off it (VehicleDrive).
+   */
+  collide(pos, radius = 0.42, feetY, stepUp = STEP_UP) {
     let x = pos.x, z = pos.z;
-    const step = feetY === undefined ? null : feetY + STEP_UP;
+    const step = feetY === undefined ? null : feetY + stepUp;
     for (let pass = 0; pass < 2; pass++) {
       const near = this.grid.query(x, z, radius + 6, _hits);
       let moved = false;

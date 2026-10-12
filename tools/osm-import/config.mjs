@@ -598,12 +598,24 @@ export const LANDMARKS = [
     fallback: [27.57630, 77.68120],
   },
   {
-    id: 'chhatikara-crossing', match: ['Chhatikara', 'Chatikara'],
+    id: 'chhatikara-crossing', match: [],
     name: 'Chhatikara Crossing', hindi: 'छटीकरा चौराहा',
     type: 'landmark', deity: null, icon: 'gate',
-    build: { kind: 'crossing', w: 70, d: 46, h: 13, color: '#d8cdb4', accent: '#c8452a' },
-    rot: Math.PI * 0.5, radius: 52, district: 'outskirts',
+    build: { kind: 'crossing', w: 30, d: 14, h: 4, color: '#d8cdb4', accent: '#c8452a' },
+    rot: 0.7463, radius: 30, district: 'outskirts',
     interactions: ['story'],
+    /*
+     * WHERE THE BUSES STOP, on the north-east service road under NH 44's
+     * flyover, 25 m short of the mouth of the Vrindavan road (Bhaktivedanta
+     * Swami Marg) and 10 m off the service road's line, turned along it. ESRI
+     * z19: a bus at the kerb there and the autos and e-rickshaws crowding the
+     * mouth; the coach operators' boarding point is "near Chhatikara at the
+     * end of Vrindavan Flyover" (zingbus). The name used to match OSM's
+     * Chhatikara village node, the village's centre 280 m west in its lanes,
+     * so the pin and everything built at it stood among the houses with a
+     * highway of its own; `at` is measured and wins.
+     */
+    at: [27.560925, 77.627416],
     // The actual four-arm chauraha, read off the OSM network: NH 44 / AH 1
     // crosses here, Chhatikara-Govardan Road leaves west, and Bhaktivedanta
     // Swami Marg leaves east for Vrindavan. The previous value was invented

@@ -7078,89 +7078,88 @@ const BUILDERS = {
   },
 
   /**
-   * Chhatikara: the crossing you arrive through. A divided highway, an overhead
-   * sign gantry, the bus stand with its shelter, and the welcome arch that tells
-   * you Braj has begun.
+   * Chhatikara: where the buses stop, on the north-east service road under
+   * NH 44's flyover, short of the mouth of the Vrindavan road. ESRI z19 has a
+   * bus at the kerb there and the autos and e-rickshaws crowding the turning.
+   *
+   * It was built, when the world ended at Chhatikara and NH 44 was not in it,
+   * as a divided highway of its own with a sign gantry and a welcome arch —
+   * and it kept them after the real highway, its flyover and the village came
+   * in, 280 m west among the houses. None of the three is there: the highway
+   * is the real one now, there is no gantry at the turning, and the "gate at
+   * Chhatikara Road" in vrindavantoday.in's photograph stands somewhere along
+   * the road, not at it (queue item 25).
+   *
+   * Frame: x along the service road, toward the mouth; z toward the road, its
+   * line at z = +10 and its kerb at about +3.
    */
   crossing: ({ loc, b, ground, rng }) => {
-    const { w, d, h, color, accent } = loc.build;
     const [x, z] = loc.pos;
     const rot = loc.rot;
     const cs = Math.cos(rot), sn = Math.sin(rot);
     const p = (lx, lz) => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
+    const colliders = [];
 
-    // central median of the divided highway
-    for (let i = -4; i <= 4; i++) {
-      const q = p(i * 7, 0);
-      b.box(q[0], ground, q[1], 5.2, 0.35, 1.6, 0xbfb49c, rot);
-      if (i % 2 === 0) b.box(q[0], ground + 0.35, q[1], 0.7, 0.9, 0.7, 0x4f7a3a, rot);
-    }
-
-    // sign gantry over the road
-    for (const side of [-1, 1]) {
-      const q = p(0, side * 11);
-      b.box(q[0], ground, q[1], 0.6, 7.2, 0.6, 0x6a6a62, rot);
-    }
-    const g0 = p(0, 0);
-    b.box(g0[0], ground + 7.0, g0[1], 0.8, 0.5, 23, 0x6a6a62, rot);
-    b.box(g0[0], ground + 5.4, g0[1], 0.35, 1.7, 7.5, 0x1d6a3f, rot);
-
-    // the welcome arch
-    const a0 = p(-w * 0.34, 0);
-    for (const side of [-1, 1]) {
-      const q = p(-w * 0.34, side * 10);
-      b.box(q[0], ground, q[1], 3.2, h * 0.8, 3.2, color, rot);
-      dome(b, q[0], ground + h * 0.8, q[1], 1.7, 1.6, accent);
-    }
-    cuspedArch(b, a0[0], ground, a0[1], 19, h * 0.72, 3.0, rot + Math.PI / 2, accent, 7);
-    b.box(a0[0], ground + h * 0.74, a0[1], 21, 1.7, 2.6, color, rot);
-    b.box(a0[0], ground + h * 0.8, a0[1], 15, 0.9, 2.9, accent, rot);
-
-    // bus stand: a long shelter, a platform, and waiting benches
-    const s0 = p(w * 0.3, 15);
-    b.box(s0[0], ground, s0[1], 26, 0.4, 7, 0xc4b79f, rot);
+    /*
+     * The stop: a platform at the back of the verge, a steel shelter, a bench
+     * along it. The pin itself is the verge in front of it, by the kerb,
+     * where you stand to hail a ride — a vehicle called to a pin set on the
+     * platform arrived inside it and was pushed out (timelapse, frame 0),
+     * so there are four clear metres round it.
+     */
+    const s0 = p(0, -4.8);
+    b.box(s0[0], ground, s0[1], 14, 0.25, 3.6, 0xb8ae98, rot);
     for (let i = -3; i <= 3; i++) {
-      const q = p(w * 0.3 + i * 4, 17.4);
-      b.box(q[0], ground + 0.4, q[1], 0.28, 3.2, 0.28, 0x6a6a62, rot);
+      const q = p(i * 2, -6.2);
+      b.box(q[0], ground + 0.25, q[1], 0.12, 2.9, 0.12, 0x5e6266, rot);
     }
-    b.box(s0[0], ground + 3.6, s0[1], 27, 0.3, 8, 0x2f5d5a, rot);
+    b.box(s0[0], ground + 3.1, s0[1], 14.6, 0.08, 4.2, 0x8e9aa0, rot);       // the roof, corrugated sheet
+    b.box(p(0, -6.4)[0], ground + 0.25, p(0, -6.4)[1], 13.4, 1.6, 0.08, 0x2f5d8a, rot);  // the back panel
     for (let i = -2; i <= 2; i++) {
-      const q = p(w * 0.3 + i * 5, 13.6);
-      b.box(q[0], ground + 0.4, q[1], 3.4, 0.45, 0.8, 0x8a7458, rot);
+      const q = p(i * 2.6, -5.7);
+      b.box(q[0], ground + 0.25, q[1], 2.1, 0.45, 0.45, 0x8a7458, rot);
     }
-    // a parked bus, because the stand should never be empty
-    const bus = p(w * 0.3 - 4, 23);
-    b.box(bus[0], ground, bus[1], 10.5, 3.1, 2.7, 0xd8c04c, rot);
-    b.box(bus[0], ground + 3.1, bus[1], 10.0, 0.3, 2.6, 0xc8452a, rot);
-    for (let i = 0; i < 6; i++) {
-      const q = p(w * 0.3 - 9 + i * 1.9, 22.6);
-      b.panel(q[0], ground + 1.6, q[1], 1.5, 1.0, 0x2f3b3a, rot, 0.02);   // windows
-    }
+    colliders.push({ type: 'box', x: s0[0], z: s0[1], w: 14, d: 3.6, rot, h: 0.25, tag: 'bus-stop' });
 
-    // parked rickshaws waiting for a fare
-    for (let i = 0; i < 5; i++) {
-      const q = p(w * 0.3 - 13 + i * 3.4, 29 + (i % 2) * 1.2);
-      const ang = rot + (rng() - 0.5) * 0.5;
-      b.box(q[0], ground, q[1], 1.4, 1.1, 2.8, i % 2 ? 0x3f8f6a : 0x2f5d5a, ang);
-      b.box(q[0], ground + 1.35, q[1], 1.5, 0.12, 1.8, i % 2 ? 0xf2ece0 : 0xc8452a, ang);
-      for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
-        b.box(q[0] + sx * 0.6, ground + 0.72, q[1] + sz * 0.7, 0.06, 0.5, 0.06, 0x5a5a52, ang);
-      }
-    }
-
-    // waiting passengers: luggage, a tea bench, a stack of crates
+    // a bus pulled in at the kerb, cream with its red band
+    const bus = p(-3, 4.8);
+    b.box(bus[0], ground, bus[1], 11, 3.1, 2.6, 0xe0d4a8, rot);
+    b.box(bus[0], ground + 1.15, bus[1], 11.05, 0.35, 2.65, 0xc8452a, rot);
+    b.box(bus[0], ground + 3.1, bus[1], 10.4, 0.25, 2.5, 0xb9b09a, rot);
     for (let i = 0; i < 7; i++) {
-      const q = p(w * 0.3 - 11 + i * 3.2, 13.2);
-      b.box(q[0], ground + 0.4, q[1], 0.6, 0.5, 0.45, [0xc8452a, 0x2f5d5a, 0x8a6a42, 0xc9a03c][i % 4], rot);
+      const q = p(-3 - 4.5 + i * 1.5, 4.8 - 1.32);
+      b.panel(q[0], ground + 1.95, q[1], 1.25, 0.9, 0x2f3b3a, rot, 0.02);
     }
-    const chai = p(w * 0.3 + 14, 16);
-    b.box(chai[0], ground, chai[1], 2.4, 2.0, 1.8, 0x8a7458, rot);
-    b.box(chai[0], ground + 2.0, chai[1], 3.2, 0.14, 2.6, 0xc8452a, rot);
-    b.box(chai[0], ground + 0.95, chai[1] + 1.2, 2.0, 0.12, 0.7, 0xa89878, rot);
+    colliders.push({ type: 'box', x: bus[0], z: bus[1], w: 11, d: 2.6, rot, tag: 'bus' });
 
-    return { altarY: 1.5, noCollider: true, colliders: [
-      { type: 'box', x: s0[0], z: s0[1], w: 26, d: 7, rot },
-    ] };
+    // the rank: autos and e-rickshaws drawn up on the verge before the
+    // turning, waiting for a fare — off the carriageway, where the rides go
+    for (let i = 0; i < 7; i++) {
+      const q = p(8.6 + i * 1.75, (i % 2) ? 1.4 : -1.6);
+      const ang = rot + Math.PI / 2 + (rng() - 0.5) * 0.4;
+      const auto = i % 3 === 1;
+      const body = auto ? 0x2f7a4a : 0x3f8f6a, canopy = auto ? 0xe8c43a : 0xf2ece0;
+      b.box(q[0], ground, q[1], auto ? 1.3 : 1.0, 1.1, 2.7, body, ang);
+      b.box(q[0], ground + 1.45, q[1], auto ? 1.4 : 1.1, 0.12, 1.9, canopy, ang);
+      for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+        b.box(q[0] + sx * 0.42 * Math.cos(ang) - sz * 0.75 * Math.sin(ang), ground + 0.85,
+          q[1] + sx * 0.42 * Math.sin(ang) + sz * 0.75 * Math.cos(ang), 0.05, 0.6, 0.05, 0x5a5a52, ang);
+      }
+      colliders.push({ type: 'circle', x: q[0], z: q[1], r: 1.05, tag: 'parked-rickshaw' });
+    }
+
+    // a tea stall at the back of the verge, and luggage waiting
+    const chai = p(-12, -5.6);
+    b.box(chai[0], ground, chai[1], 2.4, 1.0, 1.4, 0x8a7458, rot);
+    b.box(chai[0], ground + 1.0, chai[1], 2.6, 0.9, 1.6, 0x6a5a48, rot);
+    b.box(chai[0], ground + 2.1, chai[1], 3.2, 0.12, 2.4, 0xc8452a, rot);
+    colliders.push({ type: 'box', x: chai[0], z: chai[1], w: 2.6, d: 1.6, rot, tag: 'tea-stall' });
+    for (let i = 0; i < 5; i++) {
+      const q = p(-5 + i * 2.4, -3.0);
+      b.box(q[0], ground, q[1], 0.6, 0.5, 0.45, [0xc8452a, 0x2f5d5a, 0x8a6a42, 0xc9a03c][i % 4], rot);
+    }
+
+    return { altarY: 1.5, noCollider: true, colliders };
   },
 
   /** Loi Bazar: an open square of stalls. */

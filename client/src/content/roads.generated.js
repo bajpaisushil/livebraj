@@ -10,7 +10,7 @@ export const ROADS = [
     "id": "r726598281",
     "name": "NH 44 / AH 1",
     "kind": "trunk",
-    "width": 22,
+    "width": 11,
     "oneway": true,
     "points": [
       [-7100, 889.61],
@@ -32,7 +32,7 @@ export const ROADS = [
     "id": "r973946076",
     "name": "NH 44 / AH 1",
     "kind": "trunk",
-    "width": 22,
+    "width": 11,
     "oneway": true,
     "points": [
       [-6371.3, 2027.47],
@@ -58,7 +58,7 @@ export const ROADS = [
     "id": "r973946075",
     "name": "NH 44 / AH 1",
     "kind": "trunk",
-    "width": 22,
+    "width": 11,
     "oneway": true,
     "bridge": true,
     "points": [
@@ -73,7 +73,7 @@ export const ROADS = [
     "id": "r973946074",
     "name": "NH 44 / AH 1",
     "kind": "trunk",
-    "width": 22,
+    "width": 11,
     "oneway": true,
     "bridge": true,
     "points": [
@@ -89,7 +89,7 @@ export const ROADS = [
     "id": "r973946073",
     "name": "NH 44 / AH 1",
     "kind": "trunk",
-    "width": 22,
+    "width": 11,
     "oneway": true,
     "points": [
       [-5917.15, 2402.19],
@@ -101,7 +101,7 @@ export const ROADS = [
     "id": "r151813699",
     "name": "NH 44 / AH 1",
     "kind": "trunk",
-    "width": 22,
+    "width": 11,
     "oneway": true,
     "points": [
       [-5701.87, 2700],
@@ -114,7 +114,7 @@ export const ROADS = [
     "id": "r970968491",
     "name": "Bhaktivedanta Swami Marg",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-1658.17, 990.32],
@@ -162,7 +162,7 @@ export const ROADS = [
     "id": "r115788477",
     "name": "Bhaktivedanta Swami Marg",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-6214.67, 2127.58],
@@ -246,7 +246,7 @@ export const ROADS = [
     "id": "r675596660",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-5894.55, 2452.3],
@@ -290,7 +290,7 @@ export const ROADS = [
     "id": "r173006693",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-1226.41, 1692.34],
@@ -313,7 +313,7 @@ export const ROADS = [
     "id": "r404074784",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-1658.17, 990.32],
@@ -336,7 +336,7 @@ export const ROADS = [
     "id": "r675596659",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-6467.3, 1905.3],
@@ -352,7 +352,7 @@ export const ROADS = [
     "id": "r99427133",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-162.42, 2346.37],
@@ -370,7 +370,7 @@ export const ROADS = [
     "id": "r970928509",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-868.89, 2185.77],
@@ -387,7 +387,7 @@ export const ROADS = [
     "id": "r970928507",
     "name": "Mathura Road",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-862.89, 2192.02],
@@ -404,7 +404,7 @@ export const ROADS = [
     "id": "r1291254335",
     "name": "Mathura Road",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-1351.19, 2700],
@@ -452,7 +452,7 @@ export const ROADS = [
     "id": "r671701987",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "bridge": true,
     "points": [
@@ -467,7 +467,7 @@ export const ROADS = [
     "id": "r671701986",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "bridge": true,
     "points": [
@@ -481,7 +481,7 @@ export const ROADS = [
     "id": "r1105715125",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-6724.53, 1560.75],
@@ -506,7 +506,7 @@ export const ROADS = [
     "id": "r1289311303",
     "name": "Mathura Road",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-747.71, 2071.11],
@@ -517,7 +517,7 @@ export const ROADS = [
     "id": "r99427171",
     "name": "Mathura Road",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-868.89, 2185.77],
@@ -528,7 +528,7 @@ export const ROADS = [
     "id": "r671701984",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-754.65, 2078.94],
@@ -539,7 +539,7 @@ export const ROADS = [
     "id": "r671701985",
     "name": null,
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-863.06, 1970.89],
@@ -560,7 +560,7 @@ export const ROADS = [
     "id": "r970968489",
     "name": "Bhaktivedanta Swami Marg",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-6208.09, 2132.35],
@@ -571,7 +571,7 @@ export const ROADS = [
     "id": "r675596658",
     "name": "Bhaktivedanta Swami Marg",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-6232.29, 2141.31],
@@ -582,7 +582,7 @@ export const ROADS = [
     "id": "r970928506",
     "name": "Mathura Road",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-884.01, 2201.67],
@@ -593,7 +593,7 @@ export const ROADS = [
     "id": "r1289802671",
     "name": "Bhaktivedanta Swami Marg",
     "kind": "highway",
-    "width": 14,
+    "width": 7,
     "oneway": true,
     "points": [
       [-1676.74, 984.29],

@@ -92,7 +92,17 @@ const out = await p.evaluate(() => {
     for (const sl of ctx.crowd.vehicleInst) for (const a of sl.agents) {
       if (a !== v && Math.hypot(a.x - from.pos[0], a.z - from.pos[1]) < 30) a.x += 300;
     }
-    v.chartered = false; v.x = ctx.player.position.x + 3; v.z = ctx.player.position.z; v.vel = 0;
+    /*
+     * Beside you, on ground a vehicle fits on. It was always 3 m east, which
+     * at Chhatikara's stop was for a while the shelter's platform: the
+     * vehicle was pushed out of it on the first frame, and the push read as
+     * 44.7 km/h. A rickshaw you hail comes along the road; it does not
+     * appear inside a bus shelter.
+     */
+    const P = ctx.player.position;
+    const spot = [[3, 0], [-3, 0], [0, 3], [0, -3], [3, 3], [-3, 3], [3, -3], [-3, -3], [5, 0], [0, 5], [-5, 0], [0, -5]]
+      .map(([dx, dz]) => [P.x + dx, P.z + dz]).find(([x, z]) => ctx.world.fits(x, z, 1.5)) || [P.x + 3, P.z];
+    v.chartered = false; v.x = spot[0]; v.z = spot[1]; v.vel = 0;
     r._acc = 99; r.update(0.5, ctx);
     if (!r.target || r.target !== v) return 'could not hail the ' + type;
     if (!r.board()) return 'could not board';

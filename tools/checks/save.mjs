@@ -53,9 +53,11 @@ const boot = async () => {
 await boot();
 const first = await p.evaluate(() => {
   const ctx = window.vrindavan.ctx;
-  return { x: ctx.player.position.x, z: ctx.player.position.z, rupees: ctx.state.rupees };
+  const pin = ctx.data.LOCATION_BY_ID.get('chhatikara-crossing').pos;
+  return { x: ctx.player.position.x, z: ctx.player.position.z, rupees: ctx.state.rupees, pin };
 });
-check('first launch starts at Chhatikara', Math.hypot(first.x + 6492, first.z - 2115) < 200,
+// at the crossing, wherever its pin is (it moved to where the buses stop: queue item 25)
+check('first launch starts at Chhatikara', Math.hypot(first.x - first.pin[0], first.z - first.pin[1]) < 120,
   `[${Math.round(first.x)}, ${Math.round(first.z)}]`);
 
 /* ---- make some state worth keeping ---- */

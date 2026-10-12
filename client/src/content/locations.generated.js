@@ -931,10 +931,10 @@ export const LOCATIONS = [
     "type": "landmark",
     "district": "outskirts",
     "grounds": null,
-    "pos": [-6496.44, 2105.61],
-    "geo": [27.560979, 77.624707],
-    "rot": 1.5707963267948966,
-    "radius": 52,
+    "pos": [-6228.94, 2111.5],
+    "geo": [27.560925, 77.627416],
+    "rot": 0.7463,
+    "radius": 30,
     "icon": "gate",
     "deity": null,
     "interactions": [
@@ -942,12 +942,12 @@ export const LOCATIONS = [
     ],
     "build": {
       "kind": "crossing",
-      "w": 70,
-      "d": 46,
-      "h": 13,
+      "w": 30,
+      "d": 14,
+      "h": 4,
       "color": "#d8cdb4",
       "accent": "#c8452a"
     },
-    "osm": "Chhatikara"
+    "osm": null
   }
 ];

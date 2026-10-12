@@ -12,7 +12,7 @@
  */
 
 import { SpatialGrid } from '../../engine/math/SpatialGrid.js';
-import { resample } from '../../engine/math/Curves.js';
+import { resample, smoothPolyline } from '../../engine/math/Curves.js';
 import { dist2 } from '../../engine/math/MathUtils.js';
 import { BinaryHeap } from '../../engine/math/BinaryHeap.js';
 import { VEHICLE_R as DRIVE_R } from '../transport/VehicleDrive.js';
@@ -210,9 +210,12 @@ export class NavGraph {
     this._stitched = 0;
 
     for (const road of roads) {
-      const pts = resample(road.points, SAMPLE);
-      // a span's own points are on its deck, all but the two it lands on
+      // a span's own points are on its deck, all but the two it lands on —
+      // and along the line its deck is laid on, which is OSM's smoothed
+      // (TerrainBuilder): along the raw line, traffic on NH 44's flyover
+      // came up to 2.4 m off the middle of an 11 m deck at a bend, and off it
       const span = isSpan(road);
+      const pts = resample(span && road.points.length > 2 ? smoothPolyline(road.points, 1) : road.points, SAMPLE);
       let prev = null;
       for (let i = 0; i < pts.length; i++) {
         const n = this._node(pts[i][0], pts[i][1], span && i > 0 && i < pts.length - 1);

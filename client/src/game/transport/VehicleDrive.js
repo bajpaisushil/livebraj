@@ -263,7 +263,8 @@ export function driveStep(a, dt, ctx, wantYaw, wantSpeed, prof, solid = true) {
   for (let i = 0; i < n; i++) {
     _p.set(a.x + fx * sub, 0, a.z + fz * sub);
     if (solid) {
-      if (ctx.world && ctx.world.collide) ctx.world.collide(_p, radius);
+      // at its own height: what is under a bridge deck does not stop what is on it
+      if (ctx.world && ctx.world.collide) ctx.world.collide(_p, radius, Number.isFinite(a.y) ? a.y : undefined, 0.05);
       if (prof.agents && ctx.crowd && ctx.crowd.collideAgents) {
         // Skip itself. collideAgents has no idea which vehicle is asking, and a
         // vehicle tests against its own previous position at better than two

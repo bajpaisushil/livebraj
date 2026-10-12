@@ -131,8 +131,8 @@ export const STORIES = {
   },
   'chhatikara-crossing': {
     short: 'The crossing on the highway where the road to Vrindavan turns off.',
-    long: `Almost everyone arrives through Chhatikara. The highway from Delhi and Mathura runs past, and here the road turns off toward Vrindavan — a crossing of buses, autos and e-rickshaws, a line of tea stalls, and the arch that tells you Braj has begun. It is unremarkable and it is where the journey starts.`,
-    source: 'Local observation; OpenStreetMap.',
+    long: `Almost everyone arrives through Chhatikara. The highway from Delhi and Mathura runs over the village on a flyover, and under it, where the service road meets the road to Vrindavan, the buses stop — a crowd of autos and e-rickshaws at the turning, tea stalls, shops on both sides. It is unremarkable and it is where the journey starts. Chhatikara itself is old: Krishna's chhati, the sixth-day rite after his birth, was held here, and the name comes from it.`,
+    source: 'ESRI imagery and OpenStreetMap; the boarding point "near Chhatikara at the end of Vrindavan Flyover" (zingbus.com); the chhati: brajfoundation.org.',
   },
   'vrindavan-gate': {
     short: 'The gate on the Mathura road.',

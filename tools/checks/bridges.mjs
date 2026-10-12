@@ -223,7 +223,12 @@ const out = await p.evaluate(() => {
         if (over > hi) hi = over;
         if (v.prev && v.prev.deck && v.target && v.target.deck) {
           frames++;
-          if (v.y < top(v.x, v.z) - 0.5) under++;
+          // on the deck: its feet at a deck tread's height there, not on the ground under it
+          const tread = w.colliders.some((c) => c.tag === 'bridge-deck' && Math.abs(c.top - v.y) < 0.5 && (() => {
+            const dx = v.x - c.x, dz = v.z - c.z;
+            return Math.abs(dx * c.cos - dz * c.sin) < c.hw + 0.3 && Math.abs(dx * c.sin + dz * c.cos) < c.hd + 0.3;
+          })());
+          if (!tread) under++;
         }
         if (Math.hypot(v.x - midP[0], v.z - midP[1]) < 6) break;
       }

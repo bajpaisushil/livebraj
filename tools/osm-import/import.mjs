@@ -257,11 +257,23 @@ for (const way of rawRoads) {
     if (seenRoadIds.has(id)) return;
     seenRoadIds.add(id);
 
+    /*
+     * One carriageway of a divided road. OSM maps NH 44, its service roads
+     * and the Vrindavan road each as a pair of one-way ways, and the class
+     * width is the whole road's: drawn twice, NH 44 was 22 m a side, its
+     * flyover's deck swallowed the service roads under its edge, and the
+     * ramp walls stood in them (traffic, Chhatikara). A one-way trunk or
+     * secondary way is half its class: 11 m, three lanes; 7 m, two. ESRI z19
+     * puts the flyover's whole deck at about 29 m. One-way streets in town
+     * are whole streets and keep their width.
+     */
+    const oneway = ['yes', '1', 'true'].includes(way.tags?.oneway);
+    const divided = oneway && (cls.kind === 'trunk' || cls.kind === 'highway');
     roads.push({
       id,
       name,
       kind: isParikrama ? 'parikrama' : cls.kind,
-      width: isParikrama ? Math.max(cls.width, 9) : cls.width,
+      width: isParikrama ? Math.max(cls.width, 9) : divided ? cls.width / 2 : cls.width,
       // one way, in the way's own order: NH 44's two carriageways, and most
       // of the secondary roads, are mapped as a pair of these
       ...(['yes', '1', 'true'].includes(way.tags?.oneway) ? { oneway: true } : {}),
