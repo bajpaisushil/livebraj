@@ -178,6 +178,15 @@ export const DISTRICTS = [
     "density": 0.85,
     "group": "chhatikara",
     "lots": 700,
+    "roofs": [
+      "#c0bba8",
+      "#cdbfa6",
+      "#b8ad94",
+      "#a99c84",
+      "#d2cdbd",
+      "#9d907a",
+      "#c3b195"
+    ],
     "poly": [
       [-6531.99, 1879.05],
       [-6374.0, 1825.97],
@@ -215,6 +224,15 @@ export const DISTRICTS = [
     "density": 0.95,
     "group": "chhatikara",
     "lots": 700,
+    "roofs": [
+      "#c0bba8",
+      "#cdbfa6",
+      "#b8ad94",
+      "#a99c84",
+      "#d2cdbd",
+      "#9d907a",
+      "#c3b195"
+    ],
     "share": {
       "highway": 1
     },
@@ -242,6 +260,15 @@ export const DISTRICTS = [
     "density": 0.95,
     "group": "chhatikara",
     "lots": 700,
+    "roofs": [
+      "#c0bba8",
+      "#cdbfa6",
+      "#b8ad94",
+      "#a99c84",
+      "#d2cdbd",
+      "#9d907a",
+      "#c3b195"
+    ],
     "share": {
       "highway": 1
     },
@@ -269,6 +296,15 @@ export const DISTRICTS = [
     "density": 0.95,
     "group": "chhatikara",
     "lots": 700,
+    "roofs": [
+      "#c0bba8",
+      "#cdbfa6",
+      "#b8ad94",
+      "#a99c84",
+      "#d2cdbd",
+      "#9d907a",
+      "#c3b195"
+    ],
     "share": {
       "highway": 1
     },

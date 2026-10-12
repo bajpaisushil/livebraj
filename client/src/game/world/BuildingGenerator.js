@@ -1377,10 +1377,25 @@ function facadeAllSides(trim, lot, storeys, opts = {}) {
  * middle of every building.
  */
 function roofDeck(trim, lot, topY, rng, color) {
-  const roof = ROOF_COLOURS[Math.floor(rng() * ROOF_COLOURS.length) % ROOF_COLOURS.length];
+  /*
+   * A district may say what its roofs are. Chhatikara's, measured on z19, are
+   * bare concrete — greige and tan — under blue tarpaulins; the town's
+   * palette of painted reds and blues there made the village read as a toy
+   * from the flyover.
+   */
+  const own = lot.district && lot.district.roofs;
+  const roof = own
+    ? parseInt(own[Math.floor(rng() * own.length) % own.length].slice(1), 16)
+    : ROOF_COLOURS[Math.floor(rng() * ROOF_COLOURS.length) % ROOF_COLOURS.length];
   const { x, z, w, d, rot } = lot;
   const cs = Math.cos(rot), sn = Math.sin(rot);
   trim.box(x, topY + 0.02, z, w * 0.99, 0.06, d * 0.99, roof, lot.solid);
+  if (own && chance(rng, 0.26)) {
+    // a tarpaulin over part of it, weighted at the corners
+    const tw = w * range(rng, 0.35, 0.7), td = d * range(rng, 0.35, 0.7);
+    const lu = range(rng, -(w - tw) * 0.5, (w - tw) * 0.5), lv = range(rng, -(d - td) * 0.5, (d - td) * 0.5);
+    trim.box(x + lu * cs + lv * sn, topY + 0.08, z - lu * sn + lv * cs, tw, 0.05, td, 0x2f62a8, lot.solid);
+  }
 
   // the parapet, four thin panels rather than four boxes
   for (const [lu, lv, span, ang] of [
