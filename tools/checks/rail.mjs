@@ -5,12 +5,14 @@
  * over-bridges crossed nothing: the New Delhi-Mathura main line through
  * Chhatikara, four broad-gauge tracks wired for electric traction, with the
  * loops of Vrindaban Road station; and the metre gauge from Mathura into
- * Vrindavan. RailBuilder.js lays them from OSM.
+ * Vrindavan — closed in 2023 and its track taken up, which OSM still draws
+ * as running. RailBuilder.js lays them from OSM.
  *
- * This asks: are they there, at their gauges; is the track clear — no house
- * on it, no tree, no mast, no bridge pier; does each over-bridge clear its
- * track by the height a wired line needs; and can you walk across the line,
- * as everybody at Chhatikara does.
+ * This asks: are they there, at their gauges; is the closed line laid as it
+ * is now, a formation with no rails; is the track clear — no house on it, no
+ * tree, no mast, no bridge pier; does each over-bridge clear its track by
+ * the height a wired line needs; and can you walk across the line, as
+ * everybody at Chhatikara does.
  */
 import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
 import { chromium } from 'playwright';
@@ -56,6 +58,36 @@ const out = await p.evaluate(() => {
   const km = (list) => +(list.reduce((n, q) => n + len(q.points), 0) / 1000).toFixed(2);
   const mains = broad.filter((q) => q.kind === 'main').length;
   const wired = broad.every((q) => q.electrified);
+
+  /*
+   * The lines as drawn: how high anything in the rail mesh stands over the
+   * ground along each. A running track has its rails 0.46 m up; the closed
+   * one, taken up, has nothing over its formation (0.14).
+   */
+  const mg = RAIL.tracks.find((q) => q.dismantled);
+  const railMesh = ctx.scene.getObjectByName('Rail');
+  const seg = (x, z, P) => {
+    let best = Infinity;
+    for (let i = 1; i < P.length; i++) {
+      const ax = P[i - 1][0], az = P[i - 1][1], dx = P[i][0] - ax, dz = P[i][1] - az, L2 = dx * dx + dz * dz || 1;
+      const k = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / L2));
+      best = Math.min(best, Math.hypot(x - ax - dx * k, z - az - dz * k));
+    }
+    return best;
+  };
+  let mgUp = 0, mgRails = 0, mgN = 0, mainRails = 0;
+  if (railMesh && mg) {
+    const a = railMesh.geometry.attributes.position.array;
+    for (let i = 0; i < a.length; i += 3) {
+      const x = a[i], y = a[i + 1], z = a[i + 2], up = y - w.groundHeight(x, z);
+      const rail = up > 0.43 && up < 0.49;
+      if (t.railDistance(x, z, mg) < 8) { if (rail) mainRails++; continue; }
+      if (seg(x, z, mg.points) > 2.2) continue;
+      mgN++;
+      mgUp = Math.max(mgUp, up);
+      if (rail) mgRails++;
+    }
+  }
 
   // the track itself, every 4 m, inside the world: nothing built or planted on it
   let samples = 0, built = 0; const builtAt = [];
@@ -141,6 +173,7 @@ const out = await p.evaluate(() => {
   }
 
   return { broadKm: km(broad), metreKm: km(metre), mains, wired, samples, built, builtAt, trees: trees.length, treeOn,
+    mg: mg ? mg.id : null, mgUp: +mgUp.toFixed(3), mgRails, mgN, mainRails, railMesh: !!railMesh,
     masts: masts.length, mastOn, piers: piers.length, pierOn, clear, walk, stations: RAIL.stations.map((s) => s.name) };
 });
 
@@ -151,6 +184,14 @@ if (out.missing) {
     out.broadKm > 3 && out.mains >= 4 && out.wired, `${out.broadKm} km of broad gauge, ${out.mains} main tracks, ${out.wired ? 'all wired' : 'NOT all wired'}`);
   check('and the metre gauge from Mathura comes into Vrindavan',
     out.metreKm > 2 && out.stations.some((s) => /Vrindavan/i.test(s)), `${out.metreKm} km; stations: ${out.stations.join(', ')}`);
+  /*
+   * Its railbus stopped in 2023 and the track was taken up from both ends;
+   * the section was closed for good in June 2025 (tools/osm-import/config.mjs).
+   * What is left is the bank it stood on.
+   */
+  check('which is laid as it is now: its formation, the rails and sleepers taken up',
+    !!out.mg && out.railMesh && out.mgN > 500 && out.mgRails === 0 && out.mgUp < 0.27 && out.mainRails > 1000,
+    `${out.mg || 'no closed line'}: ${out.mgN} points of it drawn, the highest ${out.mgUp} m over the ground, ${out.mgRails} at rail height (the main line: ${out.mainRails})`);
   check('nothing is built on the track',
     out.samples > 1000 && out.built === 0, `${out.built} of ${out.samples} points along it blocked${out.builtAt.length ? ' at ' + JSON.stringify(out.builtAt) : ''}`);
   check('no tree grows on it', out.treeOn === 0, `${out.treeOn} of ${out.trees} trees within 2.5 m of a track`);

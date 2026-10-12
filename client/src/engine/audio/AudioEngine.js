@@ -59,7 +59,7 @@ export class AudioEngine {
     this._buildBeds();
     this._applyVolumes();
 
-    this._off = ctx.bus.on('sfx', ({ name, position }) => this.play(name, { position }));
+    this._off = ctx.bus.on('sfx', ({ name, ...opts }) => this.play(name, opts));
     document.addEventListener('visibilitychange', () => {
       if (!this.ok) return;
       this.master.gain.setTargetAtTime(document.hidden ? 0 : this._baseVolume(), this.ac.currentTime, 0.2);
@@ -277,14 +277,15 @@ export class AudioEngine {
     if (typeof fn === 'function') fn.call(this, opts);
   }
 
-  _out(position) {
+  /** Where a sound comes from; `ref` and `max` for one heard far off. */
+  _out(position, ref = 4, max = 200) {
     const ac = this.ac;
     if (!position || !ac.createPanner) return this.sfxBus;
     const pan = ac.createPanner();
     pan.panningModel = this.ctx.quality.tier === 'low' ? 'equalpower' : 'HRTF';
     pan.distanceModel = 'inverse';
-    pan.refDistance = 4;
-    pan.maxDistance = 200;
+    pan.refDistance = ref;
+    pan.maxDistance = max;
     pan.rolloffFactor = 1.2;
     if (pan.positionX) {
       pan.positionX.value = position.x;
@@ -469,6 +470,49 @@ export class AudioEngine {
       g.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
       o.connect(g); g.connect(out); o.start(now); o.stop(now + 0.8);
     });
+  }
+
+  /**
+   * A locomotive's horn: the twin-tone air horn of an Indian electric, long
+   * and loud. It carries a kilometre over open fields, so it keeps its level
+   * far past the 200 m every other sound fades out by (TrainSystem).
+   */
+  _sfx_trainhorn({ position } = {}) {
+    const ac = this.ac, now = ac.currentTime, out = this._out(position, 60, 1500);
+    const f = ac.createBiquadFilter();
+    f.type = 'lowpass'; f.frequency.value = 2400; f.Q.value = 0.7;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(0.14, now + 0.09);
+    g.gain.setValueAtTime(0.14, now + 1.5);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 1.9);
+    [311, 370].forEach((hz) => {
+      const o = ac.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz;
+      o.connect(f); o.start(now); o.stop(now + 2.0);
+    });
+    f.connect(g); g.connect(out);
+  }
+
+  /**
+   * A train going by: steel wheels on welded rail, a roar more than a
+   * clatter, lower and louder the faster it runs. One burst at a time,
+   * overlapping, for as long as it is passing (TrainSystem).
+   */
+  _sfx_trainrumble({ position, speed = 20 } = {}) {
+    const ac = this.ac, now = ac.currentTime, out = this._out(position, 25, 600);
+    const k = Math.min(1, speed / 30), peak = 0.2 * (0.4 + 0.6 * k);
+    const n = ac.createBufferSource();
+    n.buffer = this.noiseBuf;
+    n.playbackRate.value = 0.6 + 0.6 * k;
+    const lp = ac.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 220 + 260 * k;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(peak, now + 0.3);
+    g.gain.setValueAtTime(peak, now + 1.3);
+    g.gain.linearRampToValueAtTime(0, now + 1.7);
+    n.connect(lp); lp.connect(g); g.connect(out);
+    n.start(now, Math.random() * 1.2); n.stop(now + 1.8);
   }
 
   _chirp(phase) {

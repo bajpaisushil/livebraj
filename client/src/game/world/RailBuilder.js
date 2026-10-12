@@ -9,8 +9,10 @@
  *   tracks (1676 mm), wired for electric traction, with the loops and
  *   crossovers of Vrindaban Road station at the south edge of the world.
  *
- *   The metre gauge (1000 mm) from Mathura into Vrindavan station, the
- *   railbus line, unwired, through the town's south.
+ *   The metre gauge (1000 mm) from Mathura into Vrindavan station, through
+ *   the town's south: the railbus line until 2023, when its track was taken
+ *   up (tools/osm-import/config.mjs). It is laid as it is now, the bare
+ *   formation — the low bank the track stood on, rails and sleepers gone.
  *
  * Laid on the ground as track is: a ballast bed with its shoulders, concrete
  * sleepers, two rails; and on the wired tracks, a mast every MAST_EVERY with
@@ -25,10 +27,12 @@ const BALLAST = 0x7b7368;
 const SHOULDER = 0x8c8377;
 const SLEEPER = 0xa29e95;        // pre-stressed concrete
 const SLEEPER_METRE = 0x6b5a48;  // the old line's
-const RAIL_TOP = 0xc4c6c8;
+const RAIL_HEAD = 0xc4c6c8;
 const RAIL_SIDE = 0x6e5546;      // rust
 const MAST = 0x8e9399;           // galvanised steel
 const WIRE = 0x2c2c2c;
+const FORMATION = 0x8b7f6c;      // a taken-up line: trodden earth and what ballast was left
+const FORMATION_SIDE = 0x968a74;
 
 const SEG = 4;                   // the track laid in pieces this long
 const SLEEPER_EVERY = 0.75;
@@ -37,6 +41,11 @@ const MAST_EVERY = 58;
 const MAST_OUT = 2.8;            // from the track's centre
 const WIRE_Y = 5.6;              // contact wire over the rail
 const MAST_H = 8.2;
+
+/** The top of the rail over the ground, where a wheel runs (TrainSystem). */
+export const RAIL_TOP = BED + 0.22;
+/** The contact wire over the rail top, where a pantograph runs. */
+export const WIRE_OVER_RAIL = BED + WIRE_Y - RAIL_TOP;
 
 /** The metres of clearance a track keeps from everything else, centre to edge. */
 export const railHalf = (t) => t.gauge * 0.5 + 2.4;
@@ -65,6 +74,15 @@ export function buildRail(tracks, ground, otherTrack, colliders) {
       const ga = ground(a[0], a[1]), gc = ground(c[0], c[1]);
       const P = (q, off, y) => [q[0] + nx * off, y, q[1] + nz * off];
 
+      // taken up: the formation alone, a little lower for the ballast carted off
+      if (t.dismantled) {
+        const top = BED * 0.6;
+        b.quad(P(a, -bed / 2, ga + top), P(c, -bed / 2, gc + top), P(c, bed / 2, gc + top), P(a, bed / 2, ga + top), FORMATION);
+        b.quad(P(a, bed / 2, ga + top), P(c, bed / 2, gc + top), P(c, toe, gc - 0.05), P(a, toe, ga - 0.05), FORMATION_SIDE);
+        b.quad(P(a, -toe, ga - 0.05), P(c, -toe, gc - 0.05), P(c, -bed / 2, gc + top), P(a, -bed / 2, ga + top), FORMATION_SIDE);
+        continue;
+      }
+
       // the bed and its shoulders
       b.quad(P(a, -bed / 2, ga + BED), P(c, -bed / 2, gc + BED), P(c, bed / 2, gc + BED), P(a, bed / 2, ga + BED), BALLAST);
       b.quad(P(a, bed / 2, ga + BED), P(c, bed / 2, gc + BED), P(c, toe, gc - 0.05), P(a, toe, ga - 0.05), SHOULDER);
@@ -88,7 +106,7 @@ export function buildRail(tracks, ground, otherTrack, colliders) {
       for (const side of [-1, 1]) {
         const o = side * half;
         const y0a = ga + BED + 0.06, y0c = gc + BED + 0.06, y1a = y0a + 0.16, y1c = y0c + 0.16;
-        b.quad(P(a, o - 0.04, y1a), P(c, o - 0.04, y1c), P(c, o + 0.04, y1c), P(a, o + 0.04, y1a), RAIL_TOP);
+        b.quad(P(a, o - 0.04, y1a), P(c, o - 0.04, y1c), P(c, o + 0.04, y1c), P(a, o + 0.04, y1a), RAIL_HEAD);
         b.quad(P(a, o - side * 0.04, y0a), P(c, o - side * 0.04, y0c), P(c, o - side * 0.04, y1c), P(a, o - side * 0.04, y1a), RAIL_SIDE);
       }
 

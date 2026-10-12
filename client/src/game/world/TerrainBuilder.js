@@ -199,7 +199,7 @@ class Terrain {
       inBasin: (x, z) => self.inBasin(x, z),
       groundColor: (x, z) => self._groundColor(x, z, new THREE.Color()).getHex(),
       roadDistance: (x, z) => self.roadDistance(x, z),
-      railDistance: (x, z) => self.railDistance(x, z),
+      railDistance: (x, z, skip) => self.railDistance(x, z, skip),
       railTracks: this.railTracks,
       update: (dt) => self.update(dt),
     };

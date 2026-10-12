@@ -12,6 +12,7 @@ export const RAIL = {
       "kind": "metre",
       "gauge": 1,
       "name": "MTJ to BDB",
+      "dismantled": true,
       "points": [
         [421.59, 352.69],
         [112.43, 549.4],
@@ -163,7 +164,8 @@ export const RAIL = {
     {
       "id": "s316684768",
       "name": "Vrindavan",
-      "pos": [366.11, 404.24]
+      "pos": [366.11, 404.24],
+      "closed": true
     },
     {
       "id": "s6188103403",

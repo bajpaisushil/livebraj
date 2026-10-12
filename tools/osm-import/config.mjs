@@ -754,3 +754,22 @@ export const DISTRICTS = [
     poly: [[27.560479, 77.627669], [27.561074, 77.629795], [27.56167, 77.629583], [27.561074, 77.627456]],
   },
 ];
+
+/*
+ * Railway OSM still draws as running, and is not.
+ *
+ * The Mathura-Vrindavan metre gauge (BB&CI, 1889; way 671814558, "MTJ to
+ * BDB"). Its one-coach railbus ran twice a day until early 2023, when it was
+ * stopped for the line's conversion to broad gauge; the track was taken up
+ * from both ends from 31 March 2023 and Vrindavan station (node 316684768)
+ * closed. In June 2025 the Railway Board closed the section for good, the
+ * conversion "uneconomical" against local opposition (PTI in The Week, 10
+ * June 2025); the state means to build a road on the land (Vrindavan Today,
+ * 28 February 2025). Imported as `dismantled`, which RailBuilder lays as the
+ * bare formation, and the station as `closed`.
+ */
+export const RAIL_CLOSED = {
+  ways: [671814558],
+  stations: [316684768],
+};
+

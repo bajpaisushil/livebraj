@@ -37,6 +37,7 @@ import { ParikramaSystem } from '../parikrama/ParikramaSystem.js';
 import { RitualSystem } from '../devotion/RitualSystem.js';
 import { GatheringSystem } from '../devotion/GatheringSystem.js';
 import { RickshawSystem } from '../transport/RickshawSystem.js';
+import { TrainSystem } from '../transport/TrainSystem.js';
 import { DeityImages } from '../devotion/DeityImages.js';
 import { CheatCodes } from '../transport/CheatCodes.js';
 import { DialogueSystem } from '../dialogue/DialogueSystem.js';
@@ -181,6 +182,7 @@ export class GameApp {
     // those at the end of boot
     ctx.gatherings = this._safe('Gatherings', () => new GatheringSystem(ctx));
     ctx.rickshaw   = this._safe('Rickshaw', () => new RickshawSystem(ctx));
+    ctx.trains     = this._safe('Trains',   () => new TrainSystem(ctx));
     ctx.deities    = this._safe('Deities',  () => new DeityImages(ctx));
     // after the world, because it finds its leaves by name in the built scene
     ctx.curtains   = this._safe('Curtains', () => new Curtains(ctx));
@@ -517,6 +519,7 @@ export class GameApp {
         if (ctx.ritual) ctx.ritual.update(dt, ctx);
         if (ctx.gatherings) ctx.gatherings.update(dt, ctx);
         if (ctx.rickshaw) ctx.rickshaw.update(dt, ctx);
+        if (ctx.trains) ctx.trains.update(dt, ctx);
         if (ctx.dialogue) ctx.dialogue.update(dt, ctx);
         if (ctx.parikrama) ctx.parikrama.update(dt, ctx);
       }
@@ -545,7 +548,7 @@ export class GameApp {
     cancelAnimationFrame(this._raf);
     this.running = false;
     const ctx = this.ctx;
-    for (const k of ['crowd', 'interaction', 'map', 'parikrama', 'audio', 'ui', 'input', 'route', 'nav', 'rickshaw', 'dialogue', 'narration', 'ritual', 'gatherings', 'interior', 'time', 'world']) {
+    for (const k of ['crowd', 'interaction', 'map', 'parikrama', 'audio', 'ui', 'input', 'route', 'nav', 'rickshaw', 'trains', 'dialogue', 'narration', 'ritual', 'gatherings', 'interior', 'time', 'world']) {
       if (ctx[k] && ctx[k].dispose) { try { ctx[k].dispose(); } catch { /* ignore */ } }
     }
     ctx.textures.dispose();

@@ -17,7 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ORIGIN, WORLD_BOUNDS, ROAD_CLASSES, LANDMARKS, DISTRICTS } from './config.mjs';
+import { ORIGIN, WORLD_BOUNDS, ROAD_CLASSES, LANDMARKS, DISTRICTS, RAIL_CLOSED } from './config.mjs';
 import { buildGraph, closeRing } from './roadgraph.mjs';
 import { WAY_NAMES, WAY_REFS, JUNCTIONS, nameIndex, unconfirmed } from './local-knowledge.mjs';
 import { confirmedRoads, confirmedPlaces, pending as surveyPending } from './surveyed.mjs';
@@ -716,13 +716,18 @@ for (const way of rawRail) {
       gauge: Number(way.tags.gauge || (kind === 'narrow_gauge' ? 1000 : 1676)) / 1000,
       ...(way.tags.electrified === 'contact_line' ? { electrified: true } : {}),
       ...(way.tags.name ? { name: way.tags.name } : {}),
+      // taken up, though OSM still draws it (config.mjs)
+      ...(RAIL_CLOSED.ways.includes(way.id) ? { dismantled: true } : {}),
       points: pts,
     });
   });
 }
 const stations = rawRail
   .filter((e) => e.type === 'node' && /^(station|halt)$/.test(e.tags?.railway || ''))
-  .map((e) => ({ id: `s${e.id}`, name: e.tags['name:en'] || e.tags.name || 'Station', pos: toWorld(e.lat, e.lon) }));
+  .map((e) => ({
+    id: `s${e.id}`, name: e.tags['name:en'] || e.tags.name || 'Station', pos: toWorld(e.lat, e.lon),
+    ...(RAIL_CLOSED.stations.includes(e.id) ? { closed: true } : {}),
+  }));
 console.log(`rail      ${rail.length} tracks, ${(rail.reduce((n, r) => n + polylineLength(r.points), 0) / 1000).toFixed(2)} km, ${stations.length} stations`);
 
 /* ------------------------------------------------------------------ *
