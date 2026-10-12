@@ -616,6 +616,26 @@ searching the backlog for it. That is the failure this file exists to stop.*
     loop is dropped because the importer keeps only the longest stretch of
     the waterway inside the world (its riverbank polygon, 1423292, is there).
 
+25. ~~**Chhatikara Crossing where the buses stop.**~~ **DONE 2026-10-12**
+    (ecf6d7e). Found 2026-10-12: the crossing's pin had matched OSM's
+    Chhatikara VILLAGE node, 280 m west among the houses, and the builder drew
+    a divided highway, a sign gantry and a welcome arch of its own there —
+    built when the world ended at Chhatikara and NH 44 was not in it. The
+    coach operators' boarding point is "near Chhatikara at the end of
+    Vrindavan Flyover" (zingbus.com); ESRI z19 has a bus at the kerb of the
+    north-east service road and the autos and e-rickshaws crowding the mouth
+    of the Vrindavan road. It is there now, measured (`at`), and is what is
+    there: a shelter on the verge, a bus pulled in, the rank before the
+    turning, a tea stall; no gantry, no arch. Every first launch starts there.
+    On the way: a one-way trunk or secondary way is ONE carriageway and was
+    drawn the whole road's width (NH 44 22 m a side: the flyover's deck
+    covered the service roads and its ramp walls stood in them) — 27 ways
+    halved; and a vehicle on the deck near you collided with the piers under
+    it — vehicles now collide at their own height. Full suite 51/51; 60-seed
+    sweeps: verges 57 (56), traffic 48 (51), its reds the crowd round the
+    start, now the busiest junction there is (item 23). STILL OPEN: the "gate
+    at Chhatikara Road" (vrindavantoday.in has a photograph, not a place).
+
 ## OPEN — reported, not yet reproduced
 
 - ~~**"start from here not working in map"**~~ and ~~**"still 'start from
@@ -643,7 +663,10 @@ searching the backlog for it. That is the failure this file exists to stop.*
 - **Ten road names.** OSM names 41 of 2,146 ways here. The Parikrama feeders,
   the Loi Bazar approaches, the Keshi Ghat road, the Raman Reti lanes.
 - **Which OSM way is Jagadguru Kripalu Marg?**
-- **Is Chhatikara Crossing the bus stand,** or is it further out on NH 44?
+- ~~**Is Chhatikara Crossing the bus stand,** or is it further out on NH 44?~~
+  **Answered from the evidence 2026-10-12** (item 25): the buses stop on the
+  north-east service road under NH 44's flyover, at the mouth of the
+  Vrindavan road; the crossing is there now.
 - **Deity photographs for Gaura-Nitai and Krishna-Balaram** — Commons holds
   exactly one freely licensed ISKCON Vrindavan altar photograph.
 

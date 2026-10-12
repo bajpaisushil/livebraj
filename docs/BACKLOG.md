@@ -3957,3 +3957,38 @@ beside their tracks, no pier on one, 9.2 m over the main line and 8.9 over
 the metre gauge, and the main line walked across. Mutation-tested
 (buildings and trees back on the track, decks 6 m, piers anywhere). Full
 suite 51/51 in 30 min.
+
+## 2026-10-12 — Chhatikara Crossing where the buses stop
+
+DONE (ecf6d7e). Queue item 25, and the question that had waited on you ("is
+Chhatikara Crossing the bus stand, or is it further out on NH 44?") answered
+from evidence. The crossing's pin had matched the name "Chhatikara" to OSM's
+village node — the village's centre, 280 m west of the highway among the
+houses — so its builder's divided highway, sign gantry and welcome arch,
+drawn when the world ended there and NH 44 was not in it, stood in the
+village. The coach operators give their Vrindavan boarding point as "near
+Chhatikara at the end of Vrindavan Flyover" (zingbus.com), and ESRI z19 shows
+a bus at the kerb of the north-east service road and the autos and
+e-rickshaws crowding the mouth of the Vrindavan road. The crossing is pinned
+there now, measured from the roads' own lines, and built as what is there: a
+shelter on the verge, a bus pulled in at the kerb, the rank before the
+turning, a tea stall and luggage. No gantry, no arch: vrindavantoday.in has a
+photograph of "a gate at Chhatikara Road" and no place for it. Its story says
+so, and that the name is the chhati.
+
+Moving it showed two faults beneath. A one-way trunk or secondary way is one
+carriageway of a divided road and was drawn the whole road's width: NH 44 22
+m a side, so the flyover's deck covered the service roads and its ramp walls
+stood in them, and vehicles there wedged. Halved, in the importer and the
+data: 27 ways, NH 44 11 m, the service roads and the Vrindavan road 7 m. And
+a vehicle on the deck near you collided with the piers beneath it and was
+pushed off its edge: VehicleDrive now collides at the vehicle's own height
+(WorldService.collide's new `stepUp`, 0.05 for a vehicle), so nothing wholly
+below one stops it. Spans are navigated along the smoothed line their deck is
+laid on. Checks: save asks for the crossing's pin rather than a coordinate;
+timelapse hails its rickshaw onto ground a vehicle fits on (it was always 3 m
+east — briefly inside the new shelter, and the push read as 44.7 km/h);
+bridges judges "on the deck" by a tread at the vehicle's height (a parapet's
+top had read as the deck's). Full suite 51/51; over 60 seeds verges 57 (56
+before) and traffic 48 (51), its reds the crowd round the start, which is now
+the busiest junction in the world — queue item 23.
