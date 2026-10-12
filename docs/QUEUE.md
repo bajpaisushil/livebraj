@@ -557,9 +557,14 @@ searching the backlog for it. That is the failure this file exists to stop.*
     round; two holding each other give way in 0.8 s; a wedged vehicle backing
     to try again no longer counts as moving. On no seed of 60 does a pair
     touch for more than 4.5 s (16-26 s on four before); `traffic` 51 of 60,
-    every red brief touches over the 15 allowed; `verges` 56 of 60. Still
-    open: walkers still pass through vehicles (no collision between the two),
-    and brief clips at junctions. Original notes follow. Left by item 21,
+    every red brief touches over the 15 allowed; `verges` 56 of 60. **MORE
+    2026-10-12** (d8c8cd0), with everybody now starting at the crossing:
+    walkers keep out of vehicles — each body, its size and half a metre,
+    pushes them out by its shallower side; three vehicles knotted in a
+    junction (each holding the next) creep on after 5 s, still stopping for
+    people; no vehicle is put down within 8 m of another. `verges` 60 of 60,
+    `traffic` 52 of 60, no pair touching longer than 9 s. Still open: brief
+    clips at junctions. Original notes follow. Left by item 21,
     measured: on 9 of 60 seeds a pair
     of vehicles still touches for more than 4 s, or more than 15 half-second
     samples in 45 s. The long ones (seeds 32 and 47, 16-18 s) are vehicles
@@ -590,8 +595,25 @@ searching the backlog for it. That is the failure this file exists to stop.*
     sleepers, rails, masts and contact wire; buildings, trees and piers kept
     off; each over-bridge's crest over its tracks (9.2 m over the main line,
     8.9 over the metre gauge). `rail.mjs` 8/8, mutation-tested; full suite
-    51/51. STILL OPEN: Vrindaban Road station's building and platforms, just
-    past the world's south edge; trains. Original notes follow.
+    51/51. **THE ROOFS DONE 2026-10-12** (c5d1e0d): measured on ESRI z19,
+    greige and tan concrete and blue tarpaulin, not the town's painted
+    palette; a district may carry its own `roofs`. **TRAINS DONE 2026-10-12**
+    (d12e1d2): expresses and coal on all four main-line tracks, about eight an
+    hour between them (our estimate, not a timetable), keeping left as
+    Indian Railways runs — of each pair the north-eastern track to Mathura,
+    which is also how OSM draws the ways; WAP-7 and WAG-9, LHB, ICF and BOXN
+    at their own sizes, 18-24 coaches or 58 wagons. A horn as one comes up to
+    you; for anybody on the line, emergency braking — it stops short when it
+    can and goes on when you step off, and when it cannot you are put off to
+    the side you stood on, never carried along. Nobody in the crowd is ever
+    inside one. `trains.mjs` 11/11. **AND THE METRE GAUGE CORRECTED**: its
+    railbus stopped early in 2023, its track was taken up from both ends from
+    31 March 2023 and Vrindavan station closed; the section was closed for
+    good in June 2025 (PTI in The Week, 10 June 2025). OSM still draws it
+    running, and so had we, rails and all. It is the bare formation now
+    (`RAIL_CLOSED`, tools/osm-import/config.mjs) and nothing runs on it;
+    `rail.mjs` 9/9. STILL OPEN: Vrindaban Road station's building and
+    platforms, just past the world's south edge. Original notes follow.
     Photographed before: open grass and scattered trees round the start, the
     farmland rule for the corridor (BuildingGenerator's `country`) covering
     the village at the highway too. ESRI z17-z19 on the world's 200 m grid:

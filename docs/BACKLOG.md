@@ -3992,3 +3992,61 @@ bridges judges "on the deck" by a tread at the vehicle's height (a parapet's
 top had read as the deck's). Full suite 51/51; over 60 seeds verges 57 (56
 before) and traffic 48 (51), its reds the crowd round the start, which is now
 the busiest junction in the world — queue item 23.
+
+## 2026-10-12 — The crowd round the start; Chhatikara's roofs
+
+DONE (d8c8cd0, c5d1e0d). Queue items 23 and 24. Walkers stepped round a
+vehicle but had no body to keep out of, so one whose way lay through a
+waiting rickshaw stood in its nose and it waited for them: each vehicle's
+body, its size and half a metre, now pushes them out by its shallower side
+(never a vehicle on a deck overhead), and somebody standing about notices a
+vehicle by its body, not its centre. Three vehicles turned into a junction
+together each held the next, and none was the other's, so going round did
+not settle it (a tempo, a tempo and a cab under the flyover for 13 s): held
+5 s by anything, a vehicle creeps on for 3 s looking past other vehicles,
+still stopping for people. No vehicle is put down within 8 m of another —
+two brought back beside you onto one node drove off inside each other for
+9 s. Over 60 seeds verges 60 (57) and traffic 52 (48); full suite 51/51.
+
+The village's roofs had the town's painted reds, purples and greens and
+read as a toy from the flyover. Measured on ESRI z19 over its roofs: greige
+and tan concrete (#c0c0a8, #d8c0a8, #c0a890, #a8a890, #d8d8c0) and blue
+tarpaulin. A district may carry its own `roofs`; Chhatikara's four do, and a
+quarter of their roofs have a tarpaulin over part.
+
+## 2026-10-12 — Trains, and the metre gauge as it is
+
+DONE (d12e1d2). Queue item 24's last open part but the station. The New
+Delhi-Mathura line through Chhatikara carries every train between Delhi and
+both Agra and Kota — the two routes part at Mathura — and the world had its
+four tracks and nothing on them. TrainSystem runs expresses (a WAP-7 and 18
+to 24 LHB or ICF coaches, 108-130 km/h) and coal (two WAG-9s and a full
+rake of 58 BOXN, up to 75 km/h) on all four, about eight an hour between
+them — an estimate, not a timetable, said so in the code. Which way: Indian
+Railways runs on the left, and the four tracks are two pairs, so of each
+pair the north-eastern track takes trains for Mathura; OSM happens to draw
+each way in that direction, and the check measures it from the trains'
+own runs. The stock at its own sizes, measured off the drawn geometry
+(LHB 23.54 by 3.24 by 4.04 m; the pantograph meets the contact wire); the
+liveries are approximate and say so. A train sounds its horn coming up to
+you and brakes for anybody on its line: from 760 m it stopped 14.5 m short
+and went on when you stepped off; stepped in front of 90 m out, it could
+only come down from 31 to 28 m/s, and you were put 2.07 m off the line to
+the side you stood on — never carried along it, which is what pushing out
+by the shallower side did at first. People and animals in the crowd are
+moved off the same way. Every vehicle as drawn is within 8 cm of its track
+and on the rail top; none touches a mast or a bridge pier.
+
+On the way: the Mathura-Vrindavan metre gauge, laid with rails and sleepers
+on the 10th, has had none since 2023. Its one-coach railbus ran twice a day
+until early that year and was stopped for the line's conversion to broad
+gauge; the track was taken up from both ends from 31 March 2023 and
+Vrindavan station closed; and in June 2025 the Railway Board closed the
+section for good, the conversion "uneconomical" against local opposition
+(PTI in The Week, 10 June 2025; Vrindavan Today, 28 February 2025, on the
+road the state means to build there). OSM still draws it as running. The
+importer's config now names it (`RAIL_CLOSED`), the data marks it
+`dismantled` and the station `closed`, and RailBuilder lays the formation
+alone — rail.mjs measures its whole drawn length at no more than 0.16 m
+over the ground, nothing at rail height. Jaipur Mandir's notes had it right
+already. `trains.mjs` 11/11, `rail.mjs` 9/9.
