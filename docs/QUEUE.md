@@ -620,8 +620,15 @@ searching the backlog for it. That is the failure this file exists to stop.*
     contact wire, its west stair as mapped and the island's, the east
     platform's and the east end's inferred, and said so; climbed, not
     routed across the tracks at grade. `station.mjs` 9/9, mutation-tested;
-    full suite 53/54, rickshaw 31/31 alone. STILL OPEN: the station building, past the world's south
-    edge. Original notes follow.
+    full suite 53/54, rickshaw 31/31 alone. **THE VILLAGE BUILT DEEP
+    2026-10-12** (481f005): three rows behind every street, two behind the road
+    bands (699 houses to 1156 at full quality, 466 of them more than 20 m
+    from a road), on its own ground — bare earth, #9a8166 off ESRI z17,
+    coming in over 25 m inside its edge. `village.mjs` 5/5, mutation-tested.
+    STILL SHORT: about a quarter of the core is roof here and most of it in
+    the photograph; a block filled solid needs a builder for blocks, not
+    rows along roads. STILL OPEN: the station building, past the world's
+    south edge. Original notes follow.
     Photographed before: open grass and scattered trees round the start, the
     farmland rule for the corridor (BuildingGenerator's `country`) covering
     the village at the highway too. ESRI z17-z19 on the world's 200 m grid:

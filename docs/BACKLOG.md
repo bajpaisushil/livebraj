@@ -4131,3 +4131,41 @@ across the east tracks and down; no path edge across a running track.
 Mutation-tested: without the edge rule a platform stands 1.30 m from a
 track; with the footways routed again, 18 path edges cross the tracks. Full
 suite 53/54, rickshaw 31/31 alone.
+
+## 2026-10-12 — Chhatikara built as deep as it is, on bare earth
+
+DONE (481f005). Queue item 24's back lots. Everybody starts in Chhatikara, and
+it was drawn as a fringe of houses along each road round open lawn: laid
+straight down beside ESRI z17 of the same ground at the same scale, the
+photograph is a carpet of flat roofs between the roads on bare trodden
+earth, with a pond in the middle; the game was green.
+
+A district may now be built rows deep (`rows`, config.mjs): behind each
+street's row, BuildingGenerator lays the row's own frame again a gali
+further back, fitted by the same rules, so every gap is still a shared wall
+or a lane and nothing stands on a road. Chhatikara's village is three deep
+and its road bands two, on their own budget raised to 1400: 699 houses
+become 1156 at full quality, 466 of them more than 20 m from any road
+(14 before). And a district may say what its ground is (`ground`), measured
+the way its roofs were: Chhatikara's open ground is #9a8166 on ESRI z17. It
+comes in over 25 m inside the edge, so the village thins into its fields
+rather than stopping at a line, and it is dirt underfoot.
+
+Still short of it, and why: measured on a 2 m grid, about a quarter of the
+core between NH 44 and the Govardhan road is roof here (24.7% at mid
+quality), and most of it is roof in the photograph. The generator lines
+roads; rows laid from roads at different angles refuse one another under
+the lane rule, so blocks keep open middles. Four rows and more lots added
+77 houses and no coverage. A block filled solid wants a builder for blocks.
+OSM maps no buildings there at all (0 outlines in Chhatikara; 15 in a
+square kilometre of the town), so there is nothing to lay instead.
+
+`village.mjs` 5/5: 1156 houses, 466 back from the roads; 755 neighbouring
+pairs, no pocket, no overlap; none on a carriageway; earth at 314 of 314
+points in the village and grass at 328 of 328 in the fields round it; the
+start, 24 m from the crossing's pin, clear. Mutation-tested: one row, and 14
+houses stand back from the roads; no ground, and none of the 314 points is
+earth. Full suite 53/54: rickshaw's "the vehicle is chartered and drives
+with you" moves 61 m alone against the 50 it asks and 48 in the suite —
+load-sensitive since the station's change moved the crowd, as driving's
+heading was (item 11's class).
