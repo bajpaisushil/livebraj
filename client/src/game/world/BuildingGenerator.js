@@ -39,6 +39,7 @@ import { signAtlas, signUV, SIGN_COUNT, setRealSigns, realSignSlot } from './Sig
 import { lilaAtlas, lilaUV } from './LilaArt.js';
 import { LILA_COUNT } from '../../content/lilas.js';
 import { railHalf } from './RailBuilder.js';
+import { strip } from './StationBuilder.js';
 
 const _rm = new THREE.Matrix4();
 const _rp = new THREE.Vector3();
@@ -292,6 +293,18 @@ class CityFabric {
         const a = pts[i - 1], b = pts[i];
         this.roadGrid.insert((a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5, {
           ax: a[0], az: a[1], bx: b[0], bz: b[1], half,
+        });
+      }
+    }
+    // and the station's platforms, down their middles (StationBuilder.js)
+    for (const p of (this.data.RAIL && this.data.RAIL.platforms) || []) {
+      const s = strip(p.points);
+      const [ax, az] = s.at(s.a0, (s.c0 + s.c1) / 2), [bx, bz] = s.at(s.a1, (s.c0 + s.c1) / 2);
+      const pts = resample([[ax, az], [bx, bz]], 8);
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1], b = pts[i];
+        this.roadGrid.insert((a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5, {
+          ax: a[0], az: a[1], bx: b[0], bz: b[1], half: s.w * 0.5 + 1,
         });
       }
     }

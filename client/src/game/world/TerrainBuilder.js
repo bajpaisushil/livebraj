@@ -17,6 +17,7 @@ import { clamp01, smoothstep, lerp } from '../../engine/math/MathUtils.js';
 import { WORLD } from '../../content/world.generated.js';
 import { isSpan, layoutSpan, buildSpan, spanMesh } from './Bridges.js';
 import { buildRail } from './RailBuilder.js';
+import { buildStation, onPlatform } from './StationBuilder.js';
 
 /**
  * The ground covers the playable rectangle with a margin, not a square.
@@ -166,6 +167,7 @@ class Terrain {
     await breathe();
     this._buildRoads();
     this._buildRail();
+    this._buildStation();
     this._buildGhats();
     await breathe();
     this._buildWater();
@@ -177,7 +179,8 @@ class Terrain {
       water: this.water,
       // the ghat treads, so WorldService can make them solid; and the bridges'
       // decks, parapets and piers (Bridges.js)
-      colliders: [...(this.stepColliders || []), ...(this.bridgeColliders || []), ...(this.railColliders || [])],
+      colliders: [...(this.stepColliders || []), ...(this.bridgeColliders || []), ...(this.railColliders || []),
+        ...(this.stationColliders || [])],
       /*
        * Which way each ghat faces, so LandmarkGenerator can put its riverfront
        * arcade BEHIND the flight instead of across it. This is returned rather
@@ -201,6 +204,8 @@ class Terrain {
       roadDistance: (x, z) => self.roadDistance(x, z),
       railDistance: (x, z, skip) => self.railDistance(x, z, skip),
       railTracks: this.railTracks,
+      // on Vrindaban Road's platforms (StationBuilder.js), or within `pad` of one
+      onPlatform: (x, z, pad) => self.onPlatform(x, z, pad),
       update: (dt) => self.update(dt),
     };
   }
@@ -241,6 +246,8 @@ class Terrain {
   _indexRoads() {
     this.segs = [];
     for (const road of this.data.ROADS) {
+      // a foot over-bridge is the station's, stairs and all (StationBuilder)
+      if (road.fob) continue;
       const style = ROAD_STYLE[road.kind] || ROAD_STYLE.street;
       // Chaikin-smooth the OSM trace so corners curve rather than kink
       const pts = road.points.length > 2 ? smoothPolyline(road.points, 1) : road.points;
@@ -961,6 +968,24 @@ class Terrain {
     const mesh = buildRail(this.railTracks, (x, z) => this.sampleHeight(x, z), onOther, this.railColliders);
     if (mesh) this.group.add(mesh);
     console.info(`[terrain] ${this.railTracks.length} railway tracks, ${this.railColliders.length} masts`);
+  }
+
+  /** Vrindaban Road station's platforms and foot over-bridge, from OSM. */
+  _buildStation() {
+    this.stationColliders = [];
+    this.platformStrips = [];
+    const rail = this.data.RAIL;
+    if (!rail || !rail.platforms || !rail.platforms.length) return;
+    const B = this.data.WORLD.bounds;
+    const st = buildStation(rail.platforms, this.data.ROADS.filter((r) => r.fob), (x, z) => this.sampleHeight(x, z),
+      (x, z) => this.railDistance(x, z), (x, z) => x > B.minX && x < B.maxX && z > B.minZ && z < B.maxZ,
+      this.stationColliders);
+    if (st.mesh) this.group.add(st.mesh);
+    this.platformStrips = st.strips;
+  }
+
+  onPlatform(x, z, pad = 0) {
+    return !!this.platformStrips && onPlatform(this.platformStrips, x, z, pad);
   }
 
   /* ---------------- ghats ---------------- */

@@ -779,7 +779,51 @@ const stations = rawRail
     id: `s${e.id}`, name: e.tags['name:en'] || e.tags.name || 'Station', pos: toWorld(e.lat, e.lon),
     ...(RAIL_CLOSED.stations.includes(e.id) ? { closed: true } : {}),
   }));
-console.log(`rail      ${rail.length} tracks, ${(rail.reduce((n, r) => n + polylineLength(r.points), 0) / 1000).toFixed(2)} km, ${stations.length} stations`);
+/*
+ * The platforms OSM maps as areas (railway=platform, closed): Vrindaban
+ * Road's three, whole — StationBuilder lays what of them is in the world.
+ * One drawn as a line has no width to build: the closed Vrindavan station's.
+ */
+const RAIL_PAD = padBounds(WORLD_BOUNDS, 60);
+const platforms = [];
+for (const way of rawRail) {
+  if (way.type !== 'way' || !way.geometry || way.tags?.railway !== 'platform') continue;
+  const ring = way.geometry.map((g) => toWorld(g.lat, g.lon));
+  if (ring.length < 4 || dist(ring[0], ring[ring.length - 1]) > 0.05) continue;
+  const points = ring.slice(0, -1);
+  if (!points.some(([x, z]) => x >= RAIL_PAD.minX && x <= RAIL_PAD.maxX && z >= RAIL_PAD.minZ && z <= RAIL_PAD.maxZ)) continue;
+  platforms.push({ id: `p${way.id}`, points });
+}
+console.log(`rail      ${rail.length} tracks, ${(rail.reduce((n, r) => n + polylineLength(r.points), 0) / 1000).toFixed(2)} km, ${stations.length} stations, ${platforms.length} platforms`);
+
+/*
+ * A foot over-bridge: the footways OSM carries over the railway, and the
+ * ones joined to them end to end (a stair down a platform). StationBuilder
+ * builds it, stairs and all; it is neither a road on the ground nor a way
+ * across the tracks at grade.
+ */
+const segsCross = (p1, p2, p3, p4) => {
+  const d = (p2[0] - p1[0]) * (p4[1] - p3[1]) - (p2[1] - p1[1]) * (p4[0] - p3[0]);
+  if (Math.abs(d) < 1e-9) return false;
+  const a = ((p3[0] - p1[0]) * (p4[1] - p3[1]) - (p3[1] - p1[1]) * (p4[0] - p3[0])) / d;
+  const c = ((p3[0] - p1[0]) * (p2[1] - p1[1]) - (p3[1] - p1[1]) * (p2[0] - p1[0])) / d;
+  return a >= 0 && a <= 1 && c >= 0 && c <= 1;
+};
+const footBridges = roads.filter((r) => r.kind === 'path' && r.bridge);
+const overRail = (r) => r.points.some((p, i) => i > 0
+  && rail.some((t) => t.points.some((q, j) => j > 0 && segsCross(r.points[i - 1], p, t.points[j - 1], q))));
+const fob = new Set(footBridges.filter(overRail));
+const endsOf = (r) => [r.points[0], r.points[r.points.length - 1]];
+for (let grew = true; grew;) {
+  grew = false;
+  for (const r of footBridges) {
+    if (fob.has(r)) continue;
+    if ([...fob].some((g) => endsOf(g).some((e) => endsOf(r).some((f) => dist(e, f) < 1)))) { fob.add(r); grew = true; }
+  }
+}
+// flagged ahead of its points, where the written file has the flags
+for (const r of fob) { const { points } = r; delete r.points; r.fob = true; r.points = points; }
+console.log(`          ${fob.size} footways are a foot over-bridge`);
 
 /* ------------------------------------------------------------------ *
  * Districts -> metres
@@ -882,7 +926,7 @@ writeModule('locations.generated.js',
   `export const LOCATIONS = ${compactJson(locations)};\n`);
 
 writeModule('rail.generated.js',
-  `export const RAIL = ${compactJson({ tracks: rail, stations })};\n`);
+  `export const RAIL = ${compactJson({ tracks: rail, stations, platforms })};\n`);
 writeModule('districts.generated.js',
   `export const DISTRICTS = ${compactJson(districts)};\n`);
 

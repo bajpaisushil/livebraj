@@ -411,6 +411,7 @@ function buildTrees(ctx, terrain, group) {
     if (surf === 'road' || surf === 'stone' || surf === 'gali') return true;
     // and a trunk's worth of clearance beyond the kerb — and off the railway
     if (terrain.railDistance && terrain.railDistance(x, z) < 4.5) return true;
+    if (terrain.onPlatform && terrain.onPlatform(x, z, 2)) return true;
     return terrain.roadDistance(x, z) < TREE_CLEAR;
   };
 
@@ -692,6 +693,7 @@ function buildGroundCover(ctx, terrain, group) {
         if (rd < BUSH_CLEAR) continue;
         // the ballast is no place for grass or a bush (RailBuilder.js)
         if (terrain.railDistance && terrain.railDistance(x, z) < 3.2) continue;
+        if (terrain.onPlatform && terrain.onPlatform(x, z, 0.5)) continue;
         const surf = terrain.surfaceAt(x, z);
         if (surf === 'water' || surf === 'stone' || surf === 'road' || surf === 'gali') continue;
 

@@ -25960,6 +25960,7 @@ export const ROADS = [
     "kind": "path",
     "width": 2.6,
     "bridge": true,
+    "fob": true,
     "points": [
       [-6701.26, 2661.26],
       [-6675.83, 2642.02],
@@ -25972,6 +25973,7 @@ export const ROADS = [
     "kind": "path",
     "width": 2.6,
     "bridge": true,
+    "fob": true,
     "points": [
       [-6669.26, 2651.07],
       [-6645.12, 2631.61]
@@ -25983,6 +25985,7 @@ export const ROADS = [
     "kind": "path",
     "width": 2.2,
     "bridge": true,
+    "fob": true,
     "points": [
       [-6685.47, 2682.12],
       [-6701.26, 2661.26]

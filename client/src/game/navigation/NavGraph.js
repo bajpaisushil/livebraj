@@ -210,6 +210,8 @@ export class NavGraph {
     this._stitched = 0;
 
     for (const road of roads) {
+      // a foot over-bridge is climbed, not routed over (StationBuilder)
+      if (road.fob) continue;
       // a span's own points are on its deck, all but the two it lands on —
       // and along the line its deck is laid on, which is OSM's smoothed
       // (TerrainBuilder): along the raw line, traffic on NH 44's flyover
