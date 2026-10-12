@@ -256,12 +256,22 @@ class Terrain {
 
   _indexRiver() {
     const r = this.data.RIVER;
-    this.riverPts = smoothPolyline(r.points, 2);
+    /*
+     * Every stretch of the river's line inside the world: the town's, and
+     * the south-eastern loop's (`more`, import.mjs). The water is drawn only
+     * near one (`_riverSigned`), so with the town's alone the loop was dry
+     * ground inside its own riverbank polygons.
+     */
+    const runs = [{ points: r.points, width: r.width }, ...(r.more || [])]
+      .map((run) => ({ pts: smoothPolyline(run.points, 2), half: (run.width || r.width) * 0.5 }));
+    this.riverPts = runs[0].pts;
     this.riverHalf = r.width * 0.5;
-    for (let i = 1; i < this.riverPts.length; i++) {
-      const a = this.riverPts[i - 1], b = this.riverPts[i];
-      this.riverGrid.insert((a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5,
-        { ax: a[0], az: a[1], bx: b[0], bz: b[1] });
+    for (const { pts, half } of runs) {
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1], b = pts[i];
+        this.riverGrid.insert((a[0] + b[0]) * 0.5, (a[1] + b[1]) * 0.5,
+          { ax: a[0], az: a[1], bx: b[0], bz: b[1], half });
+      }
     }
     /*
      * The riverbank as OSM maps it: every edge of every ring, outer and
@@ -387,13 +397,18 @@ class Terrain {
     };
   }
 
+  /**
+   * How far a point is from the river's line — as though every stretch were
+   * the town's width, so a wider one's line reads that much nearer (the
+   * south-eastern loop's, `RIVER.more`), and `riverHalf` is its edge too.
+   */
   _riverDistance(x, z, scratch) {
     const cand = this.riverGrid.query(x, z, 180, scratch);
     let best = Infinity;
     for (let i = 0; i < cand.length; i++) {
       const s = cand[i];
-      const p = pointSegment(x, z, s.ax, s.az, s.bx, s.bz);
-      if (p.d < best) best = p.d;
+      const d = pointSegment(x, z, s.ax, s.az, s.bx, s.bz).d - (s.half - this.riverHalf);
+      if (d < best) best = d;
     }
     return best;
   }
@@ -808,7 +823,7 @@ class Terrain {
     for (const rec of this.segs) {
       if (!isSpan(rec.road)) continue;
       rec.span = layoutSpan(rec.pts, (x, z) => this.sampleHeight(x, z), (x, z) => this.isWater(x, z), ROAD_LIFT, WATER_Y,
-        (x, z) => this.railDistance(x, z) < 3);
+        (x, z) => this.railDistance(x, z) < 3, !!rec.road.pontoon);
       let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
       for (const [x, z] of rec.span.dense) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
       spans.push({ rec, x0: x0 - rec.half, x1: x1 + rec.half, z0: z0 - rec.half, z1: z1 + rec.half });

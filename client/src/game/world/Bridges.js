@@ -9,7 +9,7 @@
  * and here it becomes a deck. A short one is a culvert over a drain and stays
  * on the ground (BRIDGE_MIN).
  *
- * Two kinds, told apart by what is under them:
+ * Two kinds:
  *
  *   FLYOVER, over land. Up from grade at each end on a ramp walled in
  *   reinforced earth, then a deck on piers DECK_H over the ground, a parapet
@@ -20,10 +20,14 @@
  *   carriageways are two ways in OSM, laid side by side, so where one
  *   deck's edge lies inside the other there is neither parapet nor fascia.
  *
- *   RIVER, over the Yamuna. Laid on the ground down the bank and over the
+ *   PONTOON, over the Yamuna. Laid on the ground down the bank and over the
  *   sand, and floating FLOAT over the water on pontoons where the ground
  *   falls below it: the pontoon bridge off Keshi Ghat ("KesiGhat River.JPG",
- *   2007: the burj on the steps, the pontoons beyond).
+ *   2007: the burj on the steps, the pontoons beyond). It is the only one
+ *   OSM gives seasonal opening hours (`road.pontoon`, import.mjs); every
+ *   other span over the water is the first kind, standing on piers in the
+ *   river — the concrete road bridge east of the town (ESRI z18), its deck
+ *   DECK_H over its banks and some ten metres over the water.
  *
  * The deck is stood on, and driven on, in STEP pieces whose tops climb the
  * ramp a few centimetres at a time; the parapets and the deck itself carry a
@@ -85,14 +89,14 @@ export function isSpan(road) {
  * deck high almost to its foot: no ramp is built like that.) A span too short
  * for two whole ramps peaks lower, as a short over-bridge does.
  */
-export function layoutSpan(pts, ground, isWater, lift, waterY, overRail = () => false) {
+export function layoutSpan(pts, ground, isWater, lift, waterY, overRail = () => false, pontoon = false) {
   const dense = resample(pts, STEP);
   const n = dense.length;
   const cum = [0];
   for (let i = 1; i < n; i++) cum.push(cum[i - 1] + Math.hypot(dense[i][0] - dense[i - 1][0], dense[i][1] - dense[i - 1][1]));
   const L = cum[n - 1] || 1;
   const g = dense.map(([x, z]) => ground(x, z));
-  const river = dense.some(([x, z]) => isWater(x, z));
+  const river = pontoon && dense.some(([x, z]) => isWater(x, z));
   let y;
   if (river) {
     y = g.map((h) => Math.max(h + lift, waterY + FLOAT));

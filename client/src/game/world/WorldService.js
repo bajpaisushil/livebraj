@@ -517,9 +517,11 @@ export class WorldService {
       return m;
     });
     const river = [];
-    const rp = this.ctx.data.RIVER.points;
-    for (let i = 1; i < rp.length; i++) {
-      river.push({ ax: rp[i - 1][0], az: rp[i - 1][1], bx: rp[i][0], bz: rp[i][1] });
+    const R = this.ctx.data.RIVER;
+    for (const rp of [R.points, ...(R.more || []).map((m) => m.points)]) {
+      for (let i = 1; i < rp.length; i++) {
+        river.push({ ax: rp[i - 1][0], az: rp[i - 1][1], bx: rp[i][0], bz: rp[i][1] });
+      }
     }
     this._placeIndex = { grid, marks, river, hits: [] };
     return this._placeIndex;

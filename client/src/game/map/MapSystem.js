@@ -730,7 +730,10 @@ export class MapSystem {
     const w = this.ctx.world, r = this.ctx.data.RIVER;
     if (!w || !w.isWater || !r || !r.points.length || typeof document === 'undefined') return null;
     let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
-    for (const [x, z] of r.points) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
+    // every stretch of it: the town's, and the south-eastern loop's (`more`)
+    for (const line of [r.points, ...(r.more || []).map((m) => m.points)]) {
+      for (const [x, z] of line) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); }
+    }
     x0 = Math.max(WB.minX, x0 - 260); x1 = Math.min(WB.maxX, x1 + 260);
     z0 = Math.max(WB.minZ, z0 - 260); z1 = Math.min(WB.maxZ, z1 + 260);
     const S = 4, W = Math.ceil((x1 - x0) / S), H = Math.ceil((z1 - z0) / S);
@@ -853,7 +856,7 @@ export class MapSystem {
     const w = this.ctx.world;
     if (w && w.isWater && w.isWater(x, z)) return true;
     const r = this.ctx.data.RIVER;
-    const c = r && nearestOnLines([r], x, z, true);
+    const c = r && nearestOnLines(riverLines(r), x, z, true);
     return !!c && c.d < r.width * 0.5;
   }
 
@@ -881,31 +884,32 @@ export class MapSystem {
     const mine = nav ? nav.componentOf(nav.nearest(me.x, me.z)) : -1;
 
     let pick = null, bd = Infinity;
-    const p = r.points;
-    for (let i = 1; i < p.length; i++) {
-      const sx = p[i][0] - p[i - 1][0], sz = p[i][1] - p[i - 1][1];
-      const L = Math.hypot(sx, sz);
-      if (!L) continue;
-      for (let t = 0; t < L; t += 30) {
-        const c = { x: p[i - 1][0] + sx * t / L, z: p[i - 1][1] + sz * t / L };
-        for (const side of [1, -1]) {
-          const nx = -sz / L * side, nz = sx / L * side;
-          const bx = c.x + nx * (half + 10), bz = c.z + nz * (half + 10);
-          const d = Math.hypot(bx - ax, bz - az);
-          if (d >= bd) continue;
-          // a path has to come down to it, or "walk here" has nowhere to go
-          if (nav) {
-            const n = nav.nearest(bx, bz);
-            if (!n || Math.hypot(n.x - bx, n.z - bz) > 35) continue;
-            if (nav.componentOf(n) !== mine) continue;
+    for (const { points: p } of riverLines(r)) {
+      for (let i = 1; i < p.length; i++) {
+        const sx = p[i][0] - p[i - 1][0], sz = p[i][1] - p[i - 1][1];
+        const L = Math.hypot(sx, sz);
+        if (!L) continue;
+        for (let t = 0; t < L; t += 30) {
+          const c = { x: p[i - 1][0] + sx * t / L, z: p[i - 1][1] + sz * t / L };
+          for (const side of [1, -1]) {
+            const nx = -sz / L * side, nz = sx / L * side;
+            const bx = c.x + nx * (half + 10), bz = c.z + nz * (half + 10);
+            const d = Math.hypot(bx - ax, bz - az);
+            if (d >= bd) continue;
+            // a path has to come down to it, or "walk here" has nowhere to go
+            if (nav) {
+              const n = nav.nearest(bx, bz);
+              if (!n || Math.hypot(n.x - bx, n.z - bz) > 35) continue;
+              if (nav.componentOf(n) !== mine) continue;
+            }
+            bd = d; pick = { c, nx, nz };
           }
-          bd = d; pick = { c, nx, nz };
         }
       }
     }
     if (!pick) {
       // no path reaches the water anywhere: the bank facing the point asked about
-      const c = nearestOnLines([r], ax, az, true);
+      const c = nearestOnLines(riverLines(r), ax, az, true);
       if (!c) return null;
       let nx = -c.dz, nz = c.dx;
       if ((ax - c.x) * nx + (az - c.z) * nz < 0) { nx = -nx; nz = -nz; }
@@ -2094,6 +2098,11 @@ const RIVER_ID = 'river:yamuna';
  * [x, z] — or, with `full`, {x, z, d, dx, dz} where dx/dz is the unit
  * direction of the segment it lies on. Null when there are no segments.
  */
+/** Every stretch of the river's line, as lines: the town's and the loop's. */
+function riverLines(r) {
+  return [r, ...(r.more || [])];
+}
+
 function nearestOnLines(lines, x, z, full = false) {
   let best = null, bd = Infinity;
   for (const l of lines) {

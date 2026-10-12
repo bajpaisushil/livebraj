@@ -17,7 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ORIGIN, WORLD_BOUNDS, ROAD_CLASSES, LANDMARKS, DISTRICTS, RAIL_CLOSED } from './config.mjs';
+import { ORIGIN, WORLD_BOUNDS, ROAD_CLASSES, LANDMARKS, DISTRICTS, RAIL_CLOSED, UNBUILT_CROSSINGS, RIVER_WIDTH } from './config.mjs';
 import { buildGraph, closeRing } from './roadgraph.mjs';
 import { WAY_NAMES, WAY_REFS, JUNCTIONS, nameIndex, unconfirmed } from './local-knowledge.mjs';
 import { confirmedRoads, confirmedPlaces, pending as surveyPending } from './surveyed.mjs';
@@ -269,6 +269,14 @@ for (const way of rawRoads) {
      */
     const oneway = ['yes', '1', 'true'].includes(way.tags?.oneway);
     const divided = oneway && (cls.kind === 'trunk' || cls.kind === 'highway');
+    const bridge = !!way.tags?.bridge && way.tags.bridge !== 'no';
+    /*
+     * A bridge open only some months is a pontoon, taken up before the
+     * monsoon: the one off Keshi Ghat is tagged "Dec - Jun", and nothing
+     * else about it says it floats. Every other span over the water stands
+     * on piers (Bridges.js) — the road bridge east of the town is concrete.
+     */
+    const seasonal = /\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i.test(way.tags?.opening_hours || '');
     roads.push({
       id,
       name,
@@ -284,7 +292,8 @@ for (const way of rawRoads) {
        * BRIDGE_MIN), so only the span's own way is marked and the road
        * either side of it stays the road it was.
        */
-      ...(way.tags?.bridge && way.tags.bridge !== 'no' ? { bridge: true } : {}),
+      ...(bridge ? { bridge: true } : {}),
+      ...(bridge && seasonal ? { pontoon: true } : {}),
       prio: cls.prio,
       length: Math.round(len),
       points: pts,
@@ -321,19 +330,61 @@ console.log(`parikrama ${parikramaPoints.length} points, ${(parikramaLen / 1000)
 const riverWays = rawWater.filter((w) => w.geometry && w.geometry.length > 1 &&
   (w.tags?.waterway === 'river' || /yamuna/i.test(w.tags?.name || '')));
 
+/*
+ * Every stretch of it inside the world. The river leaves by the east edge
+ * north of Keshi Ghat and comes back in round its south-eastern loop, out
+ * by the south edge; only the longest stretch was kept, and the terrain
+ * draws water only near a centreline (TerrainBuilder._riverSigned), so the
+ * loop — 2.3 km of the Yamuna inside its own riverbank polygons, open water
+ * 112-286 m wide on ESRI — was dry ground. The longest is `points`, as
+ * before; the rest are `more`, each with its width (config.mjs RIVER_WIDTH).
+ */
 let riverPoints = [];
+let riverMore = [];
 if (riverWays.length) {
-  // take the longest continuous river trace inside bounds
-  let best = [];
+  const runs = [];
   for (const w of riverWays) {
     const projected = w.geometry.map((g) => toWorld(g.lat, g.lon));
     for (const run of clipToBounds(projected, padBounds(WORLD_BOUNDS, 500))) {
-      if (polylineLength(run) > polylineLength(best)) best = run;
+      if (polylineLength(run) >= 200) runs.push(run);
     }
   }
-  riverPoints = simplify(best, 6);
+  runs.sort((a, b) => polylineLength(b) - polylineLength(a));
+  if (runs.length) riverPoints = simplify(runs[0], 6);
+  riverMore = runs.slice(1).map((r) => simplify(r, 6));
 }
-console.log(`river     ${riverPoints.length} points, ${(polylineLength(riverPoints) / 1000).toFixed(2)} km of Yamuna`);
+console.log(`river     ${riverPoints.length} points, ${((polylineLength(riverPoints) + riverMore.reduce((n, r) => n + polylineLength(r), 0)) / 1000).toFixed(2)} km of Yamuna in ${1 + riverMore.length} stretch(es)`);
+
+/*
+ * A road drawn across the river where no bridge carries it yet
+ * (config.mjs UNBUILT_CROSSINGS) stops short of the water on each side:
+ * cut wherever it comes within RIVER_CUT of the water's edge — half the
+ * stretch's width from its line — the approaches kept as roads of their own.
+ */
+const RIVER_CUT = 25;
+const stretches = [[riverPoints, RIVER_WIDTH.main], ...riverMore.map((run) => [run, RIVER_WIDTH.more])];
+const nearRiver = (p) => stretches.some(([run, width]) =>
+  run.some((q, i) => i > 0 && perpendicular(p, run[i - 1], q) < width / 2 + RIVER_CUT));
+for (const wayId of UNBUILT_CROSSINGS) {
+  const at = roads.findIndex((r) => r.id === `r${wayId}`);
+  if (at < 0) continue;
+  const r = roads[at];
+  const dense = [];
+  for (let i = 1; i < r.points.length; i++) {
+    const a = r.points[i - 1], b = r.points[i], n = Math.max(1, Math.ceil(dist(a, b) / 4));
+    for (let k = 0; k < n; k++) dense.push([round2(a[0] + (b[0] - a[0]) * k / n), round2(a[1] + (b[1] - a[1]) * k / n)]);
+  }
+  dense.push(r.points[r.points.length - 1]);
+  const pieces = [];
+  let cur = [];
+  for (const p of dense) {
+    if (nearRiver(p)) { if (cur.length > 1) pieces.push(cur); cur = []; } else cur.push(p);
+  }
+  if (cur.length > 1) pieces.push(cur);
+  const kept = pieces.map((pts) => simplify(pts, 1.1)).filter((pts) => polylineLength(pts) >= 22);
+  roads.splice(at, 1, ...kept.map((pts, k) => ({ ...r, id: `r${wayId}${k ? `-bank${k}` : ''}`, length: Math.round(polylineLength(pts)), points: pts })));
+  console.log(`          r${wayId} stops at the river: ${kept.length} approach(es) kept`);
+}
 
 /*
  * The water itself, as OSM maps it: the riverbank multipolygons, outer ring
@@ -803,7 +854,10 @@ writeModule('roads.generated.js',
   `export const ROADS = ${compactJson(roads.map(({ prio, length, ...r }) => r))};\n`);
 
 writeModule('river.generated.js',
-  `export const RIVER = ${compactJson({ points: riverPoints, width: 130, bank: 14, water: riverWater })};\n`);
+  `export const RIVER = ${compactJson({
+    points: riverPoints, more: riverMore.map((points) => ({ width: RIVER_WIDTH.more, points })),
+    width: RIVER_WIDTH.main, bank: 14, water: riverWater,
+  })};\n`);
 
 writeModule('parikrama.generated.js',
   `export const PARIKRAMA = ${compactJson({

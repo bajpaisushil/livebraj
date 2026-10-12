@@ -72,6 +72,23 @@ const steer = await p.evaluate(async () => {
   const ctx = window.vrindavan.ctx, r = ctx.rickshaw;
   if (!r.drive) return { ok:false, why:'not driving' };
   const car = r.drive.car;
+  /*
+   * Facing open ground. It kept the heading of whichever vehicle the crowd
+   * had put down first, and a change anywhere in the road network turns
+   * that: at 0.59 rad it faced NH 44's ramp wall 5 m off, stopped against
+   * it, and "steering left" slid it along the wall the other way.
+   */
+  let bestYaw = car.yaw, bestRun = -1;
+  for (let k = 0; k < 24; k++) {
+    const yaw = k * Math.PI / 12;
+    let clear = 0;
+    for (let d = 1; d <= 30; d++) {
+      if (!ctx.world.fits(car.x + Math.sin(yaw) * d, car.z + Math.cos(yaw) * d, 1.6)) break;
+      clear = d;
+    }
+    if (clear > bestRun) { bestRun = clear; bestYaw = yaw; }
+  }
+  car.yaw = bestYaw;
   const run = (walk, strafe, n=90) => {
     const before = { x: car.x, z: car.z, yaw: car.yaw };
     ctx.input.walk = walk; ctx.input.strafe = strafe;

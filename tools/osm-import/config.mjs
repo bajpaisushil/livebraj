@@ -773,3 +773,26 @@ export const RAIL_CLOSED = {
   stations: [316684768],
 };
 
+/*
+ * Roads OSM draws across the Yamuna where no bridge carries them yet.
+ *
+ * Way 1514020216 crosses beside the road bridge east of the town (99427151),
+ * mapped as an open secondary road with no bridge at all. On ESRI z18 it is
+ * a bridge being built: well caissons standing in the river at intervals,
+ * site yards at both ends, no deck. Its approaches are kept and it stops
+ * short of the water on each side (import.mjs).
+ */
+export const UNBUILT_CROSSINGS = [1514020216];
+
+/*
+ * How wide the river runs, where OSM's line is all there is to go on: the
+ * terrain draws water within this of the line and inside the riverbank
+ * polygons (TerrainBuilder._riverSigned). The town's stretch keeps the 130 m
+ * it has always had. The south-eastern loop is wider: 112-286 m of open
+ * water, 210 m at the middle of 22 sections measured across it on ESRI z16
+ * (2026-10-12). OSM's line runs off the middle of it in places — 16 m from
+ * the north-western bank at the road bridge — so the water drawn there is
+ * the river's width and not exactly its place; the town-side bank polygon
+ * holds it off the land on that side.
+ */
+export const RIVER_WIDTH = { main: 130, more: 210 };

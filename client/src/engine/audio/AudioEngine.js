@@ -260,10 +260,11 @@ export class AudioEngine {
   _riverDistance(ctx, p) {
     // cheap: the river runs north, so depth of the nearest water is a good proxy
     let best = 9999;
-    const pts = ctx.data.RIVER.points;
-    for (let i = 0; i < pts.length; i++) {
-      const d = Math.hypot(pts[i][0] - p.x, pts[i][1] - p.z);
-      if (d < best) best = d;
+    for (const pts of [ctx.data.RIVER.points, ...(ctx.data.RIVER.more || []).map((m) => m.points)]) {
+      for (let i = 0; i < pts.length; i++) {
+        const d = Math.hypot(pts[i][0] - p.x, pts[i][1] - p.z);
+        if (d < best) best = d;
+      }
     }
     return Math.max(0, best - ctx.data.RIVER.width * 0.5);
   }
