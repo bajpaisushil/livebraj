@@ -182,6 +182,16 @@ const CORNER_V = (turn) => (turn < 0.5 ? Infinity : Math.max(1.6, 4.2 - 2.1 * (t
 const HOLD_QUEUE_S = 6.0;    // held behind a vehicle that is itself waiting
 const ROUND_S = 7.0;         // the longest a way round is kept
 const ROUND_THR = 0.55;      // and the throttle it is taken at
+/*
+ * The knot. Going round settles two vehicles holding each other; three that
+ * have turned into a junction together each hold the next and none is the
+ * other's — a tempo, a tempo and a cab under the Chhatikara flyover for
+ * thirteen seconds (traffic seed 3). A vehicle held KNOT_S by anything, for
+ * all its going round, creeps on for CREEP_S looking past the other
+ * vehicles, still stopping for people: how a jammed chowk clears.
+ */
+const KNOT_S = 5.0;
+const CREEP_S = 3.0;
 
 /** The lane for a leg: kept left on a two-way road, the middle of a one-way
  *  one, and across a junction's stitch, whatever it had coming in. */
@@ -442,7 +452,7 @@ export class Crowd {
         let n = null;
         for (let k = 0; k < 16 && nav && nav.randomNodeNear; k++) {
           const q = nav.randomNodeNear(p.x, p.z, far * 1.05, Math.random);
-          if (q && inBand(q.x, q.z) && q.edges.some((e) => DRIVABLE.has(e.kind))) { n = q; break; }
+          if (q && inBand(q.x, q.z) && q.edges.some((e) => DRIVABLE.has(e.kind)) && !this._vehicleWithin(q.x, q.z, 8, a)) { n = q; break; }
         }
         if (!n) return false;
         x = n.x; z = n.z; node = n;
@@ -614,7 +624,7 @@ export class Crowd {
     let node = null;
     for (let tries = 0; tries < 20 && nav; tries++) {
       const n = nav.randomNode(rng);
-      if (n && n.edges.some((e) => e.kind === 'street' || e.kind === 'main' || e.kind === 'highway')) { node = n; break; }
+      if (n && n.edges.some((e) => e.kind === 'street' || e.kind === 'main' || e.kind === 'highway') && !this._vehicleWithin(n.x, n.z, 8)) { node = n; break; }
     }
     if (!node) return;
     slot.agents.push({
@@ -698,7 +708,7 @@ export class Crowd {
        * round it (below). Nobody stood aside, and a cab waited 26 s for two
        * people standing at its bumper (traffic seed 59).
        */
-      if (this._vehicleNear(a.x, a.z, 2.0)) a.idle = 0;
+      if (this._vehicleNear(a.x, a.z, 1.5)) a.idle = 0;
       else { a.idle -= dt; a.walking = false; return; }
     }
 
@@ -851,6 +861,31 @@ export class Crowd {
     const step = a.speed * dt;
     a.x += nx * step;
     a.z += nz * step;
+
+    /*
+     * And never through one. Walkers stepped round a vehicle (above) but had
+     * no body to keep out of, so one whose way lay through a waiting rickshaw
+     * walked into it and stood in its nose, and the rickshaw waited for them
+     * — at Chhatikara, where everybody starts, for as long as the crowd came
+     * (queue item 23). Each vehicle's body, its own size and half a metre,
+     * pushes them out by its shallower side; one on a bridge deck overhead
+     * does not.
+     */
+    for (let ti = 0; ti < this.vehicleInst.length; ti++) {
+      const V = VEHICLES[ti];
+      const hl = V.l * 0.5 + 0.5, hw = V.w * 0.5 + 0.5;
+      for (const v of this.vehicleInst[ti].agents) {
+        const dx = a.x - v.x, dz = a.z - v.z;
+        if (dx > 3.5 || dx < -3.5 || dz > 3.5 || dz < -3.5) continue;
+        if (Math.abs((v.y || 0) - (a.y || 0)) > 2) continue;
+        const fx = Math.sin(v.yaw), fz = Math.cos(v.yaw);
+        const along = dx * fx + dz * fz, across = dx * fz - dz * fx;
+        const pa = hl - Math.abs(along), pc = hw - Math.abs(across);
+        if (pa <= 0 || pc <= 0) continue;
+        if (pc < pa) { const s = across < 0 ? -1 : 1; a.x += fz * s * pc; a.z -= fx * s * pc; }
+        else { const s = along < 0 ? -1 : 1; a.x += fx * s * pa; a.z += fz * s * pa; }
+      }
+    }
     /*
      * ON the floor, not on the terrain under it.
      *
@@ -953,7 +988,7 @@ export class Crowd {
     for (let ti = 0; ti < this.vehicleInst.length; ti++) {
       const ow = VEHICLES[ti].w * 0.5;
       for (const o of this.vehicleInst[ti].agents) {
-        if (o === a) continue;
+        if (o === a || a.creepT > 0) continue;
         const dx = o.x - a.x, dz = o.z - a.z;
         if (Math.abs(dx) > MEET_M || Math.abs(dz) > MEET_M) continue;
         /*
@@ -998,11 +1033,36 @@ export class Crowd {
     return nearest;
   }
 
-  /** Is any vehicle's centre within `r` of this point? */
-  _vehicleNear(x, z, r) {
+  /**
+   * Is another vehicle's centre within `r` of this point? A vehicle is never
+   * put down on another: two brought back beside you onto the same node drove
+   * off inside each other, the same lane at the same speed, and stayed so
+   * for nine seconds (traffic seed 21).
+   */
+  _vehicleWithin(x, z, r, self = null) {
     for (const slot of this.vehicleInst) {
       for (const v of slot.agents) {
+        if (v === self || v.away) continue;
         if (Math.abs(v.x - x) < r && Math.abs(v.z - z) < r && Math.hypot(v.x - x, v.z - z) < r) return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Is any vehicle's body within `r` of this point? Its body, not its
+   * centre: somebody standing half a metre off a tempo's nose is 2.3 m from
+   * its middle, and took no notice of it (traffic seed 21).
+   */
+  _vehicleNear(x, z, r) {
+    for (let ti = 0; ti < this.vehicleInst.length; ti++) {
+      const V = VEHICLES[ti];
+      for (const v of this.vehicleInst[ti].agents) {
+        const dx = x - v.x, dz = z - v.z;
+        if (dx > 6 || dx < -6 || dz > 6 || dz < -6) continue;
+        const fx = Math.sin(v.yaw), fz = Math.cos(v.yaw);
+        const along = Math.abs(dx * fx + dz * fz) - V.l * 0.5, across = Math.abs(dx * fz - dz * fx) - V.w * 0.5;
+        if (Math.hypot(Math.max(0, along), Math.max(0, across)) < r) return true;
       }
     }
     return false;
@@ -1039,6 +1099,12 @@ export class Crowd {
    * standoff was enough to start the count again, every time (seed 39).
    */
   _goRound(a, dt, half) {
+    // the knot (KNOT_S): held this long by anything at all, creep on through
+    if (a.creepT > 0) a.creepT -= dt;
+    if (a.aheadObj && a.aheadAt < STOP_GAP + 0.4) {
+      a.knotT = (a.knotT || 0) + dt;
+      if (a.knotT > KNOT_S && a.aheadV) { a.creepT = CREEP_S; a.knotT = 0; }
+    } else a.knotT = Math.max(0, (a.knotT || 0) - dt);
     const r = a.round;
     if (r) {
       r.t -= dt;
@@ -1095,7 +1161,11 @@ export class Crowd {
       const sl = Math.hypot(sx, sz) || 1;
       oLeft = ((o.x - a.prev.x) * sz - (o.z - a.prev.z) * sx) / sl;
       const e = a.prev.edges.find((q) => q.to === a.target.k);
-      if (e && KIND_HALF[e.kind] !== undefined && e.kind !== 'stitch') room = KIND_HALF[e.kind];
+      if (e && KIND_HALF[e.kind] !== undefined && e.kind !== 'stitch') {
+        // one carriageway of a divided road is half the road (import.mjs):
+        // going round on NH 44's eleven metres took tempos into its ramp walls
+        room = KIND_HALF[e.kind] * (e.oneway && (e.kind === 'trunk' || e.kind === 'highway') ? 0.5 : 1);
+      }
     }
     // pull in left of something coming at you; overtake anything else on its
     // right — and on the road: a rickshaw in a gali went 4 m out, into a wall
@@ -1142,7 +1212,7 @@ export class Crowd {
     for (let tj = 0; tj < this.vehicleInst.length; tj++) {
       const ow = VEHICLES[tj].w * 0.5;
       for (const o of this.vehicleInst[tj].agents) {
-        if (o === a || (a.round && a.round.past.includes(o))) continue;
+        if (o === a || a.creepT > 0 || (a.round && a.round.past.includes(o))) continue;
         const rx = o.x - a.x, rz = o.z - a.z;
         if (Math.abs(rx) > 18 || Math.abs(rz) > 18) continue;
 
@@ -1252,7 +1322,7 @@ export class Crowd {
         // looked at again once it has decided to go round, so it is looking past it
         const ahead = a.round ? this._vehicleAhead(a, half, ctx, p, hl) : a.aheadAt;
         const queue = ahead < STOP_GAP ? 0 : ahead < SLOW_GAP ? 0.35 : 1;
-        const want = Math.min(queue, this._crossYield(a, ti), a.round ? ROUND_THR : 1);
+        const want = Math.min(queue, this._crossYield(a, ti), a.round ? ROUND_THR : 1, a.creepT > 0 ? ROUND_THR : 1);
         a.throttle = a.throttle === undefined ? 1 : a.throttle + (want - a.throttle) * Math.min(1, dt * 3.5);
 
         const dx = a.x - p.x, dz = a.z - p.z;
@@ -1336,7 +1406,7 @@ export class Crowd {
         let n = null;
         for (let k = 0; k < 8 && !n; k++) {
           const q = nav.randomNodeNear(p.x, p.z, far * 0.75, Math.random);
-          if (q && q.edges.some((e) => DRIVABLE.has(e.kind) && e.kind !== 'stitch')) n = q;
+          if (q && q.edges.some((e) => DRIVABLE.has(e.kind) && e.kind !== 'stitch') && !this._vehicleWithin(q.x, q.z, 8, a)) n = q;
         }
         // a placement, so the height starts again from the new spot's terrain
         if (n) { a.x = n.x; a.z = n.z; a.y = this._placedY(n.x, n.z); a.node = n; a.prev = null; a.vel = 0; a.stuck = 0; a.round = null; a.heldT = 0; }
