@@ -4050,3 +4050,45 @@ importer's config now names it (`RAIL_CLOSED`), the data marks it
 alone — rail.mjs measures its whole drawn length at no more than 0.16 m
 over the ground, nothing at rail height. Jaipur Mandir's notes had it right
 already. `trains.mjs` 11/11, `rail.mjs` 9/9.
+
+## 2026-10-12 — The Yamuna round its south-eastern loop
+
+DONE (b719182). Queue item 26. The river leaves the world by its east edge north
+of Keshi Ghat and comes back in round its south-eastern loop, out by the
+south edge. The importer kept only the longest stretch of its line, and the
+terrain draws water only near a line as well as inside the riverbank
+polygons, so the loop — 2.3 km of the Yamuna inside its own polygons, open
+water on ESRI — was fields, with the riverside road running beside nothing.
+
+Every stretch of the line is imported now (`RIVER.more`), each with its
+width: measured across the loop on ESRI z16 at 22 sections, its open water
+runs 112-286 m, 210 m at the middle one, and that is its width; the town's
+stretch keeps its 130. OSM's line runs off the middle in places — 16 m from
+the north-western bank at the road bridge — so there the water is the
+river's width and not exactly its place; the town-side bank polygon keeps
+it off the land on that side. The terrain, the map's water and its "walk to
+the Yamuna", the riverside trees (planted last, on a sequence of their own,
+so no other tree in the world moves) and the river's sound all know it.
+
+Two bridges cross it. Bridges.js floated every span over water — right for
+the pontoon off Keshi Ghat, wrong for the concrete road bridge east of the
+town (OSM 99427151, ESRI z18: a deck on piers), which the loop's water
+would have turned into one. OSM says no more of the pontoon than bridge=yes,
+and its seasonal opening hours ("Dec - Jun": taken up for the monsoon); a
+bridge with seasonal hours is a pontoon now, and every other span over
+water stands on piers — this one on five in the river, the deck 9.6 m over
+the water at the highest. It starts at the north-western bank with its
+first 20 m over land, so it climbs over the water's edge there (3 m): in
+the river the approach embankments are on the roads either side. Beside it
+a second bridge is being built — on ESRI z18 well caissons stand in the
+river and there are site yards at both ends, no deck — and OSM maps it as
+an open secondary road straight through the water. Its approaches are kept
+and stop short of the water (config.mjs `UNBUILT_CROSSINGS`).
+
+`yamuna.mjs` 8/8: water at 138 of 138 points along the loop's line, 162-194
+m across it, nothing built, planted or routed in it, the bridge walked
+across dry, the pontoon at 0.9 m, the new bridge's approaches dry, and walk
+to the Yamuna from beside the loop 31 m to its bank. Mutation-tested: the
+loop's line unindexed, 0 of 138 points are water; without pontoons, Keshi
+Ghat's sinks to -1.1 m. The importer, run apart, writes the river, rail and
+the changed roads exactly as spliced. Full suite 52/53, driving 9/9 alone once its car faces open ground.

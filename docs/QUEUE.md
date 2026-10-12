@@ -658,6 +658,23 @@ searching the backlog for it. That is the failure this file exists to stop.*
     start, now the busiest junction there is (item 23). STILL OPEN: the "gate
     at Chhatikara Road" (vrindavantoday.in has a photograph, not a place).
 
+26. ~~**The Yamuna's south-eastern loop was dry ground.**~~ **DONE
+    2026-10-12** (b719182). Found in item 24's notes: the river leaves the
+    world by its east edge north of Keshi Ghat and comes back in round its
+    south-eastern loop, and only the longest stretch of its line was
+    imported; the terrain draws water only near a line, so 2.3 km of the
+    Yamuna, inside its own riverbank polygons, was fields. Every stretch is
+    imported now, each with its width — the loop's 210 m the middle of 22
+    sections measured across it on ESRI z16 (112-286 m). On the way:
+    Bridges.js floated every span over water, which would have made the
+    concrete road bridge east of the town a pontoon — only a bridge OSM
+    gives seasonal hours floats now (Keshi Ghat's, "Dec - Jun"), and the
+    road bridge stands on five piers in the river, 9.6 m over it at the
+    highest. A second bridge beside it is being built (ESRI z18: caissons,
+    no deck) and OSM draws it as an open road through the water: its
+    approaches stop at each bank. The map's water and "walk to the Yamuna"
+    know the loop. `yamuna.mjs` 8/8, mutation-tested; full suite 52/53, driving 9/9 alone once its car faces open ground.
+
 ## OPEN — reported, not yet reproduced
 
 - ~~**"start from here not working in map"**~~ and ~~**"still 'start from
