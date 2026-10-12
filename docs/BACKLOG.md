@@ -4092,3 +4092,42 @@ to the Yamuna from beside the loop 31 m to its bank. Mutation-tested: the
 loop's line unindexed, 0 of 138 points are water; without pontoons, Keshi
 Ghat's sinks to -1.1 m. The importer, run apart, writes the river, rail and
 the changed roads exactly as spliced. Full suite 52/53, driving 9/9 alone once its car faces open ground.
+
+## 2026-10-12 — Vrindaban Road station: platforms and foot over-bridge
+
+DONE (37f2920). Queue item 24's station. The station on the main line at
+Chhatikara had no platforms, and its foot over-bridge — footways OSM
+carries over all eight tracks — was laid on the ground across them, so the
+crowd crossed the line at grade where the trains now run.
+
+OSM maps the three platforms as areas, and on ESRI z19 each is within a
+metre of where OSM has it (measured across the tracks at five sections
+before OSM's were found: the west one 12 m wide beside the outer loop, an
+island of 10 m between the loops, the east one about 6). They are laid
+high-level, 0.84 m over the rail (Indian Railways' 760-840 mm), with a
+coping and a yellow line along each edge, a ramp off each end inside the
+world, and the shelter ESRI shows on the west one, 150-170 m from its
+north end. An edge keeps 1.68 m from the track beside it, the coping
+distance: OSM's island came to 1.34 m from its loop where the loop bends
+in at the station's throat, where a coach would have struck it.
+
+The over-bridge is built from OSM's footways — the importer marks those
+over the railway and the ones joined to them end to end — as a covered
+deck 1.4 m over the contact wire on columns off the tracks, with its stair
+down the west platform where OSM has it. OSM maps no stair onto the island
+or the east platform, nor down from the deck's east end, though an
+over-bridge comes down to every platform it serves; those three are built,
+at a stair's slope, where one must come down, and the builder says so. It
+is climbed, not routed over: the footways are out of the road ribbons and
+the path network, and nothing is built or planted on a platform. Railings
+leave a gap wherever a stair or another piece of deck joins — along the
+whole of a railing piece, not only its middle: at the island's corner one
+stood 0.85 m into the next deck's way and stopped you there.
+
+`station.mjs` 9/9: three platforms 0.84 m over the rail, edges 1.68 m from
+a track, none of 13,751 train positions touching one; up a ramp, up the west
+stair onto the deck 7.15 m over the rail, across and down onto the island,
+across the east tracks and down; no path edge across a running track.
+Mutation-tested: without the edge rule a platform stands 1.30 m from a
+track; with the footways routed again, 18 path edges cross the tracks. Full
+suite 53/54, rickshaw 31/31 alone.

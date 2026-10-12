@@ -342,7 +342,8 @@ searching the backlog for it. That is the failure this file exists to stop.*
     Temple at OSM's round building, and the ghat's floor a dry court 2.2 m
     down with its chhatri, pillar, lamp tower and Krishna on Kaliya's hoods —
     `docs/research/kaliya-ghat.md`. Its story now says the river moved.
-    STILL OPEN: the river's south-eastern loop, never in the game; the
+    STILL OPEN: the river's south-eastern loop, never in the game (**DONE
+    2026-10-12**, b719182: item 26); the
     highway and pontoon bridges, which still drown (**DONE 2026-10-10**,
     64d1108: the pontoon floats over the water and the rail over-bridges and
     NH 44's flyover stand on decks, item 24); seasons; Rani Laxmibai
@@ -612,8 +613,15 @@ searching the backlog for it. That is the failure this file exists to stop.*
     good in June 2025 (PTI in The Week, 10 June 2025). OSM still draws it
     running, and so had we, rails and all. It is the bare formation now
     (`RAIL_CLOSED`, tools/osm-import/config.mjs) and nothing runs on it;
-    `rail.mjs` 9/9. STILL OPEN: Vrindaban Road station's building and
-    platforms, just past the world's south edge. Original notes follow.
+    `rail.mjs` 9/9. **VRINDABAN ROAD'S PLATFORMS AND FOOT OVER-BRIDGE DONE
+    2026-10-12** (37f2920): OSM's three platform areas, high-level (0.84 m over
+    the rail), each edge 1.68 m from its track, ramps off their ends and the
+    west one's shelter; the over-bridge from OSM's footways, 1.4 m over the
+    contact wire, its west stair as mapped and the island's, the east
+    platform's and the east end's inferred, and said so; climbed, not
+    routed across the tracks at grade. `station.mjs` 9/9, mutation-tested;
+    full suite 53/54, rickshaw 31/31 alone. STILL OPEN: the station building, past the world's south
+    edge. Original notes follow.
     Photographed before: open grass and scattered trees round the start, the
     farmland rule for the corridor (BuildingGenerator's `country`) covering
     the village at the highway too. ESRI z17-z19 on the world's 200 m grid:
